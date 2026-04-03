@@ -1,0 +1,44 @@
+{
+  "agent": {
+    "model": "google/gemini-2.5-flash"
+  },
+  "agents": {
+    "defaults": {
+      "model": "google/gemini-1.5-flash",
+      "fallbacks": [
+        "google/gemini-2.0-flash",
+        "google/gemini-2.0-flash-lite-preview-02-05",
+        "ollama/qwen2.5-coder:0.5b",
+        "ollama/phi"
+      ]
+    },
+    "list": [
+      { "id": "jarvis", "workspace": "./agents/jarvis", "default": true },
+      { "id": "mkt-content", "workspace": "./agents/marketing" },
+      { "id": "mkt-social", "workspace": "./agents/marketing" },
+      { "id": "mkt-analytics", "workspace": "./agents/marketing" },
+      { "id": "mkt-ads", "workspace": "./agents/marketing" },
+      { "id": "mkt-email", "workspace": "./agents/marketing" },
+      { "id": "sales-hunter", "workspace": "./agents/ventas" },
+      { "id": "sales-closer", "workspace": "./agents/ventas" },
+      { "id": "sales-account", "workspace": "./agents/ventas" }
+    ]
+  },
+  "bindings": [
+    { "agentId": "jarvis", "match": { "channel": "whatsapp", "accountId": "*" } }
+  ],
+  "channels": {
+    "whatsapp": {
+      "dmPolicy": "pairing"
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true
+  },
+  "tools": {
+    "profile": "coding",
+    "alsoAllow": ["lobster"]
+  }
+}

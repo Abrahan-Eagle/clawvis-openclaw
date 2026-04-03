@@ -1,0 +1,8 @@
+Discord — parte de la coordinación (junto con Scrum y Trello)
+
+Se usa para hablar en vivo: dudas, acuerdos, anuncios. El estado del trabajo se refleja en Trello; lo que convenga archivar por escrito va en gestion/YYYY-MM-DD/ (una sola carpeta por fecha, ver GESTION.txt).
+
+Canales sugeridos (ajusta a tu servidor):
+  anuncios | sprint-actual | trello (enlaces al tablero) | daily | review-demo | retrospectiva | hilos por equipo
+
+Regla práctica: si quedó un acuerdo importante, que también se vea en una tarjeta o comentario en Trello.

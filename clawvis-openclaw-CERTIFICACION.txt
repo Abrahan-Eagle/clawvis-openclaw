@@ -1,0 +1,25 @@
+Certificación del respaldo clawvis-openclaw (fecha: 2026-04-03)
+
+1) Estructura completa (carpeta ~/clawvis-openclaw)
+   - jarvis-ecosystem/     OK
+   - documentos-jarvis-openclaw/  OK
+   - openclaw-state/       OK (incluye openclaw.json, credenciales, workspace, agents de estado)
+   - agent-town/           OK (código fuente; node_modules y .next se excluyen del .zip portable)
+   - deploy/systemd/       OK
+   - descargas-openclaw/   OK
+   - .git con 2 commits locales (adelante de origin/main hasta que hagas push)
+
+2) Servicios en ejecución en ESTA máquina (no en el zip)
+   - openclaw-gateway: debe estar "active" (systemctl --user)
+   - La config activa sigue siendo ~/.openclaw/openclaw.json
+   - Este respaldo es copia para Git/pendrive; no sustituye las rutas en vivo.
+
+3) Qué puede faltar por diseño
+   - Push a GitHub: pendiente de autenticación (git push origin main).
+   - Repo privado en GitHub: configurar en la web si hay secretos.
+   - En la otra PC: tras descomprimir, en agent-town ejecutar: pnpm install (o npm) porque el .zip excluye node_modules.
+
+4) ZIP portable
+   - Archivo: ver nombre en Documentos/clawvis-openclaw-portable-*.zip
+   - Excluye agent-town/node_modules y agent-town/.next para tamaño de pendrive.
+   - Incluye .git para poder git push desde la otra máquina.

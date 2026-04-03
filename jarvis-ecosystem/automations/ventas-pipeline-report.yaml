@@ -1,0 +1,22 @@
+# Ventas — informe semanal de pipeline (plantilla CRM)
+name: pipeline-report
+description: Recordatorio de cierre semanal de oportunidades y seguimientos
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 17 * * 5"
+
+steps:
+  - name: week
+    action: evaluate
+    expression: 'new Date().toISOString().slice(0, 10)'
+    capture: label
+
+  - name: notify-sales
+    action: notify
+    message: |
+      Ventas — Pipeline report (${label})
+      - Actualizar etapas en Trello/CRM
+      - Follow-ups pendientes (himalaya / gog)
+      - Próximos cierres y riesgos

@@ -1,0 +1,28 @@
+# Automatización Jarvis — briefing matutino (sin dependencias externas obligatorias)
+name: jarvis-morning-briefing
+description: Fecha/hora local + estado del ecosistema Jarvis (placeholder para calendar/weather cuando estén configurados)
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "30 7 * * *"
+
+steps:
+  - name: now
+    action: evaluate
+    expression: 'new Date().toISOString()'
+    capture: timestamp
+
+  - name: status
+    action: evaluate
+    expression: '"Ecosistema Jarvis + ClawFlows operativo"'
+    capture: line
+
+  - name: notify-user
+    action: notify
+    message: |
+      Jarvis — Morning briefing
+      Hora (UTC): ${timestamp}
+      ${line}
+
+      Siguiente paso: integrar calendar + weather (skills gog / weather) para agenda y clima reales.

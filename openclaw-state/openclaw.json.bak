@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.8",
+    "lastTouchedAt": "2026-03-13T22:56:21.576Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-13T21:43:49.918Z",
+    "lastRunVersion": "2026.3.8",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "google/gemini-2.5-flash"
+      },
+      "models": {
+        "google/gemini-2.5-flash": {},
+        "google/gemini-2.0-flash": {},
+        "google/gemini-2.0-flash-lite-preview-02-05": {},
+        "google/gemini-1.5-flash": {},
+        "ollama/qwen2.5-coder:0.5b": {},
+        "ollama/phi": {}
+      },
+      "workspace": "/home/will/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "jarvis",
+        "workspace": "/home/will/jarvis-ecosystem/agents/jarvis",
+        "default": true
+      },
+      {
+        "id": "mkt-content",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-social",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-analytics",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-ads",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-email",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "sales-hunter",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "sales-closer",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "sales-account",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "main",
+        "workspace": "/home/will/.openclaw/workspace",
+        "default": true
+      }
+    ]
+  },
+  "tools": {
+    "profile": "coding"
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "whatsapp",
+        "accountId": "*"
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "groupPolicy": "allowlist",
+      "debounceMs": 0,
+      "mediaMaxMb": 50
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "4aa4b66a5b97b3b6e320adf4a83e0eb69dcbe6b1254a2768"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  },
+  "browser": {
+    "mode": "headless",
+    "executablePath": "/usr/bin/google-chrome"
+  }
+}

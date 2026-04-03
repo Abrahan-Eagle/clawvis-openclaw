@@ -1,0 +1,38 @@
+Jarvis-OpenClaw/   (raíz en Documentos)
+├── _LEEME.txt
+├── SCRUM.txt
+├── TRELLO.txt
+├── DISCORD.txt
+├── GESTION.txt
+├── ESTRUCTURA.txt
+├── gestion/
+│   └── 2026-03-25/          ← una carpeta por fecha: todo lo de coordinación (Discord, Trello, notas Scrum)
+├── scrum/
+│   ├── product-backlog/2026-03-25/
+│   └── sprints/sprint-01_2026-03-25/
+│       ├── planning/
+│       ├── increment/
+│       ├── daily/
+│       ├── review/
+│       └── retrospective/
+├── agents/
+│   ├── jarvis/2026-03-25/
+│   ├── marketing/2026-03-25/
+│   └── ventas/2026-03-25/
+├── automations/
+│   ├── jarvis/2026-03-25/
+│   ├── marketing/2026-03-25/
+│   ├── ventas/2026-03-25/
+│   ├── shared/2026-03-25/
+│   └── registry/2026-03-25/
+├── scripts/2026-03-25/
+├── brands/2026-03-25/
+└── skills/global/2026-03-25/
+
+Fechas: ISO YYYY-MM-DD. Añade nuevas carpetas de fecha en gestion/ y en agents/… cuando toque.
+
+Por empresa / proyecto: opcional dentro del día, ej. agents/marketing/2026-03-25/corralx_campaña-q2/
+
+Agentes OpenClaw: jarvis → agents/jarvis | mkt-* → marketing | sales-* → ventas
+
+Coordinación (Scrum + Trello + Discord): GESTION.txt. Carpetas de sprint y entregables: scrum/ y agents/.

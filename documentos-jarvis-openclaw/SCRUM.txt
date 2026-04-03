@@ -1,0 +1,21 @@
+Metodología Scrum — convención en este almacén
+
+Coordinación: Scrum como marco; Trello + Discord como herramientas (ver GESTION.txt). Resúmenes y notas locales: gestion/YYYY-MM-DD/ (una carpeta por fecha). Entregables de sprint: scrum/sprints/…/increment/ y agents/…
+
+Roles (recordatorio): Product Owner prioriza; Scrum Master facilita; Developers entregan incremento.
+
+Artefactos en carpetas:
+  scrum/product-backlog/     → ítems priorizados (épicas, historias, criterios de aceptación en .md o .txt).
+  scrum/sprints/<id-sprint>/ → un sprint = carpeta con nombre claro, p. ej. sprint-01_2026-03-25_a_2026-04-05
+    planning/                → objetivo del sprint, ítems comprometidos
+    increment/               → entregables listos al final del sprint
+    daily/                   → notas breves por fecha (opcional)
+    review/                  → demo, feedback stakeholders (opcional)
+    retrospective/           → mejora del proceso (opcional)
+
+Definición de “Done”: acordarla en planning y reflejarla en increment/ o en el backlog.
+
+Eventos Scrum (cadencia): Sprint Planning, Daily (si aplica), Sprint Review, Retrospective.
+Las fechas en nombres de carpeta siguen ISO (YYYY-MM-DD).
+
+Relación con agents/: el trabajo técnico sigue yendo a agents/*/YYYY-MM-DD/; el sprint agrupa el “qué” y el “cuándo” en scrum/sprints/.

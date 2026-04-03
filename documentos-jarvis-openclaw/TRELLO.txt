@@ -1,0 +1,11 @@
+Trello — parte de la coordinación (junto con Scrum y Discord)
+
+Tablero para ver avance: backlog, sprint, en progreso, hecho. Discord sirve para conversar; Trello para el estado visible y ordenado.
+
+Listas sugeridas: Product Backlog → Sprint Backlog → En progreso → En revisión (opcional) → Hecho.
+
+Etiquetas por área: jarvis | marketing | ventas | automatizaciones | infra.
+
+Notas o exportes que quieras guardar en el PC: misma carpeta gestion/YYYY-MM-DD/ (ver GESTION.txt).
+
+Integración OpenClaw: skill Trello si tienes credenciales configuradas.

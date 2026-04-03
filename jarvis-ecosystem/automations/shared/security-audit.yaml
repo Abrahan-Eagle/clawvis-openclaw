@@ -1,0 +1,17 @@
+# Transversal — recordatorio de higiene de seguridad OpenClaw / host
+name: security-audit
+description: Recordatorio para ejecutar healthcheck y revisar tokens/credenciales
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 8 * * 0"
+
+steps:
+  - name: checklist
+    action: notify
+    message: |
+      Seguridad — auditoría semanal (Jarvis)
+      - Ejecutar skill healthcheck en el host del gateway
+      - Rotar tokens expuestos (Discord, APIs)
+      - Revisar openclaw.json y backups (openclaw backup)

@@ -1,0 +1,22 @@
+# Agent Town — no versionar artefactos de build ni dependencias
+agent-town/node_modules/
+agent-town/.next/
+agent-town/out/
+agent-town/.turbo/
+agent-town/.env.local
+agent-town/.env*.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# Logs sueltos (opcional)
+*.log
+
+# Perfil Chromium embebido (pesado)
+openclaw-state/browser/openclaw/user-data/
+
+# Credenciales de canales (WhatsApp, etc.) — no subir
+openclaw-state/credentials/

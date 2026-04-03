@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "skills": {
+    "gog": {
+      "version": "1.0.0",
+      "installedAt": 1774456117688
+    },
+    "himalaya": {
+      "version": "1.0.0",
+      "installedAt": 1774456120286
+    },
+    "xurl": {
+      "version": "1.0.0",
+      "installedAt": 1774456123098
+    },
+    "slack": {
+      "version": "1.0.0",
+      "installedAt": 1774456125257
+    },
+    "blogwatcher": {
+      "version": "1.0.0",
+      "installedAt": 1774456129692
+    },
+    "summarize": {
+      "version": "1.0.0",
+      "installedAt": 1774456132010
+    },
+    "notion": {
+      "version": "1.0.0",
+      "installedAt": 1774456134044
+    },
+    "trello": {
+      "version": "1.0.0",
+      "installedAt": 1774456136714
+    },
+    "session-logs": {
+      "version": "1.0.0",
+      "installedAt": 1774456138882
+    },
+    "nano-pdf": {
+      "version": "1.0.0",
+      "installedAt": 1774456141033
+    },
+    "mcporter": {
+      "version": "1.0.0",
+      "installedAt": 1774456143628
+    },
+    "tmux": {
+      "version": "1.0.0",
+      "installedAt": 1774456146458
+    },
+    "video-frames": {
+      "version": "1.0.0",
+      "installedAt": 1774456148917
+    }
+  }
+}

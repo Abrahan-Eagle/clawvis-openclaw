@@ -1,0 +1,15 @@
+Coordinación del trabajo — Scrum + Trello + Discord (un solo enfoque)
+
+Marco: Scrum (eventos, backlog, sprint, incremento).
+Herramientas: Trello (estado y avance en tarjetas) y Discord (comunicación, acuerdos, avisos). Las tres cosas van juntas; no son “tres silos” de carpetas distintas.
+
+Carpeta local única para lo que guardes del día a día de coordinación:
+  Documentos/Jarvis-OpenClaw/gestion/YYYY-MM-DD/
+
+Ahí va todo lo que quieras dejar por escrito en el PC: resúmenes de Discord, notas de planning, enlaces a tablero Trello, decisiones del sprint, etc. Puedes usar nombres de archivo claros (ej. discord-resumen.txt, trello-planning-sprint01.txt).
+
+El trabajo por entregable sigue en agents/… y scrum/sprints/… como antes.
+
+Detalle de canales (Discord) y listas (Trello): DISCORD.txt y TRELLO.txt.
+
+Credenciales Trello (API): archivo ~/.openclaw/.env con TRELLO_API_KEY y TRELLO_TOKEN. El gateway systemd carga ese archivo (EnvironmentFile en openclaw-gateway.service). Completa TRELLO_TOKEN en Trello → Power-Up → Clave de API → generar token. Prueba: source ~/.openclaw/.env && curl -s "https://api.trello.com/1/members/me/boards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[].name'

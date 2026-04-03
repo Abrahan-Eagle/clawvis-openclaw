@@ -1,0 +1,10 @@
+Jarvis-OpenClaw — almacén de trabajo (no reemplaza el repo jarvis-ecosystem)
+
+Estructura: espejo lógico de jarvis-ecosystem (agents, automations, scripts, brands, skills).
+Dentro de cada área hay subcarpetas YYYY-MM-DD: coloca ahí lo generado ese día.
+
+Convención de fechas: ISO 8601 (año-mes-día). Las carpetas nuevas de trabajo usan la fecha del día.
+
+Coordinación: Scrum + Trello + Discord (ver GESTION.txt). Una sola carpeta por fecha para notas de coordinación: gestion/YYYY-MM-DD/. Scrum detallado en scrum/.
+
+Creado / última plantilla: 2026-03-25

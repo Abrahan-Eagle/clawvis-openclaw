@@ -1,0 +1,27 @@
+# Marketing — monitor de competencia (plantilla; ampliar con RSS/API reales)
+name: competitor-monitor
+description: Checklist diario de revisión competitiva (RSS, precios, anuncios)
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 9 * * 1-5"
+
+config:
+  competitor_urls:
+    description: "URLs RSS o landing a vigilar (una por línea en memoria)"
+    default: "https://example.com/rss"
+
+steps:
+  - name: day
+    action: evaluate
+    expression: new Date().toISOString().slice(0, 10)
+    capture: today
+
+  - name: reminder
+    action: notify
+    message: |
+      Marketing — Competitor monitor (${today})
+      - Revisar feeds RSS (skill blogwatcher / summarize)
+      - Comparar precios y messaging en landings
+      - Registrar hallazgos en Notion/Trello

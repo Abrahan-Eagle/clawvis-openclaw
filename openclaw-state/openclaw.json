@@ -1,0 +1,205 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.23-2",
+    "lastTouchedAt": "2026-03-24T12:25:05.196Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-24T12:25:05.190Z",
+    "lastRunVersion": "2026.3.23-2",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "browser": {
+    "enabled": true,
+    "executablePath": "/snap/bin/chromium",
+    "headless": true,
+    "noSandbox": true,
+    "evaluateEnabled": true,
+    "extraArgs": [
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--disable-software-rasterizer",
+      "--mute-audio",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding",
+      "--memory-pressure-off"
+    ]
+  },
+  "auth": {
+    "profiles": {
+      "google:default": {
+        "provider": "google",
+        "mode": "api_key"
+      },
+      "opencode:zen1": {
+        "provider": "opencode",
+        "mode": "api_key"
+      },
+      "opencode:zen2": {
+        "provider": "opencode",
+        "mode": "api_key"
+      },
+      "opencode:zen3": {
+        "provider": "opencode",
+        "mode": "api_key"
+      },
+      "groq:default": {
+        "provider": "groq",
+        "mode": "api_key"
+      },
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/free"
+      },
+      "models": {
+        "opencode/minimax-m2.5-free": {},
+        "opencode/mimo-v2-flash-free": {},
+        "opencode/mimo-v2-omni-free": {},
+        "opencode/mimo-v2-pro-free": {},
+        "opencode/nemotron-3-super-free": {},
+        "openrouter/free": {},
+        "openrouter/deepseek/deepseek-r1": {},
+        "groq/llama-3.3-70b-versatile": {},
+        "groq/llama-3.1-70b-versatile": {},
+        "groq/llama-3.1-8b-instant": {},
+        "groq/mixtral-8x7b-32768": {},
+        "groq/llama3-70b-8192": {},
+        "groq/llama3-8b-8192": {},
+        "google/gemini-2.5-flash": {},
+        "google/gemini-2.0-flash": {},
+        "google/gemini-2.0-flash-lite-preview-02-05": {},
+        "google/gemini-1.5-flash": {},
+        "ollama/qwen2.5-coder:0.5b": {},
+        "ollama/phi": {}
+      },
+      "workspace": "/home/will/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "jarvis",
+        "default": true,
+        "workspace": "/home/will/jarvis-ecosystem/agents/jarvis"
+      },
+      {
+        "id": "mkt-content",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-social",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-analytics",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-ads",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "mkt-email",
+        "workspace": "/home/will/jarvis-ecosystem/agents/marketing"
+      },
+      {
+        "id": "sales-hunter",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "sales-closer",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "sales-account",
+        "workspace": "/home/will/jarvis-ecosystem/agents/ventas"
+      },
+      {
+        "id": "main",
+        "default": true,
+        "workspace": "/home/will/.openclaw/workspace"
+      }
+    ]
+  },
+  "tools": {
+    "profile": "coding",
+    "alsoAllow": [
+      "lobster"
+    ]
+  },
+  "bindings": [
+    {
+      "agentId": "jarvis",
+      "match": {
+        "channel": "whatsapp",
+        "accountId": "*"
+      }
+    },
+    {
+      "agentId": "jarvis",
+      "match": {
+        "channel": "discord",
+        "guildId": "*"
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true,
+      "dmPolicy": "pairing",
+      "groupPolicy": "allowlist",
+      "debounceMs": 0,
+      "mediaMaxMb": 50
+    },
+    "discord": {
+      "enabled": true,
+      "token": "",
+      "dmPolicy": "open",
+      "groupPolicy": "open",
+      "allowFrom": [
+        "*"
+      ]
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "none"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  }
+}
