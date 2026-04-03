@@ -1,0 +1,24 @@
+# Opcional: Agent Town en modo desarrollo al iniciar sesión.
+# Copiar a ~/.config/systemd/user/agent-town-dev.service
+# Ajustar rutas de usuario y del repo. Requiere Node 22 + pnpm (corepack).
+#
+# systemctl --user daemon-reload
+# systemctl --user enable --now agent-town-dev.service
+#
+# Nota: "pnpm dev" es para desarrollo; en producción usar pnpm build && pnpm start.
+
+[Unit]
+Description=Agent Town (dev server, optional)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=HOME=%h
+WorkingDirectory=/var/www/clawvis-openclaw/agent-town
+ExecStart=/bin/bash -lc 'source %h/.nvm/nvm.sh && nvm use 22 >/dev/null && exec pnpm dev'
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

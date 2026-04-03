@@ -26,6 +26,36 @@ Respaldo unificado del trabajo alrededor de **OpenClaw**, **Jarvis**, **Agent To
 
 Perfil CDP del navegador en el repo: `openclaw-state/browser/openclaw/user-data` → enlace a `~/.openclaw/cdp-user-data` (evita rutas de otro usuario).
 
+## Telegram (OpenClaw)
+
+Documentación oficial: [channels/telegram](https://docs.openclaw.ai/channels/telegram).
+
+1. Crea un bot con **@BotFather** (`/newbot`) y copia el **token**.
+2. En **`~/.openclaw/.env`** define `TELEGRAM_BOT_TOKEN=<token>` (no subas este archivo a Git).
+3. En **`~/.openclaw/openclaw.json`** debe existir `channels.telegram` con `enabled: true` y `dmPolicy` (por defecto **pairing** para el primer contacto).
+4. Enlaza mensajes al agente con `bindings` (`channel: "telegram"`, `accountId: "*"` → agente `jarvis` si aplica).
+5. Reinicia el gateway: `systemctl --user restart openclaw-gateway`.
+6. **Pairing (DM):** escribe al bot en Telegram; en el PC ejecuta `openclaw pairing list telegram` y `openclaw pairing approve telegram <CÓDIGO>` (el código caduca en ~1 h).
+7. Comprueba: `openclaw channels status` (Telegram debe pasar de `not configured` a conectado cuando el token es válido).
+
+Grupos: revisa *privacy mode* del bot en BotFather (`/setprivacy`) y opcionalmente `channels.telegram.groups` en la doc.
+
+## Arranque al iniciar sesión (resumen)
+
+| Servicio | Comportamiento |
+|----------|----------------|
+| **OpenClaw gateway** | `systemctl --user enable --now openclaw-gateway` — suele arrancar al **iniciar sesión** en el escritorio (systemd --user). |
+| **Sin login gráfico** | Opcional: `sudo loginctl enable-linger $USER` para que los servicios `--user` existan tras boot (útil en servidores headless). |
+| **Agent Town** | No arranca solo por defecto. Ejemplo opcional: [`deploy/systemd/agent-town-dev.service.example`](deploy/systemd/agent-town-dev.service.example) (modo `pnpm dev`; ajusta rutas). |
+
+## Pruebas rápidas (CLI)
+
+- Gateway: `curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18789/` → `200`.
+- Canales: `openclaw channels status` (y `--probe`).
+- Turno de agente vía gateway: `openclaw agent --agent jarvis --message "hola"` (requiere API keys de modelo válidas en `auth-profiles` / proveedores).
+
+Si las sesiones heredaron rutas de otro usuario (`/home/will/...`), conviene normalizar rutas en `~/.openclaw/agents/*/sessions/` o regenerar sesiones.
+
 ## Sincronizar desde el equipo (referencia)
 
 Tras cambios locales, desde `~/clawvis-openclaw`: `git add -A`, `git commit`, `git push origin main`.
