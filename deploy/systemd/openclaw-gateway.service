@@ -1,27 +1,28 @@
 [Unit]
-Description=OpenClaw Gateway (v2026.3.23-2)
+Description=OpenClaw Gateway (user session)
 After=network-online.target
 Wants=network-online.target
 
+# Copiar a: ~/.config/systemd/user/openclaw-gateway.service
+# Ajustar ExecStart si tu Node/nvm está en otra ruta (nvm: ~/.nvm/versions/node/v22.x.x/bin/node)
+
 [Service]
 EnvironmentFile=-%h/.openclaw/.env
-ExecStart=/home/will/.config/nvm/versions/node/v22.22.1/bin/node /home/will/.config/nvm/versions/node/v22.22.1/lib/node_modules/openclaw/dist/index.js gateway --port 18789
+ExecStart=/home/aipp/.nvm/versions/node/v22.22.2/bin/node /home/aipp/.nvm/versions/node/v22.22.2/lib/node_modules/openclaw/dist/index.js gateway --port 18789
 Restart=always
 RestartSec=5
 TimeoutStopSec=30
-TimeoutStartSec=30
+TimeoutStartSec=60
 SuccessExitStatus=0 143
 KillMode=control-group
-Environment=HOME=/home/will
+Environment=HOME=/home/aipp
 Environment=TMPDIR=/tmp
 Environment=NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
-Environment=PATH=/home/will/.config/nvm/versions/node/v22.22.1/bin:/home/will/.config/nvm/current/bin:/home/will/.local/bin:/home/will/.npm-global/bin:/home/will/bin:/home/will/.volta/bin:/home/will/.asdf/shims:/home/will/.bun/bin:/home/will/.nvm/current/bin:/home/will/.fnm/current/bin:/home/will/.local/share/pnpm:/usr/local/bin:/usr/bin:/bin
+Environment=PATH=/home/aipp/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin
 Environment=OPENCLAW_GATEWAY_PORT=18789
 Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service
-Environment="OPENCLAW_WINDOWS_TASK_NAME=OpenClaw Gateway"
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
 Environment=OPENCLAW_SERVICE_KIND=gateway
-Environment=OPENCLAW_SERVICE_VERSION=2026.3.23-2
 
 [Install]
 WantedBy=default.target

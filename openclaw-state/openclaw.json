@@ -11,7 +11,7 @@
   },
   "browser": {
     "enabled": true,
-    "executablePath": "/snap/bin/chromium",
+    "executablePath": "/usr/bin/google-chrome",
     "headless": true,
     "noSandbox": true,
     "evaluateEnabled": true,
