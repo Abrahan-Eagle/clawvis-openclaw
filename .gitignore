@@ -1,5 +1,6 @@
 # Agent Town — no versionar artefactos de build ni dependencias
 agent-town/node_modules/
+jarvis-ecosystem/agents/jarvis/scripts/node_modules/
 agent-town/.next/
 agent-town/out/
 agent-town/.turbo/

@@ -48,11 +48,21 @@ Grupos: revisa *privacy mode* del bot en BotFather (`/setprivacy`) y opcionalmen
 | **Sin login gráfico** | Opcional: `sudo loginctl enable-linger $USER` para que los servicios `--user` existan tras boot (útil en servidores headless). |
 | **Agent Town** | No arranca solo por defecto. Ejemplo opcional: [`deploy/systemd/agent-town-dev.service.example`](deploy/systemd/agent-town-dev.service.example) (modo `pnpm dev`; ajusta rutas). |
 
+## Modelos LLM (ligero vs profundo, fallbacks, idle)
+
+OpenClaw **no** trae un modo “Auto” por tarea como Cursor: `primary` + `fallbacks` solo cambian de modelo ante **fallos** (401, rate limit, etc.), no ante “pregunta difícil”. Para acercarse a “más potente cuando amerita”:
+
+- **`jarvis`:** modelo **ligero** por defecto en `agents.defaults` (rápido/barato); cadena de `fallbacks` para resiliencia.
+- **`jarvis-deep`:** mismo workspace que `jarvis`, modelo **más capaz** como `primary` (p. ej. OpenCode Nemotron primero); úsalo vía CLI o añade un `binding` específico a un chat.
+
+Detalle, matriz y consumo en reposo: [docs/MODELOS_JARVIS_OPENCLAW.md](docs/MODELOS_JARVIS_OPENCLAW.md).
+
 ## Pruebas rápidas (CLI)
 
 - Gateway: `curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18789/` → `200`.
 - Canales: `openclaw channels status` (y `--probe`).
 - Turno de agente vía gateway: `openclaw agent --agent jarvis --message "hola"` (requiere API keys de modelo válidas en `auth-profiles` / proveedores).
+- Modo profundo (mismo ecosistema, modelo más fuerte): `openclaw agent --agent jarvis-deep --message "…"`.
 
 Si las sesiones heredaron rutas de otro usuario (`/home/will/...`), conviene normalizar rutas en `~/.openclaw/agents/*/sessions/` o regenerar sesiones.
 

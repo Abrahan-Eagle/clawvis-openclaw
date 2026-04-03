@@ -1,0 +1,69 @@
+# Model router — reglas declarativas (prioridad: orden de lista, primera coincidencia gana).
+# Solo IDs canónicos ya dados de alta en ~/.openclaw/openclaw.json → agents.defaults.models
+# (ej. groq/*, opencode/* que uses). Sin nuevos proveedores.
+# Default si no hay match: tier "light" (barato).
+
+version: 1
+
+# Tiers → modelo canónico OpenClaw + agente CLI (openclaw agent --agent <id>)
+# Ajusta agentId si tus ids difieren; el script hace fallback a JARVIS_AGENT_* env.
+tiers:
+  light:
+    model: groq/llama-3.1-8b-instant
+    agentId: jarvis-auto-light
+  standard:
+    model: groq/llama-3.3-70b-versatile
+    agentId: jarvis
+  heavy:
+    model: opencode/nemotron-3-super-free
+    agentId: jarvis-deep
+
+# Clasificador opcional (Fase 2): solo si JARVIS_MODEL_ROUTER_CLASSIFIER=1 y GROQ_API_KEY
+classifier:
+  groqModel: llama-3.1-8b-instant
+  # Si ninguna regla coincide y el mensaje tiene al menos N caracteres → llamar Groq JSON tier
+  whenNoRuleMatchMinChars: 500
+
+rules:
+  # --- Heavy: código, arquitectura, depuración profunda ---
+  - name: code-heavy
+    priority: 10
+    patterns:
+      - "(?i)\\b(refactor|architecture|distributed system|prove|theorem|formal)\\b"
+      - "(?i)\\b(stack trace|segfault|memory leak|race condition)\\b"
+      - "(?i)\\b(revisa|review)\\s+(este|this)\\s+(repo|proyecto|codebase)\\b"
+    tier: heavy
+
+  - name: code-standard
+    priority: 20
+    patterns:
+      - "(?i)\\b(debug|debugger|breakpoint|stack)\\b"
+      - "(?i)\\b(exception|error:|traceback|syntax error)\\b"
+      - "(?i)```[a-z]*\\n"
+      - "(?i)\\b(unit test|integration test|pytest|jest|phpunit)\\b"
+    tier: standard
+
+  # --- Estándar: explicaciones largas, análisis ---
+  - name: analysis
+    priority: 30
+    patterns:
+      - "(?i)\\b(análisis profundo|deep dive|compare and contrast)\\b"
+      - "(?i)\\b(explica(r)? en detalle|paso a paso completo)\\b"
+    tier: standard
+
+  # --- Ligero: saludos, clima, trivial ---
+  - name: trivial
+    priority: 40
+    patterns:
+      - "(?i)^(hola|hi|hey|buenos días|buenas tardes|gracias|ok|vale|thanks)\\b"
+      - "(?i)\\b(clima|weather|temperatura)\\b"
+      - "(?i)tiempo\\s+hace"
+      - "(?i)^(ping|pong)\\s*$"
+    tier: light
+
+  - name: empty-or-short
+    priority: 50
+    maxLen: 40
+    patterns:
+      - ".*"
+    tier: light

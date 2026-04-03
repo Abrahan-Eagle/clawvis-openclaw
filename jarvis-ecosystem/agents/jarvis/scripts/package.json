@@ -1,0 +1,8 @@
+{
+  "name": "jarvis-model-router-scripts",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "yaml": "^2.8.3"
+  }
+}

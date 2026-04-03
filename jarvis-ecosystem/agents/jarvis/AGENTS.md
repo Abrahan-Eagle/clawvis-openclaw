@@ -2,6 +2,10 @@
 
 This folder is home. Treat it that way.
 
+## Model router (CLI)
+
+Routing ligero / estándar / fuerte por reglas: `model-router.rules.yaml`, implementación en `scripts/model-router.mjs`, wrapper `scripts/jarvis-agent-routed.sh`, detalle en `skills/model-router/SKILL.md`. OpenClaw no aplica esto automáticamente en canales; úsalo en terminal o scripts.
+
 ## First Run
 
 If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out who you are, then delete it. You won't need it again.
