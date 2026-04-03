@@ -1,0 +1,29 @@
+{
+  "_comment": "Fragmento para fusionar en ~/.openclaw/openclaw.json → agents.list (ajusta workspace). jarvis suele ser 'standard'; jarvis-auto-light y jarvis-deep cubren extremos del router.",
+  "agents_to_merge": [
+    {
+      "id": "jarvis-auto-light",
+      "workspace": "/home/aipp/jarvis-ecosystem/agents/jarvis",
+      "model": {
+        "primary": "groq/llama-3.1-8b-instant",
+        "fallbacks": [
+          "groq/llama-3.3-70b-versatile",
+          "opencode/nemotron-3-super-free",
+          "opencode/mimo-v2-pro-free"
+        ]
+      }
+    },
+    {
+      "id": "jarvis-deep",
+      "workspace": "/home/aipp/jarvis-ecosystem/agents/jarvis",
+      "model": {
+        "primary": "opencode/nemotron-3-super-free",
+        "fallbacks": [
+          "opencode/mimo-v2-pro-free",
+          "groq/llama-3.3-70b-versatile",
+          "groq/llama-3.1-8b-instant"
+        ]
+      }
+    }
+  ]
+}
