@@ -166,3 +166,10 @@ Script opcional: `jarvis-ecosystem/agents/jarvis/scripts/validate-jarvis-session
 En el host de referencia se **cerró** el módulo de instalación y operación de **Ollama** como proveedor local del Gateway (modelos acotados a ~4GB VRAM, servicio `systemd --user`, enlaces en `~/.openclaw/openclaw.json`, verificación de canales). Detalle operativo, rutas, checklist y límites (`contextTokens` ≥ 16000):
 
 - [`docs/CIERRE_MODULO_OLLAMA_LOCAL.md`](CIERRE_MODULO_OLLAMA_LOCAL.md)
+
+## Proveedor Cursor (comunidad, abril 2026)
+
+Cursor **no** ofrece un endpoint HTTP de suscripción público; la integración con OpenClaw se hace vía **proxies locales** que llaman al **Cursor Agent CLI**. Dos líneas habituales: **`cursor-agent-api-proxy`** (npm, puerto **4646**) y el plugin **`openclaw-cursor-brain`** (proxy **18790** + MCP hacia el IDE). Doc upstream en revisión: [openclaw/openclaw#42731](https://github.com/openclaw/openclaw/pull/42731). **Aviso ToS:** revisar términos de Cursor y uso del CLI; el tráfico sigue siendo remoto.
+
+- Guía detallada: [`docs/PROVEEDOR_CURSOR_OPENCLAW.md`](PROVEEDOR_CURSOR_OPENCLAW.md)
+- Resultado de pruebas locales (spikes): [`docs/SPIKE_CURSOR_OPENCLAW.md`](SPIKE_CURSOR_OPENCLAW.md)
