@@ -18,8 +18,13 @@
 - **No** commitear tokens, `openclaw.json` completo con secretos, ni contenido de `.env`.
 - Tablas de referencia en [../agents/jarvis/MEMORY.md](../agents/jarvis/MEMORY.md) pueden listar IDs públicos de tablero Trello si el superusuario lo desea; no pegar API keys.
 
+## Permisos para automatizar (Trello escritura, exec, Discord bot)
+
+Checklist y comandos de verificación: [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md).
+
 ---
 
 ## Historial
 
 - **2026-04-04:** Documento añadido para alinear el ecosistema Jarvis con el estado real de integraciones OpenClaw.
+- **2026-04-04:** Enlace a [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello escritura, `exec`, Discord).

@@ -14,7 +14,7 @@ Configura credenciales por skill según cada `SKILL.md` (Google, Notion, Trello,
 
 ## OpenClaw: canales ya integrados
 
-**Trello, Discord y Telegram** están configurados en el gateway OpenClaw (`~/.openclaw/openclaw.json` y `~/.openclaw/.env` donde aplique). Resumen para Jarvis: [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). No asumir que falta cablear integraciones salvo que el superusuario indique lo contrario.
+**Trello, Discord y Telegram** están configurados en el gateway OpenClaw (`~/.openclaw/openclaw.json` y `~/.openclaw/.env` donde aplique). Resumen para Jarvis: [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). Para **crear tableros/listas** hace falta token Trello con escritura + herramienta `exec`: [../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md).
 
 ## Variables de entorno (referencia en el monorepo)
 

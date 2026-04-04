@@ -50,6 +50,10 @@ Sin comillas innecesarias ni espacios al final de línea.
 
 Reiniciar el gateway tras cambios: `systemctl --user restart openclaw-gateway`.
 
+### Permisos de escritura (error `401` / `unauthorized permission requested` al crear tableros)
+
+Si **GET** `/members/me/boards` funciona pero **POST** `/boards` o `/lists` falla, el token suele ser **solo lectura** o no empareja la clave. Regenera el token desde [trello.com/app-key](https://trello.com/app-key) en la **misma** página que la API key y acepta **todos** los permisos del flujo de autorización. Guía paso a paso (OpenClaw + verificación): [jarvis-ecosystem/docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../jarvis-ecosystem/docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md).
+
 ---
 
 ## Verificación rápida

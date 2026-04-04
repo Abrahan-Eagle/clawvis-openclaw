@@ -24,7 +24,7 @@ Gobierno operativo: [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVI
 
 **Archivos en disco (entregables, medios):** solo bajo `~/Documents/JARVIS-DOCUMENTS/` (carpeta **`Documents`**, no `Documentos`) — arbol por empresa y cliente. Especificacion completa: [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md).
 
-**Integraciones OpenClaw (Trello, Discord, Telegram):** ya configuradas en el gateway — ver [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). No proponer reinstalar salvo orden del superusuario.
+**Integraciones OpenClaw (Trello, Discord, Telegram):** ya configuradas en el gateway — ver [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). **Permisos para automatizar** (escritura Trello, `exec`, bot Discord): [../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md).
 
 ---
 
@@ -81,3 +81,4 @@ Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs
 - **2026-04-04:** Documentado en repo que Trello, Discord y Telegram ya estan integrados en OpenClaw (`INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md`); plantilla Fase 5 y verificacion Discord Fase 4 añadidas.
 - **2026-04-04:** Unificada convencion de ruta: carpeta del sistema **`Documents`** (`~/Documents/`), explicitamente no `documentos` / `Documentos` / `~/Documentos/` salvo excepcion en WORKSPACE_POLICY.
 - **2026-04-04:** Añadidos `BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md` y `scripts/trello-bootstrap-boards.sh`. API Trello en este entorno rechazo escritura (401); esqueleto de tableros/canales manual o token con permiso de escritura.
+- **2026-04-04:** Documento `OPENCLAW_PERMISOS_AUTOMATIZACION.md` — checklist para token Trello con escritura, `exec` en gateway y permisos Discord bot.
