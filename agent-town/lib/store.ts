@@ -178,6 +178,12 @@ export function StudioProvider({ children }: { children: ReactNode }) {
       const t = setTimeout(() => gateway.connectImpl(savedConfig), 80);
       return () => clearTimeout(t);
     }
+    // OpenClaw: primera visita sin localStorage — conectar al proxy de esta app (/api/gateway → gateway real).
+    if (getAgentProvider() === "openclaw") {
+      const token = process.env.NEXT_PUBLIC_GATEWAY_TOKEN ?? "";
+      const t = setTimeout(() => gateway.connectImpl({ url: getDefaultGatewayUrl(), token }), 80);
+      return () => clearTimeout(t);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -122,7 +122,7 @@ export default function TerminalModal() {
               borderRadius: "var(--pixel-radius-sm)",
             }}
           >
-            Not connected. Use the HUD to connect first.
+            Not connected. Open the Connection panel (plug icon in the dock) and press Connect — or wait for auto-connect to the gateway.
           </div>
         )}
 
