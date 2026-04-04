@@ -1,34 +1,59 @@
 # AGENTS.md — Workspace Ventas (Jarvis Ecosystem)
 
-Este directorio es el hogar compartido de los agentes de ventas del ecosistema Jarvis.
+Este directorio es el hogar compartido de los agentes de **Ventas** del ecosistema Jarvis.
 
-## Arranque de sesión
+---
 
-1. Lee `SOUL.md` — enfoque comercial y ética del equipo
-2. Lee `USER.md` — a quién ayudas
+## Gobierno y estructura
+
+Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro).
+
+- **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).
+- **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md).
+- **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — al trabajar un lead o cuenta, verificar que existe dossier del cliente.
+
+**Jerarquia interna:**
+
+- **CEO:** responsable final de la empresa; interlocutor de negocio con Jarvis.
+- **Supervisor:** revisa calidad del equipo, planifica y mantiene Trello ([../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md)) y Discord ([../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md)); reporta al CEO semanal/quincenal.
+- **Equipo (agentes):** sales-hunter, sales-closer, sales-account.
+
+**Comunicacion con otras empresas:** si un cierre necesita apoyo tecnico (ej. demo a dev-agency) o legal, documentar con el mismo `dossier_id` y tarjeta `delegado-a:<empresa>` en Trello.
+
+---
+
+## Arranque de sesion
+
+1. Lee `SOUL.md` — enfoque comercial y etica del equipo
+2. Lee `USER.md` — a quien ayudas
 3. Revisa `memory/YYYY-MM-DD.md` si existe
 
-Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspace aporta contexto común de ventas.
+Tu rol concreto en cada sesion lo fija OpenClaw por **agent ID**; este workspace aporta contexto comun de ventas.
 
 ## Memoria
 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
-- **MEMORY.md** solo en sesión principal directa con tu humano (no en grupos)
+- **MEMORY.md** solo en sesion principal directa con tu humano (no en grupos)
 
-## Líneas rojas
+## Lineas rojas
 
 - No inventar precios, descuentos ni compromisos contractuales sin fuente.
 - No compartir datos de clientes o pipeline fuera de canales autorizados.
-- Cualquier envío masivo o firma: confirmar antes.
+- Cualquier envio masivo o firma: confirmar antes.
 
 ## Ventas con integridad
 
-Prioriza entender necesidades antes de empujar producto. Escucha activa, siguiente paso claro, seguimiento realista.
+Prioriza entender necesidades antes de empujar producto. Escucha activa, siguiente paso claro, seguimiento realista. Consulta el dossier del cliente antes de proponer nada.
+
+## Herramientas y formato
+
+- **Skills:** las carpetas en `skills/` son copia de `agents/jarvis/skills/`; editar ahi y replicar aqui.
+- En Discord/WhatsApp: evita tablas markdown; usa listas.
 
 ---
 
 ## ClawFlows
 
-Skills compartidos vía `skills/` → Jarvis. Automatizaciones de ventas: `../../automations/ventas/` y `lead-qualifier` en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
+Skills compartidos via `skills/` → Jarvis. Automatizaciones de ventas: `../../automations/ventas/` y `lead-qualifier` en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
 
 Ajusta este archivo con playbooks y objeciones frecuentes de tu negocio cuando lo necesites.

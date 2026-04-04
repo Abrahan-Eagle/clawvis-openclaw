@@ -5,7 +5,8 @@
 | Ruta | Contenido |
 |------|-----------|
 | `registry/` | YAML instalados con `clawflows install …` (desde [clawflows.com](https://clawflows.com)) |
-| `jarvis/`, `marketing/`, `ventas/`, `shared/`, `devops/` | Flujos propios del ecosistema |
+| `jarvis/`, `marketing/`, `ventas/`, `shared/` | Flujos propios del ecosistema |
+| `devops/` | (no existe aún en el repo; crear cuando haya flujos DevOps propios) |
 
 ## Fuente canónica vs raíz de `automations/`
 
