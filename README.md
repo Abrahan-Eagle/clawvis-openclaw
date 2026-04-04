@@ -29,6 +29,8 @@ Respaldo unificado del trabajo alrededor de **OpenClaw**, **Jarvis**, **Agent To
 6. **Gateway (systemd usuario):** copiar `deploy/systemd/openclaw-gateway.service` a `~/.config/systemd/user/`, revisar rutas de `node` y `openclaw/dist/index.js`, luego `systemctl --user daemon-reload`, `enable --now openclaw-gateway`. Puerto por defecto **18789** (loopback).
 7. **Agent Town:** `cd agent-town && pnpm install && pnpm dev` → UI en **http://localhost:3000** (proxy al gateway `ws://127.0.0.1:18789/`). Ejecuta el dev server con el **mismo usuario Linux** que el gateway para que `/api/agents/discover` lea `~/.openclaw` correcto. Si el Terminal o el chat dicen “Not connected”, abre el panel **Connection** (icono del enchufe en el dock) y pulsa **Connect**; la URL por defecto suele ser `ws://localhost:3000/api/gateway` (túnel al OpenClaw en 18789). Con `gateway.auth.mode: none`, el token puede ir vacío. Tras un primer login correcto, la app guarda la config en `localStorage`. En builds recientes, OpenClaw intenta **auto-conectar** al cargar si aún no hay config guardada.
 
+Si las tareas en Agent Town pasan a **FAILED** al instante con `Assign failed` en el chat, revisa el log del gateway: versiones recientes de OpenClaw rechazan propiedades extra en `chat.send`. El front ya no envía `seatLabel`/`seatRole` salvo proveedor **Auggie**.
+
 Perfil CDP del navegador en el repo: `openclaw-state/browser/openclaw/user-data` → enlace a `~/.openclaw/cdp-user-data` (evita rutas de otro usuario).
 
 ## Telegram (OpenClaw)
