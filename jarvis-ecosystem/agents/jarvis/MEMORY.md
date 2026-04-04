@@ -22,7 +22,7 @@ Gobierno operativo: [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVI
 
 **Operacion post gobierno (indice):** [../../docs/OPERACION_POST_GOBIERNO.md](../../docs/OPERACION_POST_GOBIERNO.md).
 
-**Archivos en disco (entregables, medios):** solo bajo `~/Documents/JARVIS-DOCUMENTS/` — arbol por empresa y cliente. Especificacion completa: [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md).
+**Archivos en disco (entregables, medios):** solo bajo `~/Documents/JARVIS-DOCUMENTS/` (carpeta **`Documents`**, no `Documentos`) — arbol por empresa y cliente. Especificacion completa: [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md).
 
 **Integraciones OpenClaw (Trello, Discord, Telegram):** ya configuradas en el gateway — ver [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). No proponer reinstalar salvo orden del superusuario.
 
@@ -75,3 +75,4 @@ Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs
 - **2026-04-04:** Modelo de gobierno v2 formalizado. Jarvis es agente maestro; cada empresa con CEO + supervisor + equipo; clientes como dossiers de contexto; solo el superusuario dialoga con Jarvis.
 - **2026-04-04:** Cliente de prueba `cli-20260404-cliente-tests-redes` (Instagram + Facebook, empresa marketing) para depurar ecosistema; brief en `client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md`.
 - **2026-04-04:** Documentado en repo que Trello, Discord y Telegram ya estan integrados en OpenClaw (`INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md`); plantilla Fase 5 y verificacion Discord Fase 4 añadidas.
+- **2026-04-04:** Unificada convencion de ruta: carpeta del sistema **`Documents`** (`~/Documents/`), explicitamente no `documentos` / `Documentos` / `~/Documentos/` salvo excepcion en WORKSPACE_POLICY.

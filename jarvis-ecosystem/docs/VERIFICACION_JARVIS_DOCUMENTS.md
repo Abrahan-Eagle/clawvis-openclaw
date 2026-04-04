@@ -1,6 +1,6 @@
 # Verificación — JARVIS-DOCUMENTS en el PC
 
-**Objetivo:** comprobar que existe la carpeta canónica de entregables bajo `~/Documents/` y el subárbol mínimo para las empresas activas del holding.
+**Objetivo:** comprobar que existe la carpeta canónica de entregables bajo **`~/Documents/`** (carpeta del sistema **`Documents`**, inglés) y el subárbol mínimo para las empresas activas del holding. **No** usar `~/Documentos/` como ruta canónica del ecosistema salvo excepción en `WORKSPACE_POLICY.md`.
 
 **Convención:** [JARVIS_DOCUMENTS_ON_DISK.md](JARVIS_DOCUMENTS_ON_DISK.md).
 

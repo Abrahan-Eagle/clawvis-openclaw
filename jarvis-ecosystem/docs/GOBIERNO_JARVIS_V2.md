@@ -76,7 +76,7 @@ flowchart TB
 | Otro cliente quiere solo programación | **Otro dossier** (`dossier_id` distinto); Jarvis separa contextos (no mezcla con el cliente de marketing). |
 | Una empresa necesita a otra | Comunicación **entre empresas** resuelta con trazabilidad: mismo cliente = mismo dossier; tarjetas `delegado-a:<empresa>` o espejo entre boards; CEOs alinean entregables. |
 | Delegación entre empresas del holding | Tú o el CEO definen el reparto; queda en dossier + Trello (ver [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md)). |
-| Prioridad estratégica | Superusuario → Jarvis → documentos/tablas; equipos consumen desde Trello/Discord según plantilla. |
+| Prioridad estratégica | Superusuario → Jarvis → entregables en `~/Documents/` (convención `JARVIS-DOCUMENTS`) / tablas; equipos consumen desde Trello/Discord según plantilla. |
 
 ---
 

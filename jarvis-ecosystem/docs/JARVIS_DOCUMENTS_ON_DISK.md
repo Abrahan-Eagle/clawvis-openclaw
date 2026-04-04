@@ -6,8 +6,8 @@
 
 ## Regla absoluta
 
-- **Única raíz permitida** para documentos de trabajo del holding: carpeta **`Documentos`** del usuario del sistema (en Linux típicamente `~/Documents`).
-- Dentro de ella, **una sola carpeta raíz Jarvis:** **`JARVIS-DOCUMENTS`**.
+- **Única raíz permitida** para archivos de trabajo del holding: la carpeta del sistema llamada **`Documents`** (nombre en **inglés**), ruta **`~/Documents/`**. **No** usar como convención del repo la carpeta `documentos`, `Documentos` ni `~/Documentos/` — si el SO solo creó `~/Documentos/`, crea un enlace simbólico `~/Documents` → `~/Documentos` o anota la ruta real en `agents/jarvis/WORKSPACE_POLICY.md`.
+- Dentro de `~/Documents/`, **una sola carpeta raíz Jarvis:** **`JARVIS-DOCUMENTS`** (con guiones, tal cual).
 - **No** dispersar entregables en rutas ad hoc (`~/HoldingZonix`, `~/Escritorio/proyecto-x`, etc.) salvo orden expresa del superusuario para un caso puntual.
 
 Ruta canónica (sustituir usuario):
@@ -83,3 +83,4 @@ Revisiones: `..._v2`, `..._v3`.
 - **2026-04-04:** Convención acordada con el superusuario; documento creado para el ecosistema Jarvis.
 - **2026-04-04:** Árbol inicial creado en esta máquina en `/home/aipp/Documents/JARVIS-DOCUMENTS/`: empresas `marketing` y `ventas`; bajo marketing, cliente de prueba `cli-20260404-cliente-tests-redes` con estados `01`–`04`. Verificación: [VERIFICACION_JARVIS_DOCUMENTS.md](VERIFICACION_JARVIS_DOCUMENTS.md).
 - **2026-04-04:** Arbol re-verificado/asegurado en disco (`mkdir -p`); texto de verificación actualizado para usar `~` y ruta ejemplo.
+- **2026-04-04:** Aclarado nombre canónico de carpeta del sistema: **`Documents`** (`~/Documents/`), no `documentos` / `Documentos` / `~/Documentos/`.

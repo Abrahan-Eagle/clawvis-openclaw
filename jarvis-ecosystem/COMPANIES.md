@@ -4,7 +4,7 @@
 Gobierno operativo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).  
 **Ultima actualizacion:** abril 2026.
 
-**Entregables en disco (fuera del repo):** cada empresa tiene su rama bajo `~/Documents/JARVIS-DOCUMENTS/empresas/<ID>/` — ver [docs/JARVIS_DOCUMENTS_ON_DISK.md](docs/JARVIS_DOCUMENTS_ON_DISK.md).
+**Entregables en disco (fuera del repo):** cada empresa tiene su rama bajo `~/Documents/JARVIS-DOCUMENTS/empresas/<ID>/` (carpeta del sistema **`Documents`**, no `Documentos`) — ver [docs/JARVIS_DOCUMENTS_ON_DISK.md](docs/JARVIS_DOCUMENTS_ON_DISK.md).
 
 **CEO / Supervisor (Fase 1):** [docs/ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) — nombres de ejemplo por empresa (no el superusuario); sustituir por personas reales cuando aplique.
 

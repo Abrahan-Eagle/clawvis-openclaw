@@ -1,6 +1,6 @@
 # Operacion post gobierno — indice
 
-Plan operativo en fases (repo en `main`). Documentos de soporte:
+Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 | Fase | Objetivo | Documento / recurso |
 |------|----------|---------------------|

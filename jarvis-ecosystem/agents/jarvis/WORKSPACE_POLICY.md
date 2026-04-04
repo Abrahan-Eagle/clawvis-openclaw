@@ -7,9 +7,9 @@ Edita este archivo para definir **dónde puede trabajar Jarvis por defecto** y *
 - **Por defecto:** solo tocar proyectos y carpetas que tú listes abajo como permitidas.
 - **Si el humano ordena explícitamente** una ruta concreta (“edita `/ruta/archivo`”, “haz backup de X en Y”): **hazlo** salvo que sea obviamente destructivo o ilegal; en ese caso confirma una frase antes.
 
-## Documentos de entrega (obligatorio leer)
+## Entregas en disco: `~/Documents/JARVIS-DOCUMENTS/` (obligatorio leer)
 
-- **Convención canónica:** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — árbol `~/Documents/JARVIS-DOCUMENTS/` por empresa, cliente (`dossier_id`) y estados (borradores → publicados).
+- **Convención canónica:** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — carpeta del sistema **`Documents`** (inglés), ruta `~/Documents/JARVIS-DOCUMENTS/` por empresa, cliente (`dossier_id`) y estados (borradores → publicados). No confundir con `documentos` / `Documentos` / `~/Documentos/` salvo excepción anotada aquí.
 - En esta máquina la ruta absoluta equivalente está listada abajo en **Rutas permitidas**.
 
 ## Rutas permitidas (trabajo habitual)
@@ -17,7 +17,7 @@ Edita este archivo para definir **dónde puede trabajar Jarvis por defecto** y *
 **Esta PC (usuario `aipp`):**
 
 - `/var/www/clawvis-openclaw/jarvis-ecosystem/` — ecosistema Jarvis (workspace y repo `clawvis-openclaw`)
-- `/home/aipp/Documents/JARVIS-DOCUMENTS/` — entregables y medios del holding (ver sección “Documentos de entrega” arriba)
+- `/home/aipp/Documents/JARVIS-DOCUMENTS/` — entregables y medios del holding (ver sección “Entregas en disco” arriba)
 
 **Otras máquinas:** sustituir por el usuario y la ruta del clon; mantener la convención `~/Documents/JARVIS-DOCUMENTS/`.
 
