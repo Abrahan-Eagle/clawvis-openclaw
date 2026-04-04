@@ -19,6 +19,8 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 - **Supervisor:** revisa calidad del equipo, planifica y mantiene Trello ([../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md)) y Discord ([../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md)); reporta al CEO semanal/quincenal.
 - **Equipo (agentes):** mkt-content, mkt-social, mkt-analytics, mkt-ads, mkt-email.
 
+**Discord y OpenClaw:** en Discord suele verse **un solo bot**; el “quien responde” es el **`agentId`** que enruta OpenClaw por canal (`bindings`). Si todo el servidor va a `jarvis`, el mismo bot habla con el workspace de Jarvis. Para acercar el comportamiento al equipo de marketing, hace falta **routing** a `mkt-social` (u otro `mkt-*`) en canales concretos o **handoff simulado** en el texto. Detalle: [../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md](../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md).
+
 **Comunicacion con otras empresas:** si un encargo necesita apoyo de otra unidad (ej. landing a dev-agency), documentar con el mismo `dossier_id` y tarjeta `delegado-a:<empresa>` en Trello.
 
 ---

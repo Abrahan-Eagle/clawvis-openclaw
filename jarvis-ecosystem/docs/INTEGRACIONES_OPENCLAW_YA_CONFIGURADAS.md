@@ -9,7 +9,8 @@
 1. **No** proponer reconfigurar credenciales salvo que el superusuario lo pida.
 2. Para **Trello** (API / skill): credenciales y uso con `curl`/`jq` — [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md).
 3. **Discord y Telegram:** canales y bindings los define OpenClaw; las plantillas de organización ([PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md)) son referencia de **roles y nombres**, no un checklist de integración técnica pendiente.
-4. Convención de negocio tableros/clientes: [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md).
+4. **Un solo bot en Discord vs varios agentes OpenClaw** (CEO/supervisor/equipo “visibles”): [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md).
+5. Convención de negocio tableros/clientes: [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md).
 
 ---
 
@@ -36,6 +37,7 @@ Checklist y comandos de verificación: [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPE
 
 ## Historial
 
+- **2026-04-04:** Enlace a [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) (un bot, bindings por canal, handoff simulado).
 - **2026-04-04:** Sección **Client dossiers (rutas en disco)** — `~/Documents/client-dossiers`, symlinks en repo y en `~/jarvis-ecosystem`, ruta relativa desde `agents/jarvis`.
 - **2026-04-04:** Documento añadido para alinear el ecosistema Jarvis con el estado real de integraciones OpenClaw.
 - **2026-04-04:** Enlace a [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello escritura, `exec`, Discord).

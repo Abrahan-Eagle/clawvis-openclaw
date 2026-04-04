@@ -88,10 +88,11 @@ flowchart TB
 | [PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) | Roles y canales sugeridos por empresa (sin canal cliente→Jarvis). |
 | [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md) | Tableros, listas, etiquetas y vínculo `dossier_id`. |
 | [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md) (monorepo) | Credenciales API Trello y uso desde OpenClaw. |
+| [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) | Discord muestra un solo bot; cómo encajan CEO/supervisor/equipo con `agentId` y `bindings`. |
 
 ---
 
 ## 5. Fuera de alcance de este documento
 
 - CRM comercial pesado, facturación y contratos legales (solo referencia en dossier si aplica).
-- Configuración concreta de `bindings` en `~/.openclaw/openclaw.json` (ver README del ecosistema).
+- Configuración concreta de `bindings` en `~/.openclaw/openclaw.json` (ver [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) e [INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md)).
