@@ -5,6 +5,8 @@
 **Última revisión:** abril 2026.  
 **API / credenciales:** ver [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md).
 
+**Flujo operativo obligatorio (listas, Done, roles):** todo agente y subagente debe cumplir [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) además de esta convención.
+
 ---
 
 ## 1. Estructura recomendada por empresa
@@ -72,6 +74,7 @@ Si están disponibles, campos útiles:
 
 ## 7. Referencias
 
+- [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) — norma obligatoria de flujo para Jarvis, agentes y subagentes.
 - [CLIENT_DOSSIER_SCHEMA.md](CLIENT_DOSSIER_SCHEMA.md) — campos del dossier.
 - [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md) — flujo supervisor → CEO y solo superusuario ↔ Jarvis.
 - [PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) — canales alineados a proyectos cliente.

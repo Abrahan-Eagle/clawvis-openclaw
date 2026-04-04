@@ -14,6 +14,7 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 - **Integraciones (Trello, Discord, Telegram):** ya configuradas en OpenClaw — [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md); detalle operativo y tablas en [MEMORY.md](MEMORY.md). No proponer reinstalar integraciones salvo orden expresa del superusuario.
 - **Discord: un bot, varios roles lógicos:** la jerarquía CEO/supervisor/equipo no implica varios bots; ver [../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md](../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md).
 - **Permisos para crear tableros/canales vía API:** [../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello con escritura, `exec`, bot Discord).
+- **Flujo Trello obligatorio:** toda tarea formal (cliente, `dossier_id`, entregable del holding) debe reflejarse en tablero según [../../docs/FLUJO_TRELLO_ECOSISTEMA.md](../../docs/FLUJO_TRELLO_ECOSISTEMA.md); aplica también cuando invoques o coordines **subagentes** (comentario en tarjeta o tarjeta hija).
 
 ### Protocolo de cliente
 

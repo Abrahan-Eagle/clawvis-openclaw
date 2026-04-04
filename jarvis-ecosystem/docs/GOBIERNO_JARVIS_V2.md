@@ -87,6 +87,7 @@ flowchart TB
 | [CLIENT_DOSSIER_SCHEMA.md](CLIENT_DOSSIER_SCHEMA.md) | Esquema mínimo del dossier por cliente (campos, ejemplo JSON). |
 | [PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) | Roles y canales sugeridos por empresa (sin canal cliente→Jarvis). |
 | [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md) | Tableros, listas, etiquetas y vínculo `dossier_id`. |
+| [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) | **Obligatorio:** flujo Kanban, formato de tarjeta, Done, roles IA vs humanos. |
 | [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md) (monorepo) | Credenciales API Trello y uso desde OpenClaw. |
 | [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) | Discord muestra un solo bot; cómo encajan CEO/supervisor/equipo con `agentId` y `bindings`. |
 

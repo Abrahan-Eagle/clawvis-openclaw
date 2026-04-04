@@ -12,6 +12,7 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md).
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — al trabajar un lead o cuenta, verificar que existe dossier del cliente.
 - **Propuestas y adjuntos (PC del superusuario):** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — usar `~/Documents/JARVIS-DOCUMENTS/empresas/ventas/clientes/<dossier_id>/` cuando haya entregables fuera del repo.
+- **Trello (obligatorio):** [../../docs/FLUJO_TRELLO_ECOSISTEMA.md](../../docs/FLUJO_TRELLO_ECOSISTEMA.md) — oportunidades y tareas con cliente deben vivir en tarjeta trazable; agentes `sales-*` y subagentes cumplen la misma norma.
 
 **Jerarquia interna:**
 
