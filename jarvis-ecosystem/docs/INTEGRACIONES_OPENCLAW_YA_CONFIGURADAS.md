@@ -13,6 +13,16 @@
 
 ---
 
+## Client dossiers (rutas en disco)
+
+- **Ubicación visible (Documentos):** `~/Documents/client-dossiers` — un JSON por cliente (`cli-*.json`) y briefs opcionales (`BRIEF_*.md`).
+- **Repo:** `jarvis-ecosystem/client-dossiers` es un **enlace simbólico** a esa carpeta (sin duplicar archivos en el clon).
+- **OpenClaw (home):** `~/jarvis-ecosystem/client-dossiers` enlaza al mismo destino para que el gateway y el explorador vean los mismos ficheros.
+- **Desde el workspace del agente** (`~/jarvis-ecosystem/agents/jarvis`): ruta relativa `../../client-dossiers/`.
+- Resumen en memoria del agente: [../agents/jarvis/MEMORY.md](../agents/jarvis/MEMORY.md) (copia en home usada por OpenClaw).
+
+---
+
 ## Seguridad
 
 - **No** commitear tokens, `openclaw.json` completo con secretos, ni contenido de `.env`.
@@ -26,5 +36,6 @@ Checklist y comandos de verificación: [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPE
 
 ## Historial
 
+- **2026-04-04:** Sección **Client dossiers (rutas en disco)** — `~/Documents/client-dossiers`, symlinks en repo y en `~/jarvis-ecosystem`, ruta relativa desde `agents/jarvis`.
 - **2026-04-04:** Documento añadido para alinear el ecosistema Jarvis con el estado real de integraciones OpenClaw.
 - **2026-04-04:** Enlace a [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello escritura, `exec`, Discord).
