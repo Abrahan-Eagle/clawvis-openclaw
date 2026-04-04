@@ -8,12 +8,20 @@
 
 ## Variables de entorno
 
-En `.env` hay `CLAWFLOWS_DIR` y `CLAWFLOWS_REGISTRY`. Para **`CLAWFLOWS_SKILLS`** (skills empaquetados de OpenClaw + carpeta Jarvis), no uses rutas fijas a `~/.nvm/.../node_modules`: cambian al actualizar Node.
+En `.env` hay `CLAWFLOWS_REGISTRY` y opcionalmente `CLAWFLOWS_DIR`. Para **`CLAWFLOWS_SKILLS`** (skills empaquetados de OpenClaw + carpeta Jarvis), no uses rutas fijas a `~/.nvm/.../node_modules`: cambian al actualizar Node.
 
-**Recomendado** antes de usar el CLI:
+**Recomendado** antes de usar el CLI (desde el directorio `jarvis-ecosystem` del monorepo, sea cual sea la ruta del clon):
 
 ```bash
-source /home/will/jarvis-ecosystem/scripts/clawflows-env.sh
+cd /ruta/a/tu/clon/clawvis-openclaw/jarvis-ecosystem
+source scripts/clawflows-env.sh
+```
+
+Alternativa portable si estás en la raíz del repo Git:
+
+```bash
+cd "$(git rev-parse --show-toplevel)/jarvis-ecosystem"
+source scripts/clawflows-env.sh
 ```
 
 Ese script define `CLAWFLOWS_SKILLS` con `$(npm root -g)/openclaw/skills` y `agents/jarvis/skills`.
@@ -32,14 +40,15 @@ automations/
   shared/
 ```
 
-En la raiz de `automations/` hay symlinks a los YAML custom para que `clawflows list` los liste.
+En la raíz de `automations/` hay copias de los YAML custom (mismo contenido que en subcarpetas) para que `clawflows list` los liste; la **fuente canónica** para editar está en `automations/jarvis/`, `marketing/`, `ventas/` (ver `automations/README.md`).
 
 ## Comandos utiles
 
 ```bash
-source /home/will/jarvis-ecosystem/scripts/clawflows-env.sh
+cd "$(git rev-parse --show-toplevel)/jarvis-ecosystem" 2>/dev/null || cd /ruta/a/jarvis-ecosystem
+source scripts/clawflows-env.sh
 # opcional: exportar tambien OLLAMA_* desde .env
-set -a; source /home/will/jarvis-ecosystem/.env; set +a
+set -a; source .env; set +a
 clawflows search "query"
 clawflows install <nombre> --skip-check   # si faltan capabilities aun
 clawflows list
@@ -52,7 +61,7 @@ Ver `automations/README.md` para la diferencia entre `list` y la carpeta `regist
 
 ## Skills instalados (ClawHub) — carpeta compartida
 
-`agents/marketing/skills` y `agents/ventas/skills` apuntan a `agents/jarvis/skills`.
+`agents/marketing/skills` y `agents/ventas/skills` duplican el contenido de `agents/jarvis/skills` (copias por skill). **Canónico para editar:** `agents/jarvis/skills/`; luego sincronizar o reinstalar según tu flujo (ver `README.md` en la raíz de `jarvis-ecosystem/`).
 
 Instalados: `gog`, `himalaya`, `xurl`, `slack`, `blogwatcher`, `summarize`, `notion`, `trello`, `session-logs`, `nano-pdf`, `mcporter`, `tmux`, `video-frames`.
 
@@ -64,7 +73,7 @@ El **CLI ClawHub** global: `npm i -g clawhub` (el skill `clawhub` no existe en e
 
 ## Verificacion de automatizaciones del registry
 
-Tras `source scripts/clawflows-env.sh`:
+Tras `source scripts/clawflows-env.sh` (desde `jarvis-ecosystem/`):
 
 ```bash
 ./scripts/clawflows-verify-registry.sh
@@ -73,8 +82,14 @@ Tras `source scripts/clawflows-env.sh`:
 
 El directorio `agents/jarvis/skills/clawflows-capability-map/` solo declara **Provides** para que `clawflows check` encuentre capabilities; la ejecucion real sigue dependiendo de los skills y credenciales configurados.
 
-`lead-qualifier` no tiene `metadata.json` en el registry web (`404`), por eso `clawflows check lead-qualifier` falla siempre; el script de verificacion lo omite y el script `validate-lead-qualifier-local.sh` comprueba `curl`/`jq`.
+### lead-qualifier (registry)
+
+`lead-qualifier` no tiene `metadata.json` en el registry web (**404**), por eso `clawflows check lead-qualifier` falla siempre; el script de verificacion lo omite y el script `validate-lead-qualifier-local.sh` comprueba `curl`/`jq`. Revisar cuando el registry publique metadata; hasta entonces no es fallo del ecosistema local.
+
+### clawflows + Node 22
+
+En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (import JSON). Si ocurre, el binario global suele estar en `$(npm root -g)/clawflows/bin/clawflows.mjs`: reemplaza la lectura de `package.json` por `readFileSync` + `JSON.parse` (parche local en esa máquina), o usa **Node 20 LTS** solo para el CLI de ClawFlows. No afecta al gateway OpenClaw si este usa otro Node.
 
 ## Nota
 
-En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (import JSON). Si ocurre, el binario global suele estar en `$(npm root -g)/clawflows/bin/clawflows.mjs`: reemplaza la lectura de `package.json` por `readFileSync` + `JSON.parse` (como en el arreglo ya aplicado en esta maquina), o usa Node 20 LTS para el CLI.
+Documentacion adicional del monorepo: [README.md](../README.md) (raíz de `clawvis-openclaw`).

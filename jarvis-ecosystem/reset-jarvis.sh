@@ -11,7 +11,7 @@ pkill -f node
 
 # 2. Limpiar archivos de bloqueo (.lock) que impiden que Jarvis inicie
 echo "🔸 Limpiando archivos de bloqueo (.lock)..."
-rm -f /home/will/.openclaw/agents/*/sessions/*.lock 2>/dev/null
+rm -f "$HOME/.openclaw/agents/"*/sessions/*.lock 2>/dev/null
 
 # 3. Reiniciar Ollama (Opcional, pero recomendado en 4GB RAM)
 # echo "🔸 Reiniciando Ollama..."

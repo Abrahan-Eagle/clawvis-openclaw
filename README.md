@@ -10,7 +10,7 @@ Todo el material versionado vive aquí: ecosistema Jarvis, docs, y una **copia s
 
 | Carpeta | Contenido |
 |---------|-----------|
-| `jarvis-ecosystem/` | Automations, agents, skills, scripts, docs del ecosistema Jarvis |
+| `jarvis-ecosystem/` | Automations, agents, skills, scripts, docs del ecosistema Jarvis (índice: [jarvis-ecosystem/README.md](jarvis-ecosystem/README.md)) |
 | `config/openclaw-home/` | Instantánea sanitizada de `~/.openclaw` (`openclaw.json`, `workspace/`, `cron/`… **sin** `.env`, sesiones ni credenciales) |
 | `documentos-jarvis-openclaw/` | Coordinación y notas en `Documentos` (gestión por fecha) |
 | `openclaw-state/` | Copia histórica / referencia de estado OpenClaw (ver también `config/openclaw-home/`) |

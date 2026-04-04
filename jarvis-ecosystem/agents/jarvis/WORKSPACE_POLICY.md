@@ -11,7 +11,7 @@ Edita este archivo para definir **dónde puede trabajar Jarvis por defecto** y *
 
 Añade líneas con rutas absolutas. Ejemplo:
 
-- `/home/will/jarvis-ecosystem/` — ecosistema Jarvis (workspace y repo)
+- `/home/TU_USUARIO/jarvis-ecosystem/` o la ruta absoluta de tu clon de `clawvis-openclaw/jarvis-ecosystem` — ecosistema Jarvis (workspace y repo)
 - _(añade aquí más proyectos: `~/proyectos/foo`, etc.)_
 
 ## Rutas restringidas o prohibidas (no tocar sin orden expresa)

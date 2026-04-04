@@ -12,6 +12,17 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 Configura credenciales por skill según cada `SKILL.md` (Google, Notion, Trello, etc.).
 
+## Variables de entorno (referencia en el monorepo)
+
+No pegues API keys en este archivo; usa `~/.openclaw/.env` u otra tienda segura.
+
+| Integración | Documentación |
+|-------------|----------------|
+| Trello + OpenClaw | [docs/TRELLO_OPENCLAW.md](../../../docs/TRELLO_OPENCLAW.md) (`TRELLO_API_KEY`, `TRELLO_TOKEN`, `exec`, `jq`) |
+| Ollama local | Variables `OLLAMA_*` en [`.env`](../../.env) del ecosistema (ejemplo) |
+
+Otras skills (Notion, Slack, etc.): seguir el `SKILL.md` de cada carpeta bajo `./skills/<nombre>/`.
+
 ## What Goes Here
 
 Things like:
@@ -51,5 +62,4 @@ Add whatever helps you do your job. This is your cheat sheet.
 
 ### Telegram
 
-- **API token**: `8624344843:AAFbShM_hujok6G8XPqcDKeBVxcYE57Oyrg`
-- **Chat ID**: `+584124352014`
+- Token del bot (BotFather) y chat: configurar en `~/.openclaw` / canal Telegram; **no** guardar secretos en este repo.

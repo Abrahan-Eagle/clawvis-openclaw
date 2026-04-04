@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Carga variables ClawFlows sin depender de la version exacta de Node en ~/.nvm/...
-# Uso: source /home/will/jarvis-ecosystem/scripts/clawflows-env.sh
+# Uso (desde el directorio jarvis-ecosystem del repo):  source scripts/clawflows-env.sh
+#    o con ruta absoluta:  source /ruta/al/clon/jarvis-ecosystem/scripts/clawflows-env.sh
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export CLAWFLOWS_DIR="${CLAWFLOWS_DIR:-$ROOT/automations}"
