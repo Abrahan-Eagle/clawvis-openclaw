@@ -19,6 +19,18 @@ Cada archivo en este directorio representa a **un cliente** (organizacion que co
 
 ---
 
+## Cliente de prueba (ecosistema)
+
+Para **depurar** flujos (Jarvis, marketing, Trello, Discord) sin datos reales:
+
+| dossier_id | Archivos |
+|------------|----------|
+| `cli-20260404-cliente-tests-redes` | [cli-20260404-cliente-tests-redes.json](cli-20260404-cliente-tests-redes.json), [BRIEF_CLIENTE_TESTS_REDES.md](BRIEF_CLIENTE_TESTS_REDES.md) |
+
+Marcado como cliente ficticio en `decisiones_relevantes` del JSON. No usar credenciales Meta reales en el repo.
+
+---
+
 ## Como usa Jarvis estos dossiers
 
 1. Al iniciar un tema sobre un cliente, el superusuario indica el `dossier_id` o pega el path del archivo.

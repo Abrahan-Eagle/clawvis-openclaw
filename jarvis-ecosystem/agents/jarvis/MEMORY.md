@@ -32,7 +32,7 @@ Plantilla vacia: [../../client-dossiers/cli-PLANTILLA-vacio.json](../../client-d
 | dossier_id | Cliente | Empresa asignada | Estado |
 |------------|---------|------------------|--------|
 | `cli-20260404-ejemplo` | ACME Ferreteria C.A. (ejemplo) | marketing | Ejemplo de documentacion |
-| *(pendiente)* | *(primer cliente real)* | | Anadir fila al crear `cli-YYYYMMDD-*.json` |
+| `cli-20260404-cliente-tests-redes` | Cliente TESTS (IG + FB) | marketing | **Cliente prueba** — depuracion ecosistema; ver [BRIEF_CLIENTE_TESTS_REDES.md](../../client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md) |
 
 ---
 
@@ -67,3 +67,4 @@ Formato: [../../docs/SUPERVISOR_CEO_REPORTE.md](../../docs/SUPERVISOR_CEO_REPORT
 ## Decisiones de gobierno (log)
 
 - **2026-04-04:** Modelo de gobierno v2 formalizado. Jarvis es agente maestro; cada empresa con CEO + supervisor + equipo; clientes como dossiers de contexto; solo el superusuario dialoga con Jarvis.
+- **2026-04-04:** Cliente de prueba `cli-20260404-cliente-tests-redes` (Instagram + Facebook, empresa marketing) para depurar ecosistema; brief en `client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md`.
