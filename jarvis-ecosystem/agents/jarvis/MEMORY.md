@@ -24,6 +24,8 @@ Gobierno operativo: [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVI
 
 **Archivos en disco (entregables, medios):** solo bajo `~/Documents/JARVIS-DOCUMENTS/` — arbol por empresa y cliente. Especificacion completa: [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md).
 
+**Integraciones OpenClaw (Trello, Discord, Telegram):** ya configuradas en el gateway — ver [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). No proponer reinstalar salvo orden del superusuario.
+
 ---
 
 ## Clientes activos (dossiers)
@@ -41,20 +43,21 @@ Plantilla vacia: [../../client-dossiers/cli-PLANTILLA-vacio.json](../../client-d
 ## Trello (referencia por empresa — Fase 3)
 
 Convencion: [../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md).  
-Credenciales: solo `~/.openclaw/.env` (`TRELLO_API_KEY`, `TRELLO_TOKEN`).
+Integracion OpenClaw: **configurada** ([../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md)). Credenciales API: solo `~/.openclaw/.env` (`TRELLO_API_KEY`, `TRELLO_TOKEN`).
 
 | Empresa | Board (nombre) | Board ID | Listas / notas |
 |---------|----------------|----------|----------------|
-| *(legacy)* | Mi tablero de Trello | `69d0a352e4fed9476a5f6cec` | Migrar a convencion por empresa cuando aplique |
-| `marketing` | *(rellenar)* | *(rellenar)* | Backlog / En curso / Revision supervisor / Bloqueado / Hecho |
-| `ventas` | *(rellenar)* | *(rellenar)* | Idem |
+| *(cuenta Trello actual)* | Mi tablero de Trello | `69d0a352e4fed9476a5f6cec` | Tablero visible vía API; alinear nombres por empresa segun convencion cuando se creen boards dedicados |
+| `marketing` | *(pendiente board dedicado o usar legacy)* | — | Objetivo: Backlog / En curso / Revision supervisor / Bloqueado / Hecho |
+| `ventas` | *(pendiente board dedicado o usar legacy)* | — | Idem |
 
 ---
 
 ## Discord (Fase 4)
 
-Checklist: [../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md](../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md).  
-Plantilla: [../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md).
+Integracion OpenClaw: **configurada** (Discord como canal del gateway). Referencia organizativa: [../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md](../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md), [../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md). Verificacion documental: [../../docs/VERIFICACION_DISCORD_FASE4.md](../../docs/VERIFICACION_DISCORD_FASE4.md).
+
+Telegram: mismo gateway OpenClaw; no repetir integracion desde el repo.
 
 *(Opcional: anotar aqui IDs de servidor/categoria solo si el superusuario quiere que Jarvis los referencie en sesion; evitar secretos.)*
 
@@ -62,7 +65,8 @@ Plantilla: [../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTIL
 
 ## Reportes supervisor → CEO (Fase 5)
 
-Formato: [../../docs/SUPERVISOR_CEO_REPORTE.md](../../docs/SUPERVISOR_CEO_REPORTE.md).
+Formato: [../../docs/SUPERVISOR_CEO_REPORTE.md](../../docs/SUPERVISOR_CEO_REPORTE.md).  
+Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md).
 
 ---
 
@@ -70,3 +74,4 @@ Formato: [../../docs/SUPERVISOR_CEO_REPORTE.md](../../docs/SUPERVISOR_CEO_REPORT
 
 - **2026-04-04:** Modelo de gobierno v2 formalizado. Jarvis es agente maestro; cada empresa con CEO + supervisor + equipo; clientes como dossiers de contexto; solo el superusuario dialoga con Jarvis.
 - **2026-04-04:** Cliente de prueba `cli-20260404-cliente-tests-redes` (Instagram + Facebook, empresa marketing) para depurar ecosistema; brief en `client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md`.
+- **2026-04-04:** Documentado en repo que Trello, Discord y Telegram ya estan integrados en OpenClaw (`INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md`); plantilla Fase 5 y verificacion Discord Fase 4 añadidas.

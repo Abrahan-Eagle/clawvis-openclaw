@@ -11,6 +11,7 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 - **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md) — actores, jerarquia, flujos.
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md) — todas las unidades (activas y planificadas), CEOs, servicios, checklist de alta.
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — contexto estable por cada organizacion que contrata servicios.
+- **Integraciones (Trello, Discord, Telegram):** ya configuradas en OpenClaw — [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md); detalle operativo y tablas en [MEMORY.md](MEMORY.md). No proponer reinstalar integraciones salvo orden expresa del superusuario.
 
 ### Protocolo de cliente
 

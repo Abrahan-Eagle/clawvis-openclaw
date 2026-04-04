@@ -4,7 +4,7 @@
 
 **Convención:** [JARVIS_DOCUMENTS_ON_DISK.md](JARVIS_DOCUMENTS_ON_DISK.md).
 
-**Última ejecución (referencia):** 2026-04-04 — árbol creado en `/home/aipp/Documents/JARVIS-DOCUMENTS/` para `marketing`, `ventas` y cliente de prueba `cli-20260404-cliente-tests-redes`.
+**Última ejecución (referencia):** 2026-04-04 — árbol creado/verificado bajo `~/Documents/JARVIS-DOCUMENTS/` para `marketing`, `ventas` y cliente de prueba `cli-20260404-cliente-tests-redes` (ruta absoluta ejemplo: `/home/aipp/Documents/JARVIS-DOCUMENTS/`).
 
 ---
 

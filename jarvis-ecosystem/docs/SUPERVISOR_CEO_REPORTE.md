@@ -2,6 +2,8 @@
 
 **Cadencia sugerida:** semanal o quincenal (acordar por empresa).
 
+**Plantilla copiable:** [plantillas/REPORTE_SUPERVISOR_CEO.md](plantillas/REPORTE_SUPERVISOR_CEO.md).
+
 **Formato minimo** (copiar y rellenar en Discord o documento interno):
 
 ```
@@ -31,6 +33,7 @@ CEO: [nombre]
 
 | Fecha | Empresa | Canal / ubicacion |
 |-------|---------|---------------------|
-| | | |
+| *(ejemplo)* | marketing | `#supervisor-interno` o doc interno — reemplazar por dato real |
+
 
 **Opcional futuro:** recordatorio ClawFlow/cron que avise al supervisor (no sustituye el informe humano).

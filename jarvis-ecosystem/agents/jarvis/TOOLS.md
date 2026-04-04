@@ -12,6 +12,10 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 Configura credenciales por skill según cada `SKILL.md` (Google, Notion, Trello, etc.).
 
+## OpenClaw: canales ya integrados
+
+**Trello, Discord y Telegram** están configurados en el gateway OpenClaw (`~/.openclaw/openclaw.json` y `~/.openclaw/.env` donde aplique). Resumen para Jarvis: [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md). No asumir que falta cablear integraciones salvo que el superusuario indique lo contrario.
+
 ## Variables de entorno (referencia en el monorepo)
 
 No pegues API keys en este archivo; usa `~/.openclaw/.env` u otra tienda segura.

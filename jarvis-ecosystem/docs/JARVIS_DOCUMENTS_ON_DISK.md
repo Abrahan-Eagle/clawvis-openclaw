@@ -82,3 +82,4 @@ Revisiones: `..._v2`, `..._v3`.
 
 - **2026-04-04:** Convención acordada con el superusuario; documento creado para el ecosistema Jarvis.
 - **2026-04-04:** Árbol inicial creado en esta máquina en `/home/aipp/Documents/JARVIS-DOCUMENTS/`: empresas `marketing` y `ventas`; bajo marketing, cliente de prueba `cli-20260404-cliente-tests-redes` con estados `01`–`04`. Verificación: [VERIFICACION_JARVIS_DOCUMENTS.md](VERIFICACION_JARVIS_DOCUMENTS.md).
+- **2026-04-04:** Arbol re-verificado/asegurado en disco (`mkdir -p`); texto de verificación actualizado para usar `~` y ruta ejemplo.
