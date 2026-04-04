@@ -8,6 +8,7 @@ import { gameEvents } from "../events";
 import type { Action } from "../reducer";
 import { chatId, findTask, resolveSeatLabelForTask, MAIN_SESSION_KEY } from "../reducer";
 import { createLogger } from "../logger";
+import { getAgentProvider } from "../utils";
 
 const log = createLogger("TaskRouter");
 
@@ -55,16 +56,19 @@ export function useTaskRouter(refs: TaskRouterRefs) {
         });
       }
 
+      const chatParams: Record<string, unknown> = {
+        sessionKey,
+        message,
+        idempotencyKey: taskId,
+      };
+      // OpenClaw gateway validates chat.send strictly (no extra keys). Auggie bridge uses these.
+      if (getAgentProvider() === "auggie") {
+        chatParams.seatLabel = seat?.label;
+        chatParams.seatRole = seat?.roleTitle;
+      }
+
       client
-        .request("chat.send", {
-          sessionKey,
-          message,
-          idempotencyKey: taskId,
-          // Passed through to the Auggie bridge for personality injection;
-          // OpenClaw ignores unknown params.
-          seatLabel: seat?.label,
-          seatRole: seat?.roleTitle,
-        })
+        .request("chat.send", chatParams)
         .then((res: GatewayFrame) => {
           const runId = (res.payload?.runId as string) ?? undefined;
           const finalRunId = runId ?? taskId;
