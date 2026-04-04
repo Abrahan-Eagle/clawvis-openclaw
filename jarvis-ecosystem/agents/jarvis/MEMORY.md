@@ -8,7 +8,7 @@ Solo lectura/escritura en sesion principal con el humano (ver `AGENTS.md`).
 
 Registro completo: [../../COMPANIES.md](../../COMPANIES.md).
 
-**CEO / Supervisor (Fase 1):** [../../docs/ASIGNACION_ROLES.md](../../docs/ASIGNACION_ROLES.md). Empresas activas: **Abraham Pulido** como CEO y supervisor interino (marketing y ventas).
+**CEO / Supervisor (Fase 1):** [../../docs/ASIGNACION_ROLES.md](../../docs/ASIGNACION_ROLES.md). Nombres de **ejemplo** por empresa (no el superusuario); ver tabla en ese archivo.
 
 | Empresa | Estado | Notas rapidas |
 |---------|--------|---------------|
