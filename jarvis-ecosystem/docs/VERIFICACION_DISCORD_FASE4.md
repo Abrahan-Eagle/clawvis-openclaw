@@ -11,6 +11,7 @@
 - [ ] [MEMORY.md](../agents/jarvis/MEMORY.md) indica integración OpenClaw configurada para Discord/Telegram (sin asumir servidor “pendiente de crear”).
 - [ ] [DISCORD_ESTRUCTURA_CHECKLIST.md](DISCORD_ESTRUCTURA_CHECKLIST.md) se usa como guía de **organización** de canales/roles si se amplía el equipo, no como “paso 1 instalar Discord”.
 - [ ] [PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) consultada cuando haya que nombrar canales alineados al holding.
+- [ ] Esqueleto de canales en el servidor **Jarvis** creado según [BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) §2 (Dirección / Operación / Clientes).
 
 ---
 
