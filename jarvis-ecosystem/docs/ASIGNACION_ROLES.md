@@ -4,10 +4,10 @@
 
 | Empresa (ID) | CEO | Supervisor | Fecha asignacion | Notas |
 |--------------|-----|------------|------------------|--------|
-| `marketing` | | | | |
-| `ventas` | | | | |
-| `dev-agency` | | | | (cuando pase a Activa) |
-| `legal` | | | | (cuando pase a Activa) |
-| `contadores` | | | | (cuando pase a Activa) |
+| `marketing` | Abraham Pulido | Abraham Pulido | 2026-04-04 | Supervisor interino (mismo que CEO) hasta asignar equipo; superusuario. |
+| `ventas` | Abraham Pulido | Abraham Pulido | 2026-04-04 | Idem. |
+| `dev-agency` | (por asignar) | (por asignar) | | (cuando pase a Activa) |
+| `legal` | (por asignar) | (por asignar) | | (cuando pase a Activa) |
+| `contadores` | (por asignar) | (por asignar) | | (cuando pase a Activa) |
 
 **Criterio de hecho (Fase 1):** filas `marketing` y `ventas` con CEO y Supervisor definidos aqui o en `COMPANIES.md`.
