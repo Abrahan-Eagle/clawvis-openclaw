@@ -53,6 +53,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/CLIENT_DOSSIER_SCHEMA.md](docs/CLIENT_DOSSIER_SCHEMA.md) | Esquema minimo del dossier por cliente (`dossier_id`, rubro, servicios). |
 | [docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) | Roles y canales Discord/Telegram por empresa (sin cliente→Jarvis). |
 | [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md) | Tableros, listas, etiquetas y vinculo `dossier_id`. |
+| [docs/JARVIS_DOCUMENTS_ON_DISK.md](docs/JARVIS_DOCUMENTS_ON_DISK.md) | Donde guardar entregables y medios en el PC: `~/Documents/JARVIS-DOCUMENTS/` (empresas, clientes, estados). |
 
 ## Checklist rapido
 

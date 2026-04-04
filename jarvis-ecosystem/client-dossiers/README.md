@@ -16,6 +16,7 @@ Cada archivo en este directorio representa a **un cliente** (organizacion que co
 | **`dossier_id` inmutable** | Una vez publicado, no reutilizar para otro cliente. |
 | **Campos obligatorios** | `dossier_id`, `nombre_comercial`, `rubro`, `servicios_contratados_o_deseados`. |
 | **Sin datos sensibles** | No guardar contrasenas, tokens ni datos financieros completos en el repo. |
+| **Entregables y medios en el PC** | No van en Git; usar `~/Documents/JARVIS-DOCUMENTS/` con la misma empresa y `dossier_id` que el JSON. Ver [../docs/JARVIS_DOCUMENTS_ON_DISK.md](../docs/JARVIS_DOCUMENTS_ON_DISK.md). |
 
 ---
 

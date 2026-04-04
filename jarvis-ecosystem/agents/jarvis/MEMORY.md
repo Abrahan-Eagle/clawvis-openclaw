@@ -22,6 +22,8 @@ Gobierno operativo: [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVI
 
 **Operacion post gobierno (indice):** [../../docs/OPERACION_POST_GOBIERNO.md](../../docs/OPERACION_POST_GOBIERNO.md).
 
+**Archivos en disco (entregables, medios):** solo bajo `~/Documents/JARVIS-DOCUMENTS/` — arbol por empresa y cliente. Especificacion completa: [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md).
+
 ---
 
 ## Clientes activos (dossiers)

@@ -11,6 +11,7 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 - **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md).
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — al trabajar en un encargo, verificar que existe dossier del cliente.
+- **Entregables y medios (PC del superusuario):** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — usar `~/Documents/JARVIS-DOCUMENTS/empresas/marketing/clientes/<dossier_id>/` (estados 01–04).
 
 **Jerarquia interna:**
 
