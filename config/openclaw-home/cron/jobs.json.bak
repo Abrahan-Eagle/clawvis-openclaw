@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "3bce80b0-c280-4d5a-95b5-88dd3bec7376",
+      "agentId": "main",
+      "sessionKey": "agent:main:main",
+      "name": "Monitor de Uso de Tokens",
+      "enabled": true,
+      "createdAtMs": 1773416565954,
+      "updatedAtMs": 1773441864098,
+      "schedule": {
+        "everyMs": 3600000,
+        "kind": "every",
+        "anchorMs": 1773416565954
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Por favor, verifica el estado de uso de tokens.",
+        "timeoutSeconds": 60,
+        "model": "google/gemini-2.5-flash"
+      },
+      "delivery": {
+        "mode": "announce"
+      },
+      "state": {
+        "nextRunAtMs": 1773445451281,
+        "lastRunAtMs": 1773441851281,
+        "lastRunStatus": "error",
+        "lastStatus": "error",
+        "lastDurationMs": 12817,
+        "lastDeliveryStatus": "unknown",
+        "consecutiveErrors": 3,
+        "runningAtMs": 1773445451547
+      }
+    }
+  ]
+}

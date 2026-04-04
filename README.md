@@ -2,13 +2,18 @@
 
 Respaldo unificado del trabajo alrededor de **OpenClaw**, **Jarvis**, **Agent Town** y coordinación local (Scrum / Trello / Discord).
 
+## Un solo repositorio
+
+Todo el material versionado vive aquí: ecosistema Jarvis, docs, y una **copia sin secretos** de la config OpenClaw en `config/openclaw-home/` (no uses varios repos en GitHub para lo mismo).
+
 ## Estructura del repositorio
 
 | Carpeta | Contenido |
 |---------|-----------|
 | `jarvis-ecosystem/` | Automations, agents, skills, scripts, docs del ecosistema Jarvis |
+| `config/openclaw-home/` | Instantánea sanitizada de `~/.openclaw` (`openclaw.json`, `workspace/`, `cron/`… **sin** `.env`, sesiones ni credenciales) |
 | `documentos-jarvis-openclaw/` | Coordinación y notas en `Documentos` (gestión por fecha) |
-| `openclaw-state/` | Copia de `~/.openclaw` (config, credenciales, workspace, agents de estado) |
+| `openclaw-state/` | Copia histórica / referencia de estado OpenClaw (ver también `config/openclaw-home/`) |
 | `agent-town/` | Proyecto Agent Town (Next); `node_modules` y `.next` no se versionan |
 | `deploy/systemd/` | Referencia: `openclaw-gateway.service`, `cursor-agent-api.service.example`, `agent-town-dev.service.example` |
 | `descargas-openclaw/` | Descargas relacionadas (opcional) |

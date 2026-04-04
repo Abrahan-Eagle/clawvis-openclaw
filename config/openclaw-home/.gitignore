@@ -1,0 +1,51 @@
+# OpenClaw: backup de configuración (repo privado). No subir secretos ni caché pesada.
+
+# Nunca subir variables de entorno con API keys / tokens
+.env
+.env.*
+!.env.example
+
+# Historial de conversaciones y perfiles con claves
+agents/**/sessions/
+agents/**/agent/auth-profiles.json
+
+# Credenciales y canales con tokens
+/credentials/
+/telegram/
+/whatsapp/
+
+# Navegador, extensiones y datos efímeros
+/browser/
+/extensions/
+/cdp-user-data/
+/cache/
+/logs/
+/media/
+/delivery-queue/
+
+# Identidad y dispositivos (pueden contener datos sensibles)
+/identity/
+/devices/
+
+# Estado de sesión / tareas locales
+/memory/
+/tasks/
+/exec-approvals.json
+/cursor-proxy.pid
+ollama-local.log
+update-check.json
+
+# Archivos temporales y respaldos de config
+openclaw.json.bak*
+openclaw.json.before-restore
+openclaw.json.cursor-brain-full
+*.tmp
+*.pid
+*.log
+
+# Canvas y flows pueden contener datos personales; excluir por defecto
+/canvas/
+/flows/
+
+# Completions generadas
+/completions/

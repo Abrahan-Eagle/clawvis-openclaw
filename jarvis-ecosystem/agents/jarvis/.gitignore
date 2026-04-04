@@ -1,0 +1,5 @@
+# Dependencias locales
+scripts/node_modules/
+
+# Estado local OpenClaw (opcional; pequeño)
+.openclaw/workspace-state.json
