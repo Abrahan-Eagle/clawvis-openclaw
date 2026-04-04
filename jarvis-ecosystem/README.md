@@ -49,6 +49,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | Documento | Contenido |
 |-----------|-----------|
 | [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md) | Modelo operativo: Jarvis master, empresas con CEO/supervisor/equipo, clientes como dossier, coordinacion inter-empresa. |
+| [docs/OPERACION_POST_GOBIERNO.md](docs/OPERACION_POST_GOBIERNO.md) | Indice del plan operativo (fases 0–6): verificacion, roles, dossiers, Trello, Discord, reportes, expansion. |
 | [docs/CLIENT_DOSSIER_SCHEMA.md](docs/CLIENT_DOSSIER_SCHEMA.md) | Esquema minimo del dossier por cliente (`dossier_id`, rubro, servicios). |
 | [docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) | Roles y canales Discord/Telegram por empresa (sin cliente→Jarvis). |
 | [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md) | Tableros, listas, etiquetas y vinculo `dossier_id`. |

@@ -4,14 +4,16 @@
 Gobierno operativo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).  
 **Ultima actualizacion:** abril 2026.
 
+**CEO / Supervisor (Fase 1):** rellenar [docs/ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) y, si quieres una sola tabla canonica, copiar aqui los nombres.
+
 ---
 
 ## Registro de empresas
 
 | ID | Nombre | Servicios principales | CEO | Supervisor | Estado | Workspace |
 |----|--------|-----------------------|-----|------------|--------|-----------|
-| `marketing` | Marketing & Comunicacion | Marketing digital, gestion de redes, branding, contenido, publicidad | (por asignar) | (por asignar) | **Activa** | `agents/marketing/` |
-| `ventas` | Ventas | Prospeccion, cierre, gestion de cuentas, pipeline comercial | (por asignar) | (por asignar) | **Activa** | `agents/ventas/` |
+| `marketing` | Marketing & Comunicacion | Marketing digital, gestion de redes, branding, contenido, publicidad | [ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) | [ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) | **Activa** | `agents/marketing/` |
+| `ventas` | Ventas | Prospeccion, cierre, gestion de cuentas, pipeline comercial | [ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) | [ASIGNACION_ROLES.md](docs/ASIGNACION_ROLES.md) | **Activa** | `agents/ventas/` |
 | `dev-agency` | Agencia de Programacion | Desarrollo de software, mantenimiento, APIs, apps moviles, web | (por asignar) | (por asignar) | Planificada | — |
 | `legal` | Bufete Legal | Asesoria juridica, contratos, propiedad intelectual, regulacion | (por asignar) | (por asignar) | Planificada | — |
 | `contadores` | Contabilidad & Finanzas | Contabilidad, impuestos, nomina, auditorias, reportes financieros | (por asignar) | (por asignar) | Planificada | — |

@@ -1,0 +1,19 @@
+{
+  "dossier_id": "cli-YYYYMMDD-slug",
+  "version": "YYYY-MM-DD",
+  "nombre_comercial": "",
+  "rubro": "",
+  "descripcion_actividad": "",
+  "contacto_principal": {
+    "nombre": "",
+    "email": "",
+    "telefono": ""
+  },
+  "servicios_contratados_o_deseados": [],
+  "empresa_del_holding_asignada": "marketing",
+  "objetivos": [],
+  "planificacion_resumen": "",
+  "nivel_servicio_o_notas_comerciales": "",
+  "decisiones_relevantes": [],
+  "enlaces": []
+}

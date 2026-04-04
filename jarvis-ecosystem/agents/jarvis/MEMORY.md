@@ -8,6 +8,8 @@ Solo lectura/escritura en sesion principal con el humano (ver `AGENTS.md`).
 
 Registro completo: [../../COMPANIES.md](../../COMPANIES.md).
 
+**CEO / Supervisor (Fase 1):** [../../docs/ASIGNACION_ROLES.md](../../docs/ASIGNACION_ROLES.md).
+
 | Empresa | Estado | Notas rapidas |
 |---------|--------|---------------|
 | marketing | Activa | Workspace `agents/marketing/`. Agentes: mkt-content, mkt-social, mkt-analytics, mkt-ads, mkt-email. |
@@ -18,32 +20,47 @@ Registro completo: [../../COMPANIES.md](../../COMPANIES.md).
 
 Gobierno operativo: [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).
 
+**Operacion post gobierno (indice):** [../../docs/OPERACION_POST_GOBIERNO.md](../../docs/OPERACION_POST_GOBIERNO.md).
+
 ---
 
 ## Clientes activos (dossiers)
 
-Directorio: [../../client-dossiers/](../../client-dossiers/).
+Directorio: [../../client-dossiers/](../../client-dossiers/).  
+Plantilla vacia: [../../client-dossiers/cli-PLANTILLA-vacio.json](../../client-dossiers/cli-PLANTILLA-vacio.json).
 
 | dossier_id | Cliente | Empresa asignada | Estado |
 |------------|---------|------------------|--------|
 | `cli-20260404-ejemplo` | ACME Ferreteria C.A. (ejemplo) | marketing | Ejemplo de documentacion |
-
-Al agregar un cliente real, actualizar esta tabla como indice rapido.
+| *(pendiente)* | *(primer cliente real)* | | Anadir fila al crear `cli-YYYYMMDD-*.json` |
 
 ---
 
-## Trello (referencia rapida)
+## Trello (referencia por empresa — Fase 3)
 
-IDs utiles para la API (`curl` / skill **trello**). Actualiza con `GET /1/boards/{boardId}/lists` si anades listas.
+Convencion: [../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md).  
+Credenciales: solo `~/.openclaw/.env` (`TRELLO_API_KEY`, `TRELLO_TOKEN`).
 
-| Recurso | Nombre | ID |
-|---------|--------|-----|
-| Tablero | Mi tablero de Trello | `69d0a352e4fed9476a5f6cec` |
-| Lista | (rellenar) | — |
+| Empresa | Board (nombre) | Board ID | Listas / notas |
+|---------|----------------|----------|----------------|
+| *(legacy)* | Mi tablero de Trello | `69d0a352e4fed9476a5f6cec` | Migrar a convencion por empresa cuando aplique |
+| `marketing` | *(rellenar)* | *(rellenar)* | Backlog / En curso / Revision supervisor / Bloqueado / Hecho |
+| `ventas` | *(rellenar)* | *(rellenar)* | Idem |
 
-Convencion de tableros por empresa: [../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md).
+---
 
-**Nota:** credenciales solo en `~/.openclaw/.env` (`TRELLO_API_KEY`, `TRELLO_TOKEN`), no en este archivo.
+## Discord (Fase 4)
+
+Checklist: [../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md](../../docs/DISCORD_ESTRUCTURA_CHECKLIST.md).  
+Plantilla: [../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](../../docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md).
+
+*(Opcional: anotar aqui IDs de servidor/categoria solo si el superusuario quiere que Jarvis los referencie en sesion; evitar secretos.)*
+
+---
+
+## Reportes supervisor → CEO (Fase 5)
+
+Formato: [../../docs/SUPERVISOR_CEO_REPORTE.md](../../docs/SUPERVISOR_CEO_REPORTE.md).
 
 ---
 

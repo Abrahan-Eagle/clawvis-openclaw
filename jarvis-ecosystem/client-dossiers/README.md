@@ -30,9 +30,15 @@ Cada archivo en este directorio representa a **un cliente** (organizacion que co
 
 ## Crear un dossier nuevo
 
+**Plantilla minima (campos vacios):** [cli-PLANTILLA-vacio.json](cli-PLANTILLA-vacio.json).
+
 ```bash
-cp cli-20260404-ejemplo.json cli-YYYYMMDD-nuevo-slug.json
-# Editar los campos con la informacion real del cliente
+cp cli-PLANTILLA-vacio.json cli-YYYYMMDD-nuevo-slug.json
+# Editar dossier_id y todos los campos con datos reales
 ```
+
+**Ejemplo relleno (referencia):** [cli-20260404-ejemplo.json](cli-20260404-ejemplo.json).
+
+Tras crear un dossier real, actualizar la tabla **Clientes activos** en [../agents/jarvis/MEMORY.md](../agents/jarvis/MEMORY.md).
 
 O pedir a Jarvis: _"Crea un dossier para [nombre del cliente] que quiere [servicios]"_.
