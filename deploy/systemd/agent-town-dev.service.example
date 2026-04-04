@@ -1,22 +1,27 @@
-# Opcional: Agent Town en modo desarrollo al iniciar sesión.
+# Opcional: Agent Town al iniciar sesión (usuario systemd).
 # Copiar a ~/.config/systemd/user/agent-town-dev.service
-# Ajustar rutas de usuario y del repo. Requiere Node 22 + pnpm (corepack).
+# Ajustar rutas de usuario, nvm y del repo.
+#
+# Requiere: pnpm install en agent-town (una vez).
 #
 # systemctl --user daemon-reload
 # systemctl --user enable --now agent-town-dev.service
 #
-# Nota: "pnpm dev" es para desarrollo; en producción usar pnpm build && pnpm start.
+# UI: http://localhost:3000  —  proxy WS: /api/gateway → GATEWAY_URL (OpenClaw 18789)
+# "pnpm dev" ejecuta tsx server.ts (ver package.json del proyecto).
 
 [Unit]
-Description=Agent Town (dev server, optional)
+Description=Agent Town (dev server, Next + WS proxy al gateway)
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-Environment=HOME=%h
+Environment=HOME=/home/aipp
+Environment=PATH=/home/aipp/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin
+Environment=GATEWAY_URL=ws://127.0.0.1:18789/
 WorkingDirectory=/var/www/clawvis-openclaw/agent-town
-ExecStart=/bin/bash -lc 'source %h/.nvm/nvm.sh && nvm use 22 >/dev/null && exec pnpm dev'
+ExecStart=/home/aipp/.nvm/versions/node/v22.22.2/bin/pnpm dev
 Restart=on-failure
 RestartSec=10
 

@@ -51,7 +51,7 @@ Grupos: revisa *privacy mode* del bot en BotFather (`/setprivacy`) y opcionalmen
 |----------|----------------|
 | **OpenClaw gateway** | `systemctl --user enable --now openclaw-gateway` — suele arrancar al **iniciar sesión** en el escritorio (systemd --user). |
 | **Sin login gráfico** | Opcional: `sudo loginctl enable-linger $USER` para que los servicios `--user` existan tras boot (útil en servidores headless). |
-| **Agent Town** | No arranca solo por defecto. Ejemplo opcional: [`deploy/systemd/agent-town-dev.service.example`](deploy/systemd/agent-town-dev.service.example) (modo `pnpm dev`; ajusta rutas). |
+| **Agent Town** | No arranca solo por defecto. Para dejarlo al iniciar sesión: copiar [`deploy/systemd/agent-town-dev.service.example`](deploy/systemd/agent-town-dev.service.example) a `~/.config/systemd/user/agent-town-dev.service`, ajustar rutas, `daemon-reload`, `enable --now`. Manual: `cd agent-town && pnpm dev` → **http://localhost:3000**. |
 
 ## Modelos LLM (qué manda en la práctica)
 
