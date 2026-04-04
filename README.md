@@ -57,6 +57,25 @@ OpenClaw **no** trae un modo “Auto” por tarea como Cursor: `primary` + `fall
 
 Detalle, matriz y consumo en reposo: [docs/MODELOS_JARVIS_OPENCLAW.md](docs/MODELOS_JARVIS_OPENCLAW.md).
 
+## Documentación en `docs/`
+
+| Documento | Contenido |
+|-----------|-----------|
+| [RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md](docs/RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md) | Respaldo **sin secretos**: systemd, fragmentos de `openclaw.json`, regla **`plugins.allow`**, proxy 4646, comandos de copia local. |
+| [SPIKE_CURSOR_OPENCLAW.md](docs/SPIKE_CURSOR_OPENCLAW.md) | Spike Cursor + OpenClaw (Linux): CLI, gateway, puertos 18789 / 4646 / 18790. |
+| [PROVEEDOR_CURSOR_OPENCLAW.md](docs/PROVEEDOR_CURSOR_OPENCLAW.md) | Guía del proveedor Cursor / OpenAI-compatible con OpenClaw. |
+| [MODELOS_JARVIS_OPENCLAW.md](docs/MODELOS_JARVIS_OPENCLAW.md) | Modelos, agentes `jarvis` / `jarvis-deep`, fallbacks. |
+| [OPENCLAW_FORENSE_RUNBOOK.md](docs/OPENCLAW_FORENSE_RUNBOOK.md) | Runbook forense OpenClaw. |
+| [CIERRE_MODULO_OLLAMA_LOCAL.md](docs/CIERRE_MODULO_OLLAMA_LOCAL.md) | Notas Ollama local. |
+
+**Aviso `plugins.allow`:** si en `openclaw.json` defines `plugins.allow` con una lista no vacía, debes incluir los IDs de cada canal que uses (`telegram`, `discord`, `whatsapp`, …) además de `browser`. Si no, el canal puede quedar desactivado aunque `channels.<id>.enabled` sea `true`. Detalle en el doc de respaldo.
+
+## Qué queda en GitHub y qué no
+
+- **En el repo (GitHub):** markdown de `docs/`, `deploy/systemd/`, `jarvis-ecosystem/`, etc. — útil para reproducir **procedimiento** y valores no sensibles.
+- **No subir nunca:** `~/.openclaw/.env`, tokens de bots, API keys. El `openclaw.json` **completo** en HOME no se versiona aquí por defecto; para copia de seguridad usa backups locales fechados (ver sección “Respaldo físico” en el doc de respaldo) o la carpeta `openclaw-state/` del repo **solo si** mantienes el repo **privado** y aceptas el riesgo (el README ya advierte que puede contener secretos).
+- Tras cambios en el equipo: `git add`, `commit`, `push` desde la raíz del repo.
+
 ## Pruebas rápidas (CLI)
 
 - Gateway: `curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:18789/` → `200`.
