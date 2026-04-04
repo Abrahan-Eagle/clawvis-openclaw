@@ -128,6 +128,8 @@ Si falla: asegúrate de sesión Cursor (`agent login` o `CURSOR_API_KEY`) y de q
 
 ## 5. Systemd (usuario): unidades tal como quedaron
 
+En el repo [`deploy/systemd/`](../deploy/systemd/) hay copia de referencia del gateway (con `PATH` que incluye `~/.local/bin`) y el ejemplo [`cursor-agent-api.service.example`](../deploy/systemd/cursor-agent-api.service.example) para el proxy en 4646.
+
 ### `openclaw-gateway.service`
 
 Ruta: `~/.config/systemd/user/openclaw-gateway.service`

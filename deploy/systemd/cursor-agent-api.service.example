@@ -1,0 +1,18 @@
+[Unit]
+Description=Cursor Agent API Proxy (OpenAI-compatible, puerto 4646)
+After=network.target
+
+# Copiar a: ~/.config/systemd/user/cursor-agent-api.service
+# Ajustar ExecStart si tu Node/nvm está en otra ruta.
+# Requiere: npm install -g cursor-agent-api-proxy
+# Requiere sesión Cursor: agent login o CURSOR_API_KEY en el entorno del servicio.
+# Conflicto EADDRINUSE: solo un proceso puede escuchar en 4646.
+
+[Service]
+Type=simple
+ExecStart=/home/aipp/.nvm/versions/node/v22.22.2/bin/node /home/aipp/.nvm/versions/node/v22.22.2/lib/node_modules/cursor-agent-api-proxy/dist/server/standalone.js run
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

@@ -18,7 +18,8 @@ KillMode=control-group
 Environment=HOME=/home/aipp
 Environment=TMPDIR=/tmp
 Environment=NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
-Environment=PATH=/home/aipp/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin
+# Incluir ~/.local/bin para el CLI `agent` de Cursor si el gateway o plugins lo invocan.
+Environment=PATH=/home/aipp/.local/bin:/home/aipp/.nvm/versions/node/v22.22.2/bin:/usr/local/bin:/usr/bin:/bin
 Environment=OPENCLAW_GATEWAY_PORT=18789
 Environment=OPENCLAW_SYSTEMD_UNIT=openclaw-gateway.service
 Environment=OPENCLAW_SERVICE_MARKER=openclaw
