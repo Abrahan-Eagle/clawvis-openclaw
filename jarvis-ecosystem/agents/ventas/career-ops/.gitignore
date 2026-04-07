@@ -17,6 +17,8 @@ jds/*
 
 # User config and customization (never auto-updated)
 config/profile.yml
+# CV fuente local (rellenar desde examples/; no subir datos personales)
+cv.md
 portals.yml
 modes/_profile.md
 .update-dismissed

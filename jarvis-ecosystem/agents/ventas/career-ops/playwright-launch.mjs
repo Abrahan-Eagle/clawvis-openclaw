@@ -1,13 +1,18 @@
 /**
  * Opciones compartidas de lanzamiento Playwright para career-ops.
  *
- * Si `npx playwright install chromium` falla en tu SO, usa el Chrome instalado:
- *   export CAREER_OPS_PLAYWRIGHT_CHANNEL=chrome
+ * Prioridad: variable de entorno CAREER_OPS_PLAYWRIGHT_CHANNEL >
+ *   archivo config/playwright.env (si existe) >
+ *   Chromium empaquetado (npx playwright install chromium).
  *
  * Valores admitidos: chrome, chrome-beta, chrome-dev, msedge, chromium
- * (mismos canales que expone Playwright).
  */
+import { existsSync, readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ALLOWED_CHANNELS = new Set([
   'chrome',
@@ -17,17 +22,42 @@ const ALLOWED_CHANNELS = new Set([
   'chromium',
 ]);
 
-export function getLaunchOptions() {
-  const raw = process.env.CAREER_OPS_PLAYWRIGHT_CHANNEL?.trim();
-  if (raw && ALLOWED_CHANNELS.has(raw)) {
-    return { headless: true, channel: raw };
+let cachedChannelFromFile;
+
+function loadChannelFromFile() {
+  if (cachedChannelFromFile !== undefined) return cachedChannelFromFile;
+  cachedChannelFromFile = null;
+  try {
+    const p = join(__dirname, 'config', 'playwright.env');
+    if (!existsSync(p)) return null;
+    const text = readFileSync(p, 'utf8');
+    for (const line of text.split('\n')) {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) continue;
+      const m = t.match(/^CAREER_OPS_PLAYWRIGHT_CHANNEL\s*=\s*(.+)$/);
+      if (m) {
+        const v = m[1].trim().replace(/^["']|["']$/g, '');
+        if (ALLOWED_CHANNELS.has(v)) cachedChannelFromFile = v;
+        break;
+      }
+    }
+  } catch {
+    /* ignore */
   }
-  return { headless: true };
+  return cachedChannelFromFile;
 }
 
 export function getConfiguredChannel() {
-  const raw = process.env.CAREER_OPS_PLAYWRIGHT_CHANNEL?.trim();
-  return raw && ALLOWED_CHANNELS.has(raw) ? raw : null;
+  const fromEnv = process.env.CAREER_OPS_PLAYWRIGHT_CHANNEL?.trim();
+  if (fromEnv && ALLOWED_CHANNELS.has(fromEnv)) return fromEnv;
+  const fromFile = loadChannelFromFile();
+  return fromFile && ALLOWED_CHANNELS.has(fromFile) ? fromFile : null;
+}
+
+export function getLaunchOptions() {
+  const ch = getConfiguredChannel();
+  if (ch) return { headless: true, channel: ch };
+  return { headless: true };
 }
 
 export async function launchChromium() {
