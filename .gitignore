@@ -21,3 +21,7 @@ openclaw-state/browser/openclaw/user-data/
 
 # Credenciales de canales (WhatsApp, etc.) — no subir
 openclaw-state/credentials/
+
+# Variables de entorno del ecosistema Jarvis (ClawFlows, scripts) — no subir
+jarvis-ecosystem/.env
+jarvis-ecosystem/.env.*

@@ -1,15 +1,21 @@
-# Subir cambios a GitHub (manual)
+# Publicar cambios en GitHub
 
-El commit local ya está hecho en la rama `main`. Si `git push` falla por credenciales, en tu máquina:
+Procedimiento breve; el detalle de qué entra en el repo está en [README.md](README.md) (sección *Qué queda en GitHub y qué no*).
+
+## Desde la raíz del repositorio
 
 ```bash
-cd ~/clawvis-openclaw
-# Opción A — GitHub CLI
-gh auth login
+cd /ruta/al/clawvis-openclaw
+git status
+git add -A
+git commit -m "Descripción clara del cambio en una frase."
 git push origin main
-
-# Opción B — HTTPS con token (PAT) guardado en credential helper
-git push https://github.com/Abrahan-Eagle/clawvis-openclaw.git main
 ```
 
-Hacer el repo **privado** antes si incluyes secretos: GitHub → repo → Settings → Danger zone → Change visibility → Private.
+- Usa rama `main` u otra según tu remoto; ajusta si trabajas con `git worktree` o ramas de feature.
+- **No** subas `~/.openclaw/.env`, tokens de bots ni claves API; el `openclaw.json` completo con secretos no debe versionarse como copia íntegra salvo política explícita del equipo (ver README).
+
+## Si el remoto rechaza el push
+
+- Revisa autenticación (`ssh -T git@github.com` o credencial HTTPS).
+- Confirma que el repositorio remoto sea **privado** si contiene material sensible (README lo recuerda).
