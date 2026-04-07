@@ -87,13 +87,13 @@
 
 1. CI en GitHub: `format:check`, `lint`, `typecheck`, `build`, `test`, `audit --audit-level=high` (continue-on-error) — cobertura razonable para Agent Town.
 2. **Node 20** en CI vs **Node 22+** citado en [README.md](../README.md) para OpenClaw: posible divergencia de versión entre CI de Agent Town y runtime del gateway (no bloqueante si Agent Town es compatible con 20).
-3. `.gitignore` no lista `jarvis-ecosystem/.env` explícitamente; sí `agent-town/.env.local`.
+3. **Remediado en repo:** [.gitignore](../.gitignore) incluye `jarvis-ecosystem/.env` y `jarvis-ecosystem/.env.*` (además de `agent-town/.env.local`).
 
 #### Riesgos detectados
 
 | Riesgo | Severidad | Evidencia | Impacto |
 |--------|-----------|-----------|---------|
-| .env en jarvis-ecosystem commitado por error | MEDIO | [.gitignore](../.gitignore) | Filtración de secretos |
+| Secreto filtrado en historial Git antes del ignore | MEDIO | Commits antiguos | Credencial expuesta en remoto |
 
 #### Oportunidades
 
@@ -103,8 +103,9 @@
 
 | # | Prioridad | Acción | Esfuerzo | Impacto esperado |
 |---|-----------|--------|----------|------------------|
-| 1 | P1 | Añadir `jarvis-ecosystem/.env` a `.gitignore` si existe en flujo local | Bajo | Menor riesgo de leak |
+| 1 | P1 | ~~Añadir `jarvis-ecosystem/.env` a `.gitignore`~~ **Hecho** | Bajo | Menor riesgo de leak futuro |
 | 2 | P2 | Matriz README: versión Node por componente | Bajo | Menos confusión |
+| 3 | P2 | Si hubo `.env` en commits previos, rotar claves y usar `git filter-repo` o equivalente | Alto | Limpieza historial |
 
 ---
 
@@ -181,7 +182,7 @@
 - [docs/OPENCLAW_FORENSE_RUNBOOK.md](../docs/OPENCLAW_FORENSE_RUNBOOK.md) Fase D
 - [agent-town/server.ts](../agent-town/server.ts)
 - [agent-town/lib/ws-proxy.ts](../agent-town/lib/ws-proxy.ts)
-- [PUSH-A-GITHUB.md](../PUSH-A-GITHUB.md) — **no presente en raíz del clon** (hallazgo: archivo listado en prompt ausente o ruta distinta)
+- [PUSH-A-GITHUB.md](../PUSH-A-GITHUB.md) — **presente en raíz** (guía mínima `git add` / `commit` / `push` y remisión al README).
 
 #### Hallazgos
 
@@ -1506,15 +1507,17 @@
 
 ### S.3 Top 10 brechas críticas
 
+**Actualización:** Tras el informe inicial se añadieron [PUSH-A-GITHUB.md](../PUSH-A-GITHUB.md) y reglas `jarvis-ecosystem/.env` / `.env.*` en [.gitignore](../.gitignore). Los puntos antiguos “falta PUSH-A-GITHUB” y “falta ignore de `.env`” quedan **cerrados** en el repositorio; persisten riesgos de **historial Git** si algún secreto se hubiera commiteado antes.
+
 1. `gateway.auth.mode: none` si el despliegue amplía superficie de red.
 2. Deriva entre `~/.openclaw`, repo y symlinks de `jarvis-ecosystem`.
 3. Workspaces ausentes para tres empresas planificadas en [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md).
 4. Routing de agentes por canal (Discord) no automático — riesgo de todo vía `jarvis`.
-5. Archivo `PUSH-A-GITHUB.md` citado en prompt forense **no encontrado** en raíz del clon.
+5. Posible filtración histórica: auditar commits anteriores por `jarvis-ecosystem/.env` u otros secretos antes de las reglas nuevas en `.gitignore`.
 6. CI Agent Town en Node 20 vs Node 22 recomendado para OpenClaw en README.
-7. Posible omisión de `.gitignore` para `jarvis-ecosystem/.env`.
-8. Duplicación / nombres paralelos en YAML de `automations/`.
-9. Métricas de costo LLM no consolidadas en dashboard único en repo.
+7. Duplicación / nombres paralelos en YAML de `automations/`.
+8. Métricas de costo LLM no consolidadas en dashboard único en repo.
+9. `plugins.allow` en OpenClaw: omisión de IDs de canal desactiva el plugin aunque `channels.*.enabled` sea true ([README.md](../README.md) — riesgo operativo recurrente).
 10. Bus factor: una persona + agentes — riesgo operativo organizacional (fuera del código pero relevante en veredicto).
 
 ### S.4 Top 10 oportunidades
@@ -1535,7 +1538,7 @@
 | Fase | Periodo | Acciones clave | Expertos / foco | Impacto esperado |
 |------|---------|----------------|-----------------|------------------|
 | Fase 0 — Cimientos | Mes 1–2 | Seguridad repo, symlinks, revisión auth gateway | SecOps, DevOps | Base estable |
-| Fase 1 — Estabilización | Mes 3–4 | Bindings por canal; housekeeping YAML; .gitignore | TL, Backend | Menos fricción |
+| Fase 1 — Estabilización | Mes 3–4 | Bindings por canal; housekeeping YAML; ~~.gitignore jarvis-ecosystem~~ hecho | TL, Backend | Menos fricción |
 | Fase 2 — Expansión | Mes 5–8 | Altas de nuevas empresas según COMPANIES + workspaces | PM, Arch | Holding completo en código |
 | Fase 3 — Escala | Mes 9–12 | Valorar HA/cloud solo ante requisito | Cloud | Opcional |
 
@@ -1546,3 +1549,5 @@ El ecosistema **clawvis-openclaw** es **operable y bien documentado** para un ho
 ---
 
 *Informe generado según [PROMPT_FORENSE_ECOSISTEMA_JARVIS.md](./PROMPT_FORENSE_ECOSISTEMA_JARVIS.md). Comité: 44 roles + síntesis S.1–S.6.*
+
+*Addendum: alineación con el estado del repo tras commit de documentación y remedios (`PUSH-A-GITHUB.md`, `.gitignore` para `jarvis-ecosystem/.env`).*
