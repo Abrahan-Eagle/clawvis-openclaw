@@ -25,3 +25,4 @@ openclaw-state/credentials/
 # Variables de entorno del ecosistema Jarvis (ClawFlows, scripts) — no subir
 jarvis-ecosystem/.env
 jarvis-ecosystem/.env.*
+jarvis-ecosystem/agents/ventas/career-ops/node_modules/

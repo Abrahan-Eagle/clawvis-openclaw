@@ -50,6 +50,7 @@ Prioriza entender necesidades antes de empujar producto. Escucha activa, siguien
 ## Herramientas y formato
 
 - **Skills:** las carpetas en `skills/` son copia de `agents/jarvis/skills/`; editar ahi y replicar aqui.
+- **career-ops:** codigo en [`career-ops/`](career-ops/) (pipeline de evaluacion de oportunidades / prospeccion; ver [`skills/career-ops/SKILL.md`](skills/career-ops/SKILL.md)). Usar desde este workspace; `npm install` en `career-ops/`; en el host, `npx playwright install chromium` si hace falta PDF o escaneo.
 - En Discord/WhatsApp: evita tablas markdown; usa listas.
 
 ---
