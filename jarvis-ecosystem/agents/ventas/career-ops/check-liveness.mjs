@@ -14,7 +14,7 @@
  * Exit code: 0 if all active, 1 if any expired or uncertain
  */
 
-import { chromium } from 'playwright';
+import { launchChromium } from './playwright-launch.mjs';
 import { readFile } from 'fs/promises';
 
 const EXPIRED_PATTERNS = [
@@ -118,7 +118,7 @@ async function main() {
 
   console.log(`Checking ${urls.length} URL(s)...\n`);
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchChromium();
   const page = await browser.newPage();
 
   let active = 0, expired = 0, uncertain = 0;

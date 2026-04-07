@@ -8,6 +8,7 @@
 import { existsSync, mkdirSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { getConfiguredChannel } from './playwright-launch.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = __dirname;
@@ -44,6 +45,23 @@ function checkDependencies() {
 async function checkPlaywright() {
   try {
     const { chromium } = await import('playwright');
+    const channel = getConfiguredChannel();
+    if (channel) {
+      try {
+        const browser = await chromium.launch({ headless: true, channel });
+        await browser.close();
+        return { pass: true, label: `Playwright ready (channel: ${channel})` };
+      } catch (err) {
+        return {
+          pass: false,
+          label: `Playwright channel "${channel}" failed`,
+          fix: [
+            `Ensure ${channel} is installed for this OS`,
+            'Or unset CAREER_OPS_PLAYWRIGHT_CHANNEL and run: npx playwright install chromium',
+          ],
+        };
+      }
+    }
     const execPath = chromium.executablePath();
     if (existsSync(execPath)) {
       return { pass: true, label: 'Playwright chromium installed' };
@@ -51,13 +69,19 @@ async function checkPlaywright() {
     return {
       pass: false,
       label: 'Playwright chromium not installed',
-      fix: 'Run: npx playwright install chromium',
+      fix: [
+        'Run: npx playwright install chromium',
+        'Or use system Chrome: export CAREER_OPS_PLAYWRIGHT_CHANNEL=chrome',
+      ],
     };
   } catch {
     return {
       pass: false,
       label: 'Playwright chromium not installed',
-      fix: 'Run: npx playwright install chromium',
+      fix: [
+        'Run: npx playwright install chromium',
+        'Or use system Chrome: export CAREER_OPS_PLAYWRIGHT_CHANNEL=chrome',
+      ],
     };
   }
 }

@@ -10,7 +10,7 @@
  * Uses Chromium headless to render the HTML and produce a clean, ATS-parseable PDF.
  */
 
-import { chromium } from 'playwright';
+import { launchChromium } from './playwright-launch.mjs';
 import { resolve, dirname } from 'path';
 import { readFile } from 'fs/promises';
 import { fileURLToPath } from 'url';
@@ -129,7 +129,7 @@ async function generatePDF() {
     console.log(`🧹 ATS normalization: ${totalReplacements} replacements (${breakdown})`);
   }
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchChromium();
   const page = await browser.newPage();
 
   // Set content with file base URL for any relative resources

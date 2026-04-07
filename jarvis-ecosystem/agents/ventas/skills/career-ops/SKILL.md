@@ -21,7 +21,7 @@ En **Ventas**, el mismo motor sirve para **prospeccion y calificacion de oportun
 ## Requisitos locales
 
 - Desde `agents/ventas/career-ops/`: `npm install` (hecho en integracion).
-- PDF / navegacion: `npx playwright install chromium` si falta el browser.
+- PDF / navegacion: `npx playwright install chromium`, o **Chrome instalado** con `export CAREER_OPS_PLAYWRIGHT_CHANNEL=chrome` (ver [`../../career-ops/playwright-launch.mjs`](../../career-ops/playwright-launch.mjs)).
 - Config: copiar `config/profile.example.yml` → `config/profile.yml` y `templates/portals.example.yml` → `portals.yml` segun necesidad.
 
 ## Lineas rojas
