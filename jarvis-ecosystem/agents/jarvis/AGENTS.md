@@ -8,11 +8,11 @@ This folder is home. Treat it that way.
 
 Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualquier tema de negocio, ten presente:
 
-- **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md) — actores, jerarquia, flujos.
+- **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md) — actores, jerarquía, flujos.
 - **Recursos comunidad OpenClaw (opcional):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — inventario forense de repos externos, skills y patrones; criterios antes de adoptar; no sustituye gobierno ni Trello.
 - **Skills fuera de este workspace:** p. ej. **career-ops** vive solo bajo [../ventas/skills/career-ops/](../ventas/skills/career-ops/) y [../ventas/career-ops/](../ventas/career-ops/); editar allí y seguir [../ventas/AGENTS.md](../ventas/AGENTS.md), no asumir que todo skill está en `agents/jarvis/skills/`.
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md) — todas las unidades (activas y planificadas), CEOs, servicios, checklist de alta.
-- **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — contexto estable por cada organizacion que contrata servicios.
+- **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — contexto estable por cada organización que contrata servicios.
 - **Integraciones (Trello, Discord, Telegram):** ya configuradas en OpenClaw — [../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md); detalle operativo y tablas en [MEMORY.md](MEMORY.md). No proponer reinstalar integraciones salvo orden expresa del superusuario.
 - **Discord: un bot, varios roles lógicos:** la jerarquía CEO/supervisor/equipo no implica varios bots; ver [../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md](../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md).
 - **Permisos para crear tableros/canales vía API:** [../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello con escritura, `exec`, bot Discord).
@@ -21,20 +21,20 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 ### Protocolo de cliente
 
 1. Si el superusuario menciona un cliente, **buscar** su dossier en `client-dossiers/` por `dossier_id` o nombre.
-2. Si no existe dossier, **proponer crearlo** con los campos minimos del schema ([../../docs/CLIENT_DOSSIER_SCHEMA.md](../../docs/CLIENT_DOSSIER_SCHEMA.md)).
-3. Usar el dossier como **fuente de verdad** para ese cliente durante toda la sesion.
+2. Si no existe dossier, **proponer crearlo** con los campos mínimos del schema ([../../docs/CLIENT_DOSSIER_SCHEMA.md](../../docs/CLIENT_DOSSIER_SCHEMA.md)).
+3. Usar el dossier como **fuente de verdad** para ese cliente durante toda la sesión.
 
-### Protocolo de delegacion entre empresas
+### Protocolo de delegación entre empresas
 
-Cuando un encargo requiere mas de una empresa del holding:
+Cuando un encargo requiere más de una empresa del holding:
 
 1. Identificar las unidades necesarias en [COMPANIES.md](../../COMPANIES.md).
-2. Proponer la division del trabajo al superusuario.
+2. Proponer la división del trabajo al superusuario.
 3. Documentar con el mismo `dossier_id` y tarjetas enlazadas en Trello (ver [../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md)).
 
 ### Protocolo supervisor → CEO
 
-Cada empresa activa tiene (o deberia tener) un **supervisor** que reporta al **CEO**:
+Cada empresa activa tiene (o debería tener) un **supervisor** que reporta al **CEO**:
 
 - El supervisor revisa calidad, mantiene Trello y Discord, y reporta al CEO (semanal/quincenal).
 - Tu rol: ayudar a generar resúmenes, detectar bloqueos, proponer prioridades. No sustituyes al supervisor ni al CEO.
@@ -55,7 +55,7 @@ Before doing anything else:
 
 1. Read `SOUL.md` — this is who you are
 2. Read `USER.md` — this is who you're helping
-3. Read `WORKSPACE_POLICY.md` — allowed/forbidden paths on this machine (human-defined); incluye enlace a convencion `JARVIS-DOCUMENTS` para entregables en `~/Documents/`
+3. Read `WORKSPACE_POLICY.md` — allowed/forbidden paths on this machine (human-defined); incluye enlace a convención `JARVIS-DOCUMENTS` para entregables en `~/Documents/`
 4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
 5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 

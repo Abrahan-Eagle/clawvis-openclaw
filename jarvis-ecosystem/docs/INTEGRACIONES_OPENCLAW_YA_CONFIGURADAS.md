@@ -34,13 +34,13 @@
 
 Checklist y comandos de verificación: [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md).
 
-**Catálogo comunidad (skills/repos externos, no confundir con integraciones ya hechas):** [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md).
+**Catálogo comunidad (skills/repos externos, no confundir con integraciones ya hechas):** [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) — inventario forense (incluye **§2** marketing + Claude, mapeo `mkt-*`, criterios de adopción); el ancla lleva al bloque principal; el documento completo lista también núcleo, skills y patrones.
 
 ---
 
 ## Historial
 
-- **2026-04-07:** Enlace a [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) (inventario forense comunidad OpenClaw).
+- **2026-04-07:** Enlace a [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) (inventario forense comunidad OpenClaw). Ampliación: ancla `#marketing-openclaw-forense`, §2 marketing + Claude y mapeo `mkt-*` en el párrafo del catálogo.
 - **2026-04-04:** [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) — norma obligatoria de trabajo en Trello para agentes y subagentes.
 - **2026-04-04:** Enlace a [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) (un bot, bindings por canal, handoff simulado).
 - **2026-04-04:** Sección **Client dossiers (rutas en disco)** — `~/Documents/client-dossiers`, symlinks en repo y en `~/jarvis-ecosystem`, ruta relativa desde `agents/jarvis`.
