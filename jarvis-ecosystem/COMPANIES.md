@@ -83,7 +83,7 @@ Cuando el superusuario autorice una empresa nueva:
 1. **Crear workspace:** `agents/<id>/` con `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `USER.md` (copiar estructura de `agents/marketing/` como plantilla).
 2. **Actualizar esta tabla:** agregar fila con estado "Activa" y ruta del workspace.
 3. **Agregar agentes en OpenClaw:** entrada(s) en `openclaw.json` bajo `agents.list` apuntando al nuevo workspace.
-4. **Copiar skills:** replicar `agents/jarvis/skills/` al nuevo workspace (o enlace simbolico si se soporta).
+4. **Copiar skills:** replicar `agents/jarvis/skills/` al nuevo workspace (o enlace simbólico si se soporta). Si la unidad necesita herramientas propias (patrón **career-ops** en Ventas), documentar la excepción en el `AGENTS.md` de esa empresa; no todo skill tiene que existir en `agents/jarvis/skills/`.
 5. **Trello:** crear board `Empresa-<NombreCorto> — Operaciones` con listas según [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md); documentar board ID en MEMORY.md de Jarvis.
 6. **Discord:** crear categoría o servidor según [docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) con roles CEO / Supervisor / Equipo.
 7. **Automatizaciones:** si la empresa necesita cron/ClawFlow propio, crear YAML en `automations/<id>/`.

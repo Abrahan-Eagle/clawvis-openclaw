@@ -84,7 +84,7 @@ El directorio `agents/jarvis/skills/clawflows-capability-map/` solo declara **Pr
 
 ### lead-qualifier (registry)
 
-`lead-qualifier` no tiene `metadata.json` en el registry web (**404**), por eso `clawflows check lead-qualifier` falla siempre; el script de verificacion lo omite y el script `validate-lead-qualifier-local.sh` comprueba `curl`/`jq`. Revisar cuando el registry publique metadata; hasta entonces no es fallo del ecosistema local.
+`lead-qualifier` no tiene `metadata.json` en el registry web (**404**), por eso `clawflows check lead-qualifier` falla siempre; el script de verificación lo omite y el script `validate-lead-qualifier-local.sh` comprueba `curl`/`jq`. Revisar cuando el registry publique metadata; hasta entonces no es fallo del ecosistema local.
 
 ### clawflows + Node 22
 

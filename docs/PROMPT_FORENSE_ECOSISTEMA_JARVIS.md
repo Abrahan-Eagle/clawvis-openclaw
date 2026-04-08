@@ -1,48 +1,48 @@
-# Prompt: Analisis Forense Profundo del Ecosistema JARVIS
+# Prompt: Análisis forense profundo del ecosistema JARVIS
 
-> **Instruccion para la IA:** Copia este prompt completo y pegalo en una nueva sesion de Cursor (o cualquier LLM con acceso al repositorio). La IA debe leer los archivos referenciados, ejecutar el analisis completo y generar el informe consolidado.
+> **Instrucción para la IA:** Copia este prompt completo y pégalo en una nueva sesión de Cursor (o cualquier LLM con acceso al repositorio). La IA debe leer los archivos referenciados, ejecutar el análisis completo y generar el informe consolidado.
 
 ---
 
 ## CONTEXTO DEL PROYECTO
 
-El repositorio `clawvis-openclaw` (ruta: `/var/www/clawvis-openclaw`) es el **monorepo operativo** del **Ecosistema JARVIS**: una plataforma de orquestacion IA que administra un **holding de empresas** mediante agentes autonomos.
+El repositorio `clawvis-openclaw` (ruta: `/var/www/clawvis-openclaw`) es el **monorepo operativo** del **Ecosistema JARVIS**: una plataforma de orquestación IA que administra un **holding de empresas** mediante agentes autónomos.
 
 ### Componentes principales
 
-| Componente | Ruta | Descripcion |
+| Componente | Ruta | Descripción |
 |------------|------|-------------|
 | **OpenClaw Gateway** | Proceso externo (`~/.openclaw/`) | Motor de agentes: LLM multi-proveedor, herramientas, canales (Telegram, Discord, WhatsApp) |
 | **Jarvis (agente maestro)** | `jarvis-ecosystem/agents/jarvis/` | Orquestador central del holding; gobierno, memoria, skills, model-router |
 | **Agent Town** | `agent-town/` | App web Next.js 16 + React 19 + Phaser 3 (oficina pixel); WebSocket proxy al gateway |
 | **Ecosistema Jarvis** | `jarvis-ecosystem/` | Agentes por empresa (`marketing/`, `ventas/`), automatizaciones ClawFlows YAML, gobierno documental |
-| **Config sanitizada** | `config/openclaw-home/` | Instantanea de `~/.openclaw` sin secretos, para backup en Git |
-| **Estado OpenClaw** | `openclaw-state/` | Sesiones, memoria SQLite, logs, transcripts historicos |
-| **Documentacion** | `docs/`, `jarvis-ecosystem/docs/`, `documentos-jarvis-openclaw/` | Gobierno, runbooks, integraciones, convenciones |
+| **Config sanitizada** | `config/openclaw-home/` | Instantánea de `~/.openclaw` sin secretos, para backup en Git |
+| **Estado OpenClaw** | `openclaw-state/` | Sesiones, memoria SQLite, logs, transcripts históricos |
+| **Documentación** | `docs/`, `jarvis-ecosystem/docs/`, `documentos-jarvis-openclaw/` | Gobierno, runbooks, integraciones, convenciones |
 | **Deploy** | `deploy/systemd/` | Units systemd para gateway, proxy Cursor, Agent Town |
 
-**Catalogo opcional (comunidad OpenClaw):** [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) — inventario forense de repos y skills externos, criterios de adopcion; **no** sustituye gobierno documental, Trello ni integraciones ya configuradas en el gateway. El ancla apunta al bloque §2 (marketing, Claude, mapeo `mkt-*`).
+**Catálogo opcional (comunidad OpenClaw):** [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) — inventario forense de repos y skills externos, criterios de adopción; **no** sustituye gobierno documental, Trello ni integraciones ya configuradas en el gateway. El ancla apunta al bloque §2 (marketing, Claude, mapeo `mkt-*`).
 
-### Stack tecnologico
+### Stack tecnológico
 
 - **Runtime:** Node.js 22+, OpenClaw CLI (npm global)
 - **Frontend:** Next.js 16, React 19, Tailwind CSS 4, Phaser 3, TypeScript, pnpm
-- **Comunicacion:** WebSocket (proxy a gateway en puerto 18789), API Routes Next.js
+- **Comunicación:** WebSocket (proxy a gateway en puerto 18789), API Routes Next.js
 - **Proveedores LLM:** Groq, OpenRouter, Google Gemini, Ollama, Cursor proxy, OpenCode
 - **Canales:** Telegram, Discord, WhatsApp
 - **Herramientas:** Trello (API), navegador embebido, skills ClawHub
-- **Base de datos:** SQLite (memoria del gateway), sin BD relacional de aplicacion
+- **Base de datos:** SQLite (memoria del gateway), sin BD relacional de aplicación
 - **CI/CD:** GitHub Actions (lint, typecheck, build, test, audit)
 - **Despliegue:** systemd units, sin Docker
 
 ### Modelo de gobierno
 
-- **Superusuario** (Abraham): unico canal humano directo con Jarvis
+- **Superusuario** (Abraham): único canal humano directo con Jarvis
 - **Jarvis**: agente maestro, orquestador del holding
 - **Empresas activas:** Marketing, Ventas (cada una con CEO/Supervisor/Equipo)
-- **Empresas planificadas:** Agencia de programacion, bufete legal, contadores
+- **Empresas planificadas:** Agencia de programación, bufete legal, contadores
 - **Clientes externos:** representados por dossiers JSON (`client-dossiers/`)
-- **Coordinacion:** Trello (tableros Kanban por empresa/cliente), Discord (roles logicos), Telegram
+- **Coordinación:** Trello (tableros Kanban por empresa/cliente), Discord (roles lógicos), Telegram
 
 ---
 
@@ -1095,12 +1095,12 @@ Un parrafo de sintesis ejecutiva: estado actual del ecosistema, viabilidad, ries
 1. **Lee TODOS los archivos indicados** antes de emitir cada veredicto. Si un archivo no existe, registralo como hallazgo.
 2. **No inventes datos.** Si no puedes verificar algo, indicalo como "no verificable con los archivos disponibles".
 3. **Cita evidencia.** Cada hallazgo debe referenciar al menos un archivo, ruta o configuracion.
-4. **Se implacablemente honesto.** Este es un analisis forense, no un halago. Exponer debilidades es mas valioso que confirmar fortalezas.
-5. **Prioriza lo accionable.** Cada recomendacion debe poder convertirse en una tarea concreta.
+4. **Sé implacablemente honesto.** Este es un análisis forense, no un halago. Exponer debilidades es más valioso que confirmar fortalezas.
+5. **Prioriza lo accionable.** Cada recomendación debe poder convertirse en una tarea concreta.
 6. **Respeta la escala.** Este es un proyecto operado por una persona (superusuario) con agentes IA; calibra las recomendaciones a esa realidad.
-7. **El informe completo debe contener las 44 secciones de expertos + la sintesis cruzada.** No omitas ningun rol.
-8. **Genera el informe como un unico documento Markdown** con tabla de contenidos al inicio.
+7. **El informe completo debe contener las 44 secciones de expertos + la síntesis cruzada.** No omitas ningún rol.
+8. **Genera el informe como un único documento Markdown** con tabla de contenidos al inicio.
 
 ---
 
-*Prompt generado para el Ecosistema JARVIS -- Analisis forense multi-experto con 44 roles de 3 empresas del holding.*
+*Prompt generado para el ecosistema JARVIS: análisis forense multiexperto con 44 roles de 3 empresas del holding.*
