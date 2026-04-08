@@ -21,6 +21,8 @@ El repositorio `clawvis-openclaw` (ruta: `/var/www/clawvis-openclaw`) es el **mo
 | **Documentacion** | `docs/`, `jarvis-ecosystem/docs/`, `documentos-jarvis-openclaw/` | Gobierno, runbooks, integraciones, convenciones |
 | **Deploy** | `deploy/systemd/` | Units systemd para gateway, proxy Cursor, Agent Town |
 
+**Catalogo opcional (comunidad OpenClaw):** [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — inventario forense de repos y skills externos, criterios de adopcion; **no** sustituye gobierno documental, Trello ni integraciones ya configuradas en el gateway.
+
 ### Stack tecnologico
 
 - **Runtime:** Node.js 22+, OpenClaw CLI (npm global)
