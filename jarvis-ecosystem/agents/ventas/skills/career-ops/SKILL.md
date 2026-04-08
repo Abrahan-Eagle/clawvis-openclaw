@@ -29,6 +29,12 @@ En **Ventas**, el mismo motor sirve para **prospeccion y calificacion de oportun
 - No enviar aplicaciones ni emails masivos sin confirmacion humana; el upstream enfatiza revision humana.
 - Datos sensibles de clientes: mismas reglas que el resto del workspace Ventas (Trello, dossiers, canales autorizados).
 
+## Stack acordado (cero coste extra)
+
+- **Solo career-ops** en esta carpeta: evaluacion, PDFs, portales, `npm run doctor`. Sin Docker ni otro producto paralelo.
+- **No** se integra [job-ops](https://github.com/DaKheera47/job-ops) ni herramientas similares que exijan servicios 24/7, scraping agresivo de terceros o stacks adicionales.
+- **Seguimiento** despues de contactar o aplicar: [Trello y dossiers](../../../../docs/FLUJO_TRELLO_ECOSISTEMA.md) del ecosistema — sin automatizar buzon; la disciplina de no perder el hilo es la misma utilidad sin dependencias nuevas.
+
 ## Referencias
 
 - README y docs: [`../../career-ops/README.md`](../../career-ops/README.md), [`../../career-ops/docs/SETUP.md`](../../career-ops/docs/SETUP.md)
