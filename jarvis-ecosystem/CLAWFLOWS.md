@@ -90,6 +90,10 @@ El directorio `agents/jarvis/skills/clawflows-capability-map/` solo declara **Pr
 
 En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (import JSON). Si ocurre, el binario global suele estar en `$(npm root -g)/clawflows/bin/clawflows.mjs`: reemplaza la lectura de `package.json` por `readFileSync` + `JSON.parse` (parche local en esa máquina), o usa **Node 20 LTS** solo para el CLI de ClawFlows. No afecta al gateway OpenClaw si este usa otro Node.
 
+## Recursos comunidad (skills y repos externos)
+
+Inventario curado con criterios de adopción (no confundir con integraciones ya configuradas en el gateway): [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md).
+
 ## Nota
 
 Documentacion adicional del monorepo: [README.md](../README.md) (raíz de `clawvis-openclaw`).

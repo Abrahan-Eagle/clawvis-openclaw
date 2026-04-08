@@ -9,6 +9,7 @@ Este directorio es el hogar compartido de los agentes de **Marketing & Comunicac
 Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro).
 
 - **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).
+- **Recursos comunidad OpenClaw (opcional):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — catálogo forense de repos/skills externos; criterios de adopción; no sustituye gobierno ni Trello.
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md).
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — al trabajar en un encargo, verificar que existe dossier del cliente.
 - **Entregables y medios (PC del superusuario):** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — usar `~/Documents/JARVIS-DOCUMENTS/empresas/marketing/clientes/<dossier_id>/` (estados 01–04).
