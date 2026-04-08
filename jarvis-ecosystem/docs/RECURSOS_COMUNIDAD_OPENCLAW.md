@@ -26,7 +26,7 @@
 
 - **Objetivo de la búsqueda:** localizar en GitHub proyectos de **agencias de marketing digital** que declaren de forma explícita **OpenClaw + Claude** como stack operativo público.
 - **Hallazgo principal:** no aparece un repositorio que sea equivalente a “producto de agencia + código abierto” con esa etiqueta. La comunidad aporta **plantillas `SOUL.md`**, **skills**, **listas awesome** y artículos/blog; el valor es **patrón operativo** (roles, pipelines, revisión humana), no un fork listo para sustituir el gobierno Jarvis.
-- **Uso para el holding:** tomar **pocas** plantillas como inspiración, adaptarlas a identidad y líneas rojas de la empresa Marketing, y atar todo a **dossier + Trello** (ver §2.5).
+- **Uso para el holding:** tomar **pocas** plantillas como inspiración, adaptarlas a identidad y líneas rojas de la empresa Marketing, y atar todo a **dossier + Trello** (ver §2.5 para mapeo plantillas → `mkt-*`, §2.6 para el procedimiento de adopción).
 
 ### 2.2 Fuentes priorizadas
 

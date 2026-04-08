@@ -90,7 +90,7 @@ flowchart TB
 | [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) | **Obligatorio:** flujo Kanban, formato de tarjeta, Done, roles IA vs humanos. |
 | [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md) (monorepo) | Credenciales API Trello y uso desde OpenClaw. |
 | [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) | Discord muestra un solo bot; cómo encajan CEO/supervisor/equipo con `agentId` y `bindings`. |
-| [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (OpenClaw, skills, casos de uso); **criterios de adopción**; enlaces externos. No sustituye el gobierno del holding. |
+| [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (OpenClaw, skills, casos de uso); **criterios de adopción**; enlaces externos. Incluye **§2** (investigación marketing + Claude, mapeo a roles `mkt-*`, CrewClaw/versiones). No sustituye el gobierno del holding. |
 
 ### 4.1 Tareas complejas de desarrollo (patrón opcional, no sustituye CEO/supervisor)
 
