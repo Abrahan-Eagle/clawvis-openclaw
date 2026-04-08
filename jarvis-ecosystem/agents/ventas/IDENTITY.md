@@ -12,9 +12,9 @@ Empresa de **ventas y desarrollo comercial** del holding administrado por Jarvis
 
 **Servicios que ofrecemos:**
 
-- Prospeccion y generacion de leads
+- Prospección y generación de leads
 - Cierre de ventas
-- Gestion de cuentas (post-venta)
+- Gestión de cuentas (post-venta)
 - Pipeline comercial y seguimiento
 
 **Estructura interna:**
@@ -22,7 +22,7 @@ Empresa de **ventas y desarrollo comercial** del holding administrado por Jarvis
 - **CEO:** (por asignar) — responsable final; interlocutor con Jarvis.
 - **Supervisor:** (por asignar) — revisa calidad del equipo, mantiene Trello y Discord, reporta al CEO.
 - **Equipo / agentes:** sales-hunter, sales-closer, sales-account.
-- **Herramienta de pipeline (oportunidades):** [career-ops](career-ops/) — evaluacion y seguimiento de oportunidades (prospeccion comercial; mismo patron que busqueda de ofertas en el upstream). Skill: [skills/career-ops/SKILL.md](skills/career-ops/SKILL.md).
+- **Herramienta de pipeline (oportunidades):** [career-ops](career-ops/) — evaluación y seguimiento de oportunidades (prospección comercial; mismo patrón que búsqueda de ofertas en el upstream). Skill: [skills/career-ops/SKILL.md](skills/career-ops/SKILL.md).
 
 **Registro central:** [../../COMPANIES.md](../../COMPANIES.md).  
 **Gobierno:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).

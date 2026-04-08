@@ -92,7 +92,7 @@ En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (im
 
 ## Recursos comunidad (skills y repos externos)
 
-Inventario curado con criterios de adopción (no confundir con integraciones ya configuradas en el gateway): [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md).
+Inventario curado con criterios de adopción (no confundir con integraciones ya configuradas en el gateway): [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) (ancla al §2 marketing; el documento completo incluye el resto del catálogo).
 
 ## Nota
 

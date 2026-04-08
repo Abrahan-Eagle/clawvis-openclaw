@@ -1,6 +1,6 @@
 # Ecosistema Jarvis (dentro de `clawvis-openclaw`)
 
-**Jarvis** es el **agente maestro** de un holding de empresas. Este directorio agrupa agentes, skills, automatizaciones ClawFlows, scripts y la documentacion de gobierno del holding. La documentacion operativa global esta en el [README.md del monorepo](../README.md).
+**Jarvis** es el **agente maestro** de un holding de empresas. Este directorio agrupa agentes, skills, automatizaciones ClawFlows, scripts y la documentación de gobierno del holding. La documentación operativa global está en el [README.md del monorepo](../README.md).
 
 ---
 
@@ -25,7 +25,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 
 ## Tres sitios distintos: no confundir
 
-| Ubicacion | Rol |
+| Ubicación | Rol |
 |-----------|-----|
 | **`jarvis-ecosystem/openclaw.json`** (este arbol) | **Plantilla / referencia** minima (modelos de ejemplo, bindings de ejemplo). El gateway **no** la lee salvo que la copies a mano. |
 | **`~/.openclaw/openclaw.json`** | **Fuente de verdad** del gateway: modelos reales, canales (Telegram, Discord, WhatsApp), `bindings`, `tools`, agentes. Editar aqui para cambiar comportamiento en produccion. |
@@ -36,11 +36,11 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | Ruta | Descripcion |
 |------|-------------|
 | `agents/jarvis/` | Workspace del agente maestro: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `MEMORY.md`, `skills/`, `scripts/` (model-router), `memory/`. |
-| `agents/marketing/` | Empresa Marketing & Comunicacion: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (copia de jarvis). |
-| `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (copia de jarvis). |
+| `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (copia de jarvis). |
+| `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (mayoría copia de jarvis; excepción `skills/career-ops/`), [`career-ops/`](agents/ventas/career-ops/) (herramienta local). Detalle: [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). |
 | `automations/` | YAML ClawFlows; ver [automations/README.md](automations/README.md). |
-| `scripts/` | `clawflows-env.sh`, verificacion del registry, etc. |
-| [CLAWFLOWS.md](CLAWFLOWS.md) | Guia ClawFlows + Lobster. |
+| `scripts/` | `clawflows-env.sh`, verificación del registry, etc. |
+| [CLAWFLOWS.md](CLAWFLOWS.md) | Guía ClawFlows + Lobster. |
 
 **Skills duplicadas:** `agents/marketing/skills/` y la mayor parte de `agents/ventas/skills/` son **copias** de `agents/jarvis/skills/`. Editar siempre en `agents/jarvis/skills/` y replicar a marketing y a ventas. **Excepción:** `agents/ventas/skills/career-ops/` (y la herramienta en `agents/ventas/career-ops/`) es solo de Ventas; no existe en jarvis — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md).
 

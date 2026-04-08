@@ -1,6 +1,6 @@
 # MEMORY.md - Long-term memory
 
-Solo lectura/escritura en sesion principal con el humano (ver `AGENTS.md`).
+Solo lectura/escritura en sesión principal con el humano (ver `AGENTS.md`).
 
 ---
 
@@ -63,7 +63,7 @@ Integracion OpenClaw: **configurada** (Discord como canal del gateway). Referenc
 
 Telegram: mismo gateway OpenClaw; no repetir integracion desde el repo.
 
-*(Opcional: anotar aqui IDs de servidor/categoria solo si el superusuario quiere que Jarvis los referencie en sesion; evitar secretos.)*
+*(Opcional: anotar aquí IDs de servidor/categoría solo si el superusuario quiere que Jarvis los referencie en sesión; evitar secretos.)*
 
 ---
 

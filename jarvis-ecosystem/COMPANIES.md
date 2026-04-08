@@ -2,7 +2,7 @@
 
 **Fuente de verdad** para las unidades de negocio que Jarvis orquesta.  
 Gobierno operativo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).  
-**Ultima actualizacion:** abril 2026.
+**Última actualización:** abril 2026.
 
 **Entregables en disco (fuera del repo):** cada empresa tiene su rama bajo `~/Documents/JARVIS-DOCUMENTS/empresas/<ID>/` (carpeta del sistema **`Documents`**, no `Documentos`) — ver [docs/JARVIS_DOCUMENTS_ON_DISK.md](docs/JARVIS_DOCUMENTS_ON_DISK.md).
 
@@ -14,13 +14,13 @@ Gobierno operativo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).
 
 | ID | Nombre | Servicios principales | CEO | Supervisor | Estado | Workspace |
 |----|--------|-----------------------|-----|------------|--------|-----------|
-| `marketing` | Marketing & Comunicacion | Marketing digital, gestion de redes, branding, contenido, publicidad | Ricardo Mena (ejemplo) | Patricia Oropeza (ejemplo) | **Activa** | `agents/marketing/` |
-| `ventas` | Ventas | Prospeccion, cierre, gestion de cuentas, pipeline comercial | Damian Vela (ejemplo) | Lucia Fernandez (ejemplo) | **Activa** | `agents/ventas/` |
-| `dev-agency` | Agencia de Programacion | Desarrollo de software, mantenimiento, APIs, apps moviles, web | (por asignar) | (por asignar) | Planificada | — |
-| `legal` | Bufete Legal | Asesoria juridica, contratos, propiedad intelectual, regulacion | (por asignar) | (por asignar) | Planificada | — |
-| `contadores` | Contabilidad & Finanzas | Contabilidad, impuestos, nomina, auditorias, reportes financieros | (por asignar) | (por asignar) | Planificada | — |
+| `marketing` | Marketing & Comunicación | Marketing digital, gestión de redes, branding, contenido, publicidad | Ricardo Mena (ejemplo) | Patricia Oropeza (ejemplo) | **Activa** | `agents/marketing/` |
+| `ventas` | Ventas | Prospección, cierre, gestión de cuentas, pipeline comercial | Damian Vela (ejemplo) | Lucia Fernandez (ejemplo) | **Activa** | `agents/ventas/` |
+| `dev-agency` | Agencia de Programación | Desarrollo de software, mantenimiento, APIs, apps móviles, web | (por asignar) | (por asignar) | Planificada | — |
+| `legal` | Bufete Legal | Asesoría jurídica, contratos, propiedad intelectual, regulación | (por asignar) | (por asignar) | Planificada | — |
+| `contadores` | Contabilidad & Finanzas | Contabilidad, impuestos, nómina, auditorías, reportes financieros | (por asignar) | (por asignar) | Planificada | — |
 
-**Nota:** las empresas "Planificada" no tienen workspace ni agentes en OpenClaw todavia. Se crearan cuando el superusuario lo autorice (ver checklist de alta abajo).
+**Nota:** las empresas "Planificada" no tienen workspace ni agentes en OpenClaw todavía. Se crearán cuando el superusuario lo autorice (ver checklist de alta abajo).
 
 ---
 
@@ -30,15 +30,15 @@ Mapeo actual entre agentes y workspaces:
 
 | Agente ID | Empresa | Rol / especialidad |
 |-----------|---------|---------------------|
-| `jarvis` | (master) | Orquestador del holding; dialogo directo con el superusuario |
+| `jarvis` | (master) | Orquestador del holding; diálogo directo con el superusuario |
 | `mkt-content` | marketing | Contenido y copywriting |
-| `mkt-social` | marketing | Gestion de redes sociales |
-| `mkt-analytics` | marketing | Analitica y reportes de campanas |
+| `mkt-social` | marketing | Gestión de redes sociales |
+| `mkt-analytics` | marketing | Analítica y reportes de campañas |
 | `mkt-ads` | marketing | Publicidad paga (ads) |
-| `mkt-email` | marketing | Email marketing y automatizacion |
-| `sales-hunter` | ventas | Prospeccion y generacion de leads |
+| `mkt-email` | marketing | Email marketing y automatización |
+| `sales-hunter` | ventas | Prospección y generación de leads |
 | `sales-closer` | ventas | Cierre de ventas |
-| `sales-account` | ventas | Gestion de cuentas (post-venta) |
+| `sales-account` | ventas | Gestión de cuentas (post-venta) |
 
 ---
 
@@ -55,24 +55,24 @@ Superusuario
     |
   Supervisor(es)
     |
-  Equipo (empleados segun rol)
+  Equipo (empleados según rol)
 ```
 
-- **CEO:** responsable final de la empresa; recibe rendicion de cuentas del supervisor; interlocutor de negocio con Jarvis.
+- **CEO:** responsable final de la empresa; recibe rendición de cuentas del supervisor; interlocutor de negocio con Jarvis.
 - **Supervisor:** revisa calidad del equipo, planifica y mantiene Trello y Discord, reporta al CEO (semanal/quincenal).
-- **Equipo:** empleados con roles segun el tipo de empresa.
+- **Equipo:** empleados con roles según el tipo de empresa.
 
 Detalle completo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).
 
 ---
 
-## Comunicacion entre empresas
+## Comunicación entre empresas
 
 Cuando una empresa necesita a otra (ej. marketing pide una landing a dev-agency, o contadores piden criterio legal):
 
 1. Se documenta con el mismo `dossier_id` del cliente si aplica.
 2. Tarjetas enlazadas en Trello con etiqueta `delegado-a:<empresa>` (ver [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md)).
-3. Jarvis puede proponer la division del trabajo; los CEOs/supervisores cierran alcance y fechas.
+3. Jarvis puede proponer la división del trabajo; los CEOs/supervisores cierran alcance y fechas.
 
 ---
 
@@ -84,8 +84,8 @@ Cuando el superusuario autorice una empresa nueva:
 2. **Actualizar esta tabla:** agregar fila con estado "Activa" y ruta del workspace.
 3. **Agregar agentes en OpenClaw:** entrada(s) en `openclaw.json` bajo `agents.list` apuntando al nuevo workspace.
 4. **Copiar skills:** replicar `agents/jarvis/skills/` al nuevo workspace (o enlace simbolico si se soporta).
-5. **Trello:** crear board `Empresa-<NombreCorto> — Operaciones` con listas segun [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md); documentar board ID en MEMORY.md de Jarvis.
-6. **Discord:** crear categoria o servidor segun [docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) con roles CEO / Supervisor / Equipo.
+5. **Trello:** crear board `Empresa-<NombreCorto> — Operaciones` con listas según [docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md](docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md); documentar board ID en MEMORY.md de Jarvis.
+6. **Discord:** crear categoría o servidor según [docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md) con roles CEO / Supervisor / Equipo.
 7. **Automatizaciones:** si la empresa necesita cron/ClawFlow propio, crear YAML en `automations/<id>/`.
 8. **Reiniciar gateway:** `systemctl --user restart openclaw-gateway` para que reconozca los nuevos agentes.
 

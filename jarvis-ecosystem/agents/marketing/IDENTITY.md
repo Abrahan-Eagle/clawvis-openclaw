@@ -1,6 +1,6 @@
-# IDENTITY.md — Marketing & Comunicacion
+# IDENTITY.md — Marketing & Comunicación
 
-**Name:** Marketing & Comunicacion
+**Name:** Marketing & Comunicación
 **Emoji:** 📣
 **Avatar:**
 
