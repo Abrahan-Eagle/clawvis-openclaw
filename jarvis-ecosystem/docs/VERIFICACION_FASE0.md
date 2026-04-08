@@ -1,8 +1,8 @@
-# Verificacion Fase 0 — Post gobierno Jarvis
+# Verificación Fase 0 — Post gobierno Jarvis
 
-**Objetivo:** confirmar que el workspace de Jarvis en disco coincide con el repo y que el gateway OpenClaw esta operativo.
+**Objetivo:** confirmar que el workspace de Jarvis en disco coincide con el repo y que el gateway OpenClaw está operativo.
 
-**Ultima ejecucion (automatica):** 2026-04-04 (entorno de desarrollo).
+**Última ejecución (automática):** 2026-04-04 (entorno de desarrollo).
 
 ---
 
@@ -14,11 +14,11 @@
 | `readlink -f <repo>/jarvis-ecosystem` | `/var/www/clawvis-openclaw/jarvis-ecosystem` |
 | `systemctl --user is-active openclaw-gateway` | `active` |
 
-**Interpretacion:** el enlace simbolico `~/.jarvis-ecosystem` apunta al mismo arbol que el clon en `/var/www/clawvis-openclaw/jarvis-ecosystem`. El gateway de usuario esta **activo**.
+**Interpretación:** el enlace simbólico `~/.jarvis-ecosystem` apunta al mismo árbol que el clon en `/var/www/clawvis-openclaw/jarvis-ecosystem`. El gateway de usuario está **activo**.
 
 ---
 
-## Re-ejecutar en tu maquina
+## Re-ejecutar en tu máquina
 
 ```bash
 readlink -f ~/.jarvis-ecosystem
@@ -27,4 +27,4 @@ systemctl --user is-active openclaw-gateway
 openclaw channels status 2>/dev/null || true
 ```
 
-Si `openclaw-gateway` no esta `active`, revisar logs: `journalctl --user -u openclaw-gateway -n 50`.
+Si `openclaw-gateway` no está `active`, revisar logs: `journalctl --user -u openclaw-gateway -n 50`.

@@ -35,7 +35,7 @@ Plantilla vacia: [../../client-dossiers/cli-PLANTILLA-vacio.json](../../client-d
 
 | dossier_id | Cliente | Empresa asignada | Estado |
 |------------|---------|------------------|--------|
-| `cli-20260404-ejemplo` | ACME Ferreteria C.A. (ejemplo) | marketing | Ejemplo de documentacion |
+| `cli-20260404-ejemplo` | ACME Ferretería C.A. (ejemplo) | marketing | Ejemplo de documentación |
 | `cli-20260404-cliente-tests-redes` | Cliente TESTS (IG + FB) | marketing | **Cliente prueba** — depuracion ecosistema; ver [BRIEF_CLIENTE_TESTS_REDES.md](../../client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md) |
 
 ---

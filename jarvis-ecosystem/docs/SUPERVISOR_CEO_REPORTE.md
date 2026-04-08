@@ -4,7 +4,7 @@
 
 **Plantilla copiable:** [plantillas/REPORTE_SUPERVISOR_CEO.md](plantillas/REPORTE_SUPERVISOR_CEO.md).
 
-**Formato minimo** (copiar y rellenar en Discord o documento interno):
+**Formato mínimo** (copiar y rellenar en Discord o documento interno):
 
 ```
 Empresa: [marketing | ventas | ...]
@@ -29,9 +29,9 @@ CEO: [nombre]
    - Dossiers clientes tocados: [dossier_id ...]
 ```
 
-**Primera ejecucion:** cuando completes el primer reporte, marca aqui la fecha y el canal donde quedo archivado (opcional):
+**Primera ejecución:** cuando completes el primer reporte, marca aquí la fecha y el canal donde quedó archivado (opcional):
 
-| Fecha | Empresa | Canal / ubicacion |
+| Fecha | Empresa | Canal / ubicación |
 |-------|---------|---------------------|
 | *(ejemplo)* | marketing | `#supervisor-interno` o doc interno — reemplazar por dato real |
 

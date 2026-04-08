@@ -19,7 +19,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | Recurso | Ruta | Contenido |
 |---------|------|-----------|
 | **Registro de empresas** | [COMPANIES.md](COMPANIES.md) | Todas las unidades (activas + planificadas), CEOs, servicios, checklist de alta. |
-| **Dossiers de cliente** | [client-dossiers/](client-dossiers/) | Un JSON por cliente con `dossier_id`, rubro, servicios, objetivos, planificacion. |
+| **Dossiers de cliente** | [client-dossiers/](client-dossiers/) | Un JSON por cliente con `dossier_id`, rubro, servicios, objetivos, planificación. |
 
 ---
 
@@ -27,13 +27,13 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 
 | Ubicación | Rol |
 |-----------|-----|
-| **`jarvis-ecosystem/openclaw.json`** (este arbol) | **Plantilla / referencia** minima (modelos de ejemplo, bindings de ejemplo). El gateway **no** la lee salvo que la copies a mano. |
-| **`~/.openclaw/openclaw.json`** | **Fuente de verdad** del gateway: modelos reales, canales (Telegram, Discord, WhatsApp), `bindings`, `tools`, agentes. Editar aqui para cambiar comportamiento en produccion. |
-| **`config/openclaw-home/`** (en el monorepo) | **Instantanea sanitizada** (sin `.env`, sin sesiones ni credenciales) para revision y backup en Git. |
+| **`jarvis-ecosystem/openclaw.json`** (este árbol) | **Plantilla / referencia** mínima (modelos de ejemplo, bindings de ejemplo). El gateway **no** la lee salvo que la copies a mano. |
+| **`~/.openclaw/openclaw.json`** | **Fuente de verdad** del gateway: modelos reales, canales (Telegram, Discord, WhatsApp), `bindings`, `tools`, agentes. Editar aquí para cambiar comportamiento en producción. |
+| **`config/openclaw-home/`** (en el monorepo) | **Instantánea sanitizada** (sin `.env`, sin sesiones ni credenciales) para revisión y backup en Git. |
 
 ## Contenido principal
 
-| Ruta | Descripcion |
+| Ruta | Descripción |
 |------|-------------|
 | `agents/jarvis/` | Workspace del agente maestro: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `MEMORY.md`, `skills/`, `scripts/` (model-router), `memory/`. |
 | `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (copia de jarvis). |
@@ -44,7 +44,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 
 **Skills duplicadas:** `agents/marketing/skills/` y la mayor parte de `agents/ventas/skills/` son **copias** de `agents/jarvis/skills/`. Editar siempre en `agents/jarvis/skills/` y replicar a marketing y a ventas. **Excepción:** `agents/ventas/skills/career-ops/` (y la herramienta en `agents/ventas/career-ops/`) es solo de Ventas; no existe en jarvis — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md).
 
-## Documentacion de gobierno
+## Documentación de gobierno
 
 | Documento | Contenido |
 |-----------|-----------|
@@ -62,9 +62,9 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) | Primera pasada: tableros Trello + canales Discord alineados a la convención. |
 | [docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) | Token Trello con escritura, `exec` en OpenClaw, Discord bot — checklist. |
 
-## Checklist rapido
+## Checklist rápido
 
 - Cambiar **Telegram / modelo / binding** → `~/.openclaw/openclaw.json` + reinicio del gateway.
 - Cambiar **skill o prompt del agente** → `agents/jarvis/skills/` (y alinear copias en marketing/ventas); **career-ops** solo en `agents/ventas/` (ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md)).
-- **Backup de config en Git** → actualizar `config/openclaw-home/` segun el procedimiento del README raiz (sin secretos).
+- **Backup de config en Git** → actualizar `config/openclaw-home/` según el procedimiento del README raíz (sin secretos).
 - **Agregar empresa nueva** → ver checklist en [COMPANIES.md](COMPANIES.md).

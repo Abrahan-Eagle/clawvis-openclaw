@@ -3,7 +3,7 @@
 ## Que es
 
 - **[ClawFlows](https://clawflows.com)**: registro de automatizaciones multi-skill para agentes OpenClaw.
-- **Lobster**: motor de pipelines deterministas (OpenClaw lo expone como herramienta `lobster` cuando esta en `tools.alsoAllow`).
+- **Lobster**: motor de pipelines deterministas (OpenClaw lo expone como herramienta `lobster` cuando está en `tools.alsoAllow`).
 - **CLI `clawflows`** (`npm i -g clawflows`): buscar, instalar y ejecutar automatizaciones del registry.
 
 ## Variables de entorno

@@ -8,15 +8,15 @@
 
 ## Rol en el holding
 
-Empresa de **marketing digital y comunicacion** del holding administrado por Jarvis.
+Empresa de **marketing digital y comunicación** del holding administrado por Jarvis.
 
 **Servicios que ofrecemos:**
 
-- Marketing digital (estrategia, campanas)
-- Gestion de redes sociales
+- Marketing digital (estrategia, campañas)
+- Gestión de redes sociales
 - Branding y contenido
 - Publicidad paga (ads)
-- Email marketing y automatizacion
+- Email marketing y automatización
 
 **Estructura interna:**
 
@@ -29,4 +29,4 @@ Empresa de **marketing digital y comunicacion** del holding administrado por Jar
 
 ---
 
-Los agentes individuales (content, social, etc.) pueden sobreescribir nombre y emoji en la configuracion de OpenClaw (`agents.list[].identity`) si hace falta diferenciacion en herramientas externas.
+Los agentes individuales (content, social, etc.) pueden sobrescribir nombre y emoji en la configuración de OpenClaw (`agents.list[].identity`) si hace falta diferenciación en herramientas externas.

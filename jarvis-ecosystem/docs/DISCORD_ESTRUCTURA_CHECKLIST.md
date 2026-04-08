@@ -8,17 +8,17 @@ Plantilla base: [PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGR
 
 ## Por empresa activa (marketing, ventas)
 
-- [ ] Servidor dedicado **o** categoria clara en un servidor unico
+- [ ] Servidor dedicado **o** categoría clara en un servidor único
 - [ ] Roles: `CEO`, `Supervisor`, `Equipo`, (opcional) `Cliente` solo en canales de entrega
-- [ ] Categoria **Direccion:** `#ceo`, `#supervisor-interno` (opcional privado CEO+supervisor)
-- [ ] Categoria **Operacion:** `#daily`, `#bloqueos`, `#trello-sync`
-- [ ] Por cliente/proyecto: `#cliente-<dossier_id>-nombre` con enlace al dossier en la descripcion del canal
-- [ ] Voz: salas segun necesidad
+- [ ] Categoría **Dirección:** `#ceo`, `#supervisor-interno` (opcional privado CEO+supervisor)
+- [ ] Categoría **Operación:** `#daily`, `#bloqueos`, `#trello-sync`
+- [ ] Por cliente/proyecto: `#cliente-<dossier_id>-nombre` con enlace al dossier en la descripción del canal
+- [ ] Voz: salas según necesidad
 - [ ] IDs de servidor/canal anotados en lugar seguro (no obligatorio en Git)
 
 ---
 
-## Verificacion
+## Verificación
 
-- [ ] Ningun cliente tiene acceso al chat 1:1 / grupo exclusivo del superusuario con Jarvis
+- [ ] Ningún cliente tiene acceso al chat 1:1 / grupo exclusivo del superusuario con Jarvis
 - [ ] Supervisor sabe donde publicar resumen de Trello (`#trello-sync` o equivalente)

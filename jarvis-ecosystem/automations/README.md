@@ -48,4 +48,4 @@ Desde el directorio `jarvis-ecosystem/`:
 ./scripts/validate-lead-qualifier-local.sh
 ```
 
-El mapa de capabilities para el CLI esta en [`agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md`](../agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md).
+El mapa de capabilities para el CLI está en [`agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md`](../agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md).
