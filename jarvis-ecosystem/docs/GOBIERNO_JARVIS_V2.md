@@ -90,6 +90,13 @@ flowchart TB
 | [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) | **Obligatorio:** flujo Kanban, formato de tarjeta, Done, roles IA vs humanos. |
 | [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md) (monorepo) | Credenciales API Trello y uso desde OpenClaw. |
 | [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) | Discord muestra un solo bot; cómo encajan CEO/supervisor/equipo con `agentId` y `bindings`. |
+| [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (OpenClaw, skills, casos de uso); **criterios de adopción**; enlaces externos. No sustituye el gobierno del holding. |
+
+### 4.1 Tareas complejas de desarrollo (patrón opcional, no sustituye CEO/supervisor)
+
+En **repos de código** (p. ej. agencia de programación), puede aplicarse el patrón **plan → implementación → revisión** inspirado en proyectos como [Three Man Team](https://github.com/russelleNVy/three-man-team) (Arquitecto, Constructor, Revisor): reduce deriva y alucinaciones en cambios grandes. Es **complementario** a la jerarquía humana (CEO, supervisor, equipo) y a Trello: las entregas siguen documentadas en tarjetas y dossiers. No es obligatorio para el resto de empresas del holding.
+
+Frameworks multi-agente tipo [Clade](https://github.com/satoh-y-0323/clade) pueden usarse **solo en proyectos concretos** con Claude Code; no se exige integrarlos en el monorepo `clawvis-openclaw`.
 
 ---
 
