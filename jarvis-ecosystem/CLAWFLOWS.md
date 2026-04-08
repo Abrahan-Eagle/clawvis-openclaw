@@ -61,7 +61,7 @@ Ver `automations/README.md` para la diferencia entre `list` y la carpeta `regist
 
 ## Skills instalados (ClawHub) — carpeta compartida
 
-`agents/marketing/skills` y `agents/ventas/skills` duplican el contenido de `agents/jarvis/skills` (copias por skill). **Canónico para editar:** `agents/jarvis/skills/`; luego sincronizar o reinstalar según tu flujo (ver `README.md` en la raíz de `jarvis-ecosystem/`).
+`agents/marketing/skills` y la mayor parte de `agents/ventas/skills` duplican el contenido de `agents/jarvis/skills` (copias por skill). **Excepción:** `agents/ventas/skills/career-ops/` es solo Ventas (no existe en jarvis). **Canónico para editar:** `agents/jarvis/skills/`; luego sincronizar o reinstalar según tu flujo (ver `README.md` en la raíz de `jarvis-ecosystem/`).
 
 Instalados: `gog`, `himalaya`, `xurl`, `slack`, `blogwatcher`, `summarize`, `notion`, `trello`, `session-logs`, `nano-pdf`, `mcporter`, `tmux`, `video-frames`.
 

@@ -50,7 +50,7 @@ Prioriza entender necesidades antes de empujar producto. Escucha activa, siguien
 
 ## Herramientas y formato
 
-- **Skills:** las carpetas en `skills/` son copia de `agents/jarvis/skills/`; editar ahi y replicar aqui.
+- **Skills:** salvo la carpeta **`career-ops/`** (solo Ventas; ver bullet siguiente), el resto de entradas en `skills/` son copia de `agents/jarvis/skills/`; editar allí y replicar aquí.
 - **career-ops:** codigo en [`career-ops/`](career-ops/) (pipeline de evaluacion de oportunidades / prospeccion; ver [`skills/career-ops/SKILL.md`](skills/career-ops/SKILL.md)). `npm install` en `career-ops/`. Navegador: por defecto [`career-ops/config/playwright.env`](career-ops/config/playwright.env) apunta a Chrome del sistema; alternativa `npx playwright install chromium` (ver `career-ops/playwright-launch.mjs`). **Perfil personal (CV, `config/profile.yml`, `portals.yml`) es local** — gitignored; no asumir que existe en el remoto. Seguimiento de oportunidades: **Trello + dossiers** ([flujo](../../docs/FLUJO_TRELLO_ECOSISTEMA.md)); sin job-ops ni stacks extra.
 - En Discord/WhatsApp: evita tablas markdown; usa listas.
 
@@ -58,6 +58,6 @@ Prioriza entender necesidades antes de empujar producto. Escucha activa, siguien
 
 ## ClawFlows
 
-Skills compartidos via `skills/` → Jarvis. Automatizaciones de ventas: `../../automations/ventas/` y `lead-qualifier` en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
+Skills alineados con Jarvis vía `skills/` (excepto **career-ops**, local a este workspace). Automatizaciones de ventas: `../../automations/ventas/` y `lead-qualifier` en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
 
 Ajusta este archivo con playbooks y objeciones frecuentes de tu negocio cuando lo necesites.
