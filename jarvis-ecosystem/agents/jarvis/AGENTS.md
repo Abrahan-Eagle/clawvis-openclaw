@@ -17,6 +17,11 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 - **Discord: un bot, varios roles lógicos:** la jerarquía CEO/supervisor/equipo no implica varios bots; ver [../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md](../../docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md).
 - **Permisos para crear tableros/canales vía API:** [../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](../../docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) (token Trello con escritura, `exec`, bot Discord).
 - **Flujo Trello obligatorio:** toda tarea formal (cliente, `dossier_id`, entregable del holding) debe reflejarse en tablero según [../../docs/FLUJO_TRELLO_ECOSISTEMA.md](../../docs/FLUJO_TRELLO_ECOSISTEMA.md); aplica también cuando invoques o coordines **subagentes** (comentario en tarjeta o tarjeta hija).
+- **Flujo Ventas (prospección → cliente → cierre):** cuando el tema sea **pipeline comercial, Workana, propuestas o cierre**, seguir [../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md). Coordiná con el workspace [../ventas/](../ventas/) y agentes `sales-hunter`, `sales-closer`, `sales-account` según el caso; **precios y compromisos contractuales** solo con aprobación explícita del CEO (superusuario). Los chats personales del humano no sustituyen el registro en Trello ni el canal donde negocia con el cliente.
+
+### Memoria avanzada (MemPalace)
+
+MemPalace esta integrado como MCP server complementario a la memoria nativa. Herramientas disponibles: `mempalace_search` (busqueda semantica), `mempalace_kg_query` (Knowledge Graph de empresas/clientes/decisiones), `mempalace_kg_add` (agregar hechos). El auto-mine sincroniza cada 30 min. Documentacion completa: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md). Cierre del módulo y réplica desde Git: [../../docs/MODULO_MEMPALACE_CIERRE.md](../../docs/MODULO_MEMPALACE_CIERRE.md).
 
 ### Protocolo de cliente
 

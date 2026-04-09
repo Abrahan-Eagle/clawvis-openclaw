@@ -81,6 +81,7 @@ Detalle, matriz, router y consumo en reposo: [docs/MODELOS_JARVIS_OPENCLAW.md](d
 | [MODELOS_JARVIS_OPENCLAW.md](docs/MODELOS_JARVIS_OPENCLAW.md) | Modelos, agentes `jarvis` / `jarvis-deep`, fallbacks. |
 | [OPENCLAW_FORENSE_RUNBOOK.md](docs/OPENCLAW_FORENSE_RUNBOOK.md) | Runbook forense OpenClaw. |
 | [CIERRE_MODULO_OLLAMA_LOCAL.md](docs/CIERRE_MODULO_OLLAMA_LOCAL.md) | Notas Ollama local. |
+| [CHECKLIST_PRODUCCION_JARVIS.md](docs/CHECKLIST_PRODUCCION_JARVIS.md) | Checklist operativo P0/P1 (gateway, canales, respaldos, gobierno). |
 
 **Aviso `plugins.allow`:** si en `openclaw.json` defines `plugins.allow` con una lista no vacía, debes incluir los IDs de cada canal que uses (`telegram`, `discord`, `whatsapp`, …) además de `browser`. Si no, el canal puede quedar desactivado aunque `channels.<id>.enabled` sea `true`. Detalle en el doc de respaldo.
 

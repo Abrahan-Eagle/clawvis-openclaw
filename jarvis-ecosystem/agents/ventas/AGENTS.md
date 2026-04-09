@@ -37,6 +37,7 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
 - **MEMORY.md** solo en sesión principal directa con tu humano (no en grupos)
+- **MemPalace (complementario):** busqueda semantica y Knowledge Graph de clientes/pipeline via MCP (`mempalace_search`, `mempalace_kg_query`). Docs: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md).
 
 ## Líneas rojas
 
@@ -47,6 +48,8 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 ## Ventas con integridad
 
 Prioriza entender necesidades antes de empujar producto. Escucha activa, siguiente paso claro, seguimiento realista. Consulta el dossier del cliente antes de proponer nada.
+
+**Flujo end-to-end (prospección → cliente → cierre):** [../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md) — embudo, Trello, roles `sales-*`, Workana y frases tipo para Jarvis.
 
 ## Herramientas y formato
 

@@ -105,6 +105,9 @@ Copia conceptual para restaurar a mano si perdieras el archivo. Ajusta rutas de 
 
 - `apiKey` **`not-needed`** es el valor esperado por `cursor-agent-api-proxy` en local (no uses `"local"` si el proxy falla al validar).
 - El archivo real en disco tiene además `agents`, `bindings`, listas largas de modelos, `browser` con Chrome, etc.; para recuperación total usa la copia fechada de `openclaw.json`, no solo este fragmento.
+- **Browser / CDP (Chrome ≥111):** en `browser.extraArgs` conviene `"--remote-allow-origins=*"`; opcional `"--remote-debugging-address=127.0.0.1"`. Opcional en `browser`: `"cdpUrl": "http://127.0.0.1:18800"` para fijar host/puerto del probe. Tras un fallo de arranque, `curl` al puerto puede dar error porque OpenClaw mata el proceso. Si usas proxy global, el unit del gateway puede definir `NO_PROXY=127.0.0.1,localhost,::1` y variables `HTTP(S)_PROXY`/`ALL_PROXY` vacías.
+- **Causa típica del falso fallo CDP (`DevTools listening` pero el probe nunca pasa):** el directorio de perfil `~/.openclaw/browser/<perfil>/user-data` está **corrupto o incompatible**: Chrome imprime la línea de DevTools y **sale al instante** (p. ej. código de salida 133). No es un problema de timeout del HTTP client. **Solución:** `openclaw browser reset-profile` o mover ese `user-data` a un respaldo y dejar que OpenClaw cree uno nuevo. Revisar también `SingletonLock` / `SingletonSocket` rotos en ese árbol si hubo cierres bruscos.
+- **Parches locales (abr 2026, host `aipp`)** en `node_modules/openclaw` (se pierden con `npm i -g openclaw@latest`): **(1)** `routes-D3B9A956.js`: `cdpProbeMs` **5000 ms**, `CHROME_LAUNCH_READY_WINDOW_MS` **60 s**, y (si aplica en tu build) URL CDP derivada/`cdpUrlForPort` coherentes con `localhost` vs `127.0.0.1`. **(2)** `runtime-api-DN3n8SWI.js`: `BROWSER_MANAGE_REQUEST_TIMEOUT_MS` subido a **120 s** para que `openclaw browser open` no haga timeout a los **45 s** fijos mientras el gateway tarda hasta ~60 s en el arranque de Chrome. **(3)** Systemd `openclaw-gateway.service`: proxy vacío + `NO_PROXY` loopback como arriba.
 
 **Bindings a agente `jarvis` (canales):** whatsapp (`accountId: *`), discord (`guildId: *`), telegram (`accountId: *`).
 
@@ -229,4 +232,19 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Última actualización del respaldo en repo:** 2026-04-04 (config aplicada y verificada por el usuario: Telegram + modelo Cursor operativos).
+---
+
+## 9. Memoria avanzada (MemPalace, abr 2026)
+
+- **MemPalace 3.0.0** instalado via `pipx install mempalace`.
+- Palace en `~/.mempalace/palace/` (ChromaDB local, ~200 MB).
+- Knowledge Graph en `~/.mempalace/knowledge_graph.sqlite3` (54 triples del ecosistema).
+- MCP Server registrado en `openclaw.json` bajo `mcp.servers.mempalace`.
+- **OpenClaw memory-core activado:** provider `ollama` con modelo `nomic-embed-text`, session-memory hook habilitado, memoryFlush pre-compaction activo, hybrid search (vector 0.7 + FTS 0.3).
+- Auto-mine systemd timer: `mempalace-auto-mine.timer` (cada 30 min).
+- Documentacion completa: `jarvis-ecosystem/docs/MEMORIA_MEMPALACE.md`.
+- **Cierre del módulo y procedimiento de réplica desde Git:** `jarvis-ecosystem/docs/MODULO_MEMPALACE_CIERRE.md` — incluye checklist, backup de `~/.mempalace`, artefactos en `deploy/mempalace/`.
+
+---
+
+**Última actualización del respaldo en repo:** 2026-04-08 (memoria avanzada MemPalace integrada + OpenClaw memory-core activado con Ollama embeddings; documentación de cierre del módulo en `MODULO_MEMPALACE_CIERRE.md`).

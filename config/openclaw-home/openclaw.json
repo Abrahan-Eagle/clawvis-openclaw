@@ -11,18 +11,25 @@
   },
   "browser": {
     "enabled": true,
+    "cdpUrl": "http://127.0.0.1:18800",
     "executablePath": "/usr/bin/google-chrome",
     "headless": true,
     "noSandbox": true,
     "evaluateEnabled": true,
+    "remoteCdpTimeoutMs": 8000,
+    "remoteCdpHandshakeTimeoutMs": 15000,
     "extraArgs": [
+      "--remote-allow-origins=*",
+      "--remote-debugging-address=127.0.0.1",
       "--disable-dev-shm-usage",
       "--disable-gpu",
       "--disable-software-rasterizer",
       "--mute-audio",
       "--disable-backgrounding-occluded-windows",
       "--disable-renderer-backgrounding",
-      "--memory-pressure-off"
+      "--memory-pressure-off",
+      "--disable-features=VaapiVideoDecoder",
+      "--disable-accelerated-video-decode"
     ]
   },
   "auth": {
@@ -86,10 +93,33 @@
       "contextTokens": 16384,
       "bootstrapMaxChars": 2500,
       "bootstrapTotalMaxChars": 8000,
+      "memorySearch": {
+        "enabled": true,
+        "sources": ["memory", "sessions"],
+        "provider": "ollama",
+        "model": "nomic-embed-text",
+        "sync": {
+          "onSessionStart": true,
+          "onSearch": true,
+          "watch": true
+        },
+        "query": {
+          "maxResults": 10,
+          "hybrid": {
+            "enabled": true,
+            "vectorWeight": 0.7,
+            "textWeight": 0.3
+          }
+        }
+      },
       "compaction": {
         "mode": "safeguard",
         "reserveTokens": 4000,
-        "keepRecentTokens": 2000
+        "keepRecentTokens": 2000,
+        "memoryFlush": {
+          "enabled": true
+        },
+        "postIndexSync": "async"
       },
       "maxConcurrent": 4,
       "subagents": {
@@ -177,7 +207,8 @@
     "profile": "messaging",
     "alsoAllow": [
       "lobster",
-      "exec"
+      "exec",
+      "browser"
     ]
   },
   "bindings": [
@@ -254,7 +285,18 @@
     "internal": {
       "entries": {
         "session-memory": {
-          "enabled": false
+          "enabled": true
+        }
+      }
+    }
+  },
+  "mcp": {
+    "servers": {
+      "mempalace": {
+        "command": "/home/aipp/.local/share/pipx/venvs/mempalace/bin/python3",
+        "args": ["-m", "mempalace.mcp_server"],
+        "env": {
+          "MEMPALACE_PALACE": "/home/aipp/.mempalace/palace"
         }
       }
     }

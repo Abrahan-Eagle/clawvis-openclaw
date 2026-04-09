@@ -1,0 +1,6 @@
+{
+  "palace_path": "/home/TU_USUARIO/.mempalace/palace",
+  "default_wing": "jarvis",
+  "auto_compress": false,
+  "embedding_model": "nomic-embed-text"
+}

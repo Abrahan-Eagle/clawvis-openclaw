@@ -11,81 +11,66 @@
 # HOW TO CUSTOMIZE:
 #   1. Copy this file to portals.yml in the project root
 #   2. Edit title_filter.positive with YOUR target role keywords
-#   3. Add/remove companies in tracked_companies
-#   4. Adjust search_queries for your preferred job boards
-#   5. Set enabled: false on companies you don't care about
+#   3. Add/remove companies in tracked_companies (o desactívalas con enabled: false)
+#   4. Ajusta search_queries (enfoque actual: Workana + LinkedIn ES; legacy Ashby/Greenhouse off)
+#   5. LinkedIn puede exigir login; valida resultados a mano si el buscador devuelve poco
 
 # -- Title filter --
 # The scanner uses these keywords to decide if a title is relevant.
 # At least 1 positive must match AND 0 negatives must match (case-insensitive).
+# "Junior" no está en negative: se aceptan ofertas junior–senior.
 
 title_filter:
   positive:
-    # [CUSTOMIZE] Add keywords matching YOUR target roles
-    # -- AI/ML roles --
+    # Programación (ES / internacional)
+    - "desarrollador"
+    - "desarrolladora"
+    - "programador"
+    - "programadora"
+    - "software"
+    - "full stack"
+    - "fullstack"
+    - "backend"
+    - "front"
+    - "frontend"
+    - "web"
+    - "desarrollo"
+    - "ingeniero de software"
+    - "software engineer"
+    - "developer"
+    - "Python"
+    - "JavaScript"
+    - "TypeScript"
+    - "React"
+    - "Node"
+    - "DevOps"
+    - "QA"
+    - "automatización"
+    # Freelance / modalidad
+    - "freelance"
+    - "autónomo"
+    - "remoto"
+    - "teletrabajo"
+    # Redes / comunidad (alineación Marketing / Jarvis)
+    - "community"
+    - "redes sociales"
+    - "marketing digital"
+    - "contenidos"
+    - "social media"
+    # Opcional — ampliar si tu stack lo usa
     - "AI"
-    - "ML"
     - "LLM"
-    - "Agent"
-    - "Agentic"
-    - "GenAI"
-    - "Generative AI"
-    - "NLP"
-    - "LLMOps"
-    - "MLOps"
-    - "Voice AI"
-    - "Conversational AI"
-    - "Speech"
-    # -- German AI/ML keywords (DACH market) --
-    - "KI"
-    - "Künstliche Intelligenz"
-    - "KI Engineer"
-    - "KI Trainer"
-    - "Dozent"
-    - "Weiterbildung"
-    # -- Engineering roles --
-    - "Platform Engineer"
-    - "Solutions Architect"
-    - "Solutions Engineer"
-    - "Forward Deployed"
-    - "Deployed Engineer"
-    - "Customer Engineer"
-    - "Integration Engineer"
-    # -- Product roles --
-    - "Product Manager"
-    - "Technical PM"
-    # -- Automation roles --
     - "Automation"
-    - "Hyperautomation"
-    - "Low-Code"
-    - "No-Code"
-    - "GTM Engineer"
-    - "RevOps"
-    - "Business Systems"
-    - "Internal Tools"
-    - "Transformation"
   negative:
-    # [CUSTOMIZE] Add keywords for roles you want to exclude
-    - "Junior"
     - "Intern"
-    - ".NET"
-    - "Java "
-    - "iOS"
-    - "Android"
-    - "PHP"
-    - "Ruby"
+    - "Becario"
     - "Embedded"
     - "Firmware"
-    - "FPGA"
-    - "ASIC"
     - "Blockchain"
     - "Web3"
     - "Crypto"
-    - "Salesforce Admin"
-    - "SAP "
-    - "Oracle EBS"
-    - "Mainframe"
     - "COBOL"
+    - "Mainframe"
   seniority_boost:
     # These prefixes add relevance but are not required
     - "Senior"
@@ -97,94 +82,110 @@ title_filter:
 
 # -- Search queries --
 # Each query triggers a WebSearch. Use site: to filter by portal.
-# The scanner extracts title, URL, and company from results.
+# Enfoque actual: Workana + LinkedIn (ES/LATAM). Queries legacy (Ashby, Greenhouse, …) desactivadas.
 
 search_queries:
-  # -- Ashby --
+  # -- Activas: Workana + LinkedIn --
+  - name: Workana — desarrollo / programación
+    query: 'site:workana.com ("desarrollo" OR "programador" OR "desarrollador" OR "full stack" OR "backend" OR "frontend" OR "web" OR "aplicación")'
+    enabled: true
+
+  - name: Workana — Python / JS / automatización
+    query: 'site:workana.com (Python OR JavaScript OR TypeScript OR React OR Node OR Django OR "automatización" OR n8n)'
+    enabled: true
+
+  - name: Workana — redes / community (handoff Marketing)
+    query: 'site:workana.com ("redes sociales" OR "community manager" OR "marketing digital" OR contenidos OR "social media" OR Instagram OR LinkedIn)'
+    enabled: true
+
+  - name: LinkedIn — desarrollador remoto ES / LATAM
+    query: 'site:linkedin.com/jobs ("desarrollador" OR "programador" OR "software engineer" OR "full stack") (remoto OR remote OR "teletrabajo" OR híbrido) (España OR Spain OR México OR Argentina OR Colombia OR "Latinoamérica")'
+    enabled: true
+
+  - name: LinkedIn — freelance / proyecto / autónomo
+    query: 'site:linkedin.com/jobs (freelance OR autónomo OR contractor OR "por proyecto") ("desarrollo" OR "software" OR programación OR developer OR programador)'
+    enabled: true
+
+  - name: LinkedIn — junior / mid / semi senior
+    query: 'site:linkedin.com/jobs ("junior" OR "mid" OR "semi senior" OR "semi-senior") ("desarrollador" OR developer OR programador OR "ingeniero de software")'
+    enabled: true
+
+  # -- Legacy (reactivar con enabled: true si vuelves a mercado US/AI) --
   - name: Ashby — AI PM
     query: 'site:jobs.ashbyhq.com "AI Product Manager" OR "Senior Product Manager AI" remote'
-    enabled: true
+    enabled: false
 
   - name: Ashby — Solutions Architect
     query: 'site:jobs.ashbyhq.com "Solutions Architect" AI OR automation remote'
-    enabled: true
+    enabled: false
 
   - name: Ashby — AI Engineer
     query: 'site:jobs.ashbyhq.com "AI Engineer" OR "LLM Engineer" OR "Forward Deployed" remote'
-    enabled: true
+    enabled: false
 
   - name: Ashby — Agentic
     query: 'site:jobs.ashbyhq.com "Agentic" OR "AI Agent" OR "Automation Architect" remote'
-    enabled: true
+    enabled: false
 
-  # -- Greenhouse --
   - name: Greenhouse — AI PM
     query: 'site:boards.greenhouse.io OR site:job-boards.greenhouse.io "AI Product Manager" OR "Senior Product Manager" AI remote'
-    enabled: true
+    enabled: false
 
   - name: Greenhouse — SA & FDE
     query: 'site:boards.greenhouse.io OR site:job-boards.greenhouse.io "Solutions Architect" OR "Forward Deployed" AI remote'
-    enabled: true
+    enabled: false
 
   - name: Greenhouse — AI Engineer
     query: 'site:boards.greenhouse.io OR site:job-boards.greenhouse.io "AI Engineer" OR "LLM" OR "Agentic" remote'
-    enabled: true
+    enabled: false
 
-  # -- Lever --
   - name: Lever — AI PM
     query: 'site:jobs.lever.co "AI Product Manager" OR "Solutions Architect" AI remote'
-    enabled: true
+    enabled: false
 
   - name: Lever — AI Roles
     query: 'site:jobs.lever.co "AI Engineer" OR "Agentic" OR "LLMOps" OR "Automation" remote'
-    enabled: true
+    enabled: false
 
-  # -- Wellfound (startups) --
   - name: Wellfound — AI PM
     query: 'site:wellfound.com "AI Product Manager" OR "AI Solutions" remote'
-    enabled: true
+    enabled: false
 
-  # -- Workable --
   - name: Workable — AI Roles
     query: 'site:apply.workable.com "AI" "Product Manager" OR "Solutions Architect" OR "AI Engineer" remote'
-    enabled: true
+    enabled: false
 
-  # -- No-Code / Low-Code / Automation --
   - name: Ashby — No-Code & Automation
     query: 'site:jobs.ashbyhq.com "no-code" OR "low-code" OR "automation engineer" OR "n8n" OR "Make" OR "Airtable" remote senior'
-    enabled: true
+    enabled: false
 
   - name: Greenhouse — No-Code & Automation
     query: 'site:job-boards.greenhouse.io "no-code" OR "low-code" OR "automation engineer" OR "business systems" senior remote'
-    enabled: true
+    enabled: false
 
   - name: GTM Engineer — All portals
     query: '"GTM Engineer" OR "RevOps Engineer" OR "Growth Engineer" automation Airtable OR Make OR Clay remote'
-    enabled: true
+    enabled: false
 
-  # -- Voice AI & Conversational AI --
   - name: Voice AI — FDE & SA
     query: 'site:job-boards.greenhouse.io OR site:jobs.ashbyhq.com "Voice AI" OR "Conversational AI" OR "Speech" "Solutions" OR "Forward Deployed" OR "Customer Engineer"'
-    enabled: true
+    enabled: false
 
   - name: Voice AI — AI Engineer
     query: 'site:job-boards.greenhouse.io OR site:jobs.ashbyhq.com "Voice" OR "Speech" "AI Engineer" OR "Deployment" OR "Integration"'
-    enabled: true
+    enabled: false
 
-  # -- Contact Center AI --
   - name: Contact Center AI — SA & SE
     query: '"contact center" OR "customer service" "AI" "Solutions Architect" OR "Solutions Engineer" OR "Forward Deployed" remote'
-    enabled: true
+    enabled: false
 
-  # -- FDE specific (cross-portal) --
   - name: FDE & Deployed Engineer — All portals
     query: '"Forward Deployed Engineer" OR "Deployed Engineer" OR "Deployment Engineer" AI site:job-boards.greenhouse.io OR site:jobs.ashbyhq.com OR site:jobs.lever.co'
-    enabled: true
+    enabled: false
 
-  # -- RemoteFront (aggregator) --
   - name: RemoteFront — AI & Automation
     query: 'site:remotefront.com "AI Engineer" OR "Solutions Engineer" OR "Automation" OR "LLM" OR "Agent" remote'
-    enabled: true
+    enabled: false
 
 # -- Tracked companies --
 # Companies whose career pages are checked directly.

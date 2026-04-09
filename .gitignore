@@ -7,6 +7,10 @@ agent-town/.turbo/
 agent-town/.env.local
 agent-town/.env*.local
 
+# Python
+__pycache__/
+*.py[cod]
+
 # OS / editor
 .DS_Store
 Thumbs.db

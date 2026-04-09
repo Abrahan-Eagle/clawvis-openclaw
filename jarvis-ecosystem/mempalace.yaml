@@ -1,0 +1,18 @@
+wing: jarvis_ecosystem
+rooms:
+- name: agents
+  description: Files from agents/
+- name: automations
+  description: Files from automations/
+- name: scripts
+  description: Files from scripts/
+- name: skills
+  description: Files from skills/
+- name: brands
+  description: Files from brands/
+- name: client_dossiers
+  description: Files from client-dossiers/
+- name: documentation
+  description: Files from docs/
+- name: general
+  description: Files that don't fit other rooms

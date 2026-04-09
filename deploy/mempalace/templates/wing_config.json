@@ -1,0 +1,28 @@
+{
+  "wings": [
+    {
+      "id": "jarvis",
+      "name": "Jarvis (Core)",
+      "type": "project",
+      "keywords": ["jarvis", "holding", "gobierno", "ecosistema", "agentes", "openclaw"]
+    },
+    {
+      "id": "ventas",
+      "name": "Ventas",
+      "type": "project",
+      "keywords": ["ventas", "sales", "workana", "pipeline", "freelance"]
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "type": "project",
+      "keywords": ["marketing", "redes", "contenido", "aiblock"]
+    },
+    {
+      "id": "abrahan",
+      "name": "CEO (persona)",
+      "type": "person",
+      "keywords": ["abrahan", "pulido", "aiblock", "ceo"]
+    }
+  ]
+}

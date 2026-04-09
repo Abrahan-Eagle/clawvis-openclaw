@@ -1,0 +1,22 @@
+# Unidad usuario: mantiene Chrome con CDP para OpenClaw (modo attachOnly).
+# Copiar a: ~/.config/systemd/user/openclaw-chrome-cdp.service
+#   cp deploy/systemd/openclaw-chrome-cdp.service ~/.config/systemd/user/
+#   cp deploy/systemd/openclaw-chrome-cdp.sh ~/.local/bin/ && chmod +x ~/.local/bin/openclaw-chrome-cdp.sh
+# systemctl --user daemon-reload
+# systemctl --user enable --now openclaw-chrome-cdp
+# Luego en ~/.openclaw/openclaw.json: "browser": { "attachOnly": true, ... }
+
+[Unit]
+Description=Chrome CDP :18800 for OpenClaw (profile openclaw)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=HOME=%h
+ExecStart=%h/.local/bin/openclaw-chrome-cdp.sh
+Restart=on-failure
+RestartSec=4
+
+[Install]
+WantedBy=default.target

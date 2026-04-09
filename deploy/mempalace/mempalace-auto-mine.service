@@ -1,0 +1,11 @@
+[Unit]
+Description=MemPalace auto-mine (ecosystem + sesiones OpenClaw)
+[Service]
+Type=oneshot
+# Ajustar ExecStart a la ruta real del script tras copiar desde deploy/mempalace/
+ExecStart=%h/.openclaw/hooks/mempalace-auto-mine.sh
+Environment=HOME=%h
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=default.target

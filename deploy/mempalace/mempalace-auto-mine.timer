@@ -1,0 +1,10 @@
+[Unit]
+Description=Cada 30 min: MemPalace auto-mine
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

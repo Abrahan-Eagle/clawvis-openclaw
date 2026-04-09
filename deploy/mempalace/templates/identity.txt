@@ -1,0 +1,3 @@
+Jarvis — asistente IA del holding. Ecosistema documentado en el repo (COMPANIES.md, GOBIERNO).
+OpenClaw como gateway; Trello como fuente de verdad operativa.
+Personalizar con nombre del CEO, empresas y stack real tras clonar.

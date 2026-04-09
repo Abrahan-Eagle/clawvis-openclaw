@@ -13,7 +13,7 @@ Registro completo: [../../COMPANIES.md](../../COMPANIES.md).
 | Empresa | Estado | Notas rapidas |
 |---------|--------|---------------|
 | marketing | Activa | Workspace `agents/marketing/`. Agentes: mkt-content, mkt-social, mkt-analytics, mkt-ads, mkt-email. |
-| ventas | Activa | Workspace `agents/ventas/`. Agentes: sales-hunter, sales-closer, sales-account. |
+| ventas | Activa | Workspace `agents/ventas/`. Agentes: sales-hunter, sales-closer, sales-account. **Flujo comercial (embudo, Trello, Workana, frases para pedir ayuda):** [../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md). |
 | dev-agency | Planificada | Sin workspace aun. |
 | legal | Planificada | Sin workspace aun. |
 | contadores | Planificada | Sin workspace aun. |
@@ -51,7 +51,7 @@ Integracion OpenClaw: **configurada** ([../../docs/INTEGRACIONES_OPENCLAW_YA_CON
 |---------|----------------|----------|----------------|
 | *(legacy)* | Mi tablero de Trello | `69d0a352e4fed9476a5f6cec` | Puede quedar como sandbox; preferir tableros `Empresa-*` para operacion |
 | `marketing` | Empresa-marketing - Operaciones | *(rellenar tras crear)* | Backlog → En curso → Revisión supervisor → Bloqueado → Hecho |
-| `ventas` | Empresa-ventas - Operaciones | *(rellenar tras crear)* | Idem |
+| `ventas` | Empresa-ventas - Operaciones | *(rellenar tras crear)* | Listas alineadas al embudo: Inbox → Triaje/Cola → En progreso → En revisión → Listo; ver [FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md) §4. |
 
 ---
 
@@ -76,6 +76,9 @@ Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs
 
 ## Decisiones de gobierno (log)
 
+- **2026-04-08:** Módulo MemPalace **cerrado** a nivel documentación: `docs/MODULO_MEMPALACE_CIERRE.md` (réplica desde Git, checklist, `deploy/mempalace/`). Artefactos versionados; estado local (`~/.mempalace/`) opcional en backup.
+- **2026-04-08:** Integrado MemPalace 3.0.0 como sistema de memoria complementario. ChromaDB local con 1270 drawers (ecosystem + sessions), Knowledge Graph temporal con 54 triples (empresas, agentes, clientes, decisiones), MCP server registrado en OpenClaw, auto-mine cada 30 min via systemd. OpenClaw memory-core activado con Ollama `nomic-embed-text` (6 archivos, 34 chunks, vector dims 768). Docs: `docs/MEMORIA_MEMPALACE.md`.
+- **2026-04-08:** Documentado flujo Ventas end-to-end (`docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md`); Jarvis debe usarlo al coordinar prospección, conversación con cliente y cierre; AGENTS.md del agente jarvis actualizado con enlace.
 - **2026-04-04:** Modelo de gobierno v2 formalizado. Jarvis es agente maestro; cada empresa con CEO + supervisor + equipo; clientes como dossiers de contexto; solo el superusuario dialoga con Jarvis.
 - **2026-04-04:** Cliente de prueba `cli-20260404-cliente-tests-redes` (Instagram + Facebook, empresa marketing) para depurar ecosistema; brief en `client-dossiers/BRIEF_CLIENTE_TESTS_REDES.md`.
 - **2026-04-04:** Documentado en repo que Trello, Discord y Telegram ya están integrados en OpenClaw (`INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md`); plantilla Fase 5 y verificación Discord Fase 4 añadidas.
