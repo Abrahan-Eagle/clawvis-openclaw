@@ -86,6 +86,40 @@ CORRECTO: [jq '.agents.list[0].heartbeat.every' openclaw.json] [Ver: "30m"] "Hea
 INCORRECTO: "Edite el archivo con el valor correcto"
 ```
 
+## Sizing de verificacion
+
+No todas las tareas requieren el mismo nivel de verificacion. Escalar segun impacto:
+
+| Tier | Criterio | Verificacion |
+|------|----------|-------------|
+| **Pequena** | <5 items, un solo agente, sin impacto externo | Verificacion rapida: un comando, un check |
+| **Estandar** | 5-20 items, un agente, impacto moderado | Verificacion completa: todos los items de la tabla |
+| **Grande** | >20 items, cross-agent, impacto en cliente | Verificacion exhaustiva: cada item + revision independiente |
+
+### Secuencia de verificacion para tareas grandes
+
+```
+1. BUILD / CONFIG -- el cambio se aplico correctamente
+2. TEST / SCRIPT -- los scripts/procesos corren sin error
+3. LINT / FORMAT -- no hay errores de formato o estructura
+4. FUNCTIONALITY -- la funcionalidad esperada existe y responde
+5. TODO / TASKS -- no quedan items pendientes
+6. CROSS-CHECK -- un segundo agente o el CEO verifica
+```
+
+Para tareas pequenas, basta con los pasos 1 y 4.
+
+## Regla de frescura
+
+```
+EVIDENCIA VIEJA NO CUENTA
+```
+
+- La verificacion debe ser de **este turno/sesion**, no de una sesion anterior
+- Si paso mas de 5 minutos desde la verificacion y hubo cambios intermedios, RE-VERIFICAR
+- Output de un subagente cuenta solo si se verifica independientemente
+- "Lo verifique ayer" NO es evidencia fresca
+
 ## Cuando aplicar
 
 SIEMPRE antes de:

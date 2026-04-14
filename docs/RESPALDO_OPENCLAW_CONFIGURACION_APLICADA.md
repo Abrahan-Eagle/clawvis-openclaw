@@ -293,4 +293,20 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Skills Repos: product-marketing-context, 5 skills de negocio, AGENTS.md actualizados).
+---
+
+## 13. Forense OMC — patrones de orquestacion multi-agente (abr 2026)
+
+- **Repo analizado:** oh-my-claudecode (28.8k stars) — multi-agent orchestration para Claude Code.
+- **4 skills creados** en `agents/jarvis/skills/`:
+  - `deep-interview-ops/SKILL.md` — cuestionamiento socratico, 6 dimensiones, gate de claridad >= 3.5.
+  - `task-pipeline-ops/SKILL.md` — pipeline plan-spec-exec-verify-fix para tareas multi-paso.
+  - `structured-commits-ops/SKILL.md` — git trailers con Constraint, Rejected, Confidence, Scope-risk.
+  - `session-learner-ops/SKILL.md` — extraccion de patrones reutilizables con 4 quality gates.
+- **verification-before-completion mejorado** — sizing tiers (pequena/estandar/grande) + regla de frescura.
+- **AGENTS.md actualizados** (jarvis, ventas, marketing) — seccion "Protocolo de calidad" ampliada.
+- Documentacion: `docs/FORENSE_OMC_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense OMC: deep-interview, task-pipeline, structured-commits, session-learner, verification sizing).

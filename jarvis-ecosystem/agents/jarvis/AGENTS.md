@@ -25,12 +25,16 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 - **Flujo Trello obligatorio:** toda tarea formal (cliente, `dossier_id`, entregable del holding) debe reflejarse en tablero según [../../docs/FLUJO_TRELLO_ECOSISTEMA.md](../../docs/FLUJO_TRELLO_ECOSISTEMA.md); aplica también cuando invoques o coordines **subagentes** (comentario en tarjeta o tarjeta hija).
 - **Flujo Ventas (prospección → cliente → cierre):** cuando el tema sea **pipeline comercial, Workana, propuestas o cierre**, seguir [../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md). Coordiná con el workspace [../ventas/](../ventas/) y agentes `sales-hunter`, `sales-closer`, `sales-account` según el caso; **precios y compromisos contractuales** solo con aprobación explícita del CEO (superusuario). Los chats personales del humano no sustituyen el registro en Trello ni el canal donde negocia con el cliente.
 
-### Protocolo de calidad (Superpowers)
+### Protocolo de calidad (Superpowers + OMC)
 
 Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 
+- **deep-interview-ops** — Antes de tareas con requisitos vagos o complejos: cuestionamiento socratico, 6 dimensiones, gate de claridad >= 3.5/5. Ver `skills/deep-interview-ops/SKILL.md`.
 - **brainstorming-ops** — OBLIGATORIO antes de propuestas, campanas, features, cambios de config. Explorar contexto, preguntar, proponer alternativas, obtener aprobacion.
-- **verification-before-completion** — OBLIGATORIO antes de declarar tarea completada. Evidencia fresca antes de claims.
+- **task-pipeline-ops** — Para tareas multi-paso: secuencia plan -> spec -> exec -> verify -> fix. Ver `skills/task-pipeline-ops/SKILL.md`.
+- **verification-before-completion** — OBLIGATORIO antes de declarar tarea completada. Evidencia fresca, sizing tiers, regla de frescura.
+- **structured-commits-ops** — Para commits con decisiones: git trailers (Constraint, Rejected, Confidence). Ver `skills/structured-commits-ops/SKILL.md`.
+- **session-learner-ops** — Despues de tareas significativas: extraer patrones reutilizables. Ver `skills/session-learner-ops/SKILL.md`.
 - **systematic-debugging** — Ante cualquier problema tecnico: 4 fases, root cause antes de fix.
 - **dev-methodology** — Al escribir scripts/automations: TDD, planes bite-sized, code review.
 

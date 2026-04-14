@@ -49,8 +49,9 @@ Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
 - **Largo plazo:** `MEMORY.md` (solo en sesión principal con tu humano, no en canales grupales)
 
-## Protocolo de calidad (Superpowers)
+## Protocolo de calidad (Superpowers + OMC)
 
+- **deep-interview-ops** — Antes de campanas con objetivo vago o multiples audiencias: cuestionamiento socratico para clarificar requisitos. Ver `../../agents/jarvis/skills/deep-interview-ops/SKILL.md`.
 - **brainstorming-ops** — OBLIGATORIO antes de campanas nuevas: definir objetivo, audiencia, canal, KPIs, proponer 2-3 alternativas, obtener aprobacion. Ver `../../agents/jarvis/skills/brainstorming-ops/SKILL.md`.
 - **verification-before-completion** — Antes de reportar exito de campana: mostrar metricas reales, URLs publicadas, evidencia de engagement. Ver `../../agents/jarvis/skills/verification-before-completion/SKILL.md`.
 

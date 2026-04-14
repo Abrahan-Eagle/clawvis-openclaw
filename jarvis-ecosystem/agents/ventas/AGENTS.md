@@ -46,8 +46,9 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 - **MEMORY.md** solo en sesión principal directa con tu humano (no en grupos)
 - **MemPalace (complementario):** busqueda semantica y Knowledge Graph de clientes/pipeline via MCP (`mempalace_search`, `mempalace_kg_query`). Docs: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md).
 
-## Protocolo de calidad (Superpowers)
+## Protocolo de calidad (Superpowers + OMC)
 
+- **deep-interview-ops** — Antes de propuestas a clientes complejos o proyectos vagos: cuestionamiento socratico para calificar requisitos. Ver `../../agents/jarvis/skills/deep-interview-ops/SKILL.md`.
 - **brainstorming-ops** — OBLIGATORIO antes de enviar propuestas: revisar dossier, preguntar necesidades del cliente, proponer 2-3 enfoques, obtener aprobacion del CEO. Ver `../../agents/jarvis/skills/brainstorming-ops/SKILL.md`.
 - **verification-before-completion** — Antes de marcar lead como calificado o propuesta como enviada: mostrar evidencia (tarjeta Trello, confirmacion de envio). Ver `../../agents/jarvis/skills/verification-before-completion/SKILL.md`.
 

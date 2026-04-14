@@ -27,4 +27,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Forense Skills Repos (marketing + ventas skills, abr 2026):** [FORENSE_SKILLS_REPOS_RESUMEN.md](FORENSE_SKILLS_REPOS_RESUMEN.md) — patron `product-marketing-context` (`.agents/product-marketing-context.md`), 5 skills operativos: copywriting-ops, cold-email-ops, page-cro-ops, lead-research-ops, seo-audit-ops. AGENTS.md de ventas y marketing actualizados.
 
+**Forense OMC (orquestacion multi-agente, abr 2026):** [FORENSE_OMC_RESUMEN.md](FORENSE_OMC_RESUMEN.md) — deep-interview-ops (cuestionamiento socratico), task-pipeline-ops (plan-spec-exec-verify-fix), structured-commits-ops (git trailers), session-learner-ops (extraccion de patrones), verification-before-completion mejorado con sizing tiers. Skills en `agents/jarvis/skills/`.
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).
