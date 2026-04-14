@@ -326,4 +326,21 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Agency Agents: proposal-ops, pipeline-health-ops, SPIN/Gap/Sandler/AECR, signal-based selling, cannibalization audit).
+---
+
+## 15. Graphify — mapa estructural del ecosistema (abr 2026)
+
+- **Graphify v0.4.13** instalado via `pipx install graphifyy`.
+- Grafo generado sobre `jarvis-ecosystem/`: 1369 nodos, 1403 aristas, 128 comunidades.
+- God nodes: README, AGENTS, OPERACION_POST_GOBIERNO, GOBIERNO_JARVIS_V2, CONVENCION_TRELLO_EMPRESA_CLIENTE, MEMORY.
+- Output en `graphify-out/` (gitignored): `GRAPH_REPORT.md`, `graph.json`, `graph.html`.
+- `.graphifyignore` en raíz del repo (versionado).
+- **Cursor**: `.cursor/rules/graphify.mdc` (alwaysApply: true).
+- **OpenClaw**: `AGENTS.md` en raíz con reglas de graphify.
+- **MCP Server**: registrado en `openclaw.json` bajo `mcp.servers.graphify` (python3 -m graphify.serve graph.json).
+- **Convención**: Graphify = mapa estructural (relaciones entre docs); MemPalace = memoria semántica (búsqueda + KG).
+- Documentación: `jarvis-ecosystem/docs/GRAPHIFY_INTEGRACION.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (Graphify: mapa estructural, MCP server, god nodes, 128 comunidades).

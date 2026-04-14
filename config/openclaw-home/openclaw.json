@@ -328,6 +328,10 @@
         "env": {
           "MEMPALACE_PALACE": "/home/aipp/.mempalace/palace"
         }
+      },
+      "graphify": {
+        "command": "/home/aipp/.local/share/pipx/venvs/graphifyy/bin/python3",
+        "args": ["-m", "graphify.serve", "/var/www/clawvis-openclaw/graphify-out/graph.json"]
       }
     }
   },

@@ -30,3 +30,7 @@ openclaw-state/credentials/
 jarvis-ecosystem/.env
 jarvis-ecosystem/.env.*
 jarvis-ecosystem/agents/ventas/career-ops/node_modules/
+
+# Graphify (output local, regenerable con graphify)
+graphify-out/
+.graphify_python

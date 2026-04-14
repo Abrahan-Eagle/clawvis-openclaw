@@ -1,0 +1,14 @@
+# Graphify ignore -- excluir ruido del corpus
+node_modules/
+.venv*/
+openclaw-state/
+.git/
+deploy/
+agent-transcripts/
+*.pyc
+__pycache__/
+.cursor/
+graphify-out/
+.mempalace/
+*.log
+*.sqlite3
