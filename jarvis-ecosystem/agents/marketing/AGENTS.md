@@ -54,6 +54,16 @@ Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por 
 - **brainstorming-ops** — OBLIGATORIO antes de campanas nuevas: definir objetivo, audiencia, canal, KPIs, proponer 2-3 alternativas, obtener aprobacion. Ver `../../agents/jarvis/skills/brainstorming-ops/SKILL.md`.
 - **verification-before-completion** — Antes de reportar exito de campana: mostrar metricas reales, URLs publicadas, evidencia de engagement. Ver `../../agents/jarvis/skills/verification-before-completion/SKILL.md`.
 
+## Skills de marketing y ventas
+
+Antes de cualquier tarea de contenido, optimizacion o auditoria, leer el contexto central:
+- **product-marketing-context** — `../../.agents/product-marketing-context.md` — producto, audiencia, voz, objeciones. Leer SIEMPRE primero.
+
+Skills operativos de negocio (en `../../agents/jarvis/skills/`):
+- **copywriting-ops** — Redactar copy para landing pages, homepage, redes, servicios. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
+- **page-cro-ops** — Auditar y optimizar paginas para conversion (framework 7 dimensiones). Ver `../../agents/jarvis/skills/page-cro-ops/SKILL.md`.
+- **seo-audit-ops** — Auditar SEO tecnico + on-page, keywords, checklist priorizado. Ver `../../agents/jarvis/skills/seo-audit-ops/SKILL.md`.
+
 ## Lineas rojas y Approval Gates
 
 - No exfiltrar datos privados.

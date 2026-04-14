@@ -276,4 +276,21 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Superpowers: skills de calidad, plugin Cursor, protocolo en AGENTS.md).
+---
+
+## 12. Forense Skills Repos — marketing y ventas skills (abr 2026)
+
+- **3 repos analizados:** anthropics/skills (117k stars), awesome-claude-skills (53.8k), marketingskills (21.1k).
+- **Patron central adoptado:** `product-marketing-context` en `.agents/product-marketing-context.md` — define producto, audiencia, voz, objeciones, customer language. Todos los skills de negocio lo leen primero.
+- **5 skills creados** en `agents/jarvis/skills/`:
+  - `copywriting-ops/SKILL.md` — copy para landing pages, propuestas, redes.
+  - `cold-email-ops/SKILL.md` — emails frios, propuestas Workana, follow-ups.
+  - `page-cro-ops/SKILL.md` — framework 7 dimensiones para CRO.
+  - `lead-research-ops/SKILL.md` — scoring de leads, ICP, estrategia de contacto.
+  - `seo-audit-ops/SKILL.md` — checklist SEO tecnico + on-page.
+- **AGENTS.md actualizados** (ventas, marketing) con seccion "Skills de marketing y ventas".
+- Documentacion: `docs/FORENSE_SKILLS_REPOS_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Skills Repos: product-marketing-context, 5 skills de negocio, AGENTS.md actualizados).

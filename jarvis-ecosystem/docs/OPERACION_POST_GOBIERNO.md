@@ -25,4 +25,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Forense Superpowers (metodologia + skills, abr 2026):** [FORENSE_SUPERPOWERS_RESUMEN.md](FORENSE_SUPERPOWERS_RESUMEN.md) — brainstorming obligatorio, verificacion antes de completar, debugging sistematico, dev methodology (TDD + code review). Plugin instalado en Cursor. Skills en `agents/jarvis/skills/`.
 
+**Forense Skills Repos (marketing + ventas skills, abr 2026):** [FORENSE_SKILLS_REPOS_RESUMEN.md](FORENSE_SKILLS_REPOS_RESUMEN.md) — patron `product-marketing-context` (`.agents/product-marketing-context.md`), 5 skills operativos: copywriting-ops, cold-email-ops, page-cro-ops, lead-research-ops, seo-audit-ops. AGENTS.md de ventas y marketing actualizados.
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).

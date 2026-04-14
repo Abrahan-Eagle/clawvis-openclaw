@@ -51,6 +51,16 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 - **brainstorming-ops** — OBLIGATORIO antes de enviar propuestas: revisar dossier, preguntar necesidades del cliente, proponer 2-3 enfoques, obtener aprobacion del CEO. Ver `../../agents/jarvis/skills/brainstorming-ops/SKILL.md`.
 - **verification-before-completion** — Antes de marcar lead como calificado o propuesta como enviada: mostrar evidencia (tarjeta Trello, confirmacion de envio). Ver `../../agents/jarvis/skills/verification-before-completion/SKILL.md`.
 
+## Skills de marketing y ventas
+
+Antes de cualquier tarea de outreach, prospeccion o redaccion comercial, leer el contexto central:
+- **product-marketing-context** — `../../.agents/product-marketing-context.md` — producto, audiencia, voz, objeciones. Leer SIEMPRE primero.
+
+Skills operativos de negocio (en `../../agents/jarvis/skills/`):
+- **cold-email-ops** — Escribir emails frios, propuestas en Workana, follow-ups. Ver `../../agents/jarvis/skills/cold-email-ops/SKILL.md`.
+- **lead-research-ops** — Investigar y calificar leads, scoring, estrategia de contacto. Ver `../../agents/jarvis/skills/lead-research-ops/SKILL.md`.
+- **copywriting-ops** — Redactar copy para propuestas, perfiles, descripciones de servicio. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
+
 ## Lineas rojas y Approval Gates
 
 - No inventar precios, descuentos ni compromisos contractuales sin fuente.
