@@ -261,4 +261,19 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Paperclip: goals, org chart, heartbeats, cost tracking, approval gates implementados dentro de OpenClaw).
+---
+
+## 11. Forense Superpowers — metodologia y skills (abr 2026)
+
+- **Plugin Superpowers v5.0.7** instalado en Cursor (`~/.cursor/plugins/local/superpowers/`, git clone).
+- **4 skills adaptados** creados en `agents/jarvis/skills/`:
+  - `brainstorming-ops/SKILL.md` — brainstorming obligatorio antes de tareas complejas.
+  - `verification-before-completion/SKILL.md` — evidencia antes de claims.
+  - `systematic-debugging/SKILL.md` — 4 fases, root cause primero.
+  - `dev-methodology/SKILL.md` — TDD + planes + code review (listo para dev-agency).
+- **AGENTS.md actualizados** (jarvis, ventas, marketing) con seccion "Protocolo de calidad (Superpowers)".
+- Documentacion: `docs/FORENSE_SUPERPOWERS_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Superpowers: skills de calidad, plugin Cursor, protocolo en AGENTS.md).

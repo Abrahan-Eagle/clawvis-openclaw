@@ -23,4 +23,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Forense Paperclip (patrones adoptados, abr 2026):** [FORENSE_PAPERCLIP_RESUMEN.md](FORENSE_PAPERCLIP_RESUMEN.md) — goals, org chart, heartbeats operativos, cost tracking, approval gates. Archivos clave: [../GOALS.md](../GOALS.md), [../ORG_CHART.md](../ORG_CHART.md), [HEARTBEAT_OPERATIVO.md](HEARTBEAT_OPERATIVO.md), [APPROVAL_GATES.md](APPROVAL_GATES.md).
 
+**Forense Superpowers (metodologia + skills, abr 2026):** [FORENSE_SUPERPOWERS_RESUMEN.md](FORENSE_SUPERPOWERS_RESUMEN.md) — brainstorming obligatorio, verificacion antes de completar, debugging sistematico, dev methodology (TDD + code review). Plugin instalado en Cursor. Skills en `agents/jarvis/skills/`.
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).
