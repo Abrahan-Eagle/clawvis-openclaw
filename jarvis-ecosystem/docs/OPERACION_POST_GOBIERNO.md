@@ -29,4 +29,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Forense OMC (orquestacion multi-agente, abr 2026):** [FORENSE_OMC_RESUMEN.md](FORENSE_OMC_RESUMEN.md) — deep-interview-ops (cuestionamiento socratico), task-pipeline-ops (plan-spec-exec-verify-fix), structured-commits-ops (git trailers), session-learner-ops (extraccion de patrones), verification-before-completion mejorado con sizing tiers. Skills en `agents/jarvis/skills/`.
 
+**Forense Agency Agents (ventas avanzadas + SEO, abr 2026):** [FORENSE_AGENCY_AGENTS_RESUMEN.md](FORENSE_AGENCY_AGENTS_RESUMEN.md) — 2 skills nuevos: proposal-ops (win themes, narrativa 3 actos, executive summary), pipeline-health-ops (metricas pipeline, forecasting, alertas). 3 skills enriquecidos: deep-interview-ops (+SPIN/Gap Selling/Sandler/AECR), cold-email-ops (+signal-based selling, ICP, secuencia 10 touches), seo-audit-ops (+cannibalization audit, keyword clusters, link building, E-E-A-T).
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).

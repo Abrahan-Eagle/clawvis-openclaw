@@ -29,7 +29,9 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 
 Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 
-- **deep-interview-ops** — Antes de tareas con requisitos vagos o complejos: cuestionamiento socratico, 6 dimensiones, gate de claridad >= 3.5/5. Ver `skills/deep-interview-ops/SKILL.md`.
+- **deep-interview-ops** — Antes de tareas con requisitos vagos o complejos: cuestionamiento socratico, 6 dimensiones, gate de claridad >= 3.5/5, frameworks SPIN/Gap Selling/Sandler para ventas, AECR para objeciones. Ver `skills/deep-interview-ops/SKILL.md`.
+- **proposal-ops** — Escribir propuestas persuasivas: win themes, narrativa 3 actos, executive summary. Para Workana y prospeccion directa. Ver `skills/proposal-ops/SKILL.md`.
+- **pipeline-health-ops** — Health check semanal del pipeline: metricas, forecasting, deals estancados, alertas. Integra con heartbeat de sales-hunter. Ver `skills/pipeline-health-ops/SKILL.md`.
 - **brainstorming-ops** — OBLIGATORIO antes de propuestas, campanas, features, cambios de config. Explorar contexto, preguntar, proponer alternativas, obtener aprobacion.
 - **task-pipeline-ops** — Para tareas multi-paso: secuencia plan -> spec -> exec -> verify -> fix. Ver `skills/task-pipeline-ops/SKILL.md`.
 - **verification-before-completion** — OBLIGATORIO antes de declarar tarea completada. Evidencia fresca, sizing tiers, regla de frescura.

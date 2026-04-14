@@ -63,7 +63,7 @@ Antes de cualquier tarea de contenido, optimizacion o auditoria, leer el context
 Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 - **copywriting-ops** — Redactar copy para landing pages, homepage, redes, servicios. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
 - **page-cro-ops** — Auditar y optimizar paginas para conversion (framework 7 dimensiones). Ver `../../agents/jarvis/skills/page-cro-ops/SKILL.md`.
-- **seo-audit-ops** — Auditar SEO tecnico + on-page, keywords, checklist priorizado. Ver `../../agents/jarvis/skills/seo-audit-ops/SKILL.md`.
+- **seo-audit-ops** — Auditar SEO tecnico + on-page, cannibalization audit (bloqueante), keyword clusters, link building, E-E-A-T. Ver `../../agents/jarvis/skills/seo-audit-ops/SKILL.md`.
 
 ## Lineas rojas y Approval Gates
 

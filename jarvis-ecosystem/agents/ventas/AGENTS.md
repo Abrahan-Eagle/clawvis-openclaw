@@ -48,7 +48,7 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 
 ## Protocolo de calidad (Superpowers + OMC)
 
-- **deep-interview-ops** — Antes de propuestas a clientes complejos o proyectos vagos: cuestionamiento socratico para calificar requisitos. Ver `../../agents/jarvis/skills/deep-interview-ops/SKILL.md`.
+- **deep-interview-ops** — Antes de propuestas a clientes complejos o proyectos vagos: cuestionamiento socratico + frameworks SPIN/Gap Selling/Sandler + AECR para objeciones. Ver `../../agents/jarvis/skills/deep-interview-ops/SKILL.md`.
 - **brainstorming-ops** — OBLIGATORIO antes de enviar propuestas: revisar dossier, preguntar necesidades del cliente, proponer 2-3 enfoques, obtener aprobacion del CEO. Ver `../../agents/jarvis/skills/brainstorming-ops/SKILL.md`.
 - **verification-before-completion** — Antes de marcar lead como calificado o propuesta como enviada: mostrar evidencia (tarjeta Trello, confirmacion de envio). Ver `../../agents/jarvis/skills/verification-before-completion/SKILL.md`.
 
@@ -58,9 +58,11 @@ Antes de cualquier tarea de outreach, prospeccion o redaccion comercial, leer el
 - **product-marketing-context** — `../../.agents/product-marketing-context.md` — producto, audiencia, voz, objeciones. Leer SIEMPRE primero.
 
 Skills operativos de negocio (en `../../agents/jarvis/skills/`):
-- **cold-email-ops** — Escribir emails frios, propuestas en Workana, follow-ups. Ver `../../agents/jarvis/skills/cold-email-ops/SKILL.md`.
+- **proposal-ops** — Escribir propuestas persuasivas: win themes, narrativa 3 actos, executive summary. Para Workana y prospeccion directa. Ver `../../agents/jarvis/skills/proposal-ops/SKILL.md`.
+- **cold-email-ops** — Escribir emails frios, secuencia multicanal 10 touches, signal-based selling. Ver `../../agents/jarvis/skills/cold-email-ops/SKILL.md`.
 - **lead-research-ops** — Investigar y calificar leads, scoring, estrategia de contacto. Ver `../../agents/jarvis/skills/lead-research-ops/SKILL.md`.
 - **copywriting-ops** — Redactar copy para propuestas, perfiles, descripciones de servicio. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
+- **pipeline-health-ops** — Health check semanal del pipeline: metricas, forecasting, deals estancados, alertas. Ver `../../agents/jarvis/skills/pipeline-health-ops/SKILL.md`.
 
 ## Lineas rojas y Approval Gates
 

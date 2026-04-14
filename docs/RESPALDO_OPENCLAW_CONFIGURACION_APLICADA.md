@@ -309,4 +309,21 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense OMC: deep-interview, task-pipeline, structured-commits, session-learner, verification sizing).
+---
+
+## 14. Forense Agency Agents — ventas avanzadas y SEO (abr 2026)
+
+- **Repo analizado:** msitarzewski/agency-agents (79.9k stars, 144 agentes en 12 divisiones).
+- **2 skills nuevos** en `agents/jarvis/skills/`:
+  - `proposal-ops/SKILL.md` — win themes, narrativa 3 actos (entender-solucionar-transformar), executive summary, adaptacion a Workana (200 palabras max).
+  - `pipeline-health-ops/SKILL.md` — metricas de volumen/velocidad/calidad, pipeline coverage ratio, deals estancados, forecasting bottom-up, alertas automaticas, cadencia semanal/quincenal/mensual.
+- **3 skills enriquecidos:**
+  - `deep-interview-ops/SKILL.md` — +SPIN Selling (Situation-Problem-Implication-Need-Payoff), +Gap Selling (estado actual vs futuro vs gap), +Sandler Pain Funnel (3 niveles), +AECR para objeciones (Acknowledge-Empathize-Clarify-Reframe), +regla 60/40.
+  - `cold-email-ops/SKILL.md` — +signal-based selling (3 tiers de senales de compra), +ICP definition (firmographic + behavioral + disqualifiers), +secuencia multicanal (10 touches en 28 dias), +benchmarks de reply rate por nivel de personalizacion.
+  - `seo-audit-ops/SKILL.md` — +cannibalization audit bloqueante (cross-page query map, ownership, resolucion), +keyword cluster framework (pilar + satelites + intent mapping), +link building plan (digital PR, content-led, outreach), +E-E-A-T compliance obligatorio. Scorecard ampliado de 22 a 29 items.
+- **AGENTS.md actualizados:** jarvis (+proposal-ops, +pipeline-health-ops), ventas (+proposal-ops, +pipeline-health-ops, deep-interview con frameworks), marketing (seo-audit con cannibalization).
+- Documentacion: `jarvis-ecosystem/docs/FORENSE_AGENCY_AGENTS_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Agency Agents: proposal-ops, pipeline-health-ops, SPIN/Gap/Sandler/AECR, signal-based selling, cannibalization audit).

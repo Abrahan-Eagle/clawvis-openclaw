@@ -59,20 +59,93 @@ Extraer: servicios, audiencia, palabras que usan los clientes. Esto define las k
 ## Scorecard
 
 ```
-| Seccion         | Items OK | Items Total | Score |
-|-----------------|----------|-------------|-------|
-| SEO Tecnico     |          | 9           |       |
-| SEO On-Page     |          | 9           |       |
-| Contenido       |          | 4           |       |
-| **Total**       |          | **22**      |       |
+| Seccion              | Items OK | Items Total | Score |
+|----------------------|----------|-------------|-------|
+| SEO Tecnico          |          | 9           |       |
+| SEO On-Page          |          | 9           |       |
+| Contenido            |          | 4           |       |
+| Canibalizacion       |          | 3           |       |
+| Keyword Clusters     |          | 2           |       |
+| Link Building / EEAT |          | 2           |       |
+| **Total**            |          | **29**      |       |
 ```
+
+## D. Cannibalization Audit (BLOQUEANTE)
+
+**OBLIGATORIO antes de optimizar cualquier pagina.** Si dos paginas compiten por la misma keyword, optimizar una empeora la otra.
+
+### Paso 1: Cross-Page Query Map
+
+Para cada keyword target, verificar en Search Console (dimensions: page + query) cuantas paginas rankean para ella.
+
+```
+| Query | Pagina A | Pos A | Clicks A | Pagina B | Pos B | Clicks B | Conflicto? |
+|-------|----------|-------|----------|----------|-------|----------|------------|
+```
+
+### Paso 2: Asignar ownership
+
+Para cada conflicto, asignar UNA pagina duena basandose en:
+- Cual tiene mas clicks/impresiones para esa query
+- Cual es el match semantico mas cercano
+- Cual es el pilar/satelite designado para ese tema
+
+### Paso 3: Resolver
+
+- Eliminar/reducir contenido competidor de la pagina no-duena
+- Agregar internal links DESDE la no-duena HACIA la duena
+- Asegurar que title tags y H1s no se superpongan en keywords primarias
+- Verificar que canonical tags son self-referencing
+
+**Si hay canibalizacion activa (2+ paginas en top 20 para la misma query con clicks divididos), resolver ANTES de crear contenido nuevo o optimizar.**
+
+## E. Keyword Cluster Framework
+
+Organizar keywords en clusters (pilar + satelites) para evitar canibalizacion y maximizar autoridad tematica.
+
+```
+PILLAR PAGE: [keyword principal, alto volumen]
+├── Satelite 1: [long-tail informacional] -> blog post
+├── Satelite 2: [long-tail comercial] -> pagina de servicio
+├── Satelite 3: [long-tail transaccional] -> landing page
+└── Satelite 4: [pregunta PAA] -> seccion FAQ
+```
+
+Cada satelite enlaza al pilar. El pilar enlaza a todos los satelites. Nunca dos paginas del cluster comparten keyword principal.
+
+### Intent mapping
+
+| Keyword | Volumen | Intent | URL target | Tipo contenido |
+|---------|---------|--------|------------|----------------|
+| [head term] | Alto | Informacional | /pilar | Guia completa |
+| [long-tail 1] | Medio | Comercial | /servicio | Pagina de servicio |
+| [long-tail 2] | Bajo | Transaccional | /landing | Landing page |
+
+## F. Link Building Plan
+
+### Tacticas por tipo
+
+| Tipo | Links/mes target | DR minimo | Approach |
+|------|------------------|-----------|----------|
+| Digital PR | 3-5 | 50+ | Datos originales, comentario experto |
+| Content-led | 5-10 | 40+ | Guias definitivas, herramientas, casos de estudio |
+| Outreach | 3-5 | 40+ | Broken links, menciones sin enlace, resource pages |
+
+### E-E-A-T (obligatorio)
+
+Todo contenido debe demostrar:
+- **Experience**: experiencia real con el tema
+- **Expertise**: conocimiento tecnico demostrable
+- **Authoritativeness**: reconocimiento externo (backlinks, menciones)
+- **Trustworthiness**: precision, fuentes citadas, HTTPS, politica de privacidad
 
 ## Prioridades de accion
 
 Ordenar hallazgos por:
-1. **Alta prioridad + rapido de arreglar** -- hacer esta semana
-2. **Alta prioridad + requiere desarrollo** -- planificar sprint
-3. **Media/baja prioridad** -- backlog
+1. **Canibalizacion activa** -- resolver PRIMERO
+2. **Alta prioridad + rapido de arreglar** -- hacer esta semana
+3. **Alta prioridad + requiere desarrollo** -- planificar sprint
+4. **Media/baja prioridad** -- backlog
 
 ## Herramientas sugeridas
 
@@ -87,14 +160,19 @@ Ordenar hallazgos por:
 - [ ] Verifique todos los items del checklist tecnico
 - [ ] Verifique todos los items on-page
 - [ ] Evalúe contenido y keywords
-- [ ] El scorecard esta completo
-- [ ] Las recomendaciones estan priorizadas
+- [ ] Complete cannibalization audit (es BLOQUEANTE)
+- [ ] Defini keyword clusters (pilar + satelites)
+- [ ] Revise E-E-A-T compliance
+- [ ] El scorecard esta completo (29 items)
+- [ ] Las recomendaciones estan priorizadas (canibalizacion primero)
 - [ ] Incluyo keywords target basadas en customer language
 
 ## Output esperado
 
 Entregar:
-- Scorecard completo
+- Scorecard completo (29 items)
+- Cannibalization report con ownership y resoluciones
+- Keyword cluster map (pilar + satelites por tema)
 - Top-5 hallazgos priorizados con recomendacion
-- Lista de keywords target sugeridas
+- Link building plan mensual
 - Proximos pasos concretos

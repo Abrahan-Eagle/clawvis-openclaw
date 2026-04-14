@@ -1,108 +1,217 @@
-# Prompt: Análisis forense profundo del ecosistema JARVIS
+# Prompt: Analisis Forense Profundo + Evaluacion de Repos Externos -- Ecosistema JARVIS
 
-> **Instrucción para la IA:** Copia este prompt completo y pégalo en una nueva sesión de Cursor (o cualquier LLM con acceso al repositorio). La IA debe leer los archivos referenciados, ejecutar el análisis completo y generar el informe consolidado.
+> **Como usar este prompt:** Copia todo el contenido de este archivo y pegalo en una nueva sesion de Cursor (o cualquier LLM con acceso al repositorio `/var/www/clawvis-openclaw`). Si quieres analizar repositorios de GitHub externos, pega sus URLs en la seccion `REPOSITORIOS EXTERNOS A EVALUAR`. La IA debe leer los archivos referenciados, clonar/inspeccionar los repos externos, ejecutar el analisis completo y generar el informe con plan de implementacion.
 
 ---
 
-## CONTEXTO DEL PROYECTO
+## PRINCIPIO FUNDAMENTAL
 
-El repositorio `clawvis-openclaw` (ruta: `/var/www/clawvis-openclaw`) es el **monorepo operativo** del **Ecosistema JARVIS**: una plataforma de orquestación IA que administra un **holding de empresas** mediante agentes autónomos.
+**OpenClaw es el CENTRO del ecosistema.** Todo gira alrededor del gateway OpenClaw y su agente maestro Jarvis. Los repositorios externos de GitHub son **fuentes de ideas, patrones y codigo** para fortalecer a Jarvis y OpenClaw. Nunca al reves: no se adapta JARVIS a un repo externo, se extraen las partes utiles del repo externo para potenciar JARVIS/OpenClaw.
 
-### Componentes principales
+---
 
-| Componente | Ruta | Descripción |
-|------------|------|-------------|
-| **OpenClaw Gateway** | Proceso externo (`~/.openclaw/`) | Motor de agentes: LLM multi-proveedor, herramientas, canales (Telegram, Discord, WhatsApp) |
-| **Jarvis (agente maestro)** | `jarvis-ecosystem/agents/jarvis/` | Orquestador central del holding; gobierno, memoria, skills, model-router |
-| **Agent Town** | `agent-town/` | App web Next.js 16 + React 19 + Phaser 3 (oficina pixel); WebSocket proxy al gateway |
-| **Ecosistema Jarvis** | `jarvis-ecosystem/` | Agentes por empresa (`marketing/`, `ventas/`), automatizaciones ClawFlows YAML, gobierno documental |
-| **Config sanitizada** | `config/openclaw-home/` | Instantánea de `~/.openclaw` sin secretos, para backup en Git |
-| **Estado OpenClaw** | `openclaw-state/` | Sesiones, memoria SQLite, logs, transcripts históricos |
-| **Documentación** | `docs/`, `jarvis-ecosystem/docs/`, `documentos-jarvis-openclaw/` | Gobierno, runbooks, integraciones, convenciones |
-| **Deploy** | `deploy/systemd/` | Units systemd para gateway, proxy Cursor, Agent Town |
+## REPOSITORIOS EXTERNOS A EVALUAR
 
-**Catálogo opcional (comunidad OpenClaw):** [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) — inventario forense de repos y skills externos, criterios de adopción; **no** sustituye gobierno documental, Trello ni integraciones ya configuradas en el gateway. El ancla apunta al bloque §2 (marketing, Claude, mapeo `mkt-*`).
+> **Instruccion:** Pega aqui las URLs de los repositorios de GitHub que quieres analizar. Puedes pegar 1 o mas. Si no pegas ninguno, el analisis sera solo forense interno del ecosistema JARVIS.
 
-### Stack tecnológico
+```
+REPO_1: [pegar URL aqui]
+REPO_2: [pegar URL aqui]
+REPO_3: [pegar URL aqui]
+... (agregar mas si es necesario)
+```
 
-- **Runtime:** Node.js 22+, OpenClaw CLI (npm global)
-- **Frontend:** Next.js 16, React 19, Tailwind CSS 4, Phaser 3, TypeScript, pnpm
-- **Comunicación:** WebSocket (proxy a gateway en puerto 18789), API Routes Next.js
-- **Proveedores LLM:** Groq, OpenRouter, Google Gemini, Ollama, Cursor proxy, OpenCode
-- **Canales:** Telegram, Discord, WhatsApp
-- **Herramientas:** Trello (API), navegador embebido, skills ClawHub
-- **Base de datos:** SQLite (memoria del gateway), sin BD relacional de aplicación
-- **CI/CD:** GitHub Actions (lint, typecheck, build, test, audit)
-- **Despliegue:** systemd units, sin Docker
+**Para cada repo externo, la IA debe:**
+1. Clonar o inspeccionar el repositorio (usar `gh repo view`, `WebFetch` del README, o clonar si es necesario)
+2. Leer el README, package.json/requirements.txt, estructura de carpetas, archivos clave
+3. Identificar el stack tecnologico, arquitectura, funcionalidades principales
+4. Evaluar compatibilidad con el ecosistema JARVIS/OpenClaw
+5. Generar el analisis por cada uno de los 44 expertos
 
-### Modelo de gobierno
+---
 
-- **Superusuario** (Abraham): único canal humano directo con Jarvis
-- **Jarvis**: agente maestro, orquestador del holding
-- **Empresas activas:** Marketing, Ventas (cada una con CEO/Supervisor/Equipo)
-- **Empresas planificadas:** Agencia de programación, bufete legal, contadores
-- **Clientes externos:** representados por dossiers JSON (`client-dossiers/`)
-- **Coordinación:** Trello (tableros Kanban por empresa/cliente), Discord (roles lógicos), Telegram
+## CONTEXTO DEL PROYECTO BASE (JARVIS / OpenClaw)
+
+El repositorio `clawvis-openclaw` (ruta: `/var/www/clawvis-openclaw`) es el **monorepo operativo** del **Ecosistema JARVIS**: una plataforma de orquestacion IA que administra un **holding de empresas** mediante agentes autonomos.
+
+### Arquitectura del ecosistema
+
+```
+                    ┌─────────────────────────────────────┐
+                    │         SUPERUSUARIO (Abraham)       │
+                    └──────────────┬──────────────────────┘
+                                   │ unico canal humano
+                    ┌──────────────▼──────────────────────┐
+                    │     JARVIS (agente maestro)          │
+                    │  jarvis-ecosystem/agents/jarvis/     │
+                    └──────────────┬──────────────────────┘
+                                   │ orquesta
+              ┌────────────────────┼────────────────────┐
+              │                    │                     │
+    ┌─────────▼────────┐ ┌────────▼─────────┐ ┌────────▼─────────┐
+    │   MARKETING      │ │    VENTAS        │ │  (PLANIFICADAS)  │
+    │ CEO/Sup/Equipo   │ │ CEO/Sup/Equipo   │ │ dev, legal, cont.│
+    └─────────┬────────┘ └────────┬─────────┘ └──────────────────┘
+              │                    │
+    ┌─────────▼────────────────────▼─────────┐
+    │          OpenClaw GATEWAY               │
+    │  (motor central: LLM, tools, canales)  │
+    │  Puerto 18789 / systemd                │
+    ├────────────────────────────────────────┤
+    │ Canales: Telegram, Discord, WhatsApp   │
+    │ Proveedores: Groq, OpenRouter, Gemini  │
+    │         Ollama, Cursor proxy, OpenCode │
+    │ Tools: Trello API, navegador, ClawHub  │
+    │ Memoria: SQLite, sesiones JSONL        │
+    └─────────┬──────────────────────────────┘
+              │ WebSocket proxy
+    ┌─────────▼──────────────────────────────┐
+    │         AGENT TOWN                     │
+    │  Next.js 16 + React 19 + Phaser 3     │
+    │  UI pixel-office / Puerto 3000         │
+    └────────────────────────────────────────┘
+```
+
+### Componentes del monorepo
+
+| Componente | Ruta | Rol |
+|------------|------|-----|
+| **OpenClaw Gateway** | Proceso externo (`~/.openclaw/`) | Motor central: LLM multi-proveedor, herramientas, canales |
+| **Jarvis** | `jarvis-ecosystem/agents/jarvis/` | Agente maestro: gobierno, memoria, skills, model-router |
+| **Agente Marketing** | `jarvis-ecosystem/agents/marketing/` | Empresa de marketing: IDENTITY, SOUL, skills |
+| **Agente Ventas** | `jarvis-ecosystem/agents/ventas/` | Empresa de ventas: IDENTITY, SOUL, skills |
+| **Agent Town** | `agent-town/` | App web Next.js 16 + Phaser 3; WebSocket proxy al gateway |
+| **Automatizaciones** | `jarvis-ecosystem/automations/` | ClawFlows YAML: competitor-monitor, pipeline-report, registry |
+| **Gobierno** | `jarvis-ecosystem/docs/` | GOBIERNO_JARVIS_V2, dossiers, Trello, Discord, reportes |
+| **Config sanitizada** | `config/openclaw-home/` | Copia de `~/.openclaw` sin secretos |
+| **Estado** | `openclaw-state/` | Sesiones, memoria SQLite, transcripts |
+| **Deploy** | `deploy/systemd/` | Units: gateway, proxy Cursor, Agent Town |
+| **Docs operativos** | `docs/` | Forense runbook, modelos, proveedores, Trello |
+
+### Stack tecnologico
+
+| Capa | Tecnologias |
+|------|-------------|
+| **Runtime** | Node.js 22+, OpenClaw CLI (npm global) |
+| **Frontend** | Next.js 16, React 19, Tailwind CSS 4, Phaser 3, TypeScript, pnpm |
+| **Comunicacion** | WebSocket (proxy gateway:18789), API Routes Next.js |
+| **LLM** | Groq, OpenRouter, Google Gemini, Ollama, Cursor proxy, OpenCode |
+| **Canales** | Telegram, Discord, WhatsApp |
+| **Herramientas** | Trello API, navegador embebido, skills ClawHub |
+| **Persistencia** | SQLite (memoria gateway), JSONL (sesiones), JSON (dossiers) |
+| **CI/CD** | GitHub Actions (lint, typecheck, build, test, audit) |
+| **Despliegue** | systemd units en servidor unico (sin Docker) |
+
+### Modelo de gobierno del holding
+
+| Actor | Rol | Interaccion |
+|-------|-----|-------------|
+| **Superusuario** (Abraham) | Unico humano con acceso directo a Jarvis | Chat Telegram directo |
+| **Jarvis** | Agente maestro, orquestador | Gobierna todas las empresas |
+| **CEO** (por empresa) | Responsable de resultado de su unidad | Recibe tareas de Jarvis via Trello/Discord |
+| **Supervisor** (por empresa) | Calidad, Trello, Discord, reportes | Reporta al CEO semanal/quincenal |
+| **Clientes externos** | Organizaciones que contratan servicios | Representados por dossiers JSON |
+| **Empresas activas** | Marketing, Ventas | Con CEO/Supervisor/Equipo |
+| **Empresas planificadas** | Dev-agency, legal, contadores | Pendientes de activacion |
 
 ---
 
 ## OBJETIVO DEL ANALISIS
 
-Realizar un **analisis forense exhaustivo** del Ecosistema JARVIS. Cada experto debe:
+Este analisis tiene **dos fases**:
 
-1. **LEER** los archivos del repositorio relevantes a su dominio (se indican rutas especificas)
-2. **DIAGNOSTICAR** el estado actual con evidencia (citar archivos, lineas, configuraciones)
-3. **IDENTIFICAR** hallazgos criticos, riesgos, deuda tecnica, oportunidades perdidas
-4. **RECOMENDAR** acciones priorizadas (P0 = urgente, P1 = importante, P2 = mejora, P3 = futuro)
-5. **CALIFICAR** la madurez de su area en escala 1-10 con justificacion
+### FASE I: Forense interno del ecosistema JARVIS
+
+Cada experto analiza el estado actual del ecosistema desde su dominio:
+1. **LEER** archivos del repositorio relevantes (rutas especificas indicadas por rol)
+2. **DIAGNOSTICAR** con evidencia (citar archivos, lineas, configuraciones)
+3. **IDENTIFICAR** hallazgos criticos, riesgos, deuda tecnica, oportunidades
+4. **CALIFICAR** madurez de su area (escala 1-10 con justificacion)
+
+### FASE II: Evaluacion de repos externos para fortalecer JARVIS/OpenClaw
+
+Si hay repos externos listados arriba, cada experto adicionalmente:
+1. **ANALIZAR** el repo externo desde su perspectiva profesional
+2. **MAPEAR** que funcionalidades del repo externo resuelven carencias detectadas en Fase I
+3. **EVALUAR** compatibilidad tecnica con OpenClaw (lenguaje, arquitectura, licencia, dependencias)
+4. **PROPONER** que extraer/adaptar y como integrarlo al ecosistema
+5. **ESTIMAR** esfuerzo de adaptacion y riesgo de integracion
+6. **CLASIFICAR** cada elemento como: ADOPTAR / ADAPTAR / INSPIRARSE / DESCARTAR
+
+### FASE III: Plan de implementacion consolidado
+
+Generar un plan accionable que combine los hallazgos de ambas fases.
 
 ---
 
 ## FORMATO DE SALIDA POR EXPERTO
 
-Cada experto debe generar su seccion con esta estructura exacta:
+Cada experto genera su seccion con esta estructura:
 
-```
-### [ROL] - [Nombre del Experto]
+```markdown
+### [NUMERO.NUMERO] [ROL]
 **Area:** [dominio especifico]
-**Madurez:** [X/10]
+**Madurez actual JARVIS:** [X/10]
 
-#### Archivos analizados
-- [lista de archivos leidos con ruta completa]
+#### FASE I: Diagnostico forense del ecosistema
 
-#### Hallazgos
-1. [Hallazgo con evidencia: archivo, linea, configuracion]
+**Archivos analizados:**
+- [ruta completa de cada archivo leido]
+
+**Hallazgos:**
+1. [HALLAZGO] -- Evidencia: [archivo:linea o configuracion]
 2. ...
 
-#### Riesgos detectados
+**Riesgos:**
 | Riesgo | Severidad | Evidencia | Impacto |
 |--------|-----------|-----------|---------|
 | ... | CRITICO/ALTO/MEDIO/BAJO | ... | ... |
 
-#### Oportunidades
+**Oportunidades:**
 1. [Oportunidad con justificacion]
-2. ...
 
-#### Recomendaciones priorizadas
-| # | Prioridad | Accion | Esfuerzo | Impacto esperado |
-|---|-----------|--------|----------|------------------|
+**Recomendaciones internas:**
+| # | Prioridad | Accion | Esfuerzo | Impacto |
+|---|-----------|--------|----------|---------|
 | 1 | P0 | ... | ... | ... |
-| 2 | P1 | ... | ... | ... |
+
+#### FASE II: Evaluacion de repos externos (si aplica)
+
+**Repo: [nombre/URL]**
+
+**Resumen del repo:** [que hace, stack, licencia, estrellas, actividad]
+
+**Funcionalidades relevantes para mi area:**
+| Funcionalidad | Archivo/modulo en el repo | Resuelve carencia en JARVIS | Clasificacion |
+|---------------|--------------------------|------------------------------|---------------|
+| ... | ... | ... | ADOPTAR/ADAPTAR/INSPIRARSE/DESCARTAR |
+
+**Compatibilidad con OpenClaw:**
+- Lenguaje/runtime: [compatible/requiere adaptacion/incompatible]
+- Puede ser skill de OpenClaw: [si/no/parcial]
+- Puede ser ClawFlow: [si/no/parcial]
+- Puede ser modulo de Agent Town: [si/no/parcial]
+- Licencia: [compatible/revisar/incompatible]
+
+**Propuesta de integracion:**
+[Descripcion concreta de como integrar lo util al ecosistema JARVIS]
+
+**Esfuerzo estimado:** [horas/dias] | **Riesgo:** [bajo/medio/alto]
 ```
 
 ---
 
 ## EMPRESA 1: AGENCIA DE DESARROLLO DE SOFTWARE
 
-> Los 16 expertos de esta empresa analizan la calidad tecnica, arquitectura, seguridad, operaciones y producto del ecosistema.
+> 16 expertos analizan calidad tecnica, arquitectura, seguridad, operaciones y producto.
 
 ---
 
 ### 1.1 Arquitecto de Software
 
-**Mision:** Evaluar la arquitectura general del ecosistema, patrones de diseno, acoplamiento entre componentes, escalabilidad y coherencia estructural.
+**Mision:** Evaluar arquitectura general, patrones de diseno, acoplamiento, escalabilidad. En repos externos: evaluar si su arquitectura es superior y que patrones adoptar.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `README.md` (raiz)
 - `jarvis-ecosystem/README.md`
 - `agent-town/package.json`
@@ -114,23 +223,29 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `agent-town/app/api/internal/seat-sync/route.ts`
 - `config/openclaw-home/openclaw.json`
 - `jarvis-ecosystem/agents/jarvis/AGENTS.md`
-- `deploy/systemd/` (todos los archivos)
+- `deploy/systemd/` (todos)
 
-**Preguntas a responder:**
-- Cual es el patron arquitectonico dominante y es el adecuado para el problema?
+**Preguntas forense (Fase I):**
+- Cual es el patron arquitectonico dominante y es el adecuado?
 - Como se comunican los componentes (gateway, Agent Town, agentes, canales)?
 - Existen dependencias circulares o acoplamiento excesivo?
-- Es la arquitectura extensible para las empresas planificadas (dev-agency, legal, contadores)?
+- Es extensible para empresas planificadas (dev-agency, legal, contadores)?
 - Que tan resiliente es ante fallos de un componente?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo usa una arquitectura superior para orquestacion de agentes?
+- Que patrones arquitectonicos del repo externo faltan en JARVIS?
+- Se puede reemplazar algun componente de JARVIS con algo del repo externo?
+- El repo externo resuelve problemas de escalabilidad que JARVIS tiene?
 
 ---
 
 ### 1.2 Lider Tecnico (Tech Lead)
 
-**Mision:** Evaluar calidad de codigo, convenciones, consistencia, documentacion tecnica y capacidad del equipo para mantener/escalar el proyecto.
+**Mision:** Evaluar calidad de codigo, convenciones, CI/CD, deuda tecnica. En repos externos: comparar practicas y adoptar las mejores.
 
-**Archivos a leer obligatoriamente:**
-- `agent-town/` (estructura completa de `components/`, `lib/`, `types/`)
+**Archivos JARVIS a leer:**
+- `agent-town/` (estructura de `components/`, `lib/`, `types/`)
 - `agent-town/.github/workflows/ci.yml`
 - `agent-town/tsconfig.json`
 - `agent-town/eslint.config.mjs`
@@ -138,43 +253,50 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `jarvis-ecosystem/agents/jarvis/model-router.rules.yaml`
 - `.gitignore`
 
-**Preguntas a responder:**
-- El codigo sigue convenciones consistentes (naming, estructura, tipado)?
-- La pipeline de CI es suficiente para garantizar calidad?
-- Existe deuda tecnica visible? Donde se concentra?
-- Es realista que un equipo pequeno mantenga este ecosistema?
-- Que tan bien documentadas estan las decisiones tecnicas?
+**Preguntas forense (Fase I):**
+- El codigo sigue convenciones consistentes?
+- La pipeline CI es suficiente?
+- Donde se concentra la deuda tecnica?
+- Es mantenible por un equipo pequeno?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene mejor CI/CD, linting, testing?
+- Que convenciones o tooling del repo externo deberiamos adoptar?
+- Su estructura de proyecto es mas escalable que la nuestra?
 
 ---
 
 ### 1.3 Desarrollador Senior (Senior Developer)
 
-**Mision:** Analizar la calidad de implementacion, patrones de codigo, manejo de errores, testing y buenas practicas en el codigo ejecutable.
+**Mision:** Analizar calidad de implementacion, patrones, manejo de errores, testing. En repos externos: identificar codigo de alta calidad reutilizable.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `agent-town/server.ts`
 - `agent-town/lib/ws-proxy.ts`
 - `agent-town/lib/gateway.ts`
-- `agent-town/components/` (todos los archivos `.tsx`)
-- `agent-town/components/game/` (estructura Phaser)
+- `agent-town/components/` (archivos `.tsx`)
+- `agent-town/components/game/` (Phaser)
 - `jarvis-ecosystem/agents/jarvis/scripts/validate-jarvis-sessions.mjs`
 - `jarvis-ecosystem/agents/jarvis/scripts/model-router.mjs`
 
-**Preguntas a responder:**
+**Preguntas forense (Fase I):**
 - Hay manejo adecuado de errores y edge cases?
-- Existen patrones antipatron o code smells?
-- Cual es la cobertura de tests y es adecuada?
-- El codigo de WebSocket/proxy es robusto ante desconexiones?
-- Los scripts de validacion cubren todos los escenarios de fallo?
+- Existen antipatrones o code smells?
+- El WebSocket/proxy es robusto ante desconexiones?
+
+**Preguntas repo externo (Fase II):**
+- Que modulos del repo externo tienen calidad de codigo superior?
+- Hay utilidades, helpers o librerias internas que podriamos extraer?
+- El manejo de errores es mejor y podemos copiarlo?
 
 ---
 
 ### 1.4 Ingeniero de DevOps
 
-**Mision:** Evaluar la infraestructura, despliegue, monitoreo, automatizacion operativa y reproducibilidad del entorno.
+**Mision:** Evaluar infraestructura, despliegue, monitoreo, automatizacion. En repos externos: adoptar mejores practicas de ops.
 
-**Archivos a leer obligatoriamente:**
-- `deploy/systemd/` (todos los units)
+**Archivos JARVIS a leer:**
+- `deploy/systemd/` (todos)
 - `agent-town/.github/workflows/ci.yml`
 - `agent-town/package.json` (scripts)
 - `docs/RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md`
@@ -182,47 +304,54 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `jarvis-ecosystem/automations/` (todos los YAML)
 - `jarvis-ecosystem/scripts/`
 
-**Preguntas a responder:**
-- Existe un proceso de despliegue reproducible y documentado?
-- Hay monitoreo y alertas configuradas?
-- Que pasa si el servidor se reinicia inesperadamente?
-- Existe un plan de disaster recovery?
-- Las automatizaciones ClawFlows son fiables y estan monitoreadas?
-- Por que no hay contenedorizacion (Docker) y deberia haberla?
+**Preguntas forense (Fase I):**
+- Existe despliegue reproducible y documentado?
+- Hay monitoreo y alertas?
+- Que pasa si el servidor se reinicia?
+- Existe disaster recovery?
+- Por que no hay Docker y deberia haberlo?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene Docker/Kubernetes/Terraform que podamos adaptar?
+- Tiene mejor monitoreo, logging o health checks?
+- Sus scripts de deploy son reutilizables?
 
 ---
 
 ### 1.5 Especialista en Ciberseguridad
 
-**Mision:** Auditar la seguridad del ecosistema: secretos, autenticacion, superficie de ataque, datos sensibles en el repo, hardening.
+**Mision:** Auditar seguridad: secretos, autenticacion, superficie de ataque. En repos externos: evaluar postura de seguridad antes de integrar.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `.gitignore`
 - `config/openclaw-home/README.md`
 - `config/openclaw-home/openclaw.json`
-- `docs/OPENCLAW_FORENSE_RUNBOOK.md` (Fase D - Secretos)
-- `openclaw-state/` (estructura, sin leer contenido sensible)
-- `agent-town/server.ts` (autenticacion dispatch)
-- `agent-town/lib/ws-proxy.ts` (inyeccion de identidad)
-- `jarvis-ecosystem/.env` (verificar si esta en .gitignore)
+- `docs/OPENCLAW_FORENSE_RUNBOOK.md` (Fase D)
+- `openclaw-state/` (estructura)
+- `agent-town/server.ts`
+- `agent-town/lib/ws-proxy.ts`
+- `jarvis-ecosystem/.env` (verificar .gitignore)
 - `PUSH-A-GITHUB.md`
 
-**Preguntas a responder:**
-- Hay secretos expuestos en el repositorio (tokens, API keys, credenciales)?
-- La autenticacion del gateway es adecuada (`gateway.auth`)?
-- Que datos sensibles contiene `openclaw-state/` y deberian estar en Git?
-- El proxy WebSocket valida origen y autenticacion?
-- Existe control de acceso por agente/canal?
-- El `.gitignore` cubre todos los archivos sensibles?
-- Hay riesgo de inyeccion de prompts o manipulacion de agentes?
+**Preguntas forense (Fase I):**
+- Hay secretos expuestos en el repositorio?
+- La autenticacion del gateway es adecuada?
+- El proxy WebSocket valida origen?
+- Hay riesgo de prompt injection?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene vulnerabilidades conocidas (CVEs, dependencias desactualizadas)?
+- Introduce nuevas superficies de ataque al integrarlo?
+- Maneja secretos/auth de forma segura?
+- Su licencia permite uso comercial?
 
 ---
 
 ### 1.6 Arquitecto de Cloud
 
-**Mision:** Evaluar la estrategia de infraestructura cloud, escalabilidad, costos, y viabilidad de despliegue en nube.
+**Mision:** Evaluar estrategia cloud, escalabilidad, costos. En repos externos: identificar servicios cloud o patrones cloud-native utiles.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `deploy/systemd/` (todos)
 - `agent-town/package.json`
 - `agent-town/server.ts`
@@ -230,248 +359,266 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `docs/PROVEEDOR_CURSOR_OPENCLAW.md`
 - `docs/MODELOS_JARVIS_OPENCLAW.md`
 
-**Preguntas a responder:**
-- El ecosistema esta listo para despliegue cloud (AWS/GCP/Azure)?
-- Que se necesitaria para escalar horizontalmente?
-- Como se gestionan los costos de proveedores LLM?
-- Existe una estrategia de alta disponibilidad?
-- El modelo de despliegue actual (systemd en servidor unico) es adecuado?
-- Que servicios cloud se beneficiarian mas el ecosistema?
+**Preguntas forense (Fase I):**
+- Esta listo para despliegue cloud?
+- Como se gestionan costos de proveedores LLM?
+- El despliegue systemd en servidor unico es adecuado?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo es cloud-native y podemos aprender de su infra?
+- Tiene integraciones con servicios cloud que JARVIS necesita?
+- Su modelo de costos es replicable?
 
 ---
 
 ### 1.7 Disenador de UX/UI
 
-**Mision:** Evaluar la experiencia de usuario de Agent Town y la interfaz visual del ecosistema.
+**Mision:** Evaluar experiencia de usuario de Agent Town. En repos externos: identificar mejores patrones de UI/UX.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `agent-town/app/page.tsx`
 - `agent-town/app/layout.tsx`
 - `agent-town/app/globals.css`
 - `agent-town/components/` (todos)
-- `agent-town/public/` (estructura de assets)
-- `agent-town/components/game/config/` (configuracion Phaser)
+- `agent-town/public/` (assets)
+- `agent-town/components/game/config/`
 
-**Preguntas a responder:**
-- La interfaz pixel-office es intuitiva para el usuario objetivo?
-- Existe un sistema de diseno coherente (colores, tipografia, espaciado)?
+**Preguntas forense (Fase I):**
+- La interfaz pixel-office es intuitiva?
+- Existe sistema de diseno coherente?
 - Agent Town es accesible (a11y)?
-- La experiencia en mobile es adecuada?
-- El flujo de interaccion con los agentes es claro?
-- Los assets visuales (sprites, mapas, audio) son de calidad profesional?
+- La experiencia mobile es adecuada?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene una UI/UX superior para interaccion con agentes IA?
+- Hay componentes visuales que podamos integrar en Agent Town?
+- Tiene un sistema de diseno reutilizable?
 
 ---
 
-### 1.8 Ingeniero de QA (Quality Assurance)
+### 1.8 Ingeniero de QA
 
-**Mision:** Evaluar la estrategia de testing, cobertura, calidad de pruebas existentes y procesos de aseguramiento de calidad.
+**Mision:** Evaluar testing, cobertura, calidad. En repos externos: adoptar estrategias de testing superiores.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `agent-town/.github/workflows/ci.yml`
-- `agent-town/package.json` (scripts de test)
-- `agent-town/vitest.config.ts` (si existe)
-- Buscar archivos `*.test.*` y `*.spec.*` en todo el repo
+- `agent-town/package.json` (scripts test)
+- Buscar `*.test.*` y `*.spec.*` en el repo
 - `jarvis-ecosystem/agents/jarvis/scripts/validate-jarvis-sessions.mjs`
 - `docs/OPENCLAW_FORENSE_RUNBOOK.md`
 
-**Preguntas a responder:**
-- Cual es la cobertura de tests (unitarios, integracion, e2e)?
-- Existen tests para los flujos criticos (WebSocket, proxy, agentes)?
-- El runbook forense funciona como test manual? Es suficiente?
-- Hay estrategia de regression testing?
-- Los ClawFlows tienen tests o validacion?
-- Que porcentaje del codigo tiene tests automatizados?
+**Preguntas forense (Fase I):**
+- Cual es la cobertura de tests?
+- Hay tests para flujos criticos (WebSocket, proxy, agentes)?
+- Los ClawFlows tienen validacion?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene tests que podamos adaptar para JARVIS?
+- Usa frameworks de testing que deberiamos adoptar?
+- Tiene tests de integracion o e2e para agentes IA?
 
 ---
 
 ### 1.9 Gerente de Producto (Product Manager)
 
-**Mision:** Evaluar la vision de producto, roadmap, alineacion con necesidades de usuario y viabilidad comercial.
+**Mision:** Evaluar vision de producto, roadmap, viabilidad comercial. En repos externos: identificar features de producto que fortalezcan la propuesta de valor de JARVIS.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `README.md` (raiz)
 - `jarvis-ecosystem/README.md`
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/docs/OPERACION_POST_GOBIERNO.md`
-- `jarvis-ecosystem/COMPANIES.md` (si existe, sino `jarvis-ecosystem/docs/` buscar empresas)
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `agent-town/README.md` (si existe)
 
-**Preguntas a responder:**
-- Existe una vision de producto clara y documentada?
-- Hay un roadmap priorizado?
-- Como se mide el exito del ecosistema (KPIs)?
-- El modelo de holding multi-empresa es viable como producto?
-- Que tan lejos esta de ser un producto comercializable?
-- Quienes son los usuarios objetivo y estan bien definidos?
-- Las empresas planificadas (dev-agency, legal, contadores) tienen especificacion?
+**Preguntas forense (Fase I):**
+- Existe vision de producto clara?
+- Hay roadmap priorizado?
+- El holding multi-empresa es viable como producto?
+- Que tan lejos esta de ser comercializable?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene funcionalidades de producto que JARVIS necesita?
+- Su modelo de negocio es relevante para el holding?
+- Que features le darian ventaja competitiva a JARVIS?
 
 ---
 
-### 1.10 Cientifico de Datos (Data Scientist)
+### 1.10 Cientifico de Datos
 
-**Mision:** Evaluar el flujo de datos, analiticas, metricas, y potencial de inteligencia de datos del ecosistema.
+**Mision:** Evaluar flujo de datos, analiticas, metricas. En repos externos: identificar pipelines de datos o analiticas replicables.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `openclaw-state/memory/` (estructura)
-- `config/openclaw-home/openclaw.json` (seccion de modelos/metricas)
-- `jarvis-ecosystem/automations/` (datos que generan)
+- `config/openclaw-home/openclaw.json`
+- `jarvis-ecosystem/automations/`
 - `jarvis-ecosystem/agents/jarvis/scripts/model-router.mjs`
 - `jarvis-ecosystem/agents/jarvis/model-router.rules.yaml`
 
-**Preguntas a responder:**
+**Preguntas forense (Fase I):**
 - Que datos genera el ecosistema y como se almacenan?
-- Existe un pipeline de analiticas?
-- Se rastrean metricas de uso de LLM (tokens, costos, latencia)?
-- Se puede medir la efectividad de cada agente?
-- Hay potencial para modelos predictivos (churn de clientes, forecasting)?
-- Los transcripts de sesiones son explotables para insights?
+- Se rastrean metricas de LLM (tokens, costos, latencia)?
+- Los transcripts son explotables para insights?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene dashboards, analiticas o pipelines de datos?
+- Tiene modelos de datos que podamos adoptar?
+- Ofrece visualizacion de metricas de agentes IA?
 
 ---
 
 ### 1.11 Ingeniero de Machine Learning
 
-**Mision:** Evaluar la estrategia de IA/ML, uso de modelos, fine-tuning, evaluacion y optimizacion.
+**Mision:** Evaluar estrategia IA/ML, modelos, prompts. En repos externos: identificar tecnicas de ML, RAG, fine-tuning o evaluacion de prompts.
 
-**Archivos a leer obligatoriamente:**
-- `config/openclaw-home/openclaw.json` (modelos, proveedores)
+**Archivos JARVIS a leer:**
+- `config/openclaw-home/openclaw.json`
 - `jarvis-ecosystem/agents/jarvis/model-router.rules.yaml`
 - `jarvis-ecosystem/agents/jarvis/scripts/model-router.mjs`
 - `docs/MODELOS_JARVIS_OPENCLAW.md`
 - `docs/CIERRE_MODULO_OLLAMA_LOCAL.md`
-- `docs/PROVEEDOR_CURSOR_OPENCLAW.md`
-- Todos los `IDENTITY.md` y `SOUL.md` de los agentes
+- Todos los `IDENTITY.md` y `SOUL.md` de agentes
 
-**Preguntas a responder:**
-- La estrategia multi-modelo (Groq, OpenRouter, Gemini, Ollama) es optima?
-- El model-router aplica reglas inteligentes o es estatico?
-- Existe evaluacion sistematica de calidad de respuestas?
-- Se hace fine-tuning o RAG con datos propios?
-- Hay oportunidad para modelos locales (Ollama) en produccion?
-- Los prompts de sistema (SOUL.md, IDENTITY.md) estan optimizados?
-- Existe un framework de evaluacion de prompts?
+**Preguntas forense (Fase I):**
+- La estrategia multi-modelo es optima?
+- Existe evaluacion sistematica de respuestas?
+- Los prompts de sistema estan optimizados?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo implementa RAG, fine-tuning o evaluacion de LLM?
+- Tiene un framework de evaluacion de prompts?
+- Su routing de modelos es mas inteligente que el nuestro?
+- Implementa tecnicas como tool-use, function-calling o agentic patterns?
 
 ---
 
 ### 1.12 Administrador de Bases de Datos (DBA)
 
-**Mision:** Evaluar el almacenamiento de datos, integridad, rendimiento, backups y estrategia de persistencia.
+**Mision:** Evaluar almacenamiento, integridad, backups. En repos externos: identificar esquemas de datos o estrategias de persistencia superiores.
 
-**Archivos a leer obligatoriamente:**
-- `openclaw-state/` (estructura completa)
-- `openclaw-state/memory/` (archivos SQLite)
-- `openclaw-state/agents/` (estructura de sesiones)
-- `config/openclaw-home/openclaw.json` (configuracion de memoria)
+**Archivos JARVIS a leer:**
+- `openclaw-state/` (estructura)
+- `openclaw-state/memory/` (SQLite)
+- `openclaw-state/agents/` (sesiones)
+- `config/openclaw-home/openclaw.json`
 - `jarvis-ecosystem/agents/jarvis/scripts/validate-jarvis-sessions.mjs`
 - `jarvis-ecosystem/client-dossiers/` (si existe)
 
-**Preguntas a responder:**
-- SQLite es adecuado para el volumen y concurrencia esperados?
-- Existe estrategia de backup de datos (sesiones, memoria, dossiers)?
-- Hay riesgo de corrupcion de datos en SQLite con multiples procesos?
-- Los archivos JSONL de sesiones crecen sin limite?
-- Se necesita una base de datos relacional o vectorial dedicada?
-- Como se gestiona la retencion y purga de datos historicos?
+**Preguntas forense (Fase I):**
+- SQLite es adecuado para el volumen esperado?
+- Existe estrategia de backup?
+- Los JSONL crecen sin limite?
+- Se necesita BD vectorial dedicada?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo usa una estrategia de datos superior (vector DB, graph DB, time-series)?
+- Tiene migraciones o esquemas formales que podamos adaptar?
+- Su gestion de memoria/sesiones de agentes es mas robusta?
 
 ---
 
 ### 1.13 Desarrollador Mobile
 
-**Mision:** Evaluar la viabilidad y necesidad de una experiencia mobile nativa o PWA para el ecosistema.
+**Mision:** Evaluar viabilidad mobile. En repos externos: identificar soluciones mobile o PWA adaptables.
 
-**Archivos a leer obligatoriamente:**
-- `agent-town/app/layout.tsx` (viewport, meta tags)
-- `agent-town/app/globals.css` (responsive design)
-- `agent-town/components/` (adaptabilidad)
-- `agent-town/public/` (iconos, manifest)
+**Archivos JARVIS a leer:**
+- `agent-town/app/layout.tsx`
+- `agent-town/app/globals.css`
+- `agent-town/components/`
+- `agent-town/public/`
 - `agent-town/package.json`
 
-**Preguntas a responder:**
-- Agent Town es responsive o esta optimizada para desktop?
-- Phaser 3 funciona bien en dispositivos moviles?
-- Hay una PWA configurada o seria viable?
-- Los canales existentes (Telegram, WhatsApp) ya cubren la necesidad mobile?
-- Se necesita una app nativa o un wrapper (Capacitor/Expo)?
-- Que experiencia mobile tienen los CEOs/supervisores del holding?
+**Preguntas forense (Fase I):**
+- Agent Town es responsive?
+- Phaser 3 funciona en mobile?
+- Los canales (Telegram, WhatsApp) cubren la necesidad mobile?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene app mobile o PWA para interaccion con agentes?
+- Tiene componentes responsive que podamos integrar?
+- Su experiencia mobile es replicable en Agent Town?
 
 ---
 
 ### 1.14 Desarrollador Backend
 
-**Mision:** Analizar la logica de servidor, APIs, manejo de estado, integraciones y robustez del backend.
+**Mision:** Analizar logica de servidor, APIs, integraciones. En repos externos: identificar APIs, middleware o integraciones reutilizables.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `agent-town/server.ts`
 - `agent-town/lib/ws-proxy.ts`
 - `agent-town/lib/gateway.ts`
 - `agent-town/app/api/` (todas las rutas)
-- `jarvis-ecosystem/automations/` (todos los YAML)
+- `jarvis-ecosystem/automations/` (YAML)
 - `jarvis-ecosystem/agents/jarvis/scripts/` (todos)
 
-**Preguntas a responder:**
-- El servidor custom de Agent Town es robusto para produccion?
-- El proxy WebSocket maneja reconexion, backpressure y errores?
-- Las API Routes tienen validacion de entrada adecuada?
-- Como se gestiona el estado entre sesiones del gateway?
-- Las automatizaciones ClawFlows son fiables? Tienen retry/fallback?
-- Hay logging estructurado y trazabilidad de requests?
+**Preguntas forense (Fase I):**
+- El servidor custom es robusto para produccion?
+- Las API Routes tienen validacion adecuada?
+- Las automatizaciones son fiables?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene APIs o integraciones que JARVIS necesita?
+- Tiene middleware reutilizable (auth, rate-limiting, logging)?
+- Su manejo de WebSocket/real-time es superior?
 
 ---
 
 ### 1.15 Desarrollador Frontend
 
-**Mision:** Analizar la calidad del frontend, rendimiento, experiencia de usuario y modernidad de la interfaz.
+**Mision:** Analizar calidad frontend, rendimiento, modernidad. En repos externos: identificar componentes o patrones frontend adoptables.
 
-**Archivos a leer obligatoriamente:**
-- `agent-town/app/` (todas las paginas)
-- `agent-town/components/` (todos los componentes)
-- `agent-town/lib/` (utilidades frontend)
-- `agent-town/types/` (tipos TypeScript)
+**Archivos JARVIS a leer:**
+- `agent-town/app/` (paginas)
+- `agent-town/components/` (componentes)
+- `agent-town/lib/` (utilidades)
+- `agent-town/types/`
 - `agent-town/app/globals.css`
-- `agent-town/tailwind.config.ts` (si existe)
-- `agent-town/next.config.ts` (si existe)
 
-**Preguntas a responder:**
-- Se usan correctamente los Server Components vs Client Components de Next.js?
-- El rendimiento de Phaser 3 embebido en Next.js es aceptable?
-- Existe gestion de estado adecuada (Context, Zustand, etc.)?
-- La integracion WebSocket desde el frontend es robusta?
-- Los componentes son reutilizables y siguen principios SOLID?
-- Hay code splitting y lazy loading donde corresponde?
+**Preguntas forense (Fase I):**
+- Se usan correctamente Server/Client Components?
+- El rendimiento de Phaser 3 embebido es aceptable?
+- Hay gestion de estado adecuada?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene componentes de UI para chat/agentes IA?
+- Tiene un sistema de componentes reutilizable?
+- Su experiencia de interaccion con IA es superior?
 
 ---
 
 ### 1.16 Desarrollador Fullstack
 
-**Mision:** Evaluar la coherencia end-to-end: desde el gateway hasta la UI, pasando por todas las capas.
+**Mision:** Evaluar coherencia end-to-end. En repos externos: evaluar como una integracion afectaria al flujo completo.
 
-**Archivos a leer obligatoriamente:**
-- Todos los archivos que leyeron Backend y Frontend
+**Archivos JARVIS a leer:**
+- Todos los de Backend y Frontend
 - `jarvis-ecosystem/agents/jarvis/AGENTS.md`
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `docs/OPENCLAW_FORENSE_RUNBOOK.md`
 
-**Preguntas a responder:**
-- El flujo completo (usuario → Agent Town → WebSocket → Gateway → LLM → respuesta → UI) es coherente?
-- Hay brechas o puntos ciegos entre frontend y backend?
-- Los tipos de TypeScript cubren los contratos entre capas?
-- El ecosistema es debuggeable end-to-end?
-- Existe una experiencia de desarrollo (DX) buena para nuevos contribuidores?
-- Los errores se propagan correctamente desde el gateway hasta la UI?
+**Preguntas forense (Fase I):**
+- El flujo usuario → Agent Town → WebSocket → Gateway → LLM → UI es coherente?
+- Los tipos TypeScript cubren contratos entre capas?
+- Es debuggeable end-to-end?
+
+**Preguntas repo externo (Fase II):**
+- La integracion del repo externo romperia el flujo end-to-end?
+- El repo externo resuelve brechas entre capas que JARVIS tiene?
+- Hay lecciones de DX (developer experience) que adoptar?
 
 ---
 
 ## EMPRESA 2: AGENCIA DE MARKETING DIGITAL
 
-> Los 16 expertos de esta empresa analizan como el ecosistema soporta, habilita y potencia operaciones de marketing digital para los clientes del holding.
+> 16 expertos analizan capacidades de marketing digital del ecosistema y como los repos externos las fortalecen.
 
 ---
 
 ### 2.1 Estratega Digital (Digital Strategist)
 
-**Mision:** Evaluar si el ecosistema JARVIS tiene una estrategia digital coherente y si habilita la creacion de estrategias para clientes.
+**Mision:** Evaluar estrategia digital y capacidad de generar estrategias para clientes. En repos externos: identificar frameworks o herramientas de estrategia digital.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/agents/marketing/IDENTITY.md`
 - `jarvis-ecosystem/agents/marketing/AGENTS.md`
@@ -479,323 +626,243 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `jarvis-ecosystem/automations/marketing-competitor-monitor.yaml`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- El agente de marketing tiene una estrategia digital definida?
-- El ecosistema puede generar estrategias personalizadas por cliente (dossier)?
-- Hay capacidad de analisis competitivo automatizado?
-- Se pueden crear y ejecutar campanas desde el ecosistema?
-- Existe alineacion entre la estrategia digital y los canales disponibles (Telegram, Discord)?
-- Que KPIs de marketing se pueden rastrear nativamente?
+**Preguntas forense (Fase I):**
+- El agente de marketing tiene estrategia digital definida?
+- Puede generar estrategias personalizadas por cliente (dossier)?
+- Hay analisis competitivo automatizado?
+- Que KPIs se pueden rastrear nativamente?
+
+**Preguntas repo externo (Fase II):**
+- El repo externo tiene frameworks de estrategia digital automatizada?
+- Tiene generacion de planes de marketing con IA?
+- Su analisis de competencia es mas completo?
+- Puede convertirse en skill de OpenClaw para el agente de marketing?
 
 ---
 
 ### 2.2 Especialista en SEO
 
-**Mision:** Evaluar capacidades de SEO dentro del ecosistema y para los clientes del holding.
+**Mision:** Evaluar capacidades SEO. En repos externos: herramientas SEO integrables.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/agents/marketing/skills/` (buscar skills relacionadas)
-- `jarvis-ecosystem/agents/jarvis/skills/` (xurl, summarize, etc.)
-- `agent-town/app/layout.tsx` (meta tags)
-- `agent-town/next.config.ts` (si existe)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/agents/marketing/skills/`
+- `jarvis-ecosystem/agents/jarvis/skills/` (xurl, summarize)
+- `agent-town/app/layout.tsx`
 
-**Preguntas a responder:**
-- Hay herramientas o skills de SEO integradas?
-- Agent Town tiene SEO basico (meta tags, sitemap, robots.txt)?
-- El ecosistema puede auditar SEO de sitios de clientes?
-- Se pueden generar contenidos SEO-optimizados automaticamente?
-- Hay integracion con herramientas SEO (Search Console, Ahrefs, Semrush)?
-- Existe monitoreo de posiciones y keywords?
+**Preguntas forense (Fase I):**
+- Hay skills de SEO integradas?
+- Agent Town tiene SEO basico?
+- Se puede auditar SEO de clientes?
+
+**Preguntas repo externo (Fase II):**
+- El repo tiene herramientas de auditoria SEO automatizada?
+- Puede generar contenido SEO-optimizado?
+- Tiene integracion con Search Console/APIs de SEO?
+- Se puede envolver como skill de OpenClaw?
 
 ---
 
-### 2.3 Especialista en SEM / Paid Search (Google Ads)
+### 2.3 Especialista en SEM / Paid Search
 
-**Mision:** Evaluar si el ecosistema puede gestionar o asistir campanas de publicidad pagada.
+**Mision:** Evaluar capacidad de gestion de ads. En repos externos: herramientas de gestion de campanas.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/marketing/skills/`
-- `jarvis-ecosystem/automations/` (buscar automatizaciones de ads)
+- `jarvis-ecosystem/automations/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- Hay integracion con Google Ads, Meta Ads u otras plataformas?
-- El ecosistema puede generar copys para anuncios?
-- Se pueden crear reportes de rendimiento de campanas?
-- Existe automatizacion de pujas o presupuestos?
-- Los dossiers de cliente incluyen informacion de campanas pagadas?
+**Preguntas forense y repo externo:** Seguir el formato estandar evaluando integracion con Google Ads, Meta Ads; generacion de copys para anuncios; automatizacion de campanas; reportes de rendimiento.
 
 ---
 
-### 2.4 Gerente de Performance (Performance Manager)
+### 2.4 Gerente de Performance
 
-**Mision:** Evaluar las capacidades de medicion de rendimiento y optimizacion de resultados.
+**Mision:** Evaluar medicion de rendimiento. En repos externos: dashboards y herramientas de performance.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/automations/` (todos)
-- `jarvis-ecosystem/agents/marketing/` (skills y configuracion)
-- `jarvis-ecosystem/docs/` (reportes)
+- `jarvis-ecosystem/agents/marketing/`
 - `jarvis-ecosystem/docs/plantillas/REPORTE_SUPERVISOR_CEO.md`
 
-**Preguntas a responder:**
-- Existen dashboards o reportes de performance?
-- Se pueden medir conversiones y atribucion?
-- Hay integracion con Google Analytics, Tag Manager, etc.?
-- El ecosistema genera reportes periodicos automaticos?
-- Se pueden establecer metas y rastrear cumplimiento?
-- Los reportes supervisor→CEO incluyen metricas de marketing?
+**Preguntas forense y repo externo:** Dashboards, conversion tracking, integracion con Analytics/Tag Manager, reportes automaticos, metas y cumplimiento.
 
 ---
 
 ### 2.5 Social Media Manager
 
-**Mision:** Evaluar la capacidad de gestion de redes sociales del ecosistema.
+**Mision:** Evaluar gestion de redes sociales. En repos externos: herramientas de social media management.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/marketing/IDENTITY.md`
 - `jarvis-ecosystem/agents/marketing/skills/`
 - `jarvis-ecosystem/automations/marketing-competitor-monitor.yaml`
-- Canales configurados en `config/openclaw-home/openclaw.json`
+- `config/openclaw-home/openclaw.json`
 
-**Preguntas a responder:**
-- Que redes sociales puede gestionar el ecosistema?
-- Hay capacidad de publicacion programada?
-- Se pueden monitorear menciones y engagement?
-- El monitor de competencia analiza redes sociales?
-- Existe un calendario editorial integrado?
-- Los canales Telegram/Discord se usan como medio de publicacion o solo operacional?
+**Preguntas forense y repo externo:** Publicacion programada, monitoreo de menciones, calendario editorial, engagement automatizado, gestion multi-plataforma.
 
 ---
 
 ### 2.6 Estratega de Contenido (Content Strategist)
 
-**Mision:** Evaluar la capacidad de planificacion, creacion y distribucion de contenido.
+**Mision:** Evaluar planificacion y creacion de contenido. En repos externos: herramientas de content generation/curation.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/agents/jarvis/skills/` (summarize, xurl, etc.)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/agents/jarvis/skills/` (summarize, xurl)
 - `jarvis-ecosystem/agents/marketing/skills/`
-- `jarvis-ecosystem/automations/registry/` (github-trending, etc.)
+- `jarvis-ecosystem/automations/registry/` (github-trending)
 - `jarvis-ecosystem/docs/FLUJO_TRELLO_ECOSISTEMA.md`
 
-**Preguntas a responder:**
-- El ecosistema puede generar contenido (blogs, posts, emails)?
-- Hay un flujo de aprobacion de contenido?
-- Se puede mantener un calendario de contenido en Trello?
-- Existe capacidad de curar contenido automaticamente (trending, noticias)?
-- Los skills de resumen y URL son utiles para content curation?
-- Se puede personalizar contenido por cliente/audiencia?
+**Preguntas forense y repo externo:** Generacion de contenido (blogs, posts, emails), flujo de aprobacion, calendario editorial en Trello, content curation automatizada.
 
 ---
 
 ### 2.7 Copywriter Creativo
 
-**Mision:** Evaluar la calidad de los prompts, la voz de marca y la capacidad de generacion de copy.
+**Mision:** Evaluar voz de marca y generacion de copy. En repos externos: herramientas de copywriting IA.
 
-**Archivos a leer obligatoriamente:**
-- Todos los `SOUL.md` e `IDENTITY.md` de los agentes
+**Archivos JARVIS a leer:**
+- Todos los `SOUL.md` e `IDENTITY.md`
 - `jarvis-ecosystem/agents/jarvis/AGENTS.md`
 - `jarvis-ecosystem/agents/marketing/AGENTS.md`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- Los agentes tienen una voz de marca definida y consistente?
-- Se pueden generar copys para distintos canales y tonos?
-- Hay plantillas de copy reutilizables?
-- El SOUL.md es efectivo como "personalidad" del agente?
-- Se puede adaptar el tono por cliente (dossier)?
-- Los prompts de sistema estan optimizados para creatividad?
+**Preguntas forense y repo externo:** Voz de marca consistente, generacion de copy multi-canal, plantillas, adaptacion de tono por cliente, optimizacion de prompts para creatividad.
 
 ---
 
-### 2.8 Media Buyer (Comprador de Medios)
+### 2.8 Media Buyer
 
-**Mision:** Evaluar la capacidad de gestion de compra de medios y presupuestos publicitarios.
+**Mision:** Evaluar gestion de compra de medios. En repos externos: herramientas de media buying/optimization.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/marketing/skills/`
 - `jarvis-ecosystem/automations/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- Hay integracion con plataformas de compra de medios?
-- Se pueden rastrear presupuestos y ROI por cliente?
-- El ecosistema asiste en la planificacion de medios?
-- Existen automatizaciones de optimizacion de gasto?
-- Los dossiers de cliente tienen campos de presupuesto?
+**Preguntas forense y repo externo:** Integracion con plataformas de medios, tracking de presupuestos/ROI, planificacion de medios, optimizacion de gasto automatizada.
 
 ---
 
-### 2.9 Analista de Datos de Marketing (Data Analyst)
+### 2.9 Analista de Datos de Marketing
 
-**Mision:** Evaluar las capacidades de analisis de datos de marketing, visualizacion y generacion de insights.
+**Mision:** Evaluar analisis de datos de marketing. En repos externos: herramientas de analitica y BI.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/automations/` (pipelines de datos)
-- `openclaw-state/memory/` (estructura de datos)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/automations/`
+- `openclaw-state/memory/`
 - `jarvis-ecosystem/agents/jarvis/scripts/`
 - `jarvis-ecosystem/docs/plantillas/REPORTE_SUPERVISOR_CEO.md`
 
-**Preguntas a responder:**
-- Que datos de marketing se recolectan y almacenan?
-- Hay capacidad de visualizacion de datos?
-- Se generan insights accionables automaticamente?
-- Existe integracion con herramientas de BI?
-- Los reportes incluyen datos cuantitativos de marketing?
-- Se puede hacer segmentacion de audiencias?
+**Preguntas forense y repo externo:** Datos de marketing recolectados, visualizacion, insights automaticos, integracion BI, segmentacion de audiencias.
 
 ---
 
 ### 2.10 Especialista en Email Marketing / Automation
 
-**Mision:** Evaluar la capacidad de email marketing y automatizacion de flujos de comunicacion.
+**Mision:** Evaluar email marketing y automatizacion de comunicacion. En repos externos: herramientas de email/automation.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/marketing/skills/`
-- `jarvis-ecosystem/automations/` (buscar flujos de email)
-- `jarvis-ecosystem/agents/jarvis/skills/` (herramientas de comunicacion)
+- `jarvis-ecosystem/automations/`
+- `jarvis-ecosystem/agents/jarvis/skills/`
 
-**Preguntas a responder:**
-- Hay integracion con plataformas de email (Mailchimp, SendGrid, etc.)?
-- Se pueden crear flujos de nurturing automatizados?
-- Los ClawFlows soportan automatizacion de emails?
-- Existe segmentacion y personalizacion de envios?
-- Se rastrean metricas de email (open rate, CTR)?
-- El ecosistema puede gestionar listas de contactos?
+**Preguntas forense y repo externo:** Integracion con plataformas de email, flujos de nurturing, ClawFlows para emails, segmentacion, metricas (open rate, CTR).
 
 ---
 
 ### 2.11 Gerente de Cuentas (Account Manager)
 
-**Mision:** Evaluar como el ecosistema facilita la gestion de relaciones con clientes.
+**Mision:** Evaluar gestion de relaciones con clientes. En repos externos: herramientas de account management.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 - `jarvis-ecosystem/client-dossiers/` (si existe)
 - `jarvis-ecosystem/docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md`
 - `jarvis-ecosystem/docs/plantillas/REPORTE_SUPERVISOR_CEO.md`
 
-**Preguntas a responder:**
-- Los dossiers de cliente son suficientes para gestion de cuentas?
-- Hay visibilidad del estado de cada cliente (proyectos activos, pendientes)?
-- Se pueden generar reportes de avance por cliente?
-- El flujo Trello permite trackear entregables por cuenta?
-- Existe un sistema de alertas para clientes desatendidos?
-- La comunicacion inter-empresa funciona para cuentas compartidas?
+**Preguntas forense y repo externo:** Dossiers suficientes para gestion de cuentas, visibilidad de estado de clientes, reportes por cliente, alertas para clientes desatendidos.
 
 ---
 
 ### 2.12 Community Manager
 
-**Mision:** Evaluar la capacidad de gestion de comunidades y engagement en canales.
+**Mision:** Evaluar gestion de comunidades. En repos externos: herramientas de community management.
 
-**Archivos a leer obligatoriamente:**
-- Configuracion de canales en `config/openclaw-home/openclaw.json`
-- `jarvis-ecosystem/agents/jarvis/AGENTS.md` (seccion Group Chats)
+**Archivos JARVIS a leer:**
+- `config/openclaw-home/openclaw.json`
+- `jarvis-ecosystem/agents/jarvis/AGENTS.md` (Group Chats)
 - `jarvis-ecosystem/docs/PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md`
 - `jarvis-ecosystem/docs/DISCORD_JERARQUIA_VS_AGENTES_IA.md`
 
-**Preguntas a responder:**
-- Jarvis puede actuar como community manager en Discord/Telegram?
-- Las reglas de "cuando hablar vs cuando callar" son adecuadas?
-- Se puede moderar contenido automaticamente?
-- Hay capacidad de engagement proactivo con la comunidad?
-- Los roles de Discord estan bien estructurados para community?
-- Se rastrean metricas de comunidad (miembros, actividad, sentimiento)?
+**Preguntas forense y repo externo:** Jarvis como community manager, moderacion automatica, engagement proactivo, metricas de comunidad.
 
 ---
 
 ### 2.13 Especialista en Inbound Marketing
 
-**Mision:** Evaluar la estrategia y capacidades de inbound marketing del ecosistema.
+**Mision:** Evaluar estrategia inbound. En repos externos: funnels, lead capture, nurturing.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/agents/marketing/` (configuracion completa)
-- `jarvis-ecosystem/automations/` (flujos de contenido/lead)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/agents/marketing/`
+- `jarvis-ecosystem/automations/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `agent-town/` (como landing/punto de atraccion)
+- `agent-town/` (como landing)
 
-**Preguntas a responder:**
-- Existe un funnel de inbound definido?
-- Agent Town sirve como punto de captacion?
-- Hay flujos automatizados de lead nurturing?
-- Se puede crear contenido de atraccion (blogs, whitepapers)?
-- El ecosistema soporta lead scoring?
-- Hay integracion con formularios o landing pages?
+**Preguntas forense y repo externo:** Funnel definido, Agent Town como captacion, lead nurturing automatizado, lead scoring, landing pages.
 
 ---
 
 ### 2.14 Especialista en CRM
 
-**Mision:** Evaluar la gestion de relaciones con clientes y el flujo de datos de contactos.
+**Mision:** Evaluar gestion de relaciones y datos de contactos. En repos externos: CRM o gestion de contactos.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `jarvis-ecosystem/client-dossiers/` (estructura y contenido)
+- `jarvis-ecosystem/client-dossiers/`
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
-- `jarvis-ecosystem/agents/jarvis/skills/` (buscar skills de CRM)
-- `jarvis-ecosystem/agents/marketing/skills/`
+- `jarvis-ecosystem/agents/jarvis/skills/`
 
-**Preguntas a responder:**
-- Los dossiers JSON funcionan como CRM minimo? Es suficiente?
-- Hay integracion con CRM comerciales (HubSpot, Salesforce, Pipedrive)?
-- Se puede rastrear el ciclo de vida del cliente?
-- Existe un pipeline de ventas visible?
-- Los datos de contacto estan centralizados?
-- Hay automatizacion de seguimiento (follow-ups)?
+**Preguntas forense y repo externo:** Dossiers como CRM minimo, integracion con CRM comerciales, ciclo de vida del cliente, pipeline visible, follow-ups automatizados.
 
 ---
 
 ### 2.15 Disenador UX/UI para Conversion
 
-**Mision:** Evaluar las interfaces del ecosistema desde la perspectiva de conversion y optimizacion.
+**Mision:** Evaluar interfaces para conversion. En repos externos: patrones de conversion, A/B testing.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `agent-town/app/page.tsx`
-- `agent-town/components/` (todos)
+- `agent-town/components/`
 - `agent-town/app/globals.css`
-- `agent-town/public/` (assets)
 
-**Preguntas a responder:**
-- Agent Town tiene elementos de conversion (CTAs, formularios, onboarding)?
-- La experiencia facilita que un visitante se convierta en usuario/cliente?
-- Hay A/B testing o personalizacion de experiencia?
-- Los flujos de usuario estan optimizados para la accion deseada?
-- Existe un journey map del usuario?
-- Las metricas de conversion se rastrean?
+**Preguntas forense y repo externo:** CTAs, onboarding, A/B testing, flujos optimizados, journey map, metricas de conversion.
 
 ---
 
 ### 2.16 Gerente de Afiliados (Affiliate Manager)
 
-**Mision:** Evaluar el potencial de un programa de afiliados o referidos.
+**Mision:** Evaluar potencial de programa de afiliados. En repos externos: sistemas de referidos/afiliados.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `agent-town/` (capacidades de tracking)
 
-**Preguntas a responder:**
-- El ecosistema soporta tracking de referidos?
-- Hay estructura para un programa de afiliados?
-- Se pueden rastrear comisiones y payouts?
-- Existe integracion con plataformas de afiliados?
-- El modelo de holding permite alianzas inter-empresa para referidos?
-- Es viable un programa de referidos como canal de adquisicion?
+**Preguntas forense y repo externo:** Tracking de referidos, programa de afiliados, comisiones, alianzas inter-empresa.
 
 ---
 
-## EMPRESA 3: EMPRESA DE DESARROLLO DE NEGOCIOS Y VENTAS
+## EMPRESA 3: DESARROLLO DE NEGOCIOS Y VENTAS
 
-> Los 12 expertos de esta empresa evaluan las capacidades comerciales, de prospeccion, negociacion y cierre del ecosistema.
+> 12 expertos evaluan capacidades comerciales, prospeccion, negociacion y cierre.
 
 ---
 
 ### 3.1 Gerente de Desarrollo de Negocios (BDM)
 
-**Mision:** Evaluar la capacidad del ecosistema para identificar, desarrollar y cerrar nuevas oportunidades de negocio.
+**Mision:** Evaluar capacidad de identificar y desarrollar oportunidades. En repos externos: herramientas de business development.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/agents/ventas/IDENTITY.md`
 - `jarvis-ecosystem/agents/ventas/AGENTS.md`
@@ -803,246 +870,169 @@ Cada experto debe generar su seccion con esta estructura exacta:
 - `jarvis-ecosystem/automations/ventas-pipeline-report.yaml`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- El agente de ventas tiene capacidad de prospeccion?
-- Hay un pipeline de negocios visible y estructurado?
-- Se pueden identificar oportunidades de cross-selling entre empresas del holding?
-- El reporte de pipeline esta automatizado?
-- Como se documenta el proceso de descubrimiento de un nuevo cliente?
-- Hay integracion con bases de datos de empresas/prospectos?
+**Preguntas forense y repo externo:** Capacidad de prospeccion, pipeline visible, cross-selling entre empresas, reporte automatizado, integracion con bases de prospectos.
 
 ---
 
 ### 3.2 Ejecutivo de Cuentas (Account Executive)
 
-**Mision:** Evaluar las herramientas y flujos para gestionar el ciclo completo de venta.
+**Mision:** Evaluar herramientas para el ciclo completo de venta. En repos externos: herramientas de sales cycle management.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `jarvis-ecosystem/client-dossiers/` (si existe)
+- `jarvis-ecosystem/client-dossiers/`
 - `jarvis-ecosystem/docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md`
 - `jarvis-ecosystem/agents/ventas/skills/`
 - `jarvis-ecosystem/docs/FLUJO_TRELLO_ECOSISTEMA.md`
 
-**Preguntas a responder:**
-- El dossier de cliente soporta el ciclo de venta completo (discovery → propuesta → cierre → delivery)?
-- Hay plantillas de propuestas comerciales?
-- Se pueden rastrear interacciones con el prospecto?
-- El flujo Trello diferencia entre lead, oportunidad y cliente?
-- Existe un flujo de aprobacion de propuestas?
-- Se pueden generar cotizaciones desde el ecosistema?
+**Preguntas forense y repo externo:** Dossier para ciclo de venta completo, propuestas comerciales, tracking de interacciones, diferenciacion lead/oportunidad/cliente, cotizaciones.
 
 ---
 
 ### 3.3 Gerente de Ventas (Sales Manager)
 
-**Mision:** Evaluar la capacidad de gestion, supervisión y optimizacion del equipo de ventas.
+**Mision:** Evaluar gestion y optimizacion del equipo de ventas. En repos externos: herramientas de sales management.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md` (jerarquia)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/docs/plantillas/REPORTE_SUPERVISOR_CEO.md`
 - `jarvis-ecosystem/automations/ventas-pipeline-report.yaml`
-- `jarvis-ecosystem/agents/ventas/` (configuracion completa)
+- `jarvis-ecosystem/agents/ventas/`
 
-**Preguntas a responder:**
-- Hay visibilidad del pipeline de ventas del equipo?
-- Se pueden establecer metas de ventas y rastrear cumplimiento?
-- El reporte supervisor→CEO incluye metricas de ventas?
-- Hay forecast de ventas?
-- Se puede analizar el rendimiento por vendedor/cuenta?
-- Existen dashboards de ventas?
+**Preguntas forense y repo externo:** Visibilidad de pipeline, metas de ventas, forecast, rendimiento por vendedor, dashboards.
 
 ---
 
-### 3.4 Director de Nuevo Negocio (Director of New Business)
+### 3.4 Director de Nuevo Negocio
 
-**Mision:** Evaluar la estrategia de adquisicion de nuevos clientes y expansion del holding.
+**Mision:** Evaluar estrategia de adquisicion y expansion. En repos externos: frameworks de expansion de negocios.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/README.md`
 - `jarvis-ecosystem/docs/OPERACION_POST_GOBIERNO.md`
-- `jarvis-ecosystem/COMPANIES.md` (o donde esten listadas las empresas planificadas)
 
-**Preguntas a responder:**
-- Hay una estrategia de expansion documentada?
-- Las empresas planificadas (dev-agency, legal, contadores) tienen plan de lanzamiento?
-- Como se evalua la viabilidad de una nueva linea de negocio?
-- Existe analisis de mercado o competencia documentado?
-- El ecosistema puede soportar 5+ empresas simultaneamente?
-- Hay una estrategia de go-to-market para el holding?
+**Preguntas forense y repo externo:** Estrategia de expansion, plan de lanzamiento de empresas planificadas, viabilidad de nuevas lineas, analisis de mercado, go-to-market.
 
 ---
 
 ### 3.5 Representante de Ventas (Sales Representative)
 
-**Mision:** Evaluar las herramientas disponibles para la venta dia a dia.
+**Mision:** Evaluar herramientas para venta dia a dia. En repos externos: herramientas de sales enablement.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/ventas/skills/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `jarvis-ecosystem/docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md`
-- Canales de comunicacion en `config/openclaw-home/openclaw.json`
+- `config/openclaw-home/openclaw.json`
 
-**Preguntas a responder:**
-- Un vendedor puede usar Jarvis/agente ventas como asistente en tiempo real?
-- Hay acceso rapido a informacion de productos/servicios del holding?
-- Se pueden generar seguimientos automatizados?
-- El agente puede preparar briefings pre-reunion con un cliente?
-- Hay templates de mensajes de venta?
-- La comunicacion via Telegram/WhatsApp soporta el flujo de ventas?
+**Preguntas forense y repo externo:** Jarvis como asistente de ventas, acceso a info de productos, seguimientos automaticos, briefings pre-reunion, templates de mensajes.
 
 ---
 
 ### 3.6 Gerente de Alianzas Estrategicas (Partnership Manager)
 
-**Mision:** Evaluar el potencial de alianzas, partnerships y sinergias dentro y fuera del holding.
+**Mision:** Evaluar potencial de alianzas. En repos externos: ecosistemas de partnerships.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/README.md`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
 
-**Preguntas a responder:**
-- El modelo de holding facilita alianzas entre empresas internas?
-- Hay un framework para evaluar partnerships externos?
-- Se documentan alianzas en el sistema de dossiers?
-- Existe un ecosistema de partners tecnologicos (OpenClaw, proveedores LLM)?
-- Se pueden rastrear beneficios de alianzas?
-- El holding puede ofrecer servicios bundled a clientes?
+**Preguntas forense y repo externo:** Alianzas inter-empresa, framework de partnerships, partners tecnologicos, servicios bundled, rastreo de beneficios.
 
 ---
 
 ### 3.7 Inside Sales Specialist
 
-**Mision:** Evaluar la capacidad de venta remota y digital del ecosistema.
+**Mision:** Evaluar venta remota y digital. En repos externos: herramientas de inside sales.
 
-**Archivos a leer obligatoriamente:**
-- `jarvis-ecosystem/agents/ventas/` (configuracion completa)
-- Canales de comunicacion disponibles
-- `jarvis-ecosystem/automations/` (automatizaciones de ventas)
+**Archivos JARVIS a leer:**
+- `jarvis-ecosystem/agents/ventas/`
+- `jarvis-ecosystem/automations/`
 
-**Preguntas a responder:**
-- El ecosistema soporta venta completamente remota?
-- Hay flujos de outreach automatizado?
-- Se pueden hacer demos o presentaciones desde el ecosistema?
-- Los canales (Telegram, Discord, WhatsApp) son efectivos para inside sales?
-- Hay scripts de venta o guiones disponibles?
-- Se puede hacer seguimiento automatico de leads frios?
+**Preguntas forense y repo externo:** Venta remota, outreach automatizado, demos, scripts de venta, seguimiento de leads frios.
 
 ---
 
-### 3.8 Especialista en Generacion de Leads (Lead Generation Specialist)
+### 3.8 Especialista en Generacion de Leads
 
-**Mision:** Evaluar la capacidad de captura, cualificacion y nutricion de leads.
+**Mision:** Evaluar captacion y cualificacion de leads. En repos externos: herramientas de lead generation.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/ventas/skills/`
 - `jarvis-ecosystem/agents/marketing/skills/`
 - `jarvis-ecosystem/automations/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `agent-town/` (como punto de captacion)
+- `agent-town/`
 
-**Preguntas a responder:**
-- Hay mecanismos de captacion de leads?
-- Se puede cualificar leads automaticamente?
-- Existe un scoring de leads?
-- Agent Town puede capturar informacion de visitantes?
-- Hay integracion con fuentes de leads (LinkedIn, formularios web)?
-- El pipeline lead → MQL → SQL esta definido?
+**Preguntas forense y repo externo:** Captacion de leads, cualificacion automatica, lead scoring, fuentes de leads (LinkedIn, web), pipeline lead-MQL-SQL.
 
 ---
 
 ### 3.9 Gerente de Licitaciones (Bid Manager)
 
-**Mision:** Evaluar la capacidad de preparar propuestas formales y participar en procesos de licitacion.
+**Mision:** Evaluar capacidad de preparar propuestas. En repos externos: herramientas de proposal/bid management.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `jarvis-ecosystem/agents/jarvis/skills/` (herramientas de generacion de documentos)
+- `jarvis-ecosystem/agents/jarvis/skills/`
 - `jarvis-ecosystem/docs/JARVIS_DOCUMENTS_ON_DISK.md`
 
-**Preguntas a responder:**
-- Se pueden generar propuestas formales desde el ecosistema?
-- Hay plantillas de propuestas/licitaciones?
-- El sistema de documentos (JARVIS-DOCUMENTS) soporta gestion de propuestas?
-- Se pueden almacenar y reutilizar componentes de propuestas pasadas?
-- Hay flujo de revision y aprobacion de propuestas?
-- Se pueden generar presupuestos detallados?
+**Preguntas forense y repo externo:** Propuestas formales, plantillas, JARVIS-DOCUMENTS para propuestas, presupuestos detallados, reutilizacion de componentes.
 
 ---
 
 ### 3.10 Growth Manager / Growth Hacker
 
-**Mision:** Evaluar el potencial de crecimiento acelerado del ecosistema y sus clientes.
+**Mision:** Evaluar potencial de crecimiento acelerado. En repos externos: herramientas de growth hacking.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/README.md`
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
-- `jarvis-ecosystem/automations/` (todas)
-- `jarvis-ecosystem/automations/registry/` (github-trending, etc.)
-- `agent-town/` (como producto de crecimiento)
+- `jarvis-ecosystem/automations/`
+- `jarvis-ecosystem/automations/registry/`
+- `agent-town/`
 
-**Preguntas a responder:**
-- Hay mecanismos de growth automatizados?
-- El ecosistema puede escalar adquisicion de clientes?
-- Agent Town tiene potencial viral o de referidos?
-- Se pueden ejecutar experimentos de growth rapidos?
-- Las automatizaciones existentes contribuyen al crecimiento?
-- Hay metricas de crecimiento definidas (MRR, CAC, LTV, churn)?
-- El open source (OpenClaw) es una palanca de growth?
+**Preguntas forense y repo externo:** Growth automatizado, potencial viral, experimentos rapidos, metricas (MRR, CAC, LTV), open source como palanca de growth.
 
 ---
 
 ### 3.11 Comercial Externo (Field Sales)
 
-**Mision:** Evaluar las herramientas para ventas presenciales y en campo.
+**Mision:** Evaluar herramientas para ventas en campo. En repos externos: herramientas mobile para sales.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/agents/ventas/`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- Canales moviles disponibles (Telegram, WhatsApp)
 
-**Preguntas a responder:**
-- Un comercial en campo puede acceder al ecosistema desde su celular?
-- Hay materiales de venta accesibles remotamente?
-- Se pueden actualizar dossiers de cliente desde el campo?
-- La comunicacion con Jarvis via Telegram/WhatsApp es util en reuniones?
-- Hay una app o interfaz movil optimizada para ventas?
-- Se puede registrar informacion de reuniones presenciales?
+**Preguntas forense y repo externo:** Acceso mobile, materiales de venta remotos, actualizacion de dossiers en campo, registro de reuniones.
 
 ---
 
-### 3.12 Consultor de Soluciones (Solutions Consultant / Pre-sales)
+### 3.12 Consultor de Soluciones (Pre-sales)
 
-**Mision:** Evaluar la capacidad del ecosistema para disenar y presentar soluciones tecnicas a clientes.
+**Mision:** Evaluar capacidad de disenar soluciones para clientes. En repos externos: herramientas de solution design.
 
-**Archivos a leer obligatoriamente:**
+**Archivos JARVIS a leer:**
 - `jarvis-ecosystem/docs/GOBIERNO_JARVIS_V2.md`
 - `jarvis-ecosystem/docs/CLIENT_DOSSIER_SCHEMA.md`
-- `jarvis-ecosystem/agents/` (todos los agentes)
+- `jarvis-ecosystem/agents/` (todos)
 - `jarvis-ecosystem/docs/OPERACION_POST_GOBIERNO.md`
-- `agent-town/` (como demo/showcase)
+- `agent-town/` (demo)
 
-**Preguntas a responder:**
-- El ecosistema puede generar propuestas tecnicas personalizadas?
-- Agent Town sirve como demo para prospectos?
-- Se pueden crear POCs (proof of concept) rapidamente?
-- Hay documentacion de servicios/capacidades del holding?
-- Se puede mapear la necesidad del cliente a los servicios del holding automaticamente?
-- El model de dossier soporta requirement gathering tecnico?
+**Preguntas forense y repo externo:** Propuestas tecnicas personalizadas, Agent Town como demo, POCs rapidos, mapeo necesidad-servicios, requirement gathering.
 
 ---
 
 ## SINTESIS CRUZADA INTER-EMPRESAS
 
-> Despues de que los 44 expertos emitan sus reportes individuales, generar esta seccion consolidada.
+> Generar despues de los 44 reportes individuales.
 
 ---
 
 ### S.1 Hallazgos convergentes
 
-Identificar hallazgos mencionados por 3+ expertos de diferentes empresas. Agrupar por tema:
+Hallazgos mencionados por 3+ expertos de diferentes empresas, agrupados por:
 - Infraestructura y arquitectura
 - Datos y analiticas
 - Experiencia de usuario
@@ -1050,9 +1040,7 @@ Identificar hallazgos mencionados por 3+ expertos de diferentes empresas. Agrupa
 - Seguridad y compliance
 - Escalabilidad y crecimiento
 
-### S.2 Mapa de madurez
-
-Generar una tabla consolidada:
+### S.2 Mapa de madurez consolidado
 
 | Area | Empresa Dev | Empresa Marketing | Empresa Ventas | Promedio |
 |------|-------------|-------------------|----------------|----------|
@@ -1067,40 +1055,106 @@ Generar una tabla consolidada:
 | Documentacion | X/10 | X/10 | X/10 | ... |
 | Escalabilidad | X/10 | X/10 | X/10 | ... |
 
-### S.3 Top 10 brechas criticas
+### S.3 Mapa de repos externos vs carencias JARVIS
 
-Lista ordenada por impacto de las 10 brechas mas criticas detectadas por el comite completo.
+| Carencia en JARVIS | Repo externo que la resuelve | Modulo/funcionalidad especifica | Tipo de integracion | Esfuerzo | Prioridad |
+|---------------------|------------------------------|---------------------------------|---------------------|----------|-----------|
+| ... | REPO_1 | ... | Skill OpenClaw / ClawFlow / Modulo Agent Town / Inspiracion | ... | P0-P3 |
 
-### S.4 Top 10 oportunidades
+### S.4 Top 10 brechas criticas
 
-Lista ordenada por potencial de las 10 oportunidades mas valiosas detectadas.
+Lista ordenada por impacto, indicando si algun repo externo las resuelve.
 
-### S.5 Roadmap priorizado (horizonte 12 meses)
+### S.5 Top 10 oportunidades
 
-| Fase | Periodo | Acciones clave | Expertos involucrados | Impacto esperado |
-|------|---------|----------------|-----------------------|------------------|
-| **Fase 0: Cimientos** | Mes 1-2 | ... | ... | ... |
-| **Fase 1: Estabilizacion** | Mes 3-4 | ... | ... | ... |
-| **Fase 2: Expansion** | Mes 5-8 | ... | ... | ... |
-| **Fase 3: Escala** | Mes 9-12 | ... | ... | ... |
+Lista ordenada por potencial, indicando que repos externos las habilitan.
 
-### S.6 Veredicto final del comite
+### S.6 Elementos a ADOPTAR de repos externos
 
-Un parrafo de sintesis ejecutiva: estado actual del ecosistema, viabilidad, riesgos criticos y potencial, firmado por el comite de 44 expertos.
+Lista de elementos concretos clasificados como ADOPTAR, con plan de integracion:
+
+| # | Elemento | Origen (repo) | Destino en JARVIS | Forma de integracion | Esfuerzo | Dependencias |
+|---|----------|----------------|--------------------|----------------------|----------|--------------|
+| 1 | ... | REPO_1 | Skill de Jarvis | Fork + adaptar como skill OpenClaw | 2 dias | Node.js compatible |
+
+### S.7 Elementos a ADAPTAR de repos externos
+
+Elementos que requieren modificacion significativa pero valen la pena.
+
+### S.8 Elementos para INSPIRARSE (no copiar codigo)
+
+Patrones, ideas o enfoques que no se pueden integrar directamente pero inspiran mejoras propias.
+
+---
+
+## PLAN DE IMPLEMENTACION CONSOLIDADO
+
+> Generar al final, integrando hallazgos forenses internos + aportes de repos externos.
+
+### P.1 Roadmap (horizonte 12 meses)
+
+| Fase | Periodo | Acciones internas | Integraciones de repos externos | Expertos involucrados | Impacto |
+|------|---------|-------------------|---------------------------------|-----------------------|---------|
+| **Fase 0: Cimientos** | Mes 1-2 | Corregir riesgos P0, seguridad, estabilidad | Elementos ADOPTAR mas urgentes | ... | ... |
+| **Fase 1: Fortalecimiento** | Mes 3-4 | Mejorar testing, CI/CD, monitoring | Integrar skills y herramientas clave | ... | ... |
+| **Fase 2: Expansion** | Mes 5-8 | Activar empresas planificadas, escalar | Adaptar componentes complejos | ... | ... |
+| **Fase 3: Escala** | Mes 9-12 | Comercializacion, growth, cloud | Consolidar integraciones, optimizar | ... | ... |
+
+### P.2 Backlog priorizado de tareas
+
+Generar una lista de tareas concretas en formato compatible con Trello (titulo + descripcion + labels):
+
+```
+TAREA-001 [P0] [seguridad] [interno]
+Titulo: ...
+Descripcion: ...
+Criterio de aceptacion: ...
+Esfuerzo estimado: ...
+
+TAREA-002 [P0] [integracion] [REPO_1]
+Titulo: ...
+Descripcion: ...
+Criterio de aceptacion: ...
+Esfuerzo estimado: ...
+```
+
+### P.3 Dependencias y riesgos del plan
+
+| Dependencia/Riesgo | Impacto si no se resuelve | Mitigacion |
+|---------------------|---------------------------|------------|
+| ... | ... | ... |
+
+### P.4 Metricas de exito del plan
+
+| Metrica | Valor actual | Meta mes 3 | Meta mes 6 | Meta mes 12 |
+|---------|-------------|------------|------------|-------------|
+| Madurez promedio (10 areas) | X/10 | ... | ... | ... |
+| Cobertura de tests | ...% | ... | ... | ... |
+| Skills de OpenClaw activas | N | ... | ... | ... |
+| Empresas activas del holding | 2 | ... | ... | ... |
+| Clientes con dossier | N | ... | ... | ... |
+
+### P.5 Veredicto final del comite de 44 expertos
+
+Un parrafo de sintesis ejecutiva: estado actual, viabilidad, riesgos criticos, potencial del ecosistema, y como los repos externos evaluados lo fortalecen (o no). Firmado por el comite completo.
 
 ---
 
 ## INSTRUCCIONES FINALES PARA LA IA
 
-1. **Lee TODOS los archivos indicados** antes de emitir cada veredicto. Si un archivo no existe, registralo como hallazgo.
-2. **No inventes datos.** Si no puedes verificar algo, indicalo como "no verificable con los archivos disponibles".
-3. **Cita evidencia.** Cada hallazgo debe referenciar al menos un archivo, ruta o configuracion.
-4. **Sé implacablemente honesto.** Este es un análisis forense, no un halago. Exponer debilidades es más valioso que confirmar fortalezas.
-5. **Prioriza lo accionable.** Cada recomendación debe poder convertirse en una tarea concreta.
-6. **Respeta la escala.** Este es un proyecto operado por una persona (superusuario) con agentes IA; calibra las recomendaciones a esa realidad.
-7. **El informe completo debe contener las 44 secciones de expertos + la síntesis cruzada.** No omitas ningún rol.
-8. **Genera el informe como un único documento Markdown** con tabla de contenidos al inicio.
+1. **Lee TODOS los archivos indicados por rol** antes de emitir cada veredicto. Si un archivo no existe, registralo como hallazgo.
+2. **Para repos externos:** usa `WebFetch` del README de GitHub, `gh repo view`, o clona el repo. Lee al menos README, estructura de carpetas, package.json/requirements.txt, y archivos clave de cada uno.
+3. **No inventes datos.** Si no puedes verificar algo, indica "no verificable con los archivos disponibles".
+4. **Cita evidencia.** Cada hallazgo referencia al menos un archivo, ruta o configuracion.
+5. **Se implacablemente honesto.** Analisis forense = exponer debilidades es mas valioso que confirmar fortalezas.
+6. **Prioriza lo accionable.** Cada recomendacion debe ser convertible en tarea concreta.
+7. **Respeta la escala.** Proyecto operado por una persona (superusuario) con agentes IA. Calibra recomendaciones.
+8. **OpenClaw es el centro.** Todo repo externo se evalua como potencial fortalecimiento de OpenClaw/Jarvis, nunca al reves.
+9. **Clasifica cada elemento externo** como ADOPTAR / ADAPTAR / INSPIRARSE / DESCARTAR con justificacion.
+10. **El informe completo contiene:** 44 secciones de expertos (Fase I + Fase II) + sintesis cruzada + plan de implementacion.
+11. **Genera el informe como un unico documento Markdown** con tabla de contenidos al inicio.
+12. **El plan de implementacion debe ser ejecutable:** tareas con formato Trello, esfuerzos estimados, dependencias claras.
 
 ---
 
-*Prompt generado para el ecosistema JARVIS: análisis forense multiexperto con 44 roles de 3 empresas del holding.*
+*Prompt generado para el Ecosistema JARVIS -- Analisis forense multi-experto (44 roles, 3 empresas) + evaluacion de repos GitHub externos + plan de implementacion consolidado.*
