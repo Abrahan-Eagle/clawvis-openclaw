@@ -133,6 +133,16 @@
         "workspace": "/home/aipp/jarvis-ecosystem/agents/jarvis",
         "params": {
           "maxTokens": 4096
+        },
+        "heartbeat": {
+          "every": "30m",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "08:00",
+            "end": "24:00",
+            "timezone": "America/Caracas"
+          }
         }
       },
       {
@@ -167,7 +177,17 @@
       },
       {
         "id": "mkt-content",
-        "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing"
+        "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
       },
       {
         "id": "mkt-social",
@@ -187,7 +207,17 @@
       },
       {
         "id": "sales-hunter",
-        "workspace": "/home/aipp/jarvis-ecosystem/agents/ventas"
+        "workspace": "/home/aipp/jarvis-ecosystem/agents/ventas",
+        "heartbeat": {
+          "every": "1h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "08:00",
+            "end": "23:00",
+            "timezone": "America/Caracas"
+          }
+        }
       },
       {
         "id": "sales-closer",

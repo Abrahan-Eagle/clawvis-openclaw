@@ -247,4 +247,18 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Última actualización del respaldo en repo:** 2026-04-08 (memoria avanzada MemPalace integrada + OpenClaw memory-core activado con Ollama embeddings; documentación de cierre del módulo en `MODULO_MEMPALACE_CIERRE.md`).
+---
+
+## 10. Forense Paperclip — patrones adoptados (abr 2026)
+
+- **Goals formalizados:** `jarvis-ecosystem/GOALS.md` con IDs `G-H01..G-J02`, metricas y reglas de alineacion.
+- **Organigrama:** `jarvis-ecosystem/ORG_CHART.md` (diagrama Mermaid con goals por agente).
+- **Heartbeats operativos:** activados en `openclaw.json` para jarvis (30m), sales-hunter (1h), mkt-content (2h). Checklists en `agents/*/HEARTBEAT.md`. Guia: `docs/HEARTBEAT_OPERATIVO.md`.
+- **Cost tracking:** `scripts/cost-report.sh` parsea sesiones JSONL y genera reporte mensual por agente.
+- **Approval Gates:** `docs/APPROVAL_GATES.md` con 10 gates formales (AG-01..AG-10); referenciados en AGENTS.md de cada workspace.
+- **Rutinas documentadas con Goals:** tabla completa en `CLAWFLOWS.md` seccion "Registro completo de rutinas".
+- **Resumen forense:** `docs/FORENSE_PAPERCLIP_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (forense Paperclip: goals, org chart, heartbeats, cost tracking, approval gates implementados dentro de OpenClaw).

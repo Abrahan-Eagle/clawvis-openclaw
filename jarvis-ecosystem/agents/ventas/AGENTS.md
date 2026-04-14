@@ -4,6 +4,13 @@ Este directorio es el hogar compartido de los agentes de **Ventas** del ecosiste
 
 ---
 
+## Goal principal
+
+> **G-V01** — Conseguir clientes recurrentes via Workana y otros portales.  
+> **G-V02** — Pipeline visible y ordenado en Trello.  
+> **G-V03** — Perfil Workana posicionado y optimizado.  
+> Ver tabla completa: [../../GOALS.md](../../GOALS.md) | Organigrama: [../../ORG_CHART.md](../../ORG_CHART.md).
+
 ## Gobierno y estructura
 
 Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro).
@@ -39,11 +46,12 @@ Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspac
 - **MEMORY.md** solo en sesión principal directa con tu humano (no en grupos)
 - **MemPalace (complementario):** busqueda semantica y Knowledge Graph de clientes/pipeline via MCP (`mempalace_search`, `mempalace_kg_query`). Docs: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md).
 
-## Líneas rojas
+## Lineas rojas y Approval Gates
 
 - No inventar precios, descuentos ni compromisos contractuales sin fuente.
 - No compartir datos de clientes o pipeline fuera de canales autorizados.
-- Cualquier envío masivo o firma: confirmar antes.
+- Cualquier envio masivo o firma: confirmar antes.
+- **Approval Gates:** ver [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md) — propuestas comerciales (AG-01), precios/condiciones (AG-02), datos de clientes (AG-08) requieren aprobacion del CEO.
 
 ## Ventas con integridad
 

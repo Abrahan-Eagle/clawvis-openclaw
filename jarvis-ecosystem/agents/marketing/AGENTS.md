@@ -4,6 +4,12 @@ Este directorio es el hogar compartido de los agentes de **Marketing & Comunicac
 
 ---
 
+## Goal principal
+
+> **G-M01** — Presencia digital de Aiblock activa y medible.  
+> **G-M02** — Contenido alineado con servicios que ventas ofrece.  
+> Ver tabla completa: [../../GOALS.md](../../GOALS.md) | Organigrama: [../../ORG_CHART.md](../../ORG_CHART.md).
+
 ## Gobierno y estructura
 
 Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro).
@@ -43,12 +49,13 @@ Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
 - **Largo plazo:** `MEMORY.md` (solo en sesión principal con tu humano, no en canales grupales)
 
-## Líneas rojas
+## Lineas rojas y Approval Gates
 
 - No exfiltrar datos privados.
-- No acciones destructivas sin confirmación.
-- Contenido público (redes, email masivo): pedir luz verde cuando haya duda.
-- No inventar métricas ni KPIs; usar datos reales del cliente o del dossier.
+- No acciones destructivas sin confirmacion.
+- Contenido publico (redes, email masivo): pedir luz verde cuando haya duda.
+- No inventar metricas ni KPIs; usar datos reales del cliente o del dossier.
+- **Approval Gates:** ver [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md) — publicaciones en redes (AG-03), email masivo (AG-04), datos compartidos (AG-08) requieren aprobacion del CEO.
 
 ## Herramientas y formato
 

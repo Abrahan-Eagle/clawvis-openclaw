@@ -90,10 +90,49 @@ El directorio `agents/jarvis/skills/clawflows-capability-map/` solo declara **Pr
 
 En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (import JSON). Si ocurre, el binario global suele estar en `$(npm root -g)/clawflows/bin/clawflows.mjs`: reemplaza la lectura de `package.json` por `readFileSync` + `JSON.parse` (parche local en esa máquina), o usa **Node 20 LTS** solo para el CLI de ClawFlows. No afecta al gateway OpenClaw si este usa otro Node.
 
+## Registro completo de rutinas (con Goal)
+
+Cada rutina debe servir a un goal definido en [GOALS.md](GOALS.md).
+
+### Rutinas propias del ecosistema
+
+| Rutina | Trigger (cron) | Owner | Goal | Archivo canonico |
+|--------|---------------|-------|------|------------------|
+| Morning Briefing | `30 7 * * *` (7:30 AM UTC diario) | jarvis | G-J01 | `automations/jarvis/morning-briefing.yaml` |
+| Competitor Monitor | `0 9 * * 1-5` (9 AM UTC L-V) | marketing | G-M01 | `automations/marketing/competitor-monitor.yaml` |
+| Pipeline Report | `0 17 * * 5` (5 PM UTC viernes) | ventas | G-V02 | `automations/ventas/pipeline-report.yaml` |
+| Security Audit | `0 8 * * 0` (8 AM UTC domingo) | shared | G-H01 | `automations/shared/security-audit.yaml` |
+
+### Rutinas del registry (instaladas)
+
+| Rutina | Trigger | Descripcion | Skills requeridos |
+|--------|---------|-------------|-------------------|
+| morning-brief | `30 7 * * *` | Briefing con calendario + clima + TTS | calendar, weather, tts |
+| lead-qualifier | (sin trigger) | Scoring de emails/leads | curl, jq |
+| rss-digest | `0 8 * * *` | Digest RSS diario | http |
+| changelog-monitor | `0 10 * * *` | Monitoreo de releases GitHub | http, storage |
+| github-stale-prs | `0 9 * * 1-5` | PRs abiertos sin movimiento | github, notifications |
+| github-trending | `0 10 * * *` | Repos trending de GitHub | http |
+| weather-commute | `0 7 * * 1-5` | Clima para commute | weather |
+
+### Heartbeats (no son ClawFlows, pero son automatizaciones)
+
+| Agente | Intervalo | Goal | Config |
+|--------|-----------|------|--------|
+| jarvis | 30 min | G-J01, G-J02 | `openclaw.json` + `agents/jarvis/HEARTBEAT.md` |
+| sales-hunter | 1 hora | G-V01 | `openclaw.json` + `agents/ventas/HEARTBEAT.md` |
+| mkt-content | 2 horas | G-M01, G-M02 | `openclaw.json` + `agents/marketing/HEARTBEAT.md` |
+
+Detalle operativo de heartbeats: [docs/HEARTBEAT_OPERATIVO.md](docs/HEARTBEAT_OPERATIVO.md).
+
+### Nota sobre duplicados en raiz de automations/
+
+Los archivos `jarvis-morning-briefing.yaml`, `marketing-competitor-monitor.yaml`, `ventas-pipeline-report.yaml`, `shared-security-audit.yaml` en la raiz de `automations/` son copias identicas de los archivos canonicos en subcarpetas. Existen porque `clawflows list` solo lee YAML directamente bajo `CLAWFLOWS_DIR`. **Editar siempre en la subcarpeta y copiar a raiz** (ver `automations/README.md`).
+
 ## Recursos comunidad (skills y repos externos)
 
-Inventario curado con criterios de adopción (no confundir con integraciones ya configuradas en el gateway): [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) (ancla al §2 marketing; el documento completo incluye el resto del catálogo).
+Inventario curado con criterios de adopcion (no confundir con integraciones ya configuradas en el gateway): [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) (ancla al §2 marketing; el documento completo incluye el resto del catalogo).
 
 ## Nota
 
-Documentacion adicional del monorepo: [README.md](../README.md) (raíz de `clawvis-openclaw`).
+Documentacion adicional del monorepo: [README.md](../README.md) (raiz de `clawvis-openclaw`).

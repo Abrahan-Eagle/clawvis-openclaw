@@ -21,4 +21,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Permisos OpenClaw (automatizar Trello / herramientas):** [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPENCLAW_PERMISOS_AUTOMATIZACION.md).
 
+**Forense Paperclip (patrones adoptados, abr 2026):** [FORENSE_PAPERCLIP_RESUMEN.md](FORENSE_PAPERCLIP_RESUMEN.md) — goals, org chart, heartbeats operativos, cost tracking, approval gates. Archivos clave: [../GOALS.md](../GOALS.md), [../ORG_CHART.md](../ORG_CHART.md), [HEARTBEAT_OPERATIVO.md](HEARTBEAT_OPERATIVO.md), [APPROVAL_GATES.md](APPROVAL_GATES.md).
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).

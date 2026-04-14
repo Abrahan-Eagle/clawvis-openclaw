@@ -76,6 +76,7 @@ Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs
 
 ## Decisiones de gobierno (log)
 
+- **2026-04-14:** Modulo **Forense Paperclip** completado. Patrones adoptados: Goals formales (`GOALS.md`), organigrama Mermaid (`ORG_CHART.md`), heartbeats operativos en openclaw.json (jarvis 30m, sales-hunter 1h, mkt-content 2h), cost tracking (`scripts/cost-report.sh`), approval gates (`docs/APPROVAL_GATES.md` con 10 gates AG-01..AG-10), rutinas documentadas con goals en CLAWFLOWS.md. Resumen: `docs/FORENSE_PAPERCLIP_RESUMEN.md`.
 - **2026-04-08:** Módulo MemPalace **cerrado** a nivel documentación: `docs/MODULO_MEMPALACE_CIERRE.md` (réplica desde Git, checklist, `deploy/mempalace/`). Artefactos versionados; estado local (`~/.mempalace/`) opcional en backup.
 - **2026-04-08:** Integrado MemPalace 3.0.0 como sistema de memoria complementario. ChromaDB local con 1270 drawers (ecosystem + sessions), Knowledge Graph temporal con 54 triples (empresas, agentes, clientes, decisiones), MCP server registrado en OpenClaw, auto-mine cada 30 min via systemd. OpenClaw memory-core activado con Ollama `nomic-embed-text` (6 archivos, 34 chunks, vector dims 768). Docs: `docs/MEMORIA_MEMPALACE.md`.
 - **2026-04-08:** Documentado flujo Ventas end-to-end (`docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md`); Jarvis debe usarlo al coordinar prospección, conversación con cliente y cierre; AGENTS.md del agente jarvis actualizado con enlace.
