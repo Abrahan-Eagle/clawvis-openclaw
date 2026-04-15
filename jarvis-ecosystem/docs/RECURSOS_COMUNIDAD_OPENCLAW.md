@@ -1,7 +1,7 @@
 # Recursos comunidad OpenClaw / Claude Code (curado para Jarvis)
 
 **Ámbito:** inventario **externo** al monorepo `clawvis-openclaw`; sirve para **descubrir** plantillas, skills y patrones sin obligar a instalarlos.  
-**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG; §2.9 carrusel IG).
+**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG; §2.9 carrusel IG; §2.10 Canva + Composio).
 
 ---
 
@@ -149,6 +149,30 @@ Hasta entonces: usar **solo** el skill y la documentación enlazada.
 
 Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs; el gateway y los agentes no dependen de ello.
 
+### 2.10 Canva + Composio — diseno visual via API desde OpenClaw
+
+| Campo | Detalle |
+|-------|---------|
+| **Servicio** | [Canva](https://canva.com) (suite de diseno) via [Composio](https://composio.dev) (plataforma de integracion). |
+| **Plugin OpenClaw** | `@composio/openclaw-plugin` v0.0.11 — instalado con `openclaw plugins install --dangerously-force-unsafe-install @composio/openclaw-plugin`. |
+| **32 herramientas** | Crear disenos, autofill brand templates, exportar PNG/PDF, gestionar carpetas, comentar, listar assets. |
+| **Auth** | OAuth gestionado por Composio; `consumerKey` (`ck_...`) en `~/.openclaw/openclaw.json` (no commitear). |
+
+**Que aporta al ecosistema**
+
+- Los agentes `mkt-*` y Jarvis pueden **crear y editar disenos Canva** desde chat (Telegram, Discord, TUI) sin intervención humana para la parte visual.
+- **Brand templates:** autofill con datos del dossier del cliente para coherencia de marca.
+- **Export programático:** obtener URLs de descarga de los diseños terminados.
+- Complementa `carousel-ops` (guion textual) con **producción visual real**.
+
+**Que NO hacer**
+
+- Commitear el `consumerKey` al repo — tratarlo como secreto (`.env`, vault, o config local).
+- Publicar directamente sin **AG-03**: el export es automático, la publicación requiere aprobación humana.
+- Asumir que Composio reemplaza open-carrusel: son complementarios (API remota vs local HTML→PNG).
+
+**Referencia:** [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado), config snapshot en `config/openclaw-home/openclaw.json`.
+
 ---
 
 ## 3. Criterios de adopción (obligatorio antes de instalar)
@@ -196,6 +220,7 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 | Awesome OpenClaw Use Cases | https://github.com/hesamsheikh/awesome-openclaw-usecases | Ideas de playbooks; documentación de referencia. |
 | Markster OS (GTM B2B) | https://github.com/markster-public/markster-os | Lenguaje GTM en chat; revisar prompts; no dependencia obligatoria. |
 | Open Carrusel | https://github.com/Hainrixz/open-carrusel | Carruseles IG (HTML → PNG); **patrones** en skill `carousel-ops` — app upstream **opcional** fuera del repo — ver **§2.9**. |
+| Canva + Composio | https://composio.dev/toolkits/canva | Diseno visual via API; plugin OpenClaw `composio` para crear/editar/exportar disenos Canva desde chat — ver **§2.10**. |
 
 ### Patrones de trabajo (recomendado para tareas grandes de código)
 
@@ -223,6 +248,7 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 ## 6. Referencias internas
 
 - Carruseles Instagram: **§2.9**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md), skill `carousel-ops`.
+- Canva + Composio: **§2.10**, plugin OpenClaw `composio`, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado).
 - LightRAG (patrones): **§2.8**, [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md), skill `dual-retrieval-ops`.
 - everything-claude-code (ECC): **§2.7** (tabla y shortlist).
 - Gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md)

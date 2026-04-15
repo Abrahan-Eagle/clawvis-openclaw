@@ -69,9 +69,34 @@ Entregar en markdown:
 
 No generar ni subir imagenes automaticamente desde el gateway.
 
-## Herramienta opcional (fuera del repo)
+## Herramientas de diseno (opcionales, fuera del repo)
 
-Quien necesite **export PNG** con preview y zip local puede instalar [open-carrusel](https://github.com/Hainrixz/open-carrusel) en su maquina; no es requisito del ecosistema. Ver [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md).
+### A. open-carrusel (local, export PNG)
+
+Instalado en `~/tools/open-carrusel/` (no en el monorepo). Genera slides HTML y exporta PNGs a dimensiones exactas IG. El humano pega el guion de este skill, edita y exporta.
+
+```bash
+cd ~/tools/open-carrusel && npm run dev   # http://localhost:3000
+```
+
+### B. Canva via Composio (API remota)
+
+Plugin `composio` instalado en OpenClaw. Permite a Jarvis y `mkt-*` crear disenos, usar brand templates y exportar desde chat. Herramientas clave:
+
+- `create_canva_design_with_optional_asset` — crear diseno.
+- `initiate_canva_design_autofill_job` — autofill brand templates.
+- `initiates_canva_design_export_job` — exportar a PNG/PDF.
+- `list_user_designs` — listar disenos existentes.
+
+Requiere `consumerKey` de Composio configurado en `~/.openclaw/openclaw.json`. Autenticar Canva desde [dashboard.composio.dev](https://dashboard.composio.dev).
+
+### Flujo combinado
+
+1. Este skill genera el **guion** (slides, caption, hashtags).
+2. El operador elige: **open-carrusel** (control local) o **Canva/Composio** (templates de marca, API).
+3. Resultado visual pasa por **AG-03** antes de publicar.
+
+Ver [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md) para detalle completo de ambas herramientas.
 
 ## Limites
 

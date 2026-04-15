@@ -333,14 +333,28 @@
       "browser": {
         "enabled": true,
         "config": {}
+      },
+      "composio": {
+        "enabled": true,
+        "config": {
+          "consumerKey": "ck_REPLACE_ME"
+        }
       }
     },
-    "installs": {},
+    "installs": {
+      "composio": {
+        "source": "npm",
+        "spec": "@composio/openclaw-plugin",
+        "resolvedName": "@composio/openclaw-plugin",
+        "resolvedVersion": "0.0.11"
+      }
+    },
     "allow": [
       "browser",
       "telegram",
       "discord",
-      "whatsapp"
+      "whatsapp",
+      "composio"
     ]
   },
   "models": {
