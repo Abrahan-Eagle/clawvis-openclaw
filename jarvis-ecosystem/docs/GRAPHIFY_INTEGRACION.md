@@ -11,6 +11,8 @@ Graphify convierte el repositorio en un **grafo de conocimiento consultable**: n
 
 No mezclar: Graphify es el **mapa**; MemPalace es la **memoria**.
 
+En preguntas complejas, el skill **`dual-retrieval-ops`** puede usar Graphify como recuperación **global** (estructura del repo) y MemPalace como **local/global** según la query — patrones inspirados en [LightRAG](https://github.com/HKUDS/LightRAG) sin desplegar ese servidor; ver [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
+
 ---
 
 ## Qué genera

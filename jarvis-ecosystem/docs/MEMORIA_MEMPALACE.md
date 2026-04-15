@@ -6,6 +6,8 @@ Sistema de memoria complementario a `memory-core` de OpenClaw. Aporta busqueda s
 
 **No reemplaza** la memoria nativa de OpenClaw (`MEMORY.md`, `memory/*.md`, session-memory hook). Es un **complemento** que agrega recall semantico y grafo de conocimiento.
 
+**Patrones tipo LightRAG (sin instalar LightRAG):** el skill [`dual-retrieval-ops`](../agents/jarvis/skills/dual-retrieval-ops/SKILL.md) usa MemPalace + dossiers como capa “local” y KG + Graphify como capa “global”. No es otro producto de memoria; es metodología. Detalle: [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md) y [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) §2.8.
+
 ---
 
 ## Arquitectura

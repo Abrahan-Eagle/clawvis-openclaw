@@ -50,6 +50,7 @@ Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 - **session-learner-ops** — Despues de tareas significativas: extraer patrones reutilizables. Ver `skills/session-learner-ops/SKILL.md`.
 - **systematic-debugging** — Ante cualquier problema tecnico: 4 fases, root cause antes de fix.
 - **dev-methodology** — Al escribir scripts/automations: TDD, planes bite-sized, code review.
+- **dual-retrieval-ops** — Preguntas que mezclan hechos concretos y contexto amplio: recuperacion local (dossier, MemPalace) + global (KG, Graphify), citas de fuente; patrones inspirados en LightRAG sin instalar ese servidor. Ver `skills/dual-retrieval-ops/SKILL.md` y [../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
 
 ### Puertas de aprobacion (Approval Gates)
 
@@ -79,6 +80,7 @@ Skills instaladas bajo `skills/` que **no** estan en el bloque de calidad comerc
 | `trello` | API Trello desde skill |
 | `video-frames` | Extraer frames con ffmpeg |
 | `xurl` | Inteligencia de contenido X/Twitter |
+| `dual-retrieval-ops` | Patrones LightRAG (local+global, citas) con MemPalace/Graphify — ver `skills/dual-retrieval-ops/SKILL.md` |
 
 Usar bajo demanda; no sustituyen gobierno, Trello ni dossiers.
 

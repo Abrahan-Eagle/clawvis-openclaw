@@ -140,6 +140,8 @@ Problemas distintos del `rg` del IDE, pero relevantes si el cuello es **`opencla
 
 Repos como [everything-claude-code](https://github.com/affaan-m/everything-claude-code) publican guías sobre **tokens, evals y harness** en Claude Code / Cursor. Son útiles para **sesiones de desarrollo** en el IDE; **no** reemplazan la configuración de **`memorySearch`**, `sync.onSearch` ni el proceso `rg` del Cursor Agent descritos arriba. Criterios de adopción y límites respecto a ECC: [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md) §2.7.
 
+**LightRAG (HKUDS):** adoptar **patrones de recuperación** (skill `dual-retrieval-ops`, [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](../jarvis-ecosystem/docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md)) **no añade** procesos de embeddings ni servidores RAG; solo guía el uso de MemPalace/Graphify. En cambio, **instalar** el servidor LightRAG o duplicar Ollama para indexado sí sumaría carga de CPU/GPU y competiría con el gateway — ver [RECURSOS §2.8](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md).
+
 ## Referencias (repo)
 
 - [MODELOS_JARVIS_OPENCLAW.md](./MODELOS_JARVIS_OPENCLAW.md) — política de modelos y dónde se define.

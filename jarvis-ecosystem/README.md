@@ -57,7 +57,8 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/FLUJO_TRELLO_ECOSISTEMA.md](docs/FLUJO_TRELLO_ECOSISTEMA.md) | **Obligatorio:** flujo Kanban, tarjetas, Done; Jarvis, agentes y subagentes. |
 | [docs/JARVIS_DOCUMENTS_ON_DISK.md](docs/JARVIS_DOCUMENTS_ON_DISK.md) | Entregables en el PC bajo `~/Documents/JARVIS-DOCUMENTS/` (carpeta del sistema **Documents** en inglés; empresas, clientes, estados). |
 | [docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md) | Trello, Discord y Telegram ya en OpenClaw; Jarvis no debe asumir integración pendiente. |
-| [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (skills, awesome lists, patrones); **§2** marketing + Claude y mapeo `mkt-*`; criterios antes de adoptar. |
+| [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (skills, awesome lists, patrones); **§2** marketing + Claude y mapeo `mkt-*`; **§2.8** patrones LightRAG portados; criterios antes de adoptar. |
+| [docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md) | Patrones LightRAG (dual retrieval) implementados vía skill `dual-retrieval-ops` — sin servidor LightRAG. |
 | [docs/VERIFICACION_DISCORD_FASE4.md](docs/VERIFICACION_DISCORD_FASE4.md) | Coherencia documental Discord/Telegram vs gateway. |
 | [docs/plantillas/REPORTE_SUPERVISOR_CEO.md](docs/plantillas/REPORTE_SUPERVISOR_CEO.md) | Plantilla copiable para reporte supervisor → CEO. |
 | [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) | Primera pasada: tableros Trello + canales Discord alineados a la convención. |

@@ -1,7 +1,7 @@
 # Recursos comunidad OpenClaw / Claude Code (curado para Jarvis)
 
 **Ámbito:** inventario **externo** al monorepo `clawvis-openclaw`; sirve para **descubrir** plantillas, skills y patrones sin obligar a instalarlos.  
-**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 everything-claude-code ECC).
+**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG patrones portados).
 
 ---
 
@@ -108,6 +108,37 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 
 - Para **TypeScript/Python/Go** en el código del monorepo (p. ej. `agent-town/`), se puede usar el instalador upstream con **`./install.sh --target cursor`** desde un clon de ECC **fuera** de `jarvis-ecosystem/agents/`, copiando solo `rules/common` + el lenguaje necesario según el README de ECC. Eso **no** configura el gateway OpenClaw ni los canales Telegram/Discord.
 
+### 2.8 LightRAG (HKUDS) — patrones portados, sin instalar el servidor
+
+| Campo | Detalle |
+|-------|---------|
+| **Repositorio** | [HKUDS/LightRAG](https://github.com/HKUDS/LightRAG) (paper EMNLP 2025, arXiv:2410.05779; licencia MIT en upstream). |
+| **Qué aporta el paper/producto** | Recuperación en **dos niveles** (local + global), **KG** combinado con vectores, consultas **mixtas**, citación de contextos; servidor opcional con API/Web UI y muchos backends de almacenamiento. |
+
+**Qué implementamos en Jarvis (habilidades, no binario LightRAG)**
+
+- Skill **[`dual-retrieval-ops`](../agents/jarvis/skills/dual-retrieval-ops/SKILL.md):** traduce esas ideas a **MemPalace** (búsqueda semántica + KG), **Graphify** (mapa del repo), **dossiers** y citas explícitas. Es la forma soportada de usar “lo mejor” de LightRAG sin segundo stack Python ni más carga en Ollama.
+- Puente conceptual: [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
+
+**Qué no hace falta instalar para obtener esas habilidades**
+
+- **`lightrag-hku`**, Docker del LightRAG Server o bases dedicadas **solo** para replicar el paper — salvo decisión explícita de negocio (corpus masivo fuera del palace; host separado). Ver gate abajo.
+
+| Dimensión | Jarvis (implementado) | LightRAG upstream |
+|-----------|----------------------|-------------------|
+| Corpus principal | Repo + sesiones + wings MemPalace + dossiers | Documentos ingestados en índice propio |
+| “Local” vs “global” | Skill `dual-retrieval-ops` + herramientas MCP | Dual retrieval + rerank en servidor |
+| KG | MemPalace KG + Graphify (mapa código) | KG extraído del texto del corpus indexado |
+| Coste CPU | Sin servicio RAG adicional | LLM de indexado + embeddings + DB (ver [TROUBLESHOOTING_OPENCLAW_CPU.md](../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md)) |
+
+**Gate para desplegar el servidor LightRAG algún día (opcional)**
+
+1. Corpus claro (p. ej. PDFs de cliente) que no encaje en MemPalace/dossiers.
+2. Presupuesto de máquina o contenedor **aparte** del gateway.
+3. Aprobación CEO / superusuario y política de datos.
+
+Hasta entonces: usar **solo** el skill y la documentación enlazada.
+
 ---
 
 ## 3. Criterios de adopción (obligatorio antes de instalar)
@@ -129,6 +160,7 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 | Clade (multi-agente Markdown) | https://github.com/satoh-y-0323/clade | Útil como **idea** de fases con aprobación humana en **proyectos Claude Code**; no mergear el framework entero en el monorepo sin necesidad. |
 | Claude Code | https://github.com/anthropics/claude-code | Base CLI; Clade y muchos skills asumen su presencia. |
 | everything-claude-code (ECC) | https://github.com/affaan-m/everything-claude-code | Harness multi-IDE + skills; resumen y límites en **§2.7**. |
+| LightRAG (HKUDS) | https://github.com/HKUDS/LightRAG | Patrones dual-retrieval + KG; **implementados** en skill `dual-retrieval-ops` — ver **§2.8** (no requiere instalar el servidor). |
 | Stokowski (Symphony) | https://github.com/Sugar-Coffee/stokowski | Aislamiento de agentes; evaluar solo si hace falta sandbox fuerte. |
 
 ### Plantillas y agentes
@@ -179,6 +211,7 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 
 ## 6. Referencias internas
 
+- LightRAG (patrones): **§2.8**, [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md), skill `dual-retrieval-ops`.
 - everything-claude-code (ECC): **§2.7** (tabla y shortlist).
 - Gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md)
 - Integraciones gateway: [INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md)
