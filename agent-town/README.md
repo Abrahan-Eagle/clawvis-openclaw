@@ -47,7 +47,7 @@ pnpm dev   # o: pnpm start (producción) — ver package.json
 # Variables típicas: PORT=3000 GATEWAY_URL=ws://127.0.0.1:18789/
 ```
 
-*(Publicación npm upstream histórica bajo otro scope no forma parte de este repo; desarrollo = clonar el monorepo.)*
+_(Publicación npm upstream histórica bajo otro scope no forma parte de este repo; desarrollo = clonar el monorepo.)_
 
 ## Key features
 
