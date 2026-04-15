@@ -38,8 +38,36 @@ Checklist y comandos de verificación: [OPENCLAW_PERMISOS_AUTOMATIZACION.md](OPE
 
 ---
 
+## Canva (vía Composio + OpenClaw)
+
+**No** es una integración nativa “Canva ↔ OpenClaw” sin intermediario: el camino oficial documentado es **Composio** (MCP + toolkit Canva). Guía upstream: [How to integrate Canva MCP with OpenClaw](https://composio.dev/toolkits/canva/framework/openclaw) (Composio). En el ecosistema Jarvis: [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) **§2.10**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (límites API, brand templates, Telegram/`messaging`).
+
+### Checklist de configuración (host donde corre el gateway)
+
+1. **Cuenta Composio** — [dashboard.composio.dev](https://dashboard.composio.dev); crear cliente **OpenClaw** y copiar **consumer key** (`ck_...`) desde la pestaña del cliente OpenClaw (Plugin / API Key).
+2. **Instalar plugin** (si no está):
+   ```bash
+   openclaw plugins install --dangerously-force-unsafe-install @composio/openclaw-plugin
+   ```
+   (OpenClaw puede bloquear la instalación sin este flag por patrones “peligrosos” en el paquete; es decisión consciente del operador.)
+3. **Configurar la clave y habilitar el plugin** en `~/.openclaw/openclaw.json`:
+   - `plugins.entries.composio.enabled`: `true`
+   - `plugins.entries.composio.config.consumerKey`: `"ck_..."` (no commitear)
+   - `plugins.allow`: incluir `"composio"`
+4. **Perfil `tools.profile: "messaging"`** (Telegram, etc.): añadir en `tools.alsoAllow` las siete herramientas genéricas `COMPOSIO_*` además de `lobster` / `browser`, para que el agente pueda invocar Composio en canales de mensajería — ver [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (snapshot en [config/openclaw-home/openclaw.json](../../config/openclaw-home/openclaw.json)).
+5. **Reiniciar gateway:** `openclaw gateway restart` (o `systemctl --user restart openclaw-gateway` si aplica).
+6. **Conectar Canva** en Composio: [Connect Apps](https://dashboard.composio.dev) → autorizar OAuth de Canva con la cuenta deseada.
+7. **Verificación:** `openclaw composio doctor` (debe listar herramientas Composio y estado healthy).
+
+**CLI Composio (opcional):** `curl -fsSL https://composio.dev/install | bash` y `composio login ...` — útil para pruebas desde terminal; el agente Jarvis usa el **plugin OpenClaw**, no sustituye el paso del consumer key en `openclaw.json`.
+
+**Nota:** cuenta **Canva gratis** suele no exponer **brand templates** a la API (`items: []`); autofill avanzado suele requerir flujos de equipo/Enterprise — ver [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md).
+
+---
+
 ## Historial
 
+- **2026-04-15:** Sección **Canva (vía Composio + OpenClaw)** — enlace oficial Composio, checklist (`consumerKey`, plugin, `plugins.allow`, `tools.alsoAllow` `COMPOSIO_*`, OAuth Canva, `composio doctor`), nota cuenta gratis y [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md).
 - **2026-04-07:** Enlace a [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) (inventario forense comunidad OpenClaw). Ampliación: ancla `#marketing-openclaw-forense`, §2 marketing + Claude y mapeo `mkt-*` en el párrafo del catálogo.
 - **2026-04-04:** [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md) — norma obligatoria de trabajo en Trello para agentes y subagentes.
 - **2026-04-04:** Enlace a [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md) (un bot, bindings por canal, handoff simulado).
