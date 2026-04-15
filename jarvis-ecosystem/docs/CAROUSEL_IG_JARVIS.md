@@ -80,6 +80,21 @@ Por eso es **coherente** que Jarvis pueda **crear** un diseno 1080×1350 e **ins
 
 **Si “Recientes” en canva.com esta vacio:** abre el enlace **“Editar en Canva”** que devuelve la API (mismo usuario OAuth que conectaste en Composio). Si entras con **otra** cuenta de Canva, no veras el diseno.
 
+### “Que analice plantillas predisenadas del buscador y arme un post completo como en la UI”
+
+Lo que haces en Canva al elegir **Redes → Instagram → plantilla** es un flujo **del producto web**: miles de plantillas publicas. La API expuesta via **Composio** **no** equivale a “abrir el catalogo, elegir la plantilla #1247 y clonarla con texto ya puesto” en un solo paso. Por eso el agente suele acabar en **lienzo + logo** o **texto suelto** para pegar.
+
+**Camino automatizable “completo” (texto + imagenes en campos definidos):**
+
+1. **Canva for Teams / Enterprise** con **Brand templates**: plantillas de equipo con **campos de datos** (titular, cuerpo, foto, etc.).
+2. En Composio existen acciones del estilo **listar brand templates**, **obtener definicion del dataset** y **iniciar job de autofill** (`CANVA_INITIATE_CANVA_DESIGN_AUTOFILL_JOB`) con un objeto `data` cuyas claves coinciden con los campos de la plantilla — ver [toolkit Canva en Composio](https://docs.composio.dev/toolkits/canva).
+3. Jarvis puede entonces: listar plantillas → elegir una → rellenar campos con el copy del post → crear el diseno autofillado (sujeto a plan y permisos).
+
+**Sin Enterprise / sin brand templates:** el flujo realista es **hibrido**: tu eliges la plantilla en Canva, afinas una **maqueta maestra**, y el agente aporta **copy por slide + assets**; o duplicas a mano y el API solo suma imagenes exporta. **Redimensionar** un diseno existente a otro formato es otra accion API (suele requerir **Pro/Enterprise**).
+
+**Prompt ejemplo para Jarvis (si tienes brand templates):**  
+*“Con Composio Canva: lista mis brand templates, muestra el dataset de la plantilla [nombre o ID], y si los campos encajan con el post de Corral X, ejecuta autofill con titular=…, subtitulo=…, logo=… (asset id o URL segun pida la herramienta).”*
+
 ---
 
 ## Flujo combinado: guion + diseno + publicacion

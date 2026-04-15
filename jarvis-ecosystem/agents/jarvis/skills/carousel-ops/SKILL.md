@@ -114,6 +114,8 @@ Requiere `consumerKey` de Composio configurado en `~/.openclaw/openclaw.json`. A
 2. Si **no** hay herramientas disponibles, falla la auth, o la llamada devuelve error: **decirlo en una frase clara** ("No se creo ningun lienzo en Canva en esta sesion") y entonces si el **brief** por slide + enlaces a assets para montaje manual.
 3. **No** presentar solo texto bonito como si ya existiera un diseno guardado en Canva; distinguir siempre **borrador de contenido** vs **diseno creado en la plataforma**.
 
+**Plantillas “del buscador” vs API:** el catalogo publico de plantillas de Canva (UI) **no** se clona por API igual que un clic humano. Para **post completo** con titular, cuerpo e imagenes **rellenados por herramienta**, la via soportada es **Brand template + autofill** (Canva Enterprise / equipo), con acciones Composio tipo listar brand templates, dataset y `CANVA_INITIATE_CANVA_DESIGN_AUTOFILL_JOB`. Si el humano **no** tiene eso, decirlo y ofrecer: maqueta manual + copy por slide, o solo `POST_DESIGNS` + assets.
+
 ### Flujo combinado
 
 1. Este skill genera el **guion** (slides, caption, hashtags).
