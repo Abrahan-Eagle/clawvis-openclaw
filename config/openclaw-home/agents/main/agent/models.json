@@ -79,7 +79,7 @@
         },
         {
           "id": "composer-2-fast",
-          "name": "Composer 2 Fast  (current, default)",
+          "name": "Composer 2 Fast",
           "reasoning": false,
           "input": [
             "text"

@@ -59,11 +59,11 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "cursor-local/composer-2-fast",
+        "primary": "cursor-local/auto",
         "fallbacks": [
-          "cursor-local/auto",
+          "cursor-local/composer-2-fast",
+          "ollama/gemma4:e2b",
           "ollama/qwen2.5:3b",
-          "ollama/qwen2.5-coder:0.5b",
           "groq/llama-3.1-8b-instant",
           "groq/llama-3.3-70b-versatile",
           "openrouter/deepseek/deepseek-r1",
@@ -84,17 +84,15 @@
         "google/gemini-2.0-flash": {},
         "google/gemini-2.0-flash-lite-preview-02-05": {},
         "google/gemini-1.5-flash": {},
-        "ollama/qwen2.5:0.5b": {},
-        "ollama/qwen2.5:3b": {},
-        "ollama/qwen2.5-coder:0.5b": {},
-        "ollama/phi": {}
+        "ollama/gemma4:e2b": {},
+        "ollama/qwen2.5:3b": {}
       },
       "workspace": "/home/aipp/.openclaw/workspace",
       "contextTokens": 16384,
       "bootstrapMaxChars": 2500,
       "bootstrapTotalMaxChars": 8000,
       "memorySearch": {
-        "enabled": true,
+        "enabled": false,
         "sources": ["memory", "sessions"],
         "provider": "ollama",
         "model": "nomic-embed-text",
@@ -131,6 +129,18 @@
         "id": "jarvis",
         "default": true,
         "workspace": "/home/aipp/jarvis-ecosystem/agents/jarvis",
+        "model": {
+          "primary": "cursor-local/auto",
+          "fallbacks": [
+            "cursor-local/composer-2-fast",
+            "ollama/gemma4:e2b",
+            "ollama/qwen2.5:3b",
+            "groq/llama-3.1-8b-instant",
+            "groq/llama-3.3-70b-versatile",
+            "openrouter/deepseek/deepseek-r1",
+            "google/gemini-2.0-flash"
+          ]
+        },
         "params": {
           "maxTokens": 4096
         },
@@ -152,10 +162,9 @@
           "maxTokens": 96
         },
         "model": {
-          "primary": "ollama/qwen2.5:0.5b",
+          "primary": "ollama/gemma4:e2b",
           "fallbacks": [
             "ollama/qwen2.5:3b",
-            "ollama/qwen2.5-coder:0.5b",
             "groq/llama-3.1-8b-instant",
             "groq/llama-3.3-70b-versatile",
             "openrouter/deepseek/deepseek-r1",
@@ -360,7 +369,7 @@
           },
           {
             "id": "composer-2-fast",
-            "name": "Composer 2 Fast  (current, default)",
+            "name": "Composer 2 Fast",
             "reasoning": false,
             "input": [
               "text"
