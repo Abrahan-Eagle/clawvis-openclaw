@@ -100,7 +100,7 @@
         "model": "nomic-embed-text",
         "sync": {
           "onSessionStart": true,
-          "onSearch": true,
+          "onSearch": false,
           "watch": true
         },
         "query": {
@@ -121,9 +121,9 @@
         },
         "postIndexSync": "async"
       },
-      "maxConcurrent": 4,
+      "maxConcurrent": 2,
       "subagents": {
-        "maxConcurrent": 8
+        "maxConcurrent": 4
       }
     },
     "list": [

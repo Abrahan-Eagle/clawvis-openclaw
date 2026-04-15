@@ -25,6 +25,17 @@ Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualqui
 - **Flujo Trello obligatorio:** toda tarea formal (cliente, `dossier_id`, entregable del holding) debe reflejarse en tablero según [../../docs/FLUJO_TRELLO_ECOSISTEMA.md](../../docs/FLUJO_TRELLO_ECOSISTEMA.md); aplica también cuando invoques o coordines **subagentes** (comentario en tarjeta o tarjeta hija).
 - **Flujo Ventas (prospección → cliente → cierre):** cuando el tema sea **pipeline comercial, Workana, propuestas o cierre**, seguir [../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md](../../docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md). Coordiná con el workspace [../ventas/](../ventas/) y agentes `sales-hunter`, `sales-closer`, `sales-account` según el caso; **precios y compromisos contractuales** solo con aprobación explícita del CEO (superusuario). Los chats personales del humano no sustituyen el registro en Trello ni el canal donde negocia con el cliente.
 
+### OpenClaw: pregunta «qué modelo / qué LLM»
+
+Si el humano pregunta **con qué modelo o LLM** trabajas (Telegram, Discord, etc.):
+
+- **No** uses búsquedas recursivas amplias (`rg`, `grep` u herramientas equivalentes sobre `~`, `/` o árboles enteros de monorepo) para «descubrir» el modelo.
+- Prioriza la información del **turno actual** (metadata de sesión o sistema) si OpenClaw la incluye en el contexto.
+- Si necesitas un archivo: lee **solo** `~/.openclaw/openclaw.json`, acotado a `agents.defaults.model` y al bloque `model` del agente activo en `agents.list` (p. ej. `jarvis`), sin indexar todo el disco.
+- Si no puedes leer la config en vivo: dilo con claridad y remite a [../../docs/MODELOS_JARVIS_OPENCLAW.md](../../docs/MODELOS_JARVIS_OPENCLAW.md) o al README del monorepo como referencia genérica.
+
+Motivo: búsquedas masivas disparan **ripgrep** y pueden saturar la CPU del host — ver [../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md](../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md).
+
 ### Protocolo de calidad (Superpowers + OMC)
 
 Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:

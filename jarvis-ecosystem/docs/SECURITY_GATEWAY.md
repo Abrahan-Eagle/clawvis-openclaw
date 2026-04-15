@@ -16,7 +16,12 @@ El snapshot en `config/openclaw-home/` puede mostrar `auth` relajado por comodid
 
 Ver aviso **`plugins.allow`** en el [README.md](../../README.md) del monorepo: una lista restrictiva sin los IDs de canal necesarios desactiva plugins aunque `channels.*.enabled` sea `true`.
 
+## CPU al 100% y proceso `rg`
+
+Si el equipo se satura y en `top` domina **`rg` (ripgrep)**, suele ser búsqueda masiva disparada por herramientas del agente, no “inferencia LLM”. Pasos y ajustes de config: [TROUBLESHOOTING_OPENCLAW_CPU.md](../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md).
+
 ## Referencias
 
 - [RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md](../../docs/RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md)
 - [COHERENCIA_RUNTIME_REPO.md](./COHERENCIA_RUNTIME_REPO.md)
+- [TROUBLESHOOTING_OPENCLAW_CPU.md](../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md)

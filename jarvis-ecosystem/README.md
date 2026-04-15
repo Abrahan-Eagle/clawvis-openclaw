@@ -64,6 +64,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) | Token Trello con escritura, `exec` en OpenClaw, Discord bot — checklist. |
 | [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md) | `~/.openclaw` vs repo vs snapshot: evitar deriva. |
 | [docs/SECURITY_GATEWAY.md](docs/SECURITY_GATEWAY.md) | Auth del gateway y superficie de red; `plugins.allow`. |
+| [../docs/TROUBLESHOOTING_OPENCLAW_CPU.md](../docs/TROUBLESHOOTING_OPENCLAW_CPU.md) | CPU al 100%, proceso `rg`, ajustes `memorySearch` / concurrencia / `exec`. |
 
 ## Checklist rápido
 
