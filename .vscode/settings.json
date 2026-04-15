@@ -4,7 +4,8 @@
     "**/.next/**": true,
     "**/graphify-out/**": true,
     "**/openclaw-state/**": true,
-    "**/descargas-openclaw/**": true
+    "**/descargas-openclaw/**": true,
+    "**/config/openclaw-home/workspace/docs/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -13,6 +14,7 @@
     "openclaw-state": true,
     "descargas-openclaw": true,
     "agent-town/node_modules": true,
-    "agent-town/.next": true
+    "agent-town/.next": true,
+    "config/openclaw-home/workspace/docs": true
   }
 }

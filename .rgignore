@@ -1,5 +1,7 @@
 # Mismas exclusiones que .cursorignore: ripgrep respeta .rgignore en la raíz del repo.
 # docs/TROUBLESHOOTING_OPENCLAW_CPU.md
+# Copia vendida de la doc de OpenClaw (miles de .md); el Agent hace rg */**/AGENTS.md
+config/openclaw-home/workspace/docs/
 agent-town/node_modules/
 agent-town/.next/
 graphify-out/

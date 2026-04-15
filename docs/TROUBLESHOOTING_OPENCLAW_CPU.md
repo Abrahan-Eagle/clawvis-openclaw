@@ -125,6 +125,8 @@ El patrón **`rg` hijo de Cursor Agent** indexando el workspace es un **bug/regr
 
 **Conclusión:** mitigar con **`.cursorignore`**, **`.rgignore`**, exclusiones VS Code, evitar `--follow` donde no lo controlas (eso lo lanza Cursor), *Reload Window*, y en casos extremos **abrir solo** `jarvis-ecosystem/` como carpeta en lugar del monorepo completo.
 
+**Causa raíz en este repo (comando real observado):** `rg --files --follow ... --iglob */**/AGENTS.md` bajo `cursor-agent/`. Ese subproceso usa **`--no-config`** (config global de ripgrep desactivada) y **lista fija de `--iglob`**; **`.cursorignore` del IDE no siempre se aplica al mismo `rg`**, por eso puede seguir el pico. **`pnpm` en `agent-town/node_modules`** genera **miles de symlinks**; con **`--follow`** el coste explota aunque se excluya `node_modules` en parte de los globs. En el repo se añadió exclusión de **`config/openclaw-home/workspace/docs/`** (árbol vendido duplicado de OpenClaw) en [`.cursorignore`](../.cursorignore) y [`.rgignore`](../.rgignore).
+
 ### OpenClaw upstream (gateway / memoria)
 
 Problemas distintos del `rg` del IDE, pero relevantes si el cuello es **`openclaw-gateway`** u **`ollama`**:

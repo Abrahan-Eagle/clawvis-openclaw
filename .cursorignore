@@ -1,6 +1,8 @@
 # Cursor Agent: rg --files indexa AGENTS.md; repo ~1.3G (agent-town/node_modules + .next)
 # Paridad con .rgignore. Tras editar: Developer: Reload Window.
 # docs/TROUBLESHOOTING_OPENCLAW_CPU.md
+# Copia vendida docs OpenClaw — reduce barrido de rg
+config/openclaw-home/workspace/docs/
 agent-town/node_modules/
 agent-town/.next/
 graphify-out/
