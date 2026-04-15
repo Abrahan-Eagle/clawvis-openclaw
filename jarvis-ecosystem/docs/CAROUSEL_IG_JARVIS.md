@@ -65,6 +65,21 @@ Si el plugin Composio esta bien (consumer key + Canva conectado) pero Jarvis **d
 
 En `~/.openclaw/openclaw.json`, `tools.alsoAllow` debe incluir las siete herramientas genericas de Composio que expone el MCP (nombres exactos: `COMPOSIO_MANAGE_CONNECTIONS`, `COMPOSIO_MULTI_EXECUTE_TOOL`, `COMPOSIO_REMOTE_BASH_TOOL`, `COMPOSIO_REMOTE_WORKBENCH`, `COMPOSIO_SEARCH_TOOLS`, `COMPOSIO_WAIT_FOR_CONNECTIONS`, `COMPOSIO_GET_TOOL_SCHEMAS`). El snapshot sanitizado en el repo muestra la lista completa. Tras cambiar: `openclaw gateway restart`. Comprueba con `openclaw composio doctor`.
 
+### Como funciona Canva por API (oficial) — y por que el titular no siempre se “pega” solo
+
+Resumen alineado con la documentacion de **Canva Connect** y el **toolkit Canva en Composio** ([docs.composio.dev/toolkits/canva](https://docs.composio.dev/toolkits/canva)):
+
+| Capacidad | Que implica |
+|-----------|-------------|
+| **Crear diseno** (dimensiones custom o preset, opcionalmente con **asset**/imagen) | Es lo que suelen exponer acciones tipo crear diseno / `POST` designs: lienzo vacio o con una imagen de partida — ver [Create design (Connect)](https://www.canva.dev/docs/connect/api-reference/designs/create-design/). |
+| **Subir activos** y **exportar** | Subir imagenes a la biblioteca del usuario, lanzar jobs de export a PNG/PDF, etc. |
+| **Texto en el lienzo como cajas editables** | **No** hay un flujo simple universal en Connect del estilo “pon este string en un cuadro de texto en (x,y)” expuesto igual en todos los entornos. La via programatica habitual para **rellenar contenido** en plantillas es **Brand Templates + Autofill** (campos variables definidos en la plantilla; a menudo **Canva Enterprise**). Composio documenta jobs de autofill asociados a esas plantillas. |
+| **Apps SDK / Design Editing API** | Otra capa de producto (apps **dentro** del editor de Canva o APIs de edicion avanzada) — **no** es lo mismo que el conjunto de acciones que un agente usa vía Composio MCP en un chat. |
+
+Por eso es **coherente** que Jarvis pueda **crear** un diseno 1080×1350 e **insertar el logo** (asset / URL), pero **no** colocar automaticamente el titular como texto en el lienzo: el toolkit Composio prioriza **creacion, activos, export, plantillas/autofill**, no edicion libre de cada elemento de texto del lienzo. La finalizacion del copy en el editor — o una **plantilla de marca con campos de autofill** preparada en Canva — es el camino realista hasta que exista una herramienta equivalente en tu stack.
+
+**Si “Recientes” en canva.com esta vacio:** abre el enlace **“Editar en Canva”** que devuelve la API (mismo usuario OAuth que conectaste en Composio). Si entras con **otra** cuenta de Canva, no veras el diseno.
+
 ---
 
 ## Flujo combinado: guion + diseno + publicacion
