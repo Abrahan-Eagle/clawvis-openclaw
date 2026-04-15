@@ -1,7 +1,7 @@
 # Recursos comunidad OpenClaw / Claude Code (curado para Jarvis)
 
 **Ámbito:** inventario **externo** al monorepo `clawvis-openclaw`; sirve para **descubrir** plantillas, skills y patrones sin obligar a instalarlos.  
-**Última revisión:** abril 2026 (ampliación: §2 investigación marketing + Claude y mapeo a `mkt-*`).
+**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 everything-claude-code ECC).
 
 ---
 
@@ -75,6 +75,39 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 
 **Riesgos residuales:** el catálogo mergisi evoluciona rápido (la tabla §2.5 puede quedar desfasada; usar el README upstream como fuente de verdad). Plantillas que asumen credenciales de terceros requieren **permiso explícito del cliente** y manejo seguro de secretos en el host, fuera de este repo.
 
+### 2.7 everything-claude-code (ECC) — harness de desarrollo (no sustituto de OpenClaw)
+
+| Campo | Detalle |
+|-------|---------|
+| **Repositorio** | [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) |
+| **Licencia** | MIT (verificar en cada release). |
+| **Qué es** | Sistema orientado al *agent harness*: plugin **Claude Code**, instaladores para **Cursor**, OpenCode, Codex, Gemini, cientos de **skills**, hooks, reglas por lenguaje, MCP de ejemplo, guías (tokens, evals, paralelización) y herramientas npm (`ecc-universal`, **`ecc-agentshield`**). |
+
+**Qué sí tiene sentido para Jarvis / este monorepo**
+
+- **AgentShield** (`npx ecc-agentshield scan`): auditoría estática de superficies tipo config de agentes/MCP/hooks en el **repo** (el CI del monorepo puede ejecutarlo de forma **advisory**). No sustituye revisión humana ni [SECURITY_GATEWAY.md](SECURITY_GATEWAY.md).
+- **Guías** (*shortform/longform* del repo ECC): lectura opcional sobre optimización de contexto y verificación en **sesiones de desarrollo**; **no** mitigan por sí solas picos de CPU de `memorySearch` ni `rg` — ver [TROUBLESHOOTING_OPENCLAW_CPU.md](../../docs/TROUBLESHOOTING_OPENCLAW_CPU.md).
+- **Cherry-pick de skills:** si una skill upstream encaja, **reescribir** un `SKILL.md` compatible OpenClaw bajo `agents/*/skills/`, con atribución y criterios de la §3.
+
+**Qué no hacer sin decisión explícita**
+
+- Instalar el **plugin ECC completo** o copiar `hooks/hooks.json` de Claude Code **dentro** del árbol de agentes Jarvis como fuente única de verdad (duplica convenciones y rompe el modelo OpenClaw).
+- Confiundir **hooks ECC** (CLI Claude Code) con **eventos del gateway OpenClaw**; son capas distintas.
+- Depender de **ccg-workflow** / comandos `multi-*` que exigen runtime adicional salvo que el superusuario quiera ese flujo en el IDE.
+
+**Shortlist de skills ECC (ideas vs Jarvis)** — referencia para priorizar port manual; no es inventario instalado.
+
+| Idea ECC | Rol o recurso Jarvis existente |
+|----------|----------------------------------|
+| `search-first` | Complementa investigación; [last30days-openclaw](../agents/jarvis/skills/last30days-openclaw/) y gobierno Trello siguen siendo la fuente de verdad operativa. |
+| `documentation-lookup` | Útil antes de integrar APIs nuevas; port solo si hay `_meta` y revisión. |
+| `cost-aware-llm-pipeline` | Alineado conceptualmente con [MODELOS_JARVIS_OPENCLAW.md](../../docs/MODELOS_JARVIS_OPENCLAW.md) y el router en `agents/jarvis/scripts/`. |
+| `article-writing` / `market-research` / `content-engine` | Comparar con agentes `mkt-*` y skills de marketing; evitar duplicar flujos ya cubiertos. |
+
+**Reglas de IDE (solo desarrollo en `clawvis-openclaw`)**
+
+- Para **TypeScript/Python/Go** en el código del monorepo (p. ej. `agent-town/`), se puede usar el instalador upstream con **`./install.sh --target cursor`** desde un clon de ECC **fuera** de `jarvis-ecosystem/agents/`, copiando solo `rules/common` + el lenguaje necesario según el README de ECC. Eso **no** configura el gateway OpenClaw ni los canales Telegram/Discord.
+
 ---
 
 ## 3. Criterios de adopción (obligatorio antes de instalar)
@@ -95,6 +128,7 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 | OpenClaw (upstream) | https://github.com/openclaw/openclaw | Referencia de producto; alinear versiones con el gateway del host. |
 | Clade (multi-agente Markdown) | https://github.com/satoh-y-0323/clade | Útil como **idea** de fases con aprobación humana en **proyectos Claude Code**; no mergear el framework entero en el monorepo sin necesidad. |
 | Claude Code | https://github.com/anthropics/claude-code | Base CLI; Clade y muchos skills asumen su presencia. |
+| everything-claude-code (ECC) | https://github.com/affaan-m/everything-claude-code | Harness multi-IDE + skills; resumen y límites en **§2.7**. |
 | Stokowski (Symphony) | https://github.com/Sugar-Coffee/stokowski | Aislamiento de agentes; evaluar solo si hace falta sandbox fuerte. |
 
 ### Plantillas y agentes
@@ -145,6 +179,7 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 
 ## 6. Referencias internas
 
+- everything-claude-code (ECC): **§2.7** (tabla y shortlist).
 - Gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md)
 - Integraciones gateway: [INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md)
 - Flujo Kanban: [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md)

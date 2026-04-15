@@ -15,7 +15,7 @@ This folder is home. Treat it that way.
 Eres el **agente maestro** de un holding de empresas. Antes de actuar en cualquier tema de negocio, ten presente:
 
 - **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md) — actores, jerarquía, flujos.
-- **Recursos comunidad OpenClaw (opcional):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — inventario forense de repos externos, skills y patrones; criterios antes de adoptar; no sustituye gobierno ni Trello.
+- **Recursos comunidad OpenClaw (opcional):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — inventario forense de repos externos, skills y patrones; criterios antes de adoptar; no sustituye gobierno ni Trello. **everything-claude-code (ECC):** ver §2.7 del mismo doc (harness IDE; cherry-pick; no plugin completo en este árbol).
 - **Skills fuera de este workspace:** p. ej. **career-ops** vive solo bajo [../ventas/skills/career-ops/](../ventas/skills/career-ops/) y [../ventas/career-ops/](../ventas/career-ops/); editar allí y seguir [../ventas/AGENTS.md](../ventas/AGENTS.md), no asumir que todo skill está en `agents/jarvis/skills/`.
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md) — todas las unidades (activas y planificadas), CEOs, servicios, checklist de alta.
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — contexto estable por cada organización que contrata servicios.

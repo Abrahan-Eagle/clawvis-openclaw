@@ -1,0 +1,23 @@
+# Advisory security scan of repo surfaces (Claude/Cursor-style configs).
+# Does not scan ~/.openclaw; failures do not block merges.
+name: ECC AgentShield
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  agentshield:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: AgentShield scan (monorepo root)
+        continue-on-error: true
+        run: npx --yes ecc-agentshield@latest scan -p . -f terminal --min-severity medium

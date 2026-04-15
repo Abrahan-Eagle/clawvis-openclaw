@@ -136,6 +136,10 @@ Problemas distintos del `rg` del IDE, pero relevantes si el cuello es **`opencla
 
 **Conclusión:** en este repo ya se aplicaron mitigaciones locales (`memorySearch.sync`, sin `exec` en canales, etc.); seguir upstream si actualizas OpenClaw.
 
+### Lecturas complementarias (desarrollo; no sustitutos del gateway)
+
+Repos como [everything-claude-code](https://github.com/affaan-m/everything-claude-code) publican guías sobre **tokens, evals y harness** en Claude Code / Cursor. Son útiles para **sesiones de desarrollo** en el IDE; **no** reemplazan la configuración de **`memorySearch`**, `sync.onSearch` ni el proceso `rg` del Cursor Agent descritos arriba. Criterios de adopción y límites respecto a ECC: [jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../jarvis-ecosystem/docs/RECURSOS_COMUNIDAD_OPENCLAW.md) §2.7.
+
 ## Referencias (repo)
 
 - [MODELOS_JARVIS_OPENCLAW.md](./MODELOS_JARVIS_OPENCLAW.md) — política de modelos y dónde se define.
