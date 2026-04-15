@@ -27,10 +27,25 @@ find ~/.openclaw/workspace -maxdepth 4 -type d -name node_modules 2>/dev/null
 | Fuente | Qué ves | Mitigación |
 |--------|---------|------------|
 | **1. Cursor Agent `rg`** | `ps` muestra `.../cursor-agent/.../rg` al ~100% CPU | [`.cursorignore`](../.cursorignore), [`.rgignore`](../.rgignore) (ripgrep nativo), [`.vscode/settings.json`](../.vscode/settings.json), *Reload Window* en Cursor. Monorepo ~1.3 GiB (`agent-town/node_modules` + `.next`). |
-| **2. Gateway al arrancar / `memorySearch`** | `openclaw-gateway` alto al reiniciar; luego baja | `sync.watch: false`, `sync.onSessionStart: false`, `sync.onSearch: true` en `agents.defaults.memorySearch.sync` (indexa bajo demanda al buscar memoria, sin watchers permanentes). |
+| **2. Gateway / `memorySearch` + Ollama** | `openclaw-gateway` u **`ollama`** suben en cada turno o al reiniciar | `sync.watch: false`, `sync.onSessionStart: false`, **`sync.onSearch: false`** (ver trampa abajo). Embeddings híbridos (`query.hybrid`) también cargan CPU en cada búsqueda de memoria. |
 | **3. Heartbeats de agentes** | Picos periódicos si hay muchos agentes con heartbeat | Quitar `heartbeat` de agentes aún no operativos (p. ej. `mkt-content`, `sales-hunter`); el `jarvis` principal puede mantener el suyo. |
 
 Coincidencia habitual: preguntar “qué LLM usas” **no** dispara solo la inferencia; a menudo coincide con **indexación del IDE** o con **lectura/búsqueda** en el workspace.
+
+### Trampa: `sync.onSearch: true` y “cualquier pregunta”
+
+Si **`onSearch` está en `true`**, OpenClaw puede **sincronizar el índice de memoria cada vez que se ejecuta una búsqueda en memoria** — y en conversación eso suele ocurrir **en muchos mensajes seguidos**. Eso dispara **embeddings locales (Ollama / `nomic-embed-text`)** y parece que “cualquier cosa que le preguntes a Jarvis” satura el CPU, aunque no sea `rg`.
+
+**Mitigación estable (host sensible):** `onSearch: false`, `onSessionStart: false`, `watch: false`. El índice queda menos “fresco” en caliente; si necesitas reindexar, hazlo con comandos/manuales puntuales o sube recursos.
+
+## Auditoría git (desde `8eb55a53`, abr 2026)
+
+Entre ese commit y `HEAD` entraron **muchas** extensiones a `jarvis-ecosystem/` (skills forenses, Graphify, last30days, docs de gobierno, tablas de skills). Eso **no es un bug por sí solo**, pero:
+
+- **`AGENTS.md` creció** con protocolos “obligatorios” y lecturas de arranque — el modelo puede **intentar más herramientas o lecturas** por turno.
+- **MCP** (MemPalace, Graphify) añade superficie: úsalo con criterio; no todo mensaje debería invocarlos.
+
+Si el cuello es **`rg`**, sigue siendo prioridad **Cursor + `.cursorignore` / `.rgignore`**. Si el cuello es **`ollama` o `openclaw-gateway`**, prioriza **`memorySearch.sync`** y carga de embeddings como arriba.
 
 ## Causas probables (detalle)
 
@@ -67,7 +82,7 @@ Valores **conservadores** alineados al snapshot sanitizado en el repo ([`config/
 |-------|----------|
 | `agents.defaults.memorySearch.sync.watch` | `false` — sin file watchers permanentes sobre workspaces (menos re-indexaciones). |
 | `agents.defaults.memorySearch.sync.onSessionStart` | `false` — no indexar al abrir cada sesión. |
-| `agents.defaults.memorySearch.sync.onSearch` | `true` — sincronizar índice **al buscar memoria** (bajo demanda). |
+| `agents.defaults.memorySearch.sync.onSearch` | `false` — evita sincronizar el índice en **cada** búsqueda de memoria (si está `true`, puede disparar CPU en casi cada mensaje). |
 | `agents.defaults.maxConcurrent` | `2` — menos llamadas a herramientas en paralelo. |
 | `agents.defaults.subagents.maxConcurrent` | `4` — menos subagentes concurrentes. |
 

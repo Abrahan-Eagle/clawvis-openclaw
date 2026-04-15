@@ -100,7 +100,7 @@
         "model": "nomic-embed-text",
         "sync": {
           "onSessionStart": false,
-          "onSearch": true,
+          "onSearch": false,
           "watch": false
         },
         "query": {
