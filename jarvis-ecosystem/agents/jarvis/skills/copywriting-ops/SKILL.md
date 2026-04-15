@@ -8,6 +8,7 @@ Usar este skill cuando el agente necesite escribir o revisar copy para:
 - Landing pages o paginas de servicios
 - Homepage o secciones de producto
 - Posts de redes sociales (caption largo)
+- Carruseles multi-slide (guion por diapositiva): usar tambien [`carousel-ops`](../carousel-ops/SKILL.md)
 - Propuestas comerciales (seccion de pitch)
 - Descripciones de perfil (Workana, LinkedIn)
 

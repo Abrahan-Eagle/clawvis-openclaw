@@ -1,7 +1,7 @@
 # Recursos comunidad OpenClaw / Claude Code (curado para Jarvis)
 
 **Ámbito:** inventario **externo** al monorepo `clawvis-openclaw`; sirve para **descubrir** plantillas, skills y patrones sin obligar a instalarlos.  
-**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG patrones portados).
+**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG; §2.9 carrusel IG).
 
 ---
 
@@ -139,6 +139,16 @@ Lista upstream completa y cambiante: [README mergisi — Marketing & Content](ht
 
 Hasta entonces: usar **solo** el skill y la documentación enlazada.
 
+### 2.9 Open Carrusel (Hainrixz) — referencia opcional; en Jarvis solo el skill
+
+| Campo | Detalle |
+|-------|---------|
+| **Repositorio** | [Hainrixz/open-carrusel](https://github.com/Hainrixz/open-carrusel) (MIT) — app local Next.js + export PNG vía Puppeteer. |
+| **En jarvis-ecosystem** | Skill **[`carousel-ops`](../agents/jarvis/skills/carousel-ops/SKILL.md)** con narrativa por slides, dimensiones IG, diseño y caption; **no** se incluye la app en el monorepo. |
+| **Documentación** | [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) — qué se adopta y qué se descarta. |
+
+Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs; el gateway y los agentes no dependen de ello.
+
 ---
 
 ## 3. Criterios de adopción (obligatorio antes de instalar)
@@ -185,6 +195,7 @@ Hasta entonces: usar **solo** el skill y la documentación enlazada.
 |---------|-----|------|
 | Awesome OpenClaw Use Cases | https://github.com/hesamsheikh/awesome-openclaw-usecases | Ideas de playbooks; documentación de referencia. |
 | Markster OS (GTM B2B) | https://github.com/markster-public/markster-os | Lenguaje GTM en chat; revisar prompts; no dependencia obligatoria. |
+| Open Carrusel | https://github.com/Hainrixz/open-carrusel | Carruseles IG (HTML → PNG); **patrones** en skill `carousel-ops` — app upstream **opcional** fuera del repo — ver **§2.9**. |
 
 ### Patrones de trabajo (recomendado para tareas grandes de código)
 
@@ -211,6 +222,7 @@ Hasta entonces: usar **solo** el skill y la documentación enlazada.
 
 ## 6. Referencias internas
 
+- Carruseles Instagram: **§2.9**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md), skill `carousel-ops`.
 - LightRAG (patrones): **§2.8**, [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md), skill `dual-retrieval-ops`.
 - everything-claude-code (ECC): **§2.7** (tabla y shortlist).
 - Gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md)
