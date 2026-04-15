@@ -3,3 +3,6 @@ out/
 node_modules/
 public/
 pnpm-lock.yaml
+
+# Generado por `pnpm build:ws-proxy` (esbuild); no formatear a mano
+lib/ws-proxy.mjs

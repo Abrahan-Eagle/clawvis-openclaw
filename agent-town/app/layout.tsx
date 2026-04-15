@@ -20,11 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`dark ${pressStart2P.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`dark ${pressStart2P.variable}`} suppressHydrationWarning>
       {/* Extensions (e.g. Agent Desktop, password managers) may inject attributes on body before hydration */}
       <body suppressHydrationWarning>{children}</body>
     </html>
