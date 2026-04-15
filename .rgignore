@@ -1,5 +1,4 @@
-# Cursor Agent: rg --files indexa AGENTS.md; repo ~1.3G (agent-town/node_modules + .next)
-# Paridad con .rgignore. Tras editar: Developer: Reload Window.
+# Mismas exclusiones que .cursorignore: ripgrep respeta .rgignore en la raíz del repo.
 # docs/TROUBLESHOOTING_OPENCLAW_CPU.md
 agent-town/node_modules/
 agent-town/.next/

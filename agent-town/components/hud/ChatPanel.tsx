@@ -43,6 +43,8 @@ export default function ChatPanel({
     gameEvents.emit("stop-task", runId, seatId);
   }, []);
 
+  // TanStack Virtual: stable API; eslint react-hooks flags false positive (library pattern).
+  // eslint-disable-next-line react-hooks/incompatible-library -- useVirtualizer is intentionally not memoized
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => scrollRef.current,

@@ -99,9 +99,9 @@
         "provider": "ollama",
         "model": "nomic-embed-text",
         "sync": {
-          "onSessionStart": true,
-          "onSearch": false,
-          "watch": true
+          "onSessionStart": false,
+          "onSearch": true,
+          "watch": false
         },
         "query": {
           "maxResults": 10,
@@ -177,17 +177,7 @@
       },
       {
         "id": "mkt-content",
-        "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing",
-        "heartbeat": {
-          "every": "2h",
-          "target": "none",
-          "lightContext": true,
-          "activeHours": {
-            "start": "09:00",
-            "end": "22:00",
-            "timezone": "America/Caracas"
-          }
-        }
+        "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing"
       },
       {
         "id": "mkt-social",
@@ -207,17 +197,7 @@
       },
       {
         "id": "sales-hunter",
-        "workspace": "/home/aipp/jarvis-ecosystem/agents/ventas",
-        "heartbeat": {
-          "every": "1h",
-          "target": "none",
-          "lightContext": true,
-          "activeHours": {
-            "start": "08:00",
-            "end": "23:00",
-            "timezone": "America/Caracas"
-          }
-        }
+        "workspace": "/home/aipp/jarvis-ecosystem/agents/ventas"
       },
       {
         "id": "sales-closer",

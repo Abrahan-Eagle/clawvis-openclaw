@@ -3,13 +3,15 @@
     "**/node_modules/**": true,
     "**/.next/**": true,
     "**/graphify-out/**": true,
-    "**/openclaw-state/**": true
+    "**/openclaw-state/**": true,
+    "**/descargas-openclaw/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
     "**/.next": true,
     "**/graphify-out": true,
     "openclaw-state": true,
+    "descargas-openclaw": true,
     "agent-town/node_modules": true,
     "agent-town/.next": true
   }

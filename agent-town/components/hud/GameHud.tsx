@@ -2,6 +2,7 @@
 
 import "./hud.css";
 
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useStudio } from "@/lib/store";
 import { isVisibleChatMessage } from "@/lib/constants";
@@ -163,13 +164,14 @@ export default function GameHud() {
             onClick={() => togglePanel("chat")}
             title="Chat"
           >
-            <img
+            <Image
               src={
                 openPanel === "chat" ? "/ui/icons/icon-chat-active.png" : "/ui/icons/icon-chat.png"
               }
               alt="Chat"
               width={28}
               height={28}
+              unoptimized
               style={{ imageRendering: "pixelated" }}
             />
             <span className="hud-chat-dock__label">Chat</span>
