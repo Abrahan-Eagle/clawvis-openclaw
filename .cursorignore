@@ -1,9 +1,14 @@
-# Reduce Cursor Agent rg load (see docs/TROUBLESHOOTING_OPENCLAW_CPU.md)
+# Cursor Agent: rg --files indexa AGENTS.md; repo ~1.3G (agent-town/node_modules + .next)
+# docs/TROUBLESHOOTING_OPENCLAW_CPU.md
+agent-town/node_modules/
+agent-town/.next/
 graphify-out/
 openclaw-state/
+descargas-openclaw/
 **/node_modules/
 **/.git/
 **/.next/
 **/dist/
 **/build/
-descargas-openclaw/
+**/.pnpm/
+**/.cache/

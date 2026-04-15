@@ -1,0 +1,16 @@
+{
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/graphify-out/**": true,
+    "**/openclaw-state/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/graphify-out": true,
+    "openclaw-state": true,
+    "agent-town/node_modules": true,
+    "agent-town/.next": true
+  }
+}

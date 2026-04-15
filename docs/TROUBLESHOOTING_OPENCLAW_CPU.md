@@ -28,11 +28,22 @@ find ~/.openclaw/workspace -maxdepth 4 -type d -name node_modules 2>/dev/null
 2. **Varias herramientas en paralelo** (`maxConcurrent`, subagentes) multiplican búsquedas.
 3. **`memorySearch`** con sincronización agresiva en cada búsqueda (`sync.onSearch`) añade trabajo de indexación (Ollama + embeddings); suele mostrarse como `ollama` u otro proceso, pero puede coincidir en el tiempo con búsquedas.
 
-### Ripgrep de Cursor Agent (a veces no es Jarvis)
+### Ripgrep de Cursor Agent (muy frecuente en monorepos)
 
-Si en `top` / `ps` el comando es **`.../cursor-agent/.../rg`** con argumentos tipo `--files`, `--iglob`, es el **indexado del IDE Cursor** buscando `AGENTS.md`, `.cursor`, etc., no el gateway OpenClaw. Eso también puede **disparar la CPU** en discos o monorepos grandes.
+Si en `ps aux` el comando es **`.../cursor-agent/.../rg --files`** con muchos `--iglob`, es el **indexado del IDE Cursor**, no OpenClaw. En este repo `agent-town/` puede superar **1 GiB** (`node_modules` + `.next`); aunque `rg` excluya `node_modules` en la línea de comandos, el recorrido del disco puede seguir siendo caro.
 
-**Qué hacer:** reducir el árbol que Cursor indexa (abrir solo subcarpetas necesarias), añadir [**`.cursorignore`**](https://cursor.com/docs) en la raíz del proyecto para excluir `node_modules`, `dist`, clones enormes, o cerrar Cursor cuando uses solo Telegram/Jarvis. Los ítems 1–3 de la lista anterior se refieren al **agente OpenClaw**; si el `rg` es de Cursor, el cuello de botella no se arregla solo con `openclaw.json`.
+**Diagnóstico en 5 s:**
+
+```bash
+ps aux | grep -E 'cursor-agent.*rg|openclaw'
+```
+
+- Si ves **`cursor-agent`** → el pico **no** lo arregla `openclaw.json`; mitiga con **`.cursorignore`**, [`.vscode/settings.json`](../.vscode/settings.json) (`search.exclude` / `files.watcherExclude`), cerrar Cursor, o abrir solo subcarpetas pequeñas.
+- Si solo **`openclaw-gateway`** → revisa memoria concurrente y herramientas (secciones de abajo).
+
+**Qué hacer (Cursor):** raíz del repo ya incluye [`.cursorignore`](../.cursorignore) (excluye explícitamente `agent-town/node_modules/` y `agent-town/.next/`). Tras cambiarlo, **recarga la ventana** de Cursor (`Developer: Reload Window`) para que el indexador vuelva a leer exclusiones.
+
+Los ítems 1–3 de la lista anterior se refieren al **agente OpenClaw**; si el `rg` es de Cursor, **`openclaw.json` solo no basta**.
 
 ## Mitigación en configuración (fuente de verdad: `~/.openclaw/openclaw.json`)
 
