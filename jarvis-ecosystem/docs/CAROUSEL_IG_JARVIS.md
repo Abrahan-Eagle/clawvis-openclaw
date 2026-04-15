@@ -59,6 +59,12 @@ npm run dev                                 # abre http://localhost:3000
 
 **Referencia en repo:** `config/openclaw-home/openclaw.json` tiene el placeholder `ck_REPLACE_ME` — no commitear el key real.
 
+### Telegram / Discord y perfil `messaging`
+
+Si el plugin Composio esta bien (consumer key + Canva conectado) pero Jarvis **dice que no puede listar Canva**, el motivo suele ser `tools.profile: "messaging"`: ese perfil solo incluye un subconjunto de herramientas core. Las herramientas del plugin (`COMPOSIO_*`) hay que **permitirlas explicitamente** en `tools.alsoAllow`, igual que `lobster` y `browser`.
+
+En `~/.openclaw/openclaw.json`, `tools.alsoAllow` debe incluir las siete herramientas genericas de Composio que expone el MCP (nombres exactos: `COMPOSIO_MANAGE_CONNECTIONS`, `COMPOSIO_MULTI_EXECUTE_TOOL`, `COMPOSIO_REMOTE_BASH_TOOL`, `COMPOSIO_REMOTE_WORKBENCH`, `COMPOSIO_SEARCH_TOOLS`, `COMPOSIO_WAIT_FOR_CONNECTIONS`, `COMPOSIO_GET_TOOL_SCHEMAS`). El snapshot sanitizado en el repo muestra la lista completa. Tras cambiar: `openclaw gateway restart`. Comprueba con `openclaw composio doctor`.
+
 ---
 
 ## Flujo combinado: guion + diseno + publicacion
