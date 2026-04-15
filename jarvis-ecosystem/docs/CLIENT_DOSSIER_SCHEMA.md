@@ -33,7 +33,7 @@
 | Campo | Tipo | Obligatorio | Notas |
 |-------|------|-------------|--------|
 | `servicios_contratados_o_deseados` | array de string | Sí | Ej. `["marketing_digital"]`, `["desarrollo_software"]`, `["diseno"]`. |
-| `empresa_del_holding_asignada` | string | No | ID o nombre corto de la unidad (ej. `marketing`, `dev_agency`). |
+| `empresa_del_holding_asignada` | string | No | ID o nombre corto de la unidad (ej. `marketing`, `dev-agency`). Mismo identificador que en [../COMPANIES.md](../COMPANIES.md). |
 | `objetivos` | array de string | No | Resultados esperados medibles cuando sea posible. |
 | `planificacion_resumen` | string | No | Hitos, fases o backlog de alto nivel acordado con el cliente. |
 | `nivel_servicio_o_notas_comerciales` | string | No | SLA, horario, restricciones. |
@@ -76,7 +76,7 @@
   "nombre_comercial": "Beta Labs",
   "rubro": "Startup fintech",
   "servicios_contratados_o_deseados": ["desarrollo_software", "mantenimiento"],
-  "empresa_del_holding_asignada": "dev_agency",
+  "empresa_del_holding_asignada": "dev-agency",
   "objetivos": ["API v2 en producción antes de julio"],
   "planificacion_resumen": "Sprint actual: auth + webhooks."
 }

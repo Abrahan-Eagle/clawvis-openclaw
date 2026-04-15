@@ -6,9 +6,19 @@
  * 2. Copy public/        → .next/standalone/public/
  * 3. Copy .next/static/  → .next/standalone/.next/static/
  * 4. Copy server.prod.mjs → .next/standalone/server.prod.mjs
+ * 5. Copy lib/*.mjs (ws-proxy from `pnpm build:ws-proxy`, auggie-bridge) → standalone/lib/
  */
 
-import { existsSync, readdirSync, statSync, mkdirSync, rmSync, renameSync, cpSync } from "node:fs";
+import {
+  existsSync,
+  readdirSync,
+  statSync,
+  mkdirSync,
+  rmSync,
+  renameSync,
+  cpSync,
+  copyFileSync,
+} from "node:fs";
 import { execSync } from "node:child_process";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -82,5 +92,15 @@ console.log("  done  .next/static/ → standalone/.next/static/");
 // --- 4. Copy server.prod.mjs ---
 cpSync(resolve(root, "server.prod.mjs"), resolve(standalone, "server.prod.mjs"));
 console.log("  done  server.prod.mjs → standalone/server.prod.mjs");
+
+// --- 5. ESM helpers for server.prod.mjs (not emitted by Next) ---
+const libSrc = resolve(root, "lib");
+const libDest = resolve(standalone, "lib");
+mkdirSync(libDest, { recursive: true });
+for (const name of readdirSync(libSrc)) {
+  if (!name.endsWith(".mjs")) continue;
+  copyFileSync(resolve(libSrc, name), resolve(libDest, name));
+}
+console.log("  done  lib/*.mjs → standalone/lib/");
 
 console.log("\n  Standalone package ready.\n");

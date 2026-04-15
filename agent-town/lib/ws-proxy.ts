@@ -1,6 +1,8 @@
 /**
  * Shared WebSocket proxy logic used by both dev (server.ts) and prod (server.prod.mjs) servers.
  *
+ * **Producción:** `lib/ws-proxy.mjs` se genera desde este archivo (`pnpm build:ws-proxy`, encadenado en `pnpm build`). No editar el `.mjs` a mano.
+ *
  * Proxies a client WebSocket connection to an upstream gateway,
  * buffering messages during upstream connection and forwarding close codes.
  *

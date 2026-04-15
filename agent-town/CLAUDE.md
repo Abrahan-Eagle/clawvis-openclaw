@@ -76,38 +76,32 @@ moderninteriors-win/2_Characters/
 6. 加 Agent 逻辑
 ```
 
-## 项目结构
+## 项目结构（与仓库一致，2026-04）
 
 ```
-agent-world/
+agent-town/
 ├── app/
-│   ├── page.tsx                 # 主页面，挂载 Phaser
+│   ├── page.tsx
 │   ├── layout.tsx
 │   ├── globals.css
-│   └── api/                     # API Routes
-│       ├── status/route.ts
-│       ├── agents/route.ts
-│       └── ws/route.ts
-├── components/
-│   ├── hud/                     # 游戏 HUD 面板组件
-│   ├── game/
-│   │   ├── PhaserGame.tsx       # Phaser 挂载（dynamic import, ssr: false）
-│   │   ├── scenes/
-│   │   │   └── OfficeScene.ts
-│   │   └── config.ts
-│   └── panel/
-│       └── ControlPanel.tsx
+│   └── api/
+│       ├── agents/discover/route.ts   # GET 发现 agent / 配置
+│       └── internal/seat-sync/route.ts
+├── server.ts                    # 开发：Next + WebSocket 代理到 Gateway
+├── server.prod.mjs              # 生产：standalone 入口（import ./lib/ws-proxy.mjs）
 ├── lib/
-│   ├── utils.ts
-│   └── store.ts
-├── public/
-│   ├── maps/                    # Tiled 导出的 JSON
-│   ├── tilesets/                # tileset 图片
-│   ├── sprites/                 # 精灵表
-│   └── characters/
+│   ├── ws-proxy.ts              # 代理逻辑（源文件）
+│   ├── ws-proxy.mjs             # 由 pnpm build:ws-proxy 从 ws-proxy.ts 生成，勿手改
+│   ├── gateway.ts, store.ts, hooks/, …
+│   └── __tests__/               # Vitest（reducer, gateway-handler, utils, persistence）
+├── components/
+│   ├── game/                    # Phaser（PhaserGame.tsx, scenes/, …）
+│   ├── hud/, panel/, …
+├── public/maps/
 └── types/
-    └── game.ts
 ```
+
+WebSocket 浏览器 → `/api/gateway`（见 `lib/ws-proxy.ts`），非旧版 `app/api/ws/route.ts`。
 
 ## Phaser 集成要点
 

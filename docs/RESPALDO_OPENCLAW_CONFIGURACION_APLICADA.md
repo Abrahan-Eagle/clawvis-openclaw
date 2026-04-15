@@ -13,7 +13,10 @@ Documento para **no perder el hilo** de lo que quedó operativo en la máquina d
 | `~/.openclaw/.env` | Tokens y claves (`TELEGRAM_BOT_TOKEN`, Discord, `CURSOR_API_KEY`, etc.) | **No** — no commitear |
 | `~/.config/systemd/user/openclaw-gateway.service` | Unidad usuario del gateway | **No** |
 | `~/.config/systemd/user/cursor-agent-api.service` | Unidad usuario del proxy Composer | **No** |
+| `~/.config/systemd/user/openclaw-chrome-cdp.service` | Chrome con CDP para perfil OpenClaw (opcional; ver §3 modos browser) | **No** — copia de referencia: [`deploy/systemd/openclaw-chrome-cdp.service`](../deploy/systemd/openclaw-chrome-cdp.service) |
+| `~/.config/systemd/user/agent-town-dev.service` | Agent Town en modo dev (`pnpm dev` en `agent-town/`) | **No** — ejemplo: [`deploy/systemd/agent-town-dev.service.example`](../deploy/systemd/agent-town-dev.service.example) |
 | `/tmp/openclaw/openclaw-YYYY-MM-DD.log` | Logs del día (rotativos por fecha) | No |
+| Estado runtime bajo `openclaw-state/` en el clon | Sesiones, `.env`, SQLite memoria — ver política | Ver [OPENCLAW_STATE_GIT_POLICY.md](OPENCLAW_STATE_GIT_POLICY.md) y `.gitignore` |
 
 **Respaldo físico recomendado** (fuera de git, con fecha):
 
@@ -105,7 +108,8 @@ Copia conceptual para restaurar a mano si perdieras el archivo. Ajusta rutas de 
 
 - `apiKey` **`not-needed`** es el valor esperado por `cursor-agent-api-proxy` en local (no uses `"local"` si el proxy falla al validar).
 - El archivo real en disco tiene además `agents`, `bindings`, listas largas de modelos, `browser` con Chrome, etc.; para recuperación total usa la copia fechada de `openclaw.json`, no solo este fragmento.
-- **Browser / CDP (Chrome ≥111):** en `browser.extraArgs` conviene `"--remote-allow-origins=*"`; opcional `"--remote-debugging-address=127.0.0.1"`. Opcional en `browser`: `"cdpUrl": "http://127.0.0.1:18800"` para fijar host/puerto del probe. Tras un fallo de arranque, `curl` al puerto puede dar error porque OpenClaw mata el proceso. Si usas proxy global, el unit del gateway puede definir `NO_PROXY=127.0.0.1,localhost,::1` y variables `HTTP(S)_PROXY`/`ALL_PROXY` vacías.
+- **Browser / CDP — dos modos posibles:** (1) **Integrado:** OpenClaw arranca o adjunta Chrome con `browser.enabled` y `cdpUrl` en `openclaw.json` (como en [`config/openclaw-home/openclaw.json`](../config/openclaw-home/openclaw.json) del repo). (2) **Solo adjuntar (`attachOnly: true`):** Chrome lo levanta **otro** proceso (p. ej. unidad [`deploy/systemd/openclaw-chrome-cdp.service`](../deploy/systemd/openclaw-chrome-cdp.service)); el gateway solo se conecta al CDP ya escuchando — útil cuando el arranque integrado falla o se prefiere perfil aislado. El fragmento de ejemplo más arriba en este doc es **resumido**; el archivo real en disco puede usar uno u otro modo según el host.
+- **Browser / CDP (Chrome ≥111), detalle:** en `browser.extraArgs` conviene `"--remote-allow-origins=*"`; opcional `"--remote-debugging-address=127.0.0.1"`. Opcional en `browser`: `"cdpUrl": "http://127.0.0.1:18800"` para fijar host/puerto del probe. Tras un fallo de arranque, `curl` al puerto puede dar error porque OpenClaw mata el proceso. Si usas proxy global, el unit del gateway puede definir `NO_PROXY=127.0.0.1,localhost,::1` y variables `HTTP(S)_PROXY`/`ALL_PROXY` vacías.
 - **Causa típica del falso fallo CDP (`DevTools listening` pero el probe nunca pasa):** el directorio de perfil `~/.openclaw/browser/<perfil>/user-data` está **corrupto o incompatible**: Chrome imprime la línea de DevTools y **sale al instante** (p. ej. código de salida 133). No es un problema de timeout del HTTP client. **Solución:** `openclaw browser reset-profile` o mover ese `user-data` a un respaldo y dejar que OpenClaw cree uno nuevo. Revisar también `SingletonLock` / `SingletonSocket` rotos en ese árbol si hubo cierres bruscos.
 - **Parches locales (abr 2026, host `aipp`)** en `node_modules/openclaw` (se pierden con `npm i -g openclaw@latest`): **(1)** `routes-D3B9A956.js`: `cdpProbeMs` **5000 ms**, `CHROME_LAUNCH_READY_WINDOW_MS` **60 s**, y (si aplica en tu build) URL CDP derivada/`cdpUrlForPort` coherentes con `localhost` vs `127.0.0.1`. **(2)** `runtime-api-DN3n8SWI.js`: `BROWSER_MANAGE_REQUEST_TIMEOUT_MS` subido a **120 s** para que `openclaw browser open` no haga timeout a los **45 s** fijos mientras el gateway tarda hasta ~60 s en el arranque de Chrome. **(3)** Systemd `openclaw-gateway.service`: proxy vacío + `NO_PROXY` loopback como arriba.
 
@@ -229,6 +233,8 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 - [`SPIKE_CURSOR_OPENCLAW.md`](SPIKE_CURSOR_OPENCLAW.md) — spike, puertos, decisión 4646 vs 18790.
 - [`PROVEEDOR_CURSOR_OPENCLAW.md`](PROVEEDOR_CURSOR_OPENCLAW.md)
 - [`MODELOS_JARVIS_OPENCLAW.md`](MODELOS_JARVIS_OPENCLAW.md)
+- [`OPENCLAW_STATE_GIT_POLICY.md`](OPENCLAW_STATE_GIT_POLICY.md) — qué estado de `openclaw-state/` no debe versionarse.
+- [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — CI del monorepo (Agent Town con `working-directory: agent-town`).
 
 ---
 
@@ -354,4 +360,4 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (last30days-openclaw: skill versionado, integracion lead-research/proposal, docs).
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (auditoria coherencia: CI raiz, openclaw-state policy, systemd tabla, modos browser, Agent Town ws-proxy generado).

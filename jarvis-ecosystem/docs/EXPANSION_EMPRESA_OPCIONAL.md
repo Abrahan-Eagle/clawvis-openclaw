@@ -9,7 +9,7 @@
 1. Crear `agents/<id>/` (IDENTITY, AGENTS, SOUL, USER) tomando `agents/marketing/` como plantilla.
 2. Actualizar tabla en `COMPANIES.md`: estado **Activa**, workspace, CEO/Supervisor en [ASIGNACION_ROLES.md](ASIGNACION_ROLES.md).
 3. Anadir entradas en `~/.openclaw/openclaw.json` (`agents.list`) apuntando al nuevo workspace.
-4. Copiar skills desde `agents/jarvis/skills/` (ver [../agents/marketing/skills/README.md](../agents/marketing/skills/README.md)).
+4. Apuntar el workspace nuevo a skills compartidas en `agents/jarvis/skills/` (ver [../agents/jarvis/AGENTS.md](../agents/jarvis/AGENTS.md)); no duplicar carpetas de skills salvo excepciones documentadas (p. ej. `career-ops` en Ventas).
 5. Trello: board por empresa; documentar IDs en [../agents/jarvis/MEMORY.md](../agents/jarvis/MEMORY.md).
 6. Discord: [DISCORD_ESTRUCTURA_CHECKLIST.md](DISCORD_ESTRUCTURA_CHECKLIST.md).
 7. Automatizaciones opcionales en `automations/<id>/`.

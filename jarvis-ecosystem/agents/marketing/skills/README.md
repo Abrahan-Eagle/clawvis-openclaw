@@ -1,9 +1,9 @@
 # Skills del workspace Marketing
 
-Estas carpetas son **copias** de las skills del workspace canónico:
+**No hay copias locales** de skills compartidas: la **fuente de verdad** es una sola carpeta:
 
-**Fuente de verdad:** [`../../jarvis/skills/`](../../jarvis/skills/).
+**[`../../jarvis/skills/`](../../jarvis/skills/)**
 
-**Regla:** edita primero en `agents/jarvis/skills/` y replica los cambios aquí (o sincroniza con `rsync`/`cp` según el equipo). Si solo editas en `marketing/skills/`, se producirá **drift** respecto a Jarvis y a Ventas.
+OpenClaw / Jarvis resuelven skills desde el workspace del agente maestro (`jarvis/`). Para marketing y ventas, usar las mismas rutas documentadas en [../../jarvis/AGENTS.md](../../jarvis/AGENTS.md) o invocar skills por nombre según la configuración del gateway.
 
 Ver también [../../README.md](../../README.md) del ecosistema.

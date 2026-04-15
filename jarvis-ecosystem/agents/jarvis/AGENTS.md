@@ -48,6 +48,29 @@ Antes de ejecutar acciones con impacto externo, consultar [../../docs/APPROVAL_G
 
 Skill **last30days-openclaw** (en `skills/last30days-openclaw/`): investigacion multi-fuente de los ultimos dias (Reddit, HN, GitHub, etc.) para pulso de comunidad antes de propuestas o campanas de alto valor. Convive con MemPalace y Graphify; no los sustituye. Guia: [../../docs/LAST30DAYS_INTEGRACION.md](../../docs/LAST30DAYS_INTEGRACION.md).
 
+### Skills de integracion y utilidades (indice)
+
+Skills instaladas bajo `skills/` que **no** estan en el bloque de calidad comercial anterior; sirven para integraciones, terminal y ClawFlows. Cada una tiene su `SKILL.md` o documento equivalente:
+
+| Skill | Rol breve |
+|-------|-------------|
+| `blogwatcher` | Resumir feeds / blogs |
+| `clawflows-capability-map` | Mapa de capabilities para `clawflows check` — ver `CAPABILITY.md` |
+| `gog` | Utilidad CLI relacionada con skills empaquetadas |
+| `himalaya` | Email IMAP/SMTP (CLI Himalaya) |
+| `mcporter` | MCP / porter |
+| `nano-pdf` | PDF ligero |
+| `notion` | API Notion |
+| `session-logs` | Consultar logs de sesion OpenClaw |
+| `slack` | Acciones Slack |
+| `summarize` | Resumir texto |
+| `tmux` | Sesiones tmux |
+| `trello` | API Trello desde skill |
+| `video-frames` | Extraer frames con ffmpeg |
+| `xurl` | Inteligencia de contenido X/Twitter |
+
+Usar bajo demanda; no sustituyen gobierno, Trello ni dossiers.
+
 ### Memoria avanzada (MemPalace)
 
 MemPalace esta integrado como MCP server complementario a la memoria nativa. Herramientas disponibles: `mempalace_search` (busqueda semantica), `mempalace_kg_query` (Knowledge Graph de empresas/clientes/decisiones), `mempalace_kg_add` (agregar hechos). El auto-mine sincroniza cada 30 min. Documentacion completa: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md). Cierre del módulo y réplica desde Git: [../../docs/MODULO_MEMPALACE_CIERRE.md](../../docs/MODULO_MEMPALACE_CIERRE.md).

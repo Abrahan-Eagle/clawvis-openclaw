@@ -36,14 +36,15 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 
 1. Lee `SOUL.md` — enfoque comercial y ética del equipo
 2. Lee `USER.md` — a quién ayudas
-3. Revisa `memory/YYYY-MM-DD.md` si existe
+3. Lee [WORKSPACE_POLICY.md](WORKSPACE_POLICY.md) — rutas permitidas y entregables (política canónica en [../jarvis/WORKSPACE_POLICY.md](../jarvis/WORKSPACE_POLICY.md))
+4. Revisa `memory/YYYY-MM-DD.md` si existe
 
 Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspace aporta contexto común de ventas.
 
 ## Memoria
 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
-- **MEMORY.md** solo en sesión principal directa con tu humano (no en grupos)
+- **[MEMORY.md](MEMORY.md)** — largo plazo; solo en sesión principal directa con tu humano (no en grupos)
 - **MemPalace (complementario):** busqueda semantica y Knowledge Graph de clientes/pipeline via MCP (`mempalace_search`, `mempalace_kg_query`). Docs: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md).
 
 ## Protocolo de calidad (Superpowers + OMC)

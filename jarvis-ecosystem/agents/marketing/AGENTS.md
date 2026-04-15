@@ -40,14 +40,15 @@ Antes de actuar:
 
 1. Lee `SOUL.md` — tono y rol del equipo marketing
 2. Lee `USER.md` — a quién ayudas
-3. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe
+3. Lee [WORKSPACE_POLICY.md](WORKSPACE_POLICY.md) — rutas permitidas y entregables (política canónica en [../jarvis/WORKSPACE_POLICY.md](../jarvis/WORKSPACE_POLICY.md))
+4. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe
 
 Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por **agent ID** y sesión; este workspace es el contexto compartido del equipo.
 
 ## Memoria
 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
-- **Largo plazo:** `MEMORY.md` (solo en sesión principal con tu humano, no en canales grupales)
+- **Largo plazo:** [MEMORY.md](MEMORY.md) (solo en sesión principal con tu humano, no en canales grupales)
 
 ## Protocolo de calidad (Superpowers + OMC)
 

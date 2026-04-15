@@ -1,3 +1,11 @@
+# Dependencias (cualquier subproyecto)
+node_modules/
+
+# Variables de entorno en la raíz del monorepo (no secretos en git)
+.env
+.env.*
+!.env.example
+
 # Agent Town — no versionar artefactos de build ni dependencias
 agent-town/node_modules/
 jarvis-ecosystem/agents/jarvis/scripts/node_modules/
@@ -19,6 +27,13 @@ Thumbs.db
 
 # Logs sueltos (opcional)
 *.log
+
+# OpenClaw — estado en runtime (no versionar: privacidad, tamaño, drift)
+# Política: `docs/OPENCLAW_STATE_GIT_POLICY.md`
+openclaw-state/.env
+openclaw-state/agents/**/sessions/
+openclaw-state/memory/
+openclaw-state/openclaw.json.bak*
 
 # Perfil Chromium embebido (pesado)
 openclaw-state/browser/openclaw/user-data/

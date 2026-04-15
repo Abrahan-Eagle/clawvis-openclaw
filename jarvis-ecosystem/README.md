@@ -36,13 +36,13 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | Ruta | Descripción |
 |------|-------------|
 | `agents/jarvis/` | Workspace del agente maestro: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `MEMORY.md`, `skills/`, `scripts/` (model-router), `memory/`. |
-| `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (copia de jarvis). |
-| `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/` (mayoría copia de jarvis; excepción `skills/career-ops/`), [`career-ops/`](agents/ventas/career-ops/) (herramienta local). Detalle: [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). |
+| `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`. Las skills compartidas viven solo en [`agents/jarvis/skills/`](agents/jarvis/skills/) (sin copias duplicadas aquí). |
+| `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/career-ops/` (solo Ventas), [`career-ops/`](agents/ventas/career-ops/) (herramienta local). Resto de skills: [`agents/jarvis/skills/`](agents/jarvis/skills/). Detalle: [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). |
 | `automations/` | YAML ClawFlows; ver [automations/README.md](automations/README.md). |
 | `scripts/` | `clawflows-env.sh`, verificación del registry, etc. |
 | [CLAWFLOWS.md](CLAWFLOWS.md) | Guía ClawFlows + Lobster. |
 
-**Skills duplicadas:** `agents/marketing/skills/` y la mayor parte de `agents/ventas/skills/` son **copias** de `agents/jarvis/skills/`. Editar siempre en `agents/jarvis/skills/` y replicar a marketing y a ventas. **Excepción:** `agents/ventas/skills/career-ops/` (y la herramienta en `agents/ventas/career-ops/`) es solo de Ventas; no existe en jarvis — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md).
+**Skills canónicas:** toda skill compartida está en **`agents/jarvis/skills/`** (una sola copia; evita drift). Marketing y Ventas **no** duplican esas carpetas. **Excepción:** `agents/ventas/skills/career-ops/` (y `agents/ventas/career-ops/`) es solo Ventas — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). Los README en `agents/marketing/skills/` y `agents/ventas/skills/` enlazan a Jarvis.
 
 ## Documentación de gobierno
 
