@@ -106,6 +106,14 @@ Plugin `composio` instalado en OpenClaw. Permite a Jarvis y `mkt-*` crear diseno
 
 Requiere `consumerKey` de Composio configurado en `~/.openclaw/openclaw.json`. Autenticar Canva desde [dashboard.composio.dev](https://dashboard.composio.dev).
 
+**Redactar no es crear en Canva:** entregar titular, cuerpo, guion por slide o URLs de imagenes **no** genera por si solo un **archivo** en la cuenta de Canva. Eso solo ocurre si se **ejecutan** las acciones de API (crear diseno / export) via Composio, o si el humano monta el lienzo a mano en canva.com.
+
+**Si el humano pide explícitamente "crear el diseno en Canva" o "que quede en mi Canva":**
+
+1. **Intentar** las herramientas Composio expuestas en la sesion (p. ej. buscar/ejecutar acciones del toolkit Canva: listar disenos, crear diseno, iniciar export) cuando el gateway las inyecte al modelo.
+2. Si **no** hay herramientas disponibles, falla la auth, o la llamada devuelve error: **decirlo en una frase clara** ("No se creo ningun lienzo en Canva en esta sesion") y entonces si el **brief** por slide + enlaces a assets para montaje manual.
+3. **No** presentar solo texto bonito como si ya existiera un diseno guardado en Canva; distinguir siempre **borrador de contenido** vs **diseno creado en la plataforma**.
+
 ### Flujo combinado
 
 1. Este skill genera el **guion** (slides, caption, hashtags).
