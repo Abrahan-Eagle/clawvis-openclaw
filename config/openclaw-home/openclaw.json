@@ -237,7 +237,6 @@
     "profile": "messaging",
     "alsoAllow": [
       "lobster",
-      "exec",
       "browser"
     ]
   },

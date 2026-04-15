@@ -1,0 +1,9 @@
+# Reduce Cursor Agent rg load (see docs/TROUBLESHOOTING_OPENCLAW_CPU.md)
+graphify-out/
+openclaw-state/
+**/node_modules/
+**/.git/
+**/.next/
+**/dist/
+**/build/
+descargas-openclaw/

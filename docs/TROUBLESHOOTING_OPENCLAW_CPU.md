@@ -28,6 +28,12 @@ find ~/.openclaw/workspace -maxdepth 4 -type d -name node_modules 2>/dev/null
 2. **Varias herramientas en paralelo** (`maxConcurrent`, subagentes) multiplican búsquedas.
 3. **`memorySearch`** con sincronización agresiva en cada búsqueda (`sync.onSearch`) añade trabajo de indexación (Ollama + embeddings); suele mostrarse como `ollama` u otro proceso, pero puede coincidir en el tiempo con búsquedas.
 
+### Ripgrep de Cursor Agent (a veces no es Jarvis)
+
+Si en `top` / `ps` el comando es **`.../cursor-agent/.../rg`** con argumentos tipo `--files`, `--iglob`, es el **indexado del IDE Cursor** buscando `AGENTS.md`, `.cursor`, etc., no el gateway OpenClaw. Eso también puede **disparar la CPU** en discos o monorepos grandes.
+
+**Qué hacer:** reducir el árbol que Cursor indexa (abrir solo subcarpetas necesarias), añadir [**`.cursorignore`**](https://cursor.com/docs) en la raíz del proyecto para excluir `node_modules`, `dist`, clones enormes, o cerrar Cursor cuando uses solo Telegram/Jarvis. Los ítems 1–3 de la lista anterior se refieren al **agente OpenClaw**; si el `rg` es de Cursor, el cuello de botella no se arregla solo con `openclaw.json`.
+
 ## Mitigación en configuración (fuente de verdad: `~/.openclaw/openclaw.json`)
 
 Tras editar, reiniciar el gateway, p. ej.:
@@ -42,7 +48,7 @@ Valores **conservadores** alineados al snapshot sanitizado en el repo ([`config/
 | `agents.defaults.maxConcurrent` | `2` — menos llamadas a herramientas en paralelo. |
 | `agents.defaults.subagents.maxConcurrent` | `4` — menos subagentes concurrentes. |
 
-Fusiona estos bloques con tu JSON **real** (no copies secretos a Git). El snapshot del monorepo es referencia, no sustituye `~/.openclaw`.
+**Obligatorio:** los valores anteriores deben existir en **`~/.openclaw/openclaw.json`** (no solo en Git). Si solo actualizaste el repo y el pico continúa, tu gateway seguía con `onSearch: true` o `maxConcurrent` altos hasta fusionar y reiniciar (`systemctl --user restart openclaw-gateway`).
 
 ## Higiene del workspace
 
@@ -55,9 +61,9 @@ En [`jarvis-ecosystem/agents/jarvis/AGENTS.md`](../jarvis-ecosystem/agents/jarvi
 
 ## Herramientas `exec` y perfiles (`tools`)
 
-En el snapshot, `tools.alsoAllow` puede incluir `exec`, `browser`, `lobster`. **`exec`** permite que el agente ejecute comandos shell: útil para automatización, pero aumenta el riesgo de cadenas que invoquen `rg` o escaneos amplios.
+**`exec`** en `tools.alsoAllow` permite comandos shell; sube el riesgo de `rg` u otros escaneos. El snapshot en repo (**[`config/openclaw-home/openclaw.json`](../config/openclaw-home/openclaw.json)**) deja solo `lobster` y `browser` en `alsoAllow` (sin `exec`) para canales de mensajería salvo que vuelvas a añadirlo a mano.
 
-**Criterio:** para canales solo de mensajería (p. ej. Telegram), si no necesitas terminal remota, valora **quitar `exec`** del `alsoAllow` o usar un perfil de herramientas más restrictivo según la documentación de tu versión de OpenClaw. Evalúa el trade-off: menos capacidad vs menos riesgo de picos.
+**Criterio:** si necesitas `exec` para automatizaciones concretas, añádelo de nuevo en `~/.openclaw/openclaw.json` y reinicia el gateway; asume el trade-off.
 
 ## Si el sistema ya está colgado
 
