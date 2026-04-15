@@ -10,46 +10,46 @@
   <image source="../tilesets/Modern_Office_48x48.png" width="768" height="2544"/>
  </tileset>
  <tileset firstgid="1073" name="Classroom &amp; Library" tilewidth="48" tileheight="48" tilecount="544" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/5_Classroom_and_library_48x48.png" width="768" height="1632"/>
+  <image source="../tilesets/5_Classroom_and_library_48x48.png" width="768" height="1632"/>
  </tileset>
  <tileset firstgid="1617" name="Basement" tilewidth="48" tileheight="48" tilecount="800" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/14_Basement_48x48.png" width="768" height="2400"/>
+  <image source="../tilesets/14_Basement_48x48.png" width="768" height="2400"/>
  </tileset>
  <tileset firstgid="2417" name="Generic Interiors" tilewidth="48" tileheight="48" tilecount="1248" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/1_Generic_48x48.png" width="768" height="3744"/>
+  <image source="../tilesets/1_Generic_48x48.png" width="768" height="3744"/>
  </tileset>
  <tileset firstgid="3665" name="Interios Room Builder" tilewidth="48" tileheight="48" tilecount="8588" columns="76">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Room_Builder_48x48.png" width="3648" height="5424"/>
+  <image source="../tilesets/Room_Builder_48x48.png" width="3648" height="5424"/>
  </tileset>
  <tileset firstgid="12253" name="6_Music_and_sport_48x48" tilewidth="48" tileheight="48" tilecount="768" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/6_Music_and_sport_48x48.png" width="768" height="2304"/>
+  <image source="../tilesets/6_Music_and_sport_48x48.png" width="768" height="2304"/>
  </tileset>
  <tileset firstgid="13021" name="3_Bathroom_48x48" tilewidth="48" tileheight="48" tilecount="896" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/3_Bathroom_48x48.png" width="768" height="2688"/>
+  <image source="../tilesets/3_Bathroom_48x48.png" width="768" height="2688"/>
  </tileset>
  <tileset firstgid="13917" name="4_Bedroom_48x48" tilewidth="48" tileheight="48" tilecount="1712" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/4_Bedroom_48x48.png" width="768" height="5136"/>
+  <image source="../tilesets/4_Bedroom_48x48.png" width="768" height="5136"/>
  </tileset>
  <tileset firstgid="15629" name="2_LivingRoom_48x48" tilewidth="48" tileheight="48" tilecount="720" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/2_LivingRoom_48x48.png" width="768" height="2160"/>
+  <image source="../tilesets/2_LivingRoom_48x48.png" width="768" height="2160"/>
  </tileset>
  <tileset firstgid="16349" name="7_Art_48x48" tilewidth="48" tileheight="48" tilecount="112" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/7_Art_48x48.png" width="768" height="336"/>
+  <image source="../tilesets/7_Art_48x48.png" width="768" height="336"/>
  </tileset>
  <tileset firstgid="16461" name="8_Gym_48x48" tilewidth="48" tileheight="48" tilecount="528" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/8_Gym_48x48.png" width="768" height="1584"/>
+  <image source="../tilesets/8_Gym_48x48.png" width="768" height="1584"/>
  </tileset>
  <tileset firstgid="16989" name="9_Fishing_48x48" tilewidth="48" tileheight="48" tilecount="432" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/9_Fishing_48x48.png" width="768" height="1296"/>
+  <image source="../tilesets/9_Fishing_48x48.png" width="768" height="1296"/>
  </tileset>
  <tileset firstgid="17421" name="11_Halloween_48x48" tilewidth="48" tileheight="48" tilecount="976" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/11_Halloween_48x48.png" width="768" height="2928"/>
+  <image source="../tilesets/11_Halloween_48x48.png" width="768" height="2928"/>
  </tileset>
  <tileset firstgid="18397" name="13_Conference_Hall_48x48" tilewidth="48" tileheight="48" tilecount="192" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/13_Conference_Hall_48x48.png" width="768" height="576"/>
+  <image source="../tilesets/13_Conference_Hall_48x48.png" width="768" height="576"/>
  </tileset>
  <tileset firstgid="18589" name="16_Grocery_store_48x48" tilewidth="48" tileheight="48" tilecount="1248" columns="16">
-  <image source="../../../../../Pictures/ModernAssets/moderninteriors-win/1_Interiors/48x48/Theme_Sorter_48x48/16_Grocery_store_48x48.png" width="768" height="3744"/>
+  <image source="../tilesets/16_Grocery_store_48x48.png" width="768" height="3744"/>
  </tileset>
  <layer id="7" name="floor" width="27" height="20">
   <data encoding="csv">
