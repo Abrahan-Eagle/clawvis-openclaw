@@ -62,6 +62,8 @@ Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por 
 Antes de cualquier tarea de contenido, optimizacion o auditoria, leer el contexto central:
 - **product-marketing-context** — `../../.agents/product-marketing-context.md` — producto, audiencia, voz, objeciones. Leer SIEMPRE primero.
 
+**Contenido para redes (logica operativa):** el formato depende del **canal** (IG, LinkedIn, X, etc.): limites de caracteres, ratio de imagen, si es carrusel o post unico, tono. Si el encargo no especifica red ni formato, **preguntar primero** o entregar variantes **por red** claramente etiquetadas. Para carrusel + dimensiones + Canva/open-carrusel: [`carousel-ops`](../jarvis/skills/carousel-ops/SKILL.md) y [CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
+
 Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 - **copywriting-ops** — Redactar copy para landing pages, homepage, redes, servicios. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
 - **page-cro-ops** — Auditar y optimizar paginas para conversion (framework 7 dimensiones). Ver `../../agents/jarvis/skills/page-cro-ops/SKILL.md`.

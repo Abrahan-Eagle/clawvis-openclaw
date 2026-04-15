@@ -9,6 +9,8 @@ Usar este skill cuando el agente necesite escribir o revisar copy para:
 - Homepage o secciones de producto
 - Posts de redes sociales (caption largo)
 - Carruseles multi-slide (guion por diapositiva): usar tambien [`carousel-ops`](../carousel-ops/SKILL.md)
+
+**Redes sociales — regla de claridad:** si el encargo es “un post” o “contenido para redes” **sin** decir red ni formato, **preguntar antes** (o proponer 1 opcion por red en bloques separados): canal(es), formato (post vs carrusel vs hilo), si incluye **brief visual** (imagenes, Canva, solo texto). Cada red tiene reglas distintas; no entregar solo un bloque generico como si valiera para todas.
 - Propuestas comerciales (seccion de pitch)
 - Descripciones de perfil (Workana, LinkedIn)
 

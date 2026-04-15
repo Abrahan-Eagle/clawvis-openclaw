@@ -15,6 +15,22 @@ Este skill cubre **metodologia y salidas textuales** (guion por slide, checklist
 - Hace falta **guion estructurado** alineado a marca antes de disenar en Canva/Figma/otra app.
 - Complementa [`copywriting-ops`](../copywriting-ops/SKILL.md) cuando el formato es **multi-slide** con gancho y CTA final.
 
+## Brief por red (obligatorio si el humano no lo especifico)
+
+**Logica:** cada red tiene limites de caracteres, ratios y tono distintos; el carrusel con imagenes no es lo mismo que un hilo de X ni un post de LinkedIn. **No asumir** un solo formato para todo.
+
+Si falta **cualquiera** de estos datos, **preguntar primero** (lista corta, una sola ronda) antes de redactar el entregable final:
+
+| Pregunta | Por que importa |
+|----------|-----------------|
+| **Que red(es)?** (IG, LinkedIn, X, Facebook, TikTok caption, etc.) | Limites de texto, hashtags, tono, si va carrusel o post unico. |
+| **Formato?** (carrusel N slides, post unico, story, Reels guion, newsletter) | Estructura y longitud. |
+| **Solo copy o tambien diseno?** (Canva / open-carrusel / texto con URLs de imagen) | Evita prometer “diseño en Canva” si el humano solo pidio articulo de blog. |
+| **Marca y ratio?** (ej. IG 4:5, LinkedIn 1200x627) | Dimensiones y safe zone. |
+| **Idioma y CTA?** | Coherencia con campana. |
+
+Si el humano dice **“para IG”** o **“carrusel 6 slides”**, es suficiente; no hace falta repreguntar lo obvio.
+
 ## Prerrequisitos
 
 1. Leer [`product-marketing-context.md`](../../../../.agents/product-marketing-context.md) (audiencia, voz, colores si estan declarados).
