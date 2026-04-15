@@ -1,6 +1,6 @@
 # Tilesets para `office2` (Tiled)
 
-El mapa [`../maps/office2.json`](../maps/office2.json) espera estos PNG en **esta carpeta** (`public/tilesets/`). No se versionan en el repo (binarios grandes / licencia); cópialos desde tu instalación del pack **Modern Interiors** u otra fuente compatible con los mismos nombres de archivo.
+El mapa [`../maps/office2.json`](../maps/office2.json) carga estos PNG desde **`public/tilesets/`**. En este monorepo los archivos **ya están en el repo** (clon/pull normal). Si en tu máquina faltan, sincroniza con `origin` o vuelve a copiarlos desde el pack **Modern Interiors** / **Modern Office Revamped** (LimeZu, itch.io), respetando su licencia.
 
 **Oficina (2):**
 
@@ -24,4 +24,4 @@ El mapa [`../maps/office2.json`](../maps/office2.json) espera estos PNG en **est
 - `13_Conference_Hall_48x48.png`
 - `16_Grocery_store_48x48.png`
 
-Tras copiar los archivos, abre `maps/office2.tmx` en Tiled para comprobar que todas las imágenes cargan.
+Para editar el mapa, abre `maps/office2.tmx` en Tiled y comprueba que todas las imágenes cargan.
