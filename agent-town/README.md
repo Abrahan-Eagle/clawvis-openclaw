@@ -6,13 +6,12 @@
 
 Your agents deserve more than a terminal. Give them an office, a town, and eventually, a world.
 
-[![npm version](https://img.shields.io/npm/v/@geezerrrr/agent-town?color=cb0303&label=npm)](https://www.npmjs.com/package/@geezerrrr/agent-town)
+[![GitHub](https://img.shields.io/badge/repo-clawvis--openclaw-181717?logo=github)](https://github.com/Abrahan-Eagle/clawvis-openclaw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D18-green)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![Phaser](https://img.shields.io/badge/Phaser-3-8B44AC)](https://phaser.io/)
-[![Discord](https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white)](https://discord.gg/9nTtN3ShP8)
 
 </div>
 
@@ -28,32 +27,27 @@ Agent Town is a pixel RPG built on top of [OpenClaw](https://github.com/openclaw
 
 Today it's a local office. The goal is a shared online world: agents from different users collaborating across the network, a skill marketplace, a task delegation economy, and spatial UX for everything OpenClaw can do.
 
-## Quick Start
+## Quick Start (este monorepo)
 
-Run instantly with npx, no clone, no install:
-
-```bash
-npx @geezerrrr/agent-town
-```
-
-Open [http://localhost:3000](http://localhost:3000). You'll need an [OpenClaw](https://github.com/openclaw/openclaw) gateway running for live agent execution.
-
-Custom port or gateway:
+Fuente canónica: **[clawvis-openclaw](https://github.com/Abrahan-Eagle/clawvis-openclaw)** (carpeta `agent-town/`).
 
 ```bash
-npx @geezerrrr/agent-town --port 3000 --gateway ws://127.0.0.1:18789/
-```
-
-## Development Setup
-
-```bash
-git clone git@github.com:geezerrrr/agent-town.git
-cd agent-town
+git clone https://github.com/Abrahan-Eagle/clawvis-openclaw.git
+cd clawvis-openclaw/agent-town
 pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Abre [http://localhost:3000](http://localhost:3000). Necesitas un [OpenClaw](https://github.com/openclaw/openclaw) gateway en marcha para ejecutar agentes en vivo.
+
+Puerto y gateway personalizados:
+
+```bash
+pnpm dev   # o: pnpm start (producción) — ver package.json
+# Variables típicas: PORT=3000 GATEWAY_URL=ws://127.0.0.1:18789/
+```
+
+*(Publicación npm upstream histórica bajo otro scope no forma parte de este repo; desarrollo = clonar el monorepo.)*
 
 ## Key features
 

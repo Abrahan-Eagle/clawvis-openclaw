@@ -17,7 +17,7 @@
 
 ## 素材资源
 
-所有素材位于 `/Users/geezerrrr/Pictures/ModernAssets/`，来自 itch.io **LimeZu Modern 系列**（已购买授权）。
+素材应放在本仓库可引用路径下（例如 `agent-town/public/` 下的 tilesets/sprites）。若从 itch.io **LimeZu Modern** 等包导入，请在本地解压并重新导出 Tiled，使 JSON 中的 `image` 指向 `public/` 相对路径（勿提交指向其他用户主目录的绝对路径）。
 
 ### 素材清单
 
