@@ -16,11 +16,11 @@ Gobierno operativo: [docs/GOBIERNO_JARVIS_V2.md](docs/GOBIERNO_JARVIS_V2.md).
 |----|--------|-----------------------|-----|------------|--------|-----------|
 | `marketing` | Marketing & Comunicación | Marketing digital, gestión de redes, branding, contenido, publicidad | Ricardo Mena (ejemplo) | Patricia Oropeza (ejemplo) | **Activa** | `agents/marketing/` |
 | `ventas` | Ventas | Prospección, cierre, gestión de cuentas, pipeline comercial | Damian Vela (ejemplo) | Lucia Fernandez (ejemplo) | **Activa** | `agents/ventas/` |
-| `dev-agency` | Agencia de Programación | Desarrollo de software, mantenimiento, APIs, apps móviles, web | (por asignar) | (por asignar) | Planificada | — |
-| `legal` | Bufete Legal | Asesoría jurídica, contratos, propiedad intelectual, regulación | (por asignar) | (por asignar) | Planificada | — |
-| `contadores` | Contabilidad & Finanzas | Contabilidad, impuestos, nómina, auditorías, reportes financieros | (por asignar) | (por asignar) | Planificada | — |
+| `dev-agency` | Agencia de Programación | Desarrollo de software, mantenimiento, APIs, apps móviles, web | (por asignar) | (por asignar) | Planificada (scaffold) | `agents/dev-agency/` |
+| `legal` | Bufete Legal | Asesoría jurídica, contratos, propiedad intelectual, regulación | (por asignar) | (por asignar) | Planificada (scaffold) | `agents/legal/` |
+| `contadores` | Contabilidad & Finanzas | Contabilidad, impuestos, nómina, auditorías, reportes financieros | (por asignar) | (por asignar) | Planificada (scaffold) | `agents/contadores/` |
 
-**Nota:** las empresas "Planificada" no tienen workspace ni agentes en OpenClaw todavía. Se crearán cuando el superusuario lo autorice (ver checklist de alta abajo).
+**Nota:** estado **Planificada (scaffold)** = hay carpeta `agents/<id>/` con `IDENTITY.md`, `AGENTS.md`, etc., pero **aún no** hay agentes en OpenClaw ni tableros hasta que el superusuario complete el checklist de alta.
 
 ---
 
@@ -80,7 +80,7 @@ Cuando una empresa necesita a otra (ej. marketing pide una landing a dev-agency,
 
 Cuando el superusuario autorice una empresa nueva:
 
-1. **Crear workspace:** `agents/<id>/` con `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `USER.md` (copiar estructura de `agents/marketing/` como plantilla).
+1. **Workspace:** si no existe, crear `agents/<id>/` con `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `USER.md`, `MEMORY.md` (plantilla: `agents/marketing/`). Para `dev-agency`, `legal` y `contadores` ya hay **scaffold** en el repo: completar contenido y pasar la empresa a **Activa** en esta tabla.
 2. **Actualizar esta tabla:** agregar fila con estado "Activa" y ruta del workspace.
 3. **Agregar agentes en OpenClaw:** entrada(s) en `openclaw.json` bajo `agents.list` apuntando al nuevo workspace.
 4. **Copiar skills:** replicar `agents/jarvis/skills/` al nuevo workspace (o enlace simbólico si se soporta). Si la unidad necesita herramientas propias (patrón **career-ops** en Ventas), documentar la excepción en el `AGENTS.md` de esa empresa; no todo skill tiene que existir en `agents/jarvis/skills/`.

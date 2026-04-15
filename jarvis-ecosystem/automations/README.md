@@ -15,6 +15,17 @@ El CLI solo lista archivos `*.yaml` **directamente** bajo `CLAWFLOWS_DIR`, no en
 - En la **raíz** de `automations/` hay **archivos YAML** con el mismo contenido que los de `jarvis/`, `marketing/`, etc. (para que `clawflows list` los vea). **Edita primero** en `automations/jarvis/`, `automations/marketing/`, `automations/ventas/` — o un solo sitio que el equipo elija — y **vuelve a alinear** la copia de la raíz si cambia el flujo (por ejemplo `diff`/`cp` entre `jarvis/morning-briefing.yaml` y `jarvis-morning-briefing.yaml`).
 - **No** asumir symlinks: en este repo las copias en raíz son ficheros regulares idénticos a la última sincronización.
 
+### Tabla raíz ↔ subcarpeta (pares esperados)
+
+| Archivo en raíz | Canónico en subcarpeta |
+|-----------------|-------------------------|
+| `jarvis-morning-briefing.yaml` | `jarvis/morning-briefing.yaml` |
+| `marketing-competitor-monitor.yaml` | `marketing/competitor-monitor.yaml` |
+| `ventas-pipeline-report.yaml` | `ventas/pipeline-report.yaml` |
+| `shared-security-audit.yaml` | `shared/security-audit.yaml` |
+
+Tras editar un lado, `diff` los dos y copiar si hace falta.
+
 ## `clawflows list` vs `registry/`
 
 - Los flujos custom en la raíz existen para el listado del CLI (véase arriba).

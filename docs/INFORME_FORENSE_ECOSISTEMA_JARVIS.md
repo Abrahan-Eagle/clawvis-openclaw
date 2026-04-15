@@ -1486,7 +1486,7 @@
 
 - **Infraestructura:** Gateway loopback + Agent Town como proxy WS; systemd usuario; fuerte dependencia de un nodo.
 - **Datos:** Dossiers y Trello como columnas vertebrales; sin data warehouse en repo.
-- **Multi-empresa:** [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md) lista cinco unidades; solo tres workspaces bajo `agents/` (jarvis, marketing, ventas) — **brecha esperada** para `dev-agency`, `legal`, `contadores`.
+- **Multi-empresa:** [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md) lista cinco unidades; bajo `agents/` hay **seis** carpetas (jarvis, marketing, ventas + **scaffolds** dev-agency, legal, contadores). Las tres planificadas siguen sin agentes en OpenClaw hasta activación.
 - **Seguridad:** `gateway.auth: none` en snapshot; README exige repo privado; proxy y dispatch con controles parciales (localhost, secret).
 - **Integraciones:** Trello/Discord/Telegram documentados como ya configurados en flujo Jarvis ([INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../jarvis-ecosystem/docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md) referenciado en AGENTS).
 
@@ -1509,13 +1509,15 @@
 
 **Actualización:** Tras el informe inicial se añadieron [PUSH-A-GITHUB.md](../PUSH-A-GITHUB.md) y reglas `jarvis-ecosystem/.env` / `.env.*` en [.gitignore](../.gitignore). Los puntos antiguos “falta PUSH-A-GITHUB” y “falta ignore de `.env`” quedan **cerrados** en el repositorio; persisten riesgos de **historial Git** si algún secreto se hubiera commiteado antes.
 
+**Remedios en repo (abr 2026):** CI de Agent Town con **Node 22** ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml)); `engines.node >=22` en [`agent-town/package.json`](../agent-town/package.json); **scaffolds** en `agents/dev-agency/`, `agents/legal/`, `agents/contadores/` y tabla actualizada en [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md); guías [COHERENCIA_RUNTIME_REPO.md](../jarvis-ecosystem/docs/COHERENCIA_RUNTIME_REPO.md) y [SECURITY_GATEWAY.md](../jarvis-ecosystem/docs/SECURITY_GATEWAY.md); **tabla explícita** raíz ↔ subcarpeta en [automations/README.md](../jarvis-ecosystem/automations/README.md). Lo anterior **no sustituye** endurecer auth en despliegues expuestos ni un dashboard de costos LLM.
+
 1. `gateway.auth.mode: none` si el despliegue amplía superficie de red.
-2. Deriva entre `~/.openclaw`, repo y symlinks de `jarvis-ecosystem`.
-3. Workspaces ausentes para tres empresas planificadas en [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md).
+2. Deriva entre `~/.openclaw`, repo y symlinks de `jarvis-ecosystem` — mitigación documental: [COHERENCIA_RUNTIME_REPO.md](../jarvis-ecosystem/docs/COHERENCIA_RUNTIME_REPO.md).
+3. ~~Workspaces ausentes~~ **Scaffold en repo** para `dev-agency`, `legal`, `contadores`; sigue pendiente **activación** (agentes OpenClaw, Trello, Discord) según checklist en [COMPANIES.md](../jarvis-ecosystem/COMPANIES.md).
 4. Routing de agentes por canal (Discord) no automático — riesgo de todo vía `jarvis`.
-5. Posible filtración histórica: auditar commits anteriores por `jarvis-ecosystem/.env` u otros secretos antes de las reglas nuevas en `.gitignore`.
-6. CI Agent Town en Node 20 vs Node 22 recomendado para OpenClaw en README.
-7. Duplicación / nombres paralelos en YAML de `automations/`.
+5. Posible filtración histórica: auditar commits anteriores por `jarvis-ecosystem/.env` u otros secretos antes de las reglas nuevas en `.gitignore` — ver procedimiento en [COHERENCIA_RUNTIME_REPO.md](../jarvis-ecosystem/docs/COHERENCIA_RUNTIME_REPO.md).
+6. ~~CI Agent Town en Node 20 vs Node 22~~ **Alineado:** CI y `package.json` usan Node **22** (abr 2026).
+7. Duplicación / nombres paralelos en YAML de `automations/` — **documentado** con tabla en [automations/README.md](../jarvis-ecosystem/automations/README.md) (sincronización manual sigue siendo responsabilidad del equipo).
 8. Métricas de costo LLM no consolidadas en dashboard único en repo.
 9. `plugins.allow` en OpenClaw: omisión de IDs de canal desactiva el plugin aunque `channels.*.enabled` sea true ([README.md](../README.md) — riesgo operativo recurrente).
 10. Bus factor: una persona + agentes — riesgo operativo organizacional (fuera del código pero relevante en veredicto).
@@ -1551,3 +1553,5 @@ El ecosistema **clawvis-openclaw** es **operable y bien documentado** para un ho
 *Informe generado según [PROMPT_FORENSE_ECOSISTEMA_JARVIS.md](./PROMPT_FORENSE_ECOSISTEMA_JARVIS.md). Comité: 44 roles + síntesis S.1–S.6.*
 
 *Addendum: alineación con el estado del repo tras commit de documentación y remedios (`PUSH-A-GITHUB.md`, `.gitignore` para `jarvis-ecosystem/.env`).*
+
+*Addendum abr 2026: remedios S.3 (Node 22 en CI, scaffolds empresas planificadas, `COHERENCIA_RUNTIME_REPO`, `SECURITY_GATEWAY`, tabla `automations/`).*

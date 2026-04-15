@@ -38,6 +38,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | `agents/jarvis/` | Workspace del agente maestro: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `MEMORY.md`, `skills/`, `scripts/` (model-router), `memory/`. |
 | `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`. Las skills compartidas viven solo en [`agents/jarvis/skills/`](agents/jarvis/skills/) (sin copias duplicadas aquí). |
 | `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/career-ops/` (solo Ventas), [`career-ops/`](agents/ventas/career-ops/) (herramienta local). Resto de skills: [`agents/jarvis/skills/`](agents/jarvis/skills/). Detalle: [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). |
+| `agents/dev-agency/`, `agents/legal/`, `agents/contadores/` | Empresas **planificadas**: scaffold (`IDENTITY`, `AGENTS`, `SOUL`, `USER`, `MEMORY`). Sin agentes en gateway hasta activación — [COMPANIES.md](COMPANIES.md). |
 | `automations/` | YAML ClawFlows; ver [automations/README.md](automations/README.md). |
 | `scripts/` | `clawflows-env.sh`, verificación del registry, etc. |
 | [CLAWFLOWS.md](CLAWFLOWS.md) | Guía ClawFlows + Lobster. |
@@ -61,6 +62,8 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/plantillas/REPORTE_SUPERVISOR_CEO.md](docs/plantillas/REPORTE_SUPERVISOR_CEO.md) | Plantilla copiable para reporte supervisor → CEO. |
 | [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) | Primera pasada: tableros Trello + canales Discord alineados a la convención. |
 | [docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) | Token Trello con escritura, `exec` en OpenClaw, Discord bot — checklist. |
+| [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md) | `~/.openclaw` vs repo vs snapshot: evitar deriva. |
+| [docs/SECURITY_GATEWAY.md](docs/SECURITY_GATEWAY.md) | Auth del gateway y superficie de red; `plugins.allow`. |
 
 ## Checklist rápido
 
