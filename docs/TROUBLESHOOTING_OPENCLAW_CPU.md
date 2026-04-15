@@ -109,7 +109,32 @@ En [`jarvis-ecosystem/agents/jarvis/AGENTS.md`](../jarvis-ecosystem/agents/jarvi
 2. Si es seguro: `kill <PID>` del `rg` runaway (o `killall rg` con cuidado).
 3. Reiniciar el gateway si el proceso del agente quedó inconsistente.
 
-## Referencias
+## Evidencia upstream: el “error” no es del fork `clawvis-openclaw`
+
+Revisión de **issues públicos** (GitHub / foro Cursor) alineada con lo observado en este host (`cursor-agent/.../rg --files --follow`, CPU al 900%+, monorepo ~1.3 GiB en `agent-town/`):
+
+### Cursor / Cursor Agent (ripgrep)
+
+El patrón **`rg` hijo de Cursor Agent** indexando el workspace es un **bug/regresión conocida del producto Cursor**, no algo introducido por commits en [Abrahan-Eagle/clawvis-openclaw](https://github.com/Abrahan-Eagle/clawvis-openclaw).
+
+- Foro Cursor — [Cursor 2.5+ unusable, persistent rg processes with high CPU usage](https://forum.cursor.com/t/cursor-2-5-unusable-persistent-rg-processes-with-high-cpu-usage/153681) (repos grandes, symlinks).
+- Foro Cursor — [Cursor spawns hundreds of rg processes](https://forum.cursor.com/t/cursor-spawns-hundreds-of-rg-processes/135818).
+- Foro Cursor — [Cursor 2.5+ project rules discovery causes infinite CPU usage in repos with circular symlinks](https://forum.cursor.com/t/cursor-2-5-project-rules-discovery-causes-infinite-cpu-usage-in-repos-with-circular-symlinks/155059) (descubrimiento de reglas / `AGENTS.md` vía `rg`).
+- Foro Cursor — [Regression - cpu spikes to 100% and agent hangs](https://forum.cursor.com/t/regression-cpu-100-usage/157585) (CLI Cursor).
+- Reddit — [Workaround for 100% CPU bug in Cursor CLI](https://www.reddit.com/r/cursor/comments/1ozltip/workaround_for_100_cpu_bug_in_cursor_cli/) (workarounds de versión).
+
+**Conclusión:** mitigar con **`.cursorignore`**, **`.rgignore`**, exclusiones VS Code, evitar `--follow` donde no lo controlas (eso lo lanza Cursor), *Reload Window*, y en casos extremos **abrir solo** `jarvis-ecosystem/` como carpeta en lugar del monorepo completo.
+
+### OpenClaw upstream (gateway / memoria)
+
+Problemas distintos del `rg` del IDE, pero relevantes si el cuello es **`openclaw-gateway`** u **`ollama`**:
+
+- [openclaw/openclaw#13758](https://github.com/openclaw/openclaw/issues/13758) — Gateway con CPU/RSS altos en sesiones muy largas (cerrado como duplicado; debate sobre timeouts, exec, heap de Node).
+- [openclaw/openclaw#10931](https://github.com/openclaw/openclaw/issues/10931) — `memory_search` con embeddings Ollama vs herramienta en gateway.
+
+**Conclusión:** en este repo ya se aplicaron mitigaciones locales (`memorySearch.sync`, sin `exec` en canales, etc.); seguir upstream si actualizas OpenClaw.
+
+## Referencias (repo)
 
 - [MODELOS_JARVIS_OPENCLAW.md](./MODELOS_JARVIS_OPENCLAW.md) — política de modelos y dónde se define.
 - [SECURITY_GATEWAY.md](../jarvis-ecosystem/docs/SECURITY_GATEWAY.md) — gateway y superficie de red.
