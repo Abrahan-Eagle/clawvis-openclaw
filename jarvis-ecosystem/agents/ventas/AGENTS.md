@@ -63,6 +63,7 @@ Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 - **lead-research-ops** — Investigar y calificar leads, scoring, estrategia de contacto. Ver `../../agents/jarvis/skills/lead-research-ops/SKILL.md`.
 - **copywriting-ops** — Redactar copy para propuestas, perfiles, descripciones de servicio. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
 - **pipeline-health-ops** — Health check semanal del pipeline: metricas, forecasting, deals estancados, alertas. Ver `../../agents/jarvis/skills/pipeline-health-ops/SKILL.md`.
+- **last30days-openclaw** — (opcional) Pulso de comunidad reciente (Reddit, HN, GitHub, etc.) antes de leads/propuestas de alto valor. Ver `../../agents/jarvis/skills/last30days-openclaw/SKILL.md` y [../../docs/LAST30DAYS_INTEGRACION.md](../../docs/LAST30DAYS_INTEGRACION.md).
 
 ## Lineas rojas y Approval Gates
 

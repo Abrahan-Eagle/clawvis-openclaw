@@ -44,6 +44,10 @@ Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 
 Antes de ejecutar acciones con impacto externo, consultar [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md). Acciones como enviar propuestas, publicar contenido, modificar config o comprometer presupuesto requieren aprobacion explicita del CEO.
 
+### Intel reciente externa (last30days-openclaw)
+
+Skill **last30days-openclaw** (en `skills/last30days-openclaw/`): investigacion multi-fuente de los ultimos dias (Reddit, HN, GitHub, etc.) para pulso de comunidad antes de propuestas o campanas de alto valor. Convive con MemPalace y Graphify; no los sustituye. Guia: [../../docs/LAST30DAYS_INTEGRACION.md](../../docs/LAST30DAYS_INTEGRACION.md).
+
 ### Memoria avanzada (MemPalace)
 
 MemPalace esta integrado como MCP server complementario a la memoria nativa. Herramientas disponibles: `mempalace_search` (busqueda semantica), `mempalace_kg_query` (Knowledge Graph de empresas/clientes/decisiones), `mempalace_kg_add` (agregar hechos). El auto-mine sincroniza cada 30 min. Documentacion completa: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md). Cierre del módulo y réplica desde Git: [../../docs/MODULO_MEMPALACE_CIERRE.md](../../docs/MODULO_MEMPALACE_CIERRE.md).

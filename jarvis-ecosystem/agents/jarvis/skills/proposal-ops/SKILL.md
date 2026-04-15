@@ -22,6 +22,7 @@ Usar este skill cuando el agente necesite:
 2. Si hay dossier del cliente: leerlo (`client-dossiers/`)
 3. Si el pedido es vago: ejecutar `deep-interview-ops` primero
 4. Si ya hay datos del lead: revisar resultado de `lead-research-ops`
+5. **Opcional:** si el proyecto gira en torno a una tecnologia o marca muy debatida ahora, correr **last30days-openclaw** sobre ese tema y usar 1-2 citas o angulos del brief en win themes (sin inventar fuentes). Guia: `jarvis-ecosystem/docs/LAST30DAYS_INTEGRACION.md`.
 
 ## Win Themes
 

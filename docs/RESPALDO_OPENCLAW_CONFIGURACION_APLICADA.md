@@ -343,4 +343,15 @@ systemctl --user status openclaw-gateway.service cursor-agent-api.service
 
 ---
 
-**Ultima actualizacion del respaldo en repo:** 2026-04-14 (Graphify: mapa estructural, MCP server, god nodes, 128 comunidades).
+## 16. Forense last30days — skill last30days-openclaw (abr 2026)
+
+- **Origen:** analisis del repo upstream `mvanhorn/last30days-skill`; en ClawHub el paquete oficial puede devolver HTTP 429; se adopto el fork **last30days-openclaw** instalable con `openclaw skills install last30days-openclaw`.
+- **En repo:** `jarvis-ecosystem/agents/jarvis/skills/last30days-openclaw/` (versionado junto al ecosistema).
+- **Uso:** pulso de comunidad reciente (Reddit, Hacker News, GitHub, etc.) complementario a Workana/LinkedIn; no sustituye MemPalace ni Graphify.
+- **Skills actualizados:** `lead-research-ops` (paso opcional 0), `proposal-ops` (paso opcional 5).
+- **AGENTS.md:** jarvis, ventas, marketing enlazan el skill y la guia.
+- Documentacion: `jarvis-ecosystem/docs/LAST30DAYS_INTEGRACION.md`, `jarvis-ecosystem/docs/FORENSE_LAST30DAYS_RESUMEN.md`.
+
+---
+
+**Ultima actualizacion del respaldo en repo:** 2026-04-14 (last30days-openclaw: skill versionado, integracion lead-research/proposal, docs).

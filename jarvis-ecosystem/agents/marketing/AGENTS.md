@@ -64,6 +64,7 @@ Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 - **copywriting-ops** — Redactar copy para landing pages, homepage, redes, servicios. Ver `../../agents/jarvis/skills/copywriting-ops/SKILL.md`.
 - **page-cro-ops** — Auditar y optimizar paginas para conversion (framework 7 dimensiones). Ver `../../agents/jarvis/skills/page-cro-ops/SKILL.md`.
 - **seo-audit-ops** — Auditar SEO tecnico + on-page, cannibalization audit (bloqueante), keyword clusters, link building, E-E-A-T. Ver `../../agents/jarvis/skills/seo-audit-ops/SKILL.md`.
+- **last30days-openclaw** — (opcional) Tendencias y conversaciones recientes sobre un tema antes de planificar contenido. Ver `../../agents/jarvis/skills/last30days-openclaw/SKILL.md` y [../../docs/LAST30DAYS_INTEGRACION.md](../../docs/LAST30DAYS_INTEGRACION.md).
 
 ## Lineas rojas y Approval Gates
 

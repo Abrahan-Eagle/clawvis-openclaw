@@ -31,6 +31,8 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Graphify (mapa estructural del ecosistema, abr 2026):** [GRAPHIFY_INTEGRACION.md](GRAPHIFY_INTEGRACION.md) — grafo de conocimiento del repo (1369 nodos, 128 comunidades). God nodes, conexiones entre docs, MCP server. Convención: Graphify = mapa, MemPalace = memoria. Output local en `graphify-out/`.
 
+**Forense last30days / last30days-openclaw (abr 2026):** [FORENSE_LAST30DAYS_RESUMEN.md](FORENSE_LAST30DAYS_RESUMEN.md) — skill de investigacion reciente multi-fuente; integracion en `lead-research-ops` y `proposal-ops`. Guia operativa: [LAST30DAYS_INTEGRACION.md](LAST30DAYS_INTEGRACION.md).
+
 **Forense Agency Agents (ventas avanzadas + SEO, abr 2026):** [FORENSE_AGENCY_AGENTS_RESUMEN.md](FORENSE_AGENCY_AGENTS_RESUMEN.md) — 2 skills nuevos: proposal-ops (win themes, narrativa 3 actos, executive summary), pipeline-health-ops (metricas pipeline, forecasting, alertas). 3 skills enriquecidos: deep-interview-ops (+SPIN/Gap Selling/Sandler/AECR), cold-email-ops (+signal-based selling, ICP, secuencia 10 touches), seo-audit-ops (+cannibalization audit, keyword clusters, link building, E-E-A-T).
 
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).

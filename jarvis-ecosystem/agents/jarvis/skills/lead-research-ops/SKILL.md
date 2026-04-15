@@ -17,6 +17,16 @@ Usar este skill cuando el agente necesite:
 
 Extraer: servicios, audiencia objetivo, diferenciadores. Para saber si el lead encaja con lo que ofrecemos.
 
+## Paso 0 (opcional): intel reciente con last30days-openclaw
+
+Cuando el lead es **Hot/Warm** o el tema del proyecto depende de **stack, herramienta o persona publica**, considerar ejecutar el skill **last30days-openclaw** para pulso de comunidad (Reddit, HN, GitHub, X, etc.) en los ultimos dias. No sustituye Workana/LinkedIn; **complementa** con lenguaje y dolores recientes.
+
+- Skill: `agents/jarvis/skills/last30days-openclaw/SKILL.md`
+- Guia: `jarvis-ecosystem/docs/LAST30DAYS_INTEGRACION.md`
+- Si el skill no esta instalado en la maquina: `openclaw skills install last30days-openclaw` (o usar la copia versionada en el repo + `setup_openclaw_env.sh`).
+
+Integrar en la ficha del lead: 2-4 bullets de "que dice la comunidad ahora" solo si aportan al angulo de contacto o a la propuesta.
+
 ## Ideal Customer Profile (ICP)
 
 Un lead es ideal si cumple 3+ de estos criterios:
@@ -80,6 +90,7 @@ Para leads Hot y Warm, preparar:
 ## Checklist antes de entregar
 
 - [ ] Lei product-marketing-context.md
+- [ ] (Opcional) last30days-openclaw si el lead/tema lo justifica — ver Paso 0
 - [ ] Complete los datos basicos del lead
 - [ ] Hice scoring con todos los factores
 - [ ] El lead esta clasificado (Hot/Warm/Cold/Skip)
