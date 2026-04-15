@@ -183,11 +183,7 @@ function proxyWebSocket(clientWs, gatewayUrl) {
           if (frame.params.client) {
             frame.params.client.platform = process.platform;
           }
-          frame.params.device = buildDeviceBlock(
-            deviceAuth.identity,
-            challengeNonce,
-            frame.params
-          );
+          frame.params.device = buildDeviceBlock(deviceAuth.identity, challengeNonce, frame.params);
           payload = Buffer.from(JSON.stringify(frame));
           challengeNonce = null;
           proxyLog.info("Injected device identity into connect handshake");
