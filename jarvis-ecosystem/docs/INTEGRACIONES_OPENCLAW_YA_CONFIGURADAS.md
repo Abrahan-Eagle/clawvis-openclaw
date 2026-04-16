@@ -46,7 +46,7 @@ Tres caminos para usar Canva desde el ecosistema Jarvis, de mas inmediato a mas 
 |-----|--------|-------------|
 | **B. Composio** | Activa (OAuth OK) | Plugin `@composio/openclaw-plugin` + `consumerKey` + 7 herramientas `COMPOSIO_*` en `alsoAllow`. Tool calling desde chat. |
 | **C. Canva Connect directo** | Skill instalado | Skill `canva` de ClawHub (`openclaw skills install canva`). OAuth directo, scripts CLI (`canva.sh`), sin intermediario. |
-| **D. MCP oficial Canva** | Pendiente registro | `https://mcp.canva.com/mcp` — 30+ tools (`generate-design`, editing transactions, resize). Requiere [formulario de intake](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform). |
+| **D. MCP oficial Canva** | Pendiente registro | Servidor remoto `https://mcp.canva.com/mcp` — 30+ tools (`generate-design`, editing transactions, resize). Registro previo: [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (puente SDK + MCP; el formulario resume capacidades y puede enlazar al repo del conector). |
 
 Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://composio.dev/toolkits/canva/framework/openclaw). MCP oficial: [canva.dev/docs/mcp](https://www.canva.dev/docs/mcp/). En el ecosistema Jarvis: [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) **§2.10**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (limites API, brand templates, Telegram/`messaging`).
 
@@ -75,6 +75,7 @@ Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://compo
 
 ## Historial
 
+- **2026-04-16:** Via **D (MCP oficial)** — alineacion con *Canva MCP Connector Intake Form*: descripcion del conector SDK+MCP y nota de verificar enlace al repo en el formulario; enlaces en [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) y [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md).
 - **2026-04-15:** Seccion **Canva (tres vias configuradas)** — tabla comparativa Composio / Canva Connect directo / MCP oficial, skill `canva` de ClawHub, formulario de intake MCP.
 - **2026-04-15:** Seccion **Canva (via Composio + OpenClaw)** (version inicial) — enlace oficial Composio, checklist (`consumerKey`, plugin, `plugins.allow`, `tools.alsoAllow` `COMPOSIO_*`, OAuth Canva, `composio doctor`), nota cuenta gratis y [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md).
 - **2026-04-07:** Enlace a [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) (inventario forense comunidad OpenClaw). Ampliación: ancla `#marketing-openclaw-forense`, §2 marketing + Claude y mapeo `mkt-*` en el párrafo del catálogo.

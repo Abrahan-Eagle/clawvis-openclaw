@@ -151,6 +151,7 @@ Archivos PNG    URL de descarga
 3. [`canva-design-assets`](https://mcpmarket.com/tools/skills/canva-design-assets) — skill MCPMarket, patron bulk social media.
 4. [`canva-sdks/canva-gemini-extension`](https://github.com/canva-sdks/canva-gemini-extension) — extension MCP oficial de Canva para Gemini.
 5. [Composio toolkit Canva](https://composio.dev/toolkits/canva) — integracion ya activa en el ecosistema.
+6. **Canva MCP Connector (intake)** — El [formulario de intake de Canva](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (*Canva MCP Connector Intake Form*) describe el puente entre el SDK de Canva y MCP: busqueda de plantillas en lenguaje natural / categorias / keywords; creacion de disenos desde plantilla existente, brand template o imagen; disenos **multi-pagina**; gestion de disenos (importar, listar, renombrar, papelera) en evolucion. Configuracion tipica: bloque `mcpServers` en JSON para clientes compatibles con MCP. El formulario puede incluir un enlace al repositorio publico del conector; **comprueba la URL vigente en el propio formulario** (las rutas de GitHub pueden cambiar).
 
 **Herramientas MCP oficial por plan (referencia [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/)):**
 

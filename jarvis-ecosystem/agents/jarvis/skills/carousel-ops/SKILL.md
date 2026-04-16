@@ -132,7 +132,7 @@ Skill [`canva`](../canva/SKILL.md) instalado desde ClawHub (`openclaw skills ins
 
 ### D. Canva MCP oficial (futuro — `generate-design` + editing)
 
-Servidor remoto `https://mcp.canva.com/mcp` — 30+ herramientas incluyendo `generate-design` (IA), `perform-editing-operations` (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [formulario de intake de Canva](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (5-7 dias). Herramientas y planes en [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/).
+Servidor remoto `https://mcp.canva.com/mcp` — 30+ herramientas incluyendo `generate-design` (IA), `perform-editing-operations` (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (5-7 dias; el formulario describe el conector SDK+MCP y puede enlazar al repo publico). Herramientas y planes en [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/).
 
 ---
 
