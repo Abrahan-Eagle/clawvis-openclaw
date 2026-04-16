@@ -174,9 +174,9 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 **Vias adicionales (abr 2026):**
 
 - **Canva Connect directo** — skill `canva` de ClawHub (`openclaw skills install canva`), OAuth 2.0 sin Composio, scripts CLI (`canva-auth.sh`, `canva.sh`). Ideal para debug y automatizacion por script.
-- **MCP oficial Canva** — `https://mcp.canva.com/mcp`, 30+ herramientas incluyendo `generate-design` (IA), editing transactions (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [formulario de intake](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (5-7 dias).
+- **MCP oficial Canva** — `https://mcp.canva.com/mcp`, 30+ herramientas incluyendo `generate-design` (IA), editing transactions (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [formulario de intake](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (5-7 dias).
 
-**Proyectos de referencia estudiados:** `coolmanns/canva-connect` (skill base), MCP oficial Canva (`https://mcp.canva.com/mcp`), [intake Canva MCP Connector](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (formulario con descripcion del conector y enlace al repo si aplica), `canva-design-assets` (MCPMarket, patron bulk social media), `canva-sdks/canva-gemini-extension` (wrapper MCP oficial), Composio toolkit (ya activo).
+**Proyectos de referencia estudiados:** `coolmanns/canva-connect` (skill base), MCP oficial Canva (`https://mcp.canva.com/mcp`), [intake Canva MCP Connector](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (formulario con descripcion del conector y enlace al repo si aplica), `canva-design-assets` (MCPMarket, patron bulk social media), `canva-sdks/canva-gemini-extension` (wrapper MCP oficial), Composio toolkit (ya activo).
 
 **Referencia:** [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado, tabla comparativa), config snapshot en `config/openclaw-home/openclaw.json`.
 
