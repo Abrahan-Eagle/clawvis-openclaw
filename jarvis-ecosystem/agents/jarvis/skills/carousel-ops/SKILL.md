@@ -25,11 +25,11 @@ Si falta **cualquiera** de estos datos, **preguntar primero** (lista corta, una 
 |----------|-----------------|
 | **Que red(es)?** (IG, LinkedIn, X, Facebook, TikTok caption, etc.) | Limites de texto, hashtags, tono, si va carrusel o post unico. |
 | **Formato?** (carrusel N slides, post unico, story, Reels guion, newsletter) | Estructura y longitud. |
-| **Solo copy o tambien diseno?** (Canva / open-carrusel / texto con URLs de imagen) | Evita prometer “diseño en Canva” si el humano solo pidio articulo de blog. |
+| **Solo copy o tambien diseno?** (Canva / open-carrusel / texto con URLs de imagen) | Evita prometer "diseño en Canva" si el humano solo pidio articulo de blog. |
 | **Marca y ratio?** (ej. IG 4:5, LinkedIn 1200x627) | Dimensiones y safe zone. |
 | **Idioma y CTA?** | Coherencia con campana. |
 
-Si el humano dice **“para IG”** o **“carrusel 6 slides”**, es suficiente; no hace falta repreguntar lo obvio.
+Si el humano dice **"para IG"** o **"carrusel 6 slides"**, es suficiente; no hace falta repreguntar lo obvio.
 
 ## Prerrequisitos
 
@@ -95,7 +95,7 @@ Instalado en `~/tools/open-carrusel/` (no en el monorepo). Genera slides HTML y 
 cd ~/tools/open-carrusel && npm run dev   # http://localhost:3000
 ```
 
-### B. Canva via Composio (API remota)
+### B. Canva via Composio (API remota — ya activa)
 
 Plugin `composio` instalado en OpenClaw. Permite a Jarvis y `mkt-*` crear disenos, usar brand templates y exportar desde chat. Herramientas clave:
 
@@ -106,23 +106,92 @@ Plugin `composio` instalado en OpenClaw. Permite a Jarvis y `mkt-*` crear diseno
 
 Requiere `consumerKey` de Composio configurado en `~/.openclaw/openclaw.json`. Autenticar Canva desde [dashboard.composio.dev](https://dashboard.composio.dev).
 
-**Redactar no es crear en Canva:** entregar titular, cuerpo, guion por slide o URLs de imagenes **no** genera por si solo un **archivo** en la cuenta de Canva. Eso solo ocurre si se **ejecutan** las acciones de API (crear diseno / export) via Composio, o si el humano monta el lienzo a mano en canva.com.
+### C. Canva Connect directo (skill `canva` — OAuth sin intermediario)
 
-**Si el humano pide explícitamente "crear el diseno en Canva" o "que quede en mi Canva":**
+Skill [`canva`](../canva/SKILL.md) instalado desde ClawHub (`openclaw skills install canva`). Accede a la Connect API de Canva **directamente** via OAuth 2.0, sin pasar por Composio.
 
-1. **Intentar** las herramientas Composio expuestas en la sesion (p. ej. buscar/ejecutar acciones del toolkit Canva: listar disenos, crear diseno, iniciar export) cuando el gateway las inyecte al modelo.
-2. Si **no** hay herramientas disponibles, falla la auth, o la llamada devuelve error: **decirlo en una frase clara** ("No se creo ningun lienzo en Canva en esta sesion") y entonces si el **brief** por slide + enlaces a assets para montaje manual.
+**Scripts:**
+
+- `scripts/canva-auth.sh` — flujo OAuth interactivo (genera `~/.canva/tokens.json`).
+- `scripts/canva.sh <comando>` — CLI: `designs`, `get <id>`, `templates`, `export <id> [png|jpg|pdf]`, `autofill <template_id> '<json>'`, `upload <archivo>`, `user`.
+
+**Requisitos:**
+
+- `CANVA_CLIENT_ID` y `CANVA_CLIENT_SECRET` como env vars (crearlos en [canva.dev/developers](https://www.canva.dev/docs/connect/)).
+- Scopes: `design:content:read`, `design:content:write`, `asset:read`, `asset:write`, `brandtemplate:content:read`.
+
+**Cuando usar uno u otro:**
+
+| Criterio | Composio (B) | Canva Connect directo (C) |
+|----------|-------------|--------------------------|
+| Auth gestionada | Si (Composio OAuth) | Manual (script + tokens locales) |
+| Intermediario | Si (MCP Composio) | No (API Canva directo) |
+| Funciona en `messaging` profile | Si (via `COMPOSIO_*` en `alsoAllow`) | Si (via `exec` de scripts en sesion) |
+| Autofill brand templates | Si | Si |
+| Ideal para | Chat Telegram/Discord (tool calling) | CLI, scripts automatizados, debug |
+
+### D. Canva MCP oficial (futuro — `generate-design` + editing)
+
+Servidor remoto `https://mcp.canva.com/mcp` — 30+ herramientas incluyendo `generate-design` (IA), `perform-editing-operations` (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [formulario de intake de Canva](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (5-7 dias). Herramientas y planes en [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/).
+
+---
+
+## Dimensiones por red social (referencia ampliada)
+
+| Red | Formato | Pixeles | Ratio | Notas |
+|-----|---------|---------|-------|-------|
+| **Instagram** | Post feed cuadrado | 1080 x 1080 | 1:1 | |
+| **Instagram** | Post feed retrato | 1080 x 1350 | 4:5 | Recomendado carrusel |
+| **Instagram** | Story / Reels | 1080 x 1920 | 9:16 | |
+| **Instagram** | Carrusel | 1080 x 1350 | 4:5 | Max 10 slides |
+| **Facebook** | Post con imagen | 1200 x 630 | ~1.91:1 | |
+| **Facebook** | Story | 1080 x 1920 | 9:16 | |
+| **LinkedIn** | Post con imagen | 1200 x 627 | ~1.91:1 | |
+| **LinkedIn** | Carrusel (PDF) | 1080 x 1080 o 1080x1350 | 1:1 o 4:5 | Subir como PDF |
+| **X (Twitter)** | Post con imagen | 1600 x 900 | 16:9 | |
+| **TikTok** | Video / imagen | 1080 x 1920 | 9:16 | |
+| **Pinterest** | Pin estandar | 1000 x 1500 | 2:3 | |
+
+---
+
+## Flujo operativo Canva automatizado (patron social media)
+
+Flujo tipo para **crear un post de Instagram** con la API (aplica a Composio, skill directo o MCP):
+
+1. **Listar brand templates** — `GET /brand-templates` o via Composio. Si hay plantilla adecuada, usarla; si no, crear diseno en blanco.
+2. **Autofill** (si hay brand template) — `POST /autofills` con `brand_template_id` + `data: {titulo, cuerpo, ...}`. Requiere campos definidos en la plantilla. **Nota:** brand templates suelen necesitar Canva Teams/Enterprise; cuenta gratis puede devolver `items: []`.
+3. **Crear diseno** (si no hay template) — dimensiones custom (ej. 1080x1350 para IG carrusel).
+4. **Subir asset** — `POST /asset-uploads` con imagen de producto, logo, foto.
+5. **Exportar** — `POST /exports` con `design_id` + formato (PNG 1080x1350). Pollear status hasta `completed`.
+6. **Descargar** — URL temporal del export; pasar a aprobacion AG-03.
+
+**Para carrusel:** repetir pasos 2-5 por cada slide (max 10).
+
+**Fallback si la API no esta disponible:** entregar brief textual por slide + URLs de assets para montaje manual en canva.com.
+
+---
+
+**Redactar no es crear en Canva:** entregar titular, cuerpo, guion por slide o URLs de imagenes **no** genera por si solo un **archivo** en la cuenta de Canva. Eso solo ocurre si se **ejecutan** las acciones de API (crear diseno / export) via Composio, el skill `canva` o el MCP oficial, o si el humano monta el lienzo a mano en canva.com.
+
+**Si el humano pide explicitamente "crear el diseno en Canva" o "que quede en mi Canva":**
+
+1. **Intentar** primero Composio (tool calling desde chat), luego skill `canva` (scripts CLI).
+2. Si **no** hay herramientas disponibles, falla la auth, o la llamada devuelve error: **decirlo en una frase clara** ("No se creo ningun lienzo en Canva en esta sesion") y entonces dar el **brief** por slide + enlaces a assets para montaje manual.
 3. **No** presentar solo texto bonito como si ya existiera un diseno guardado en Canva; distinguir siempre **borrador de contenido** vs **diseno creado en la plataforma**.
 
-**Plantillas “del buscador” vs API:** el catalogo publico de plantillas de Canva (UI) **no** se clona por API igual que un clic humano. Para **post completo** con titular, cuerpo e imagenes **rellenados por herramienta**, la via soportada es **Brand template + autofill** (Canva Enterprise / equipo), con acciones Composio tipo listar brand templates, dataset y `CANVA_INITIATE_CANVA_DESIGN_AUTOFILL_JOB`. Si el humano **no** tiene eso, decirlo y ofrecer: maqueta manual + copy por slide, o solo `POST_DESIGNS` + assets.
+**Plantillas "del buscador" vs API:** el catalogo publico de plantillas de Canva (UI) **no** se clona por API igual que un clic humano. Para **post completo** con titular, cuerpo e imagenes **rellenados por herramienta**, la via soportada es **Brand template + autofill** (Canva Enterprise / equipo). Si el humano **no** tiene eso, decirlo y ofrecer: maqueta manual + copy por slide, o solo crear diseno + assets.
 
 ### Flujo combinado
 
 1. Este skill genera el **guion** (slides, caption, hashtags).
-2. El operador elige: **open-carrusel** (control local) o **Canva/Composio** (templates de marca, API).
+2. El operador elige herramienta:
+   - **open-carrusel** (A) — control local, HTML custom.
+   - **Composio** (B) — tool calling desde chat, brand templates.
+   - **Canva Connect directo** (C) — scripts CLI, debug, automatizacion.
+   - **MCP oficial** (D, futuro) — generacion IA + edicion en lienzo.
 3. Resultado visual pasa por **AG-03** antes de publicar.
 
-Ver [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md) para detalle completo de ambas herramientas.
+Ver [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md) para detalle completo.
 
 ## Limites
 

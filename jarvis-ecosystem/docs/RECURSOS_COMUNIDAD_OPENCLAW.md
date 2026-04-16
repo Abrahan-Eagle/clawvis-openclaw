@@ -1,7 +1,7 @@
 # Recursos comunidad OpenClaw / Claude Code (curado para Jarvis)
 
 **Ámbito:** inventario **externo** al monorepo `clawvis-openclaw`; sirve para **descubrir** plantillas, skills y patrones sin obligar a instalarlos.  
-**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG; §2.9 carrusel IG; §2.10 Canva + Composio).
+**Última revisión:** abril 2026 (ampliación: §2 marketing; §2.7 ECC; §2.8 LightRAG; §2.9 carrusel IG; §2.10 Canva + Composio + Connect directo + MCP oficial).
 
 ---
 
@@ -171,7 +171,14 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 - Publicar directamente sin **AG-03**: el export es automático, la publicación requiere aprobación humana.
 - Asumir que Composio reemplaza open-carrusel: son complementarios (API remota vs local HTML→PNG).
 
-**Referencia:** [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado), config snapshot en `config/openclaw-home/openclaw.json`.
+**Vias adicionales (abr 2026):**
+
+- **Canva Connect directo** — skill `canva` de ClawHub (`openclaw skills install canva`), OAuth 2.0 sin Composio, scripts CLI (`canva-auth.sh`, `canva.sh`). Ideal para debug y automatizacion por script.
+- **MCP oficial Canva** — `https://mcp.canva.com/mcp`, 30+ herramientas incluyendo `generate-design` (IA), editing transactions (editar texto en lienzo), `resize-design` (Pro+). Requiere registro via [formulario de intake](https://docs.google.com/forms/d/1jgC4vAA2-5LqaNzVhnP8ygSknF4Vysc1UzAWJukzcp0/viewform) (5-7 dias).
+
+**Proyectos de referencia estudiados:** `coolmanns/canva-connect` (skill base), MCP oficial Canva, `canva-design-assets` (MCPMarket, patron bulk social media), `canva-sdks/canva-gemini-extension` (wrapper MCP oficial), Composio toolkit (ya activo).
+
+**Referencia:** [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado, tabla comparativa), config snapshot en `config/openclaw-home/openclaw.json`.
 
 ---
 
@@ -221,6 +228,10 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 | Markster OS (GTM B2B) | https://github.com/markster-public/markster-os | Lenguaje GTM en chat; revisar prompts; no dependencia obligatoria. |
 | Open Carrusel | https://github.com/Hainrixz/open-carrusel | Carruseles IG (HTML → PNG); **patrones** en skill `carousel-ops` — app upstream **opcional** fuera del repo — ver **§2.9**. |
 | Canva + Composio | https://composio.dev/toolkits/canva | Diseno visual via API; plugin OpenClaw `composio` para crear/editar/exportar disenos Canva desde chat — ver **§2.10**. |
+| Canva Connect skill (ClawHub) | https://github.com/openclaw/skills/tree/main/skills/coolmanns/canva-connect | Skill OpenClaw: OAuth directo con Canva Connect API, sin intermediario. Instalado como skill `canva`. |
+| Canva MCP oficial | https://www.canva.dev/docs/mcp/ | 30+ herramientas MCP: `generate-design` (IA), editing transactions, resize, autofill (Enterprise). |
+| canva-design-assets (MCPMarket) | https://mcpmarket.com/tools/skills/canva-design-assets | Patron bulk social media: create, export, upload, comment via Connect API. |
+| canva-gemini-extension (Canva SDK) | https://github.com/canva-sdks/canva-gemini-extension | Extension MCP oficial de Canva para Gemini CLI; codigo de referencia para wrappers. |
 
 ### Patrones de trabajo (recomendado para tareas grandes de código)
 
@@ -248,7 +259,7 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 ## 6. Referencias internas
 
 - Carruseles Instagram: **§2.9**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md), skill `carousel-ops`.
-- Canva + Composio: **§2.10**, plugin OpenClaw `composio`, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado).
+- Canva (3 vias): **§2.10**, plugin Composio + skill `canva` (Connect directo) + MCP oficial, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (flujo combinado, tabla comparativa).
 - LightRAG (patrones): **§2.8**, [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md), skill `dual-retrieval-ops`.
 - everything-claude-code (ECC): **§2.7** (tabla y shortlist).
 - Gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md)

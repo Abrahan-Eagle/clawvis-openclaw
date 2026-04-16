@@ -135,11 +135,43 @@ Archivos PNG    URL de descarga
 - Submodulo o fork en `clawvis-openclaw/`.
 - Job de CI que levante esa stack.
 
+## Tabla comparativa: vias Canva disponibles
+
+| Via | Tipo | Herramientas clave | Plan Canva | Estado |
+|-----|------|-------------------|------------|--------|
+| **A. open-carrusel** | Local (HTML/PNG) | Export pixel-perfect, sin API | N/A | Opcional en `~/tools/` |
+| **B. Composio** | MCP remoto | ~32 acciones Canva via tool calling | Gratis (limitado) | Activa (OAuth OK) |
+| **C. Canva Connect directo** | OAuth + REST | `canva.sh`: designs, export, autofill, upload | Gratis (limitado) | Skill `canva` instalado |
+| **D. MCP oficial Canva** | MCP remoto | 30+ tools: `generate-design`, editing transactions, resize | Free/Pro/Enterprise | Pendiente registro |
+
+**Proyectos de referencia estudiados:**
+
+1. [`coolmanns/canva-connect`](https://github.com/openclaw/skills/tree/main/skills/coolmanns/canva-connect) — skill OpenClaw, Connect API directa (base del skill C).
+2. [Canva MCP oficial](https://www.canva.dev/docs/mcp/) — servidor remoto con generacion IA y edicion en lienzo.
+3. [`canva-design-assets`](https://mcpmarket.com/tools/skills/canva-design-assets) — skill MCPMarket, patron bulk social media.
+4. [`canva-sdks/canva-gemini-extension`](https://github.com/canva-sdks/canva-gemini-extension) — extension MCP oficial de Canva para Gemini.
+5. [Composio toolkit Canva](https://composio.dev/toolkits/canva) — integracion ya activa en el ecosistema.
+
+**Herramientas MCP oficial por plan (referencia [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/)):**
+
+| Herramienta | Free | Pro | Enterprise |
+|-------------|------|-----|------------|
+| `generate-design` | Si | Si | Si |
+| `export-design` | Standard | Pro quality | Pro quality |
+| `start/perform/commit-editing-transaction` | Si | Si | Si |
+| `resize-design` | No | Si | Si |
+| `autofill-design` | No | No | Si |
+| `search-brand-templates` / `list-brand-kits` | No | No | Si |
+| `upload-asset-from-url` | Si | Si | Si |
+
+---
+
 ## Resumen
 
 | Pregunta | Respuesta |
 |----------|-----------|
 | Jarvis necesita open-carrusel instalado? | **No** — opcional en `~/tools/`. |
-| Jarvis necesita Canva? | **Opcional** — via plugin Composio si se quiere diseno desde chat. |
+| Jarvis necesita Canva? | **Opcional** — via Composio, skill directo o MCP oficial. |
 | Que necesita el ecosistema como minimo? | Skill `carousel-ops` + gobierno (dossier, Trello, AG-03). |
 | Donde estan los PNG? | Donde el humano los exporte (open-carrusel local o Canva export). |
+| Cual es la via mas potente? | MCP oficial (D) — pero requiere registro y espera 5-7 dias. |
