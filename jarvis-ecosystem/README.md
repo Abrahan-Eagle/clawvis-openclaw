@@ -59,7 +59,8 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md) | Trello, Discord y Telegram ya en OpenClaw; Jarvis no debe asumir integración pendiente. |
 | [docs/RECURSOS_COMUNIDAD_OPENCLAW.md](docs/RECURSOS_COMUNIDAD_OPENCLAW.md) | Inventario forense de repos comunidad (skills, awesome lists, patrones); **§2** marketing + Claude y mapeo `mkt-*`; **§2.8** patrones LightRAG portados; criterios antes de adoptar. |
 | [docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md) | Patrones LightRAG (dual retrieval) implementados vía skill `dual-retrieval-ops` — sin servidor LightRAG. |
-| [docs/CAROUSEL_IG_JARVIS.md](docs/CAROUSEL_IG_JARVIS.md) | Carruseles IG y disenos redes: skill `carousel-ops`, open-carrusel (local PNG) y Canva via Composio (API); flujo combinado. |
+| [docs/CAROUSEL_IG_JARVIS.md](docs/CAROUSEL_IG_JARVIS.md) | Carruseles IG y disenos redes: skill `carousel-ops` (brief + calidad + handoff), open-carrusel (local PNG) y Canva via Composio (API); flujo combinado. |
+| [docs/TROUBLESHOOTING_COMPOSIO_OPENCLAW.md](docs/TROUBLESHOOTING_COMPOSIO_OPENCLAW.md) | Composio + OpenClaw: `fetch failed` tras `composio doctor`, proxy, criterio de exito en gateway; script `scripts/composio-diagnose.sh`. |
 | [docs/VERIFICACION_DISCORD_FASE4.md](docs/VERIFICACION_DISCORD_FASE4.md) | Coherencia documental Discord/Telegram vs gateway. |
 | [docs/plantillas/REPORTE_SUPERVISOR_CEO.md](docs/plantillas/REPORTE_SUPERVISOR_CEO.md) | Plantilla copiable para reporte supervisor → CEO. |
 | [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) | Primera pasada: tableros Trello + canales Discord alineados a la convención. |
@@ -70,6 +71,7 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 
 ## Checklist rápido
 
+- Tras **git pull** en `clawvis-openclaw`, si el gateway usa una copia en `$HOME/jarvis-ecosystem` (no symlink al repo), sincronizar skills desde la raiz del monorepo: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./jarvis-ecosystem/scripts/sync-jarvis-skills-from-repo.sh` — o desde `jarvis-ecosystem/`: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./scripts/sync-jarvis-skills-from-repo.sh` — ver [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md).
 - Cambiar **Telegram / modelo / binding** → `~/.openclaw/openclaw.json` + reinicio del gateway.
 - Cambiar **skill o prompt del agente** → `agents/jarvis/skills/` (y alinear copias en marketing/ventas); **career-ops** solo en `agents/ventas/` (ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md)).
 - **Backup de config en Git** → actualizar `config/openclaw-home/` según el procedimiento del README raíz (sin secretos).

@@ -37,4 +37,6 @@ Plan operativo en fases (repo en `main`). Documentación de soporte:
 
 **Forense Agency Agents (ventas avanzadas + SEO, abr 2026):** [FORENSE_AGENCY_AGENTS_RESUMEN.md](FORENSE_AGENCY_AGENTS_RESUMEN.md) — 2 skills nuevos: proposal-ops (win themes, narrativa 3 actos, executive summary), pipeline-health-ops (metricas pipeline, forecasting, alertas). 3 skills enriquecidos: deep-interview-ops (+SPIN/Gap Selling/Sandler/AECR), cold-email-ops (+signal-based selling, ICP, secuencia 10 touches), seo-audit-ops (+cannibalization audit, keyword clusters, link building, E-E-A-T).
 
+**Forense MiroFish (escenarios + briefing holding, abr 2026):** [FORENSE_MIROFISH_RESUMEN.md](FORENSE_MIROFISH_RESUMEN.md) — 2 skills nuevos: `scenario-analysis-ops` (analisis what-if con variables iterables, matriz de riesgos, acciones Trello), `strategic-briefing-ops` (briefing semanal a nivel holding: goals, pipeline, marketing, riesgos). Patrones conceptuales; sin codigo AGPL del upstream.
+
 Modelo de gobierno: [GOBIERNO_JARVIS_V2.md](GOBIERNO_JARVIS_V2.md).

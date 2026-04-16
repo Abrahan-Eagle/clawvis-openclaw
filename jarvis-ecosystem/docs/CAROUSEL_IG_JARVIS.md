@@ -3,6 +3,7 @@
 ## Que queda en el repo (lo necesario)
 
 - **Skill [`carousel-ops`](../agents/jarvis/skills/carousel-ops/SKILL.md):** guion por slides, dimensiones IG, caption/hashtags, y **pipeline automatizado** copy + Canva (Composio) hasta export cuando las herramientas estan disponibles. **AG-03** aplica a **publicar** en Instagram, no a crear borrador/export en Canva — ver [APPROVAL_GATES.md](APPROVAL_GATES.md).
+- **OpenClaw:** el workspace del agente **Jarvis** es `agents/jarvis` (no la raiz del monorepo). El skill esta en **`agents/jarvis/skills/carousel-ops/SKILL.md`**; ver [skills/README.md](../agents/jarvis/skills/README.md). Si el modelo dice que no encuentra el skill, suele estar buscando en el cwd equivocado.
 - Referencia en [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) §2.9 y §2.10.
 
 Jarvis y `mkt-*` deben **ejecutar** el diseno remoto via API cuando el encargo lo pide; no limitarse a texto si Composio+Canva estan configurados.
@@ -16,6 +17,14 @@ Jarvis y `mkt-*` deben **ejecutar** el diseno remoto via API cuando el encargo l
 | Publicar en IG | — | **AG-03** (aprobacion CEO) salvo politica explicita distinta |
 
 Limites tecnicos habituales: cuenta Canva gratis sin brand templates (`items: []`), calidad export Free vs Pro, elementos premium que bloquean export — el skill documenta fallbacks.
+
+### Compromiso de calidad (“mejor diseno posible” en este stack)
+
+No es un premio subjetivo de diseno grafico: es **maximizar** el resultado con **brief rico** (ratio, estilo, colores de marca o dossier), **priorizar brand templates + autofill** cuando existan, **iterar** si el primer export es claro, y **siempre** ofrecer **Editar en Canva** (`edit_url` / `design_id`) para retoque rapido. Canva documenta para asistentes conectados: prompts **especificos**, varios turnos de refinamiento y carpetas claras — ver [Acciones con Canva MCP](https://www.canva.com/es_us/help/mcp-canva-usage/) y [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/). Checklist operativa del agente: seccion homonima en [`carousel-ops/SKILL.md`](../agents/jarvis/skills/carousel-ops/SKILL.md).
+
+### Anti-patron: “solo titular centrado” (borrador API debil)
+
+Si el chat devuelve un lienzo con **una sola linea de texto** sobre **fondo blanco** y poco mas, es coherente con **Connect sin plantilla de marca**: el API crea dimensiones + texto, no el layout del explorador web. **No** es fallo de credenciales; es **techo del flujo** si no se aplica **brief visual** (fondo, logo, imagen), **segundo intento** (upload asset / duplicar maqueta), **brand templates + autofill** (Teams/Enterprise), o **retoque humano** via `edit_url`. Detalle operativo: secciones **Anti-patron** y **Brief visual minimo** en [`carousel-ops/SKILL.md`](../agents/jarvis/skills/carousel-ops/SKILL.md).
 
 ---
 
@@ -73,7 +82,7 @@ npm run dev                                 # abre http://localhost:3000
 
 Si el plugin Composio esta bien (consumer key + Canva conectado) pero Jarvis **dice que no puede listar Canva**, el motivo suele ser `tools.profile: "messaging"`: ese perfil solo incluye un subconjunto de herramientas core. Las herramientas del plugin (`COMPOSIO_*`) hay que **permitirlas explicitamente** en `tools.alsoAllow`, igual que `lobster` y `browser`.
 
-En `~/.openclaw/openclaw.json`, `tools.alsoAllow` debe incluir las siete herramientas genericas de Composio que expone el MCP (nombres exactos: `COMPOSIO_MANAGE_CONNECTIONS`, `COMPOSIO_MULTI_EXECUTE_TOOL`, `COMPOSIO_REMOTE_BASH_TOOL`, `COMPOSIO_REMOTE_WORKBENCH`, `COMPOSIO_SEARCH_TOOLS`, `COMPOSIO_WAIT_FOR_CONNECTIONS`, `COMPOSIO_GET_TOOL_SCHEMAS`). El snapshot sanitizado en el repo muestra la lista completa. Tras cambiar: `openclaw gateway restart`. Comprueba con `openclaw composio doctor`.
+En `~/.openclaw/openclaw.json`, `tools.alsoAllow` debe incluir las siete herramientas genericas de Composio que expone el MCP (nombres exactos: `COMPOSIO_MANAGE_CONNECTIONS`, `COMPOSIO_MULTI_EXECUTE_TOOL`, `COMPOSIO_REMOTE_BASH_TOOL`, `COMPOSIO_REMOTE_WORKBENCH`, `COMPOSIO_SEARCH_TOOLS`, `COMPOSIO_WAIT_FOR_CONNECTIONS`, `COMPOSIO_GET_TOOL_SCHEMAS`). El snapshot sanitizado en el repo muestra la lista completa. Tras cambiar: `openclaw gateway restart`. Comprueba con `openclaw composio doctor`. Si el doctor muestra **healthy** pero al final aparece `MCP client connection failed: fetch failed`, lee [TROUBLESHOOTING_COMPOSIO_OPENCLAW.md](TROUBLESHOOTING_COMPOSIO_OPENCLAW.md) (criterio: herramientas Composio **en el gateway**, no solo la ultima linea del CLI).
 
 ### Como funciona Canva por API (oficial) — y por que el titular no siempre se “pega” solo
 
@@ -89,6 +98,13 @@ Resumen alineado con la documentacion de **Canva Connect** y el **toolkit Canva 
 Por eso es **coherente** que Jarvis pueda **crear** un diseno 1080×1350 e **insertar el logo** (asset / URL), pero **no** colocar automaticamente el titular como texto en el lienzo: el toolkit Composio prioriza **creacion, activos, export, plantillas/autofill**, no edicion libre de cada elemento de texto del lienzo. La finalizacion del copy en el editor — o una **plantilla de marca con campos de autofill** preparada en Canva — es el camino realista hasta que exista una herramienta equivalente en tu stack.
 
 **Si “Recientes” en canva.com esta vacio:** abre el enlace **“Editar en Canva”** que devuelve la API (mismo usuario OAuth que conectaste en Composio). Si entras con **otra** cuenta de Canva, no veras el diseno.
+
+**La API dijo exito pero “no se genero nada” en tu Canva:**
+
+1. **Cuenta distinta:** el diseno queda en la cuenta **OAuth de Composio** (dashboard Composio → Canva conectado). Cierra sesion en canva.com y entra con **esa** cuenta, o abre el `edit_url` / `view_url` en una ventana donde ya este esa sesion.
+2. **Equipo vs personal:** si el `owner.team_id` del JSON apunta a un **team**, mira el espacio de equipo en Canva, no solo “Proyectos” personales.
+3. **Solo texto en chat:** si el agente **no** invoco herramientas reales (`COMPOSIO_*` / CLI `composio execute`), puede haber **descripcion sin crear diseno**. Comprueba en Composio **logs** o repite con `composio execute CANVA_LIST_USER_DESIGNS` y busca el `design_id` devuelto.
+4. **Export OK pero lienzo raro:** un lienzo con **solo una imagen** de 1080×1350 puede parecer “no editado”; sigue siendo un diseno valido — abre **Editar** para ver capas.
 
 ### “Que analice plantillas predisenadas del buscador y arme un post completo como en la UI”
 
@@ -205,6 +221,6 @@ Jarvis y `mkt-*` deben respetar **handoff** (enlace de edicion al usuario) y las
 |----------|-----------|
 | Jarvis necesita open-carrusel instalado? | **No** — opcional en `~/tools/`. |
 | Jarvis necesita Canva? | **Opcional** — via Composio, skill directo o MCP oficial. |
-| Que necesita el ecosistema como minimo? | Skill `carousel-ops` + gobierno (dossier, Trello, AG-03). |
+| Que necesita el ecosistema como minimo? | Skill `carousel-ops` (incl. checklist calidad) + gobierno (dossier, Trello, AG-03). |
 | Donde estan los PNG? | Donde el humano los exporte (open-carrusel local o Canva export). |
 | Cual es la via mas potente? | MCP oficial (D) — pero requiere registro y espera 5-7 dias. |

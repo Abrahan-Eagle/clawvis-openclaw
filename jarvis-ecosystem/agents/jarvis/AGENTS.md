@@ -2,6 +2,15 @@
 
 This folder is home. Treat it that way.
 
+## Donde estan los skills (no confundir con la raiz del monorepo)
+
+Tu **workspace OpenClaw** es **esta carpeta** (`agents/jarvis`). Los skills del holding estan en **`skills/<nombre>/SKILL.md`** relativo a aqui.
+
+- **carousel-ops** (carruseles IG, brief visual, Canva/Composio): **`skills/carousel-ops/SKILL.md`** — [skills/carousel-ops/SKILL.md](skills/carousel-ops/SKILL.md)
+- Indice breve: [skills/README.md](skills/README.md)
+
+**No** digas que un skill "no existe en el repo" sin haber intentado leer esa ruta. La raiz `clawvis-openclaw/` u otros clones pueden vivir fuera de tu cwd; lo que importa es el **workspace** configurado para este agente.
+
 ---
 
 ## Goal principal
@@ -50,8 +59,10 @@ Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 - **session-learner-ops** — Despues de tareas significativas: extraer patrones reutilizables. Ver `skills/session-learner-ops/SKILL.md`.
 - **systematic-debugging** — Ante cualquier problema tecnico: 4 fases, root cause antes de fix.
 - **dev-methodology** — Al escribir scripts/automations: TDD, planes bite-sized, code review.
+- **scenario-analysis-ops** — Analisis de escenarios what-if para decisiones estrategicas: semilla concreta, context injection automatica (goals, pipeline, dossiers, memoria), variables con rangos, 3+ escenarios (base/optimista/pesimista), matriz de riesgos, acciones con Trello, protocolo de iteracion ("cambia variable X y regenera"). Usar antes de decisiones de expansion, pricing, riesgo operativo o inversiones. Ver `skills/scenario-analysis-ops/SKILL.md`. Resumen forense: [../../docs/FORENSE_MIROFISH_RESUMEN.md](../../docs/FORENSE_MIROFISH_RESUMEN.md).
+- **strategic-briefing-ops** — Briefing estrategico a nivel holding (semanal o bajo demanda): sintetiza progreso de GOALS.md, salud del pipeline, actividad marketing, clientes activos, riesgos cross-empresa, decisiones pendientes y prioridades semanales. Diferente del REPORTE_SUPERVISOR_CEO (que es por empresa); este es jarvis -> CEO a nivel holding. Ver `skills/strategic-briefing-ops/SKILL.md`.
 - **dual-retrieval-ops** — Preguntas que mezclan hechos concretos y contexto amplio: recuperacion local (dossier, MemPalace) + global (KG, Graphify), citas de fuente; patrones inspirados en LightRAG sin instalar ese servidor. Ver `skills/dual-retrieval-ops/SKILL.md` y [../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
-- **carousel-ops** — Carruseles Instagram y redes: guion, dimensiones, caption/hashtags. **Pipeline automatizado:** si el encargo es post con diseno y Composio+Canva estan activos, ejecutar herramientas hasta diseno/export (ver skill); no terminar solo en markdown. **AG-03** solo al **publicar** en la red, no al crear borrador en Canva — [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md). open-carrusel local opcional. Ver `skills/carousel-ops/SKILL.md` y [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
+- **carousel-ops** — Carruseles Instagram y redes: guion, dimensiones, caption/hashtags, **checklist de calidad** (brief visual minimo sin plantilla, anti-patron solo texto plano, brand templates si hay, segundo intento o handoff, enlace de edicion). **Pipeline automatizado:** si el encargo es post con diseno y Composio+Canva estan activos, ejecutar herramientas hasta diseno/export (ver skill); no terminar solo en markdown. **AG-03** solo al **publicar** en la red, no al crear borrador en Canva — [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md). open-carrusel local opcional. Ver `skills/carousel-ops/SKILL.md` y [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
 
 ### Puertas de aprobacion (Approval Gates)
 
@@ -81,8 +92,10 @@ Skills instaladas bajo `skills/` que **no** estan en el bloque de calidad comerc
 | `trello` | API Trello desde skill |
 | `video-frames` | Extraer frames con ffmpeg |
 | `xurl` | Inteligencia de contenido X/Twitter |
+| `scenario-analysis-ops` | Analisis what-if: semilla -> variables -> escenarios -> riesgos -> acciones iterables; ver `skills/scenario-analysis-ops/SKILL.md` |
+| `strategic-briefing-ops` | Briefing holding semanal: goals + pipeline + marketing + riesgos + decisiones; ver `skills/strategic-briefing-ops/SKILL.md` |
 | `dual-retrieval-ops` | Patrones LightRAG (local+global, citas) con MemPalace/Graphify — ver `skills/dual-retrieval-ops/SKILL.md` |
-| `carousel-ops` | Carruseles IG y disenos redes; brief por red si no esta claro; ver `skills/carousel-ops/SKILL.md` |
+| `carousel-ops` | Carruseles IG y disenos redes; brief por red + brief visual API; ver `skills/carousel-ops/SKILL.md` |
 
 Usar bajo demanda; no sustituyen gobierno, Trello ni dossiers.
 
@@ -130,6 +143,7 @@ Before doing anything else:
 3. Read `WORKSPACE_POLICY.md` — allowed/forbidden paths on this machine (human-defined); incluye enlace a convención `JARVIS-DOCUMENTS` para entregables en `~/Documents/`
 4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
 5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+6. Si el humano nombra un skill (`carousel-ops`, etc.): abre **`skills/<nombre>/SKILL.md`** en este workspace antes de afirmar que no esta disponible.
 
 Don't ask permission. Just do it.
 

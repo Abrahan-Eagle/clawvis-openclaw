@@ -65,7 +65,7 @@ Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://compo
 4. **Perfil `tools.profile: "messaging"`** (Telegram, etc.): añadir en `tools.alsoAllow` las siete herramientas genéricas `COMPOSIO_*` además de `lobster` / `browser`, para que el agente pueda invocar Composio en canales de mensajería — ver [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (snapshot en [config/openclaw-home/openclaw.json](../../config/openclaw-home/openclaw.json)).
 5. **Reiniciar gateway:** `openclaw gateway restart` (o `systemctl --user restart openclaw-gateway` si aplica).
 6. **Conectar Canva** en Composio: [Connect Apps](https://dashboard.composio.dev) → autorizar OAuth de Canva con la cuenta deseada.
-7. **Verificación:** `openclaw composio doctor` (debe listar herramientas Composio y estado healthy).
+7. **Verificación:** `openclaw composio doctor` (debe listar herramientas Composio y estado **healthy**). Si al final aparece `MCP client connection failed: fetch failed`, **no** reinstalar OAuth por defecto: el criterio de éxito es que el **gateway** pueda usar `COMPOSIO_*` en chat — ver [TROUBLESHOOTING_COMPOSIO_OPENCLAW.md](TROUBLESHOOTING_COMPOSIO_OPENCLAW.md). Script opcional: [../scripts/composio-diagnose.sh](../scripts/composio-diagnose.sh).
 
 **CLI Composio (opcional):** `curl -fsSL https://composio.dev/install | bash` y `composio login ...` — útil para pruebas desde terminal; el agente Jarvis usa el **plugin OpenClaw**, no sustituye el paso del consumer key en `openclaw.json`.
 
@@ -75,6 +75,7 @@ Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://compo
 
 ## Historial
 
+- **2026-04-16:** [TROUBLESHOOTING_COMPOSIO_OPENCLAW.md](TROUBLESHOOTING_COMPOSIO_OPENCLAW.md) — `fetch failed` tras `composio doctor`, criterio de éxito (runtime gateway), proxy/`NODE_USE_ENV_PROXY`, Inspector, escalación upstream; script [../scripts/composio-diagnose.sh](../scripts/composio-diagnose.sh).
 - **2026-04-16:** Enlaces oficiales Canva MCP en documentacion: [Overview](https://www.canva.dev/docs/mcp/), [Tools](https://www.canva.dev/docs/mcp/tools/), [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/), [Troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/), [Usage policy](https://www.canva.dev/docs/mcp/usage-policy/), [Prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/) — tabla en [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md).
 - **2026-04-16:** URL canonica del intake MCP: [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (`/d/e/1FAIpQLSdtsKA9...`); OAuth Redirect URI obligatorio; contenido alineado al texto publico del formulario.
 - **2026-04-16:** Via **D (MCP oficial)** — alineacion con *Canva MCP Connector Intake Form*: descripcion del conector SDK+MCP y nota de verificar enlace al repo en el formulario; enlaces en [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) y [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md).

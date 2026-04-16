@@ -59,6 +59,19 @@ graphify update .
 graphify cluster-only .
 ```
 
+### Ver `graph.html` en el navegador (sin 404 de `favicon`, solo localhost)
+
+Tras `graphify update .`, no hace falta `python3 -m http.server` a mano en `0.0.0.0` (expone el puerto a la red). Usa el script del repo: crea un `favicon.ico` vacio en `graphify-out/` para que el navegador no dispare **404** en `/favicon.ico`, y enlaza el servidor a **127.0.0.1**:
+
+```bash
+chmod +x jarvis-ecosystem/scripts/graphify-serve-local.sh
+./jarvis-ecosystem/scripts/graphify-serve-local.sh
+```
+
+Abre la URL que imprima el script (por defecto `http://127.0.0.1:8765/graph.html`). Si **8765** esta ocupado por un `http.server` anterior, el script **elige el siguiente puerto libre** y lo indica en stderr. Para liberar el puerto: `Ctrl+C` en la terminal del servidor viejo, o `fuser -k 8765/tcp`.
+
+Si en los logs ves **404** a `/.well-known/appspecific/com.chrome.devtools.json`, es peticion de **Chrome DevTools**; el script crea un JSON vacio `{}` en esa ruta para silenciarlo. La advertencia de consola de **vis-network** sobre *improved layout* es del visor, no del grafo en si.
+
 ## Actualización del grafo
 
 El grafo se actualiza de dos formas:
