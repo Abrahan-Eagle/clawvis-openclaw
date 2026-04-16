@@ -1,6 +1,6 @@
 ---
 name: carousel-ops
-description: "Carruseles Instagram: narrativa por slides, dimensiones IG, tipografia y contraste, caption/hashtags, citas de marca — sin depender de apps externas en el repo. Opcional: herramienta local open-carrusel solo si el operador la instala aparte."
+description: "Carruseles Instagram: narrativa, dimensiones, caption/hashtags. Objetivo ecosistema: pipeline automatizado copy + Canva (Composio) hasta export sin pasos humanos en runtime si las herramientas estan expuestas; publicacion en red sigue AG-03."
 ---
 
 # Carousel ops (Instagram)
@@ -25,7 +25,7 @@ Si falta **cualquiera** de estos datos, **preguntar primero** (lista corta, una 
 |----------|-----------------|
 | **Que red(es)?** (IG, LinkedIn, X, Facebook, TikTok caption, etc.) | Limites de texto, hashtags, tono, si va carrusel o post unico. |
 | **Formato?** (carrusel N slides, post unico, story, Reels guion, newsletter) | Estructura y longitud. |
-| **Solo copy o tambien diseno?** (Canva / open-carrusel / texto con URLs de imagen) | Evita prometer "diseño en Canva" si el humano solo pidio articulo de blog. |
+| **Solo copy o tambien diseno?** (Canva / open-carrusel / texto con URLs de imagen) | Si el humano pidio **post IG** o **contenido + diseno**, asumir **pipeline completo** (copy + Canva) salvo que diga explicitamente "solo texto". |
 | **Marca y ratio?** (ej. IG 4:5, LinkedIn 1200x627) | Dimensiones y safe zone. |
 | **Idioma y CTA?** | Coherencia con campana. |
 
@@ -35,7 +35,7 @@ Si el humano dice **"para IG"** o **"carrusel 6 slides"**, es suficiente; no hac
 
 1. Leer [`product-marketing-context.md`](../../../../.agents/product-marketing-context.md) (audiencia, voz, colores si estan declarados).
 2. Si hay cliente: dossier en `client-dossiers/` y lineas rojas del encargo.
-3. **Publicar** en IG: gate **AG-03** en [APPROVAL_GATES.md](../../../../docs/APPROVAL_GATES.md) — borrador + aprobacion CEO antes de publicar.
+3. **Publicar** en IG (subir a la red / programar): gate **AG-03** en [APPROVAL_GATES.md](../../../../docs/APPROVAL_GATES.md). **No** confundir con crear/exportar borrador en Canva: AG-03 es para **publicacion** visible.
 
 ## Dimensiones Instagram (referencia)
 
@@ -74,16 +74,34 @@ Proponer **3 variantes**: pregunta, estadistica, afirmacion contraria; el humano
 - **Caption:** 150–300 caracteres: linea gancho + valor + CTA; tono de `product-marketing-context`.
 - **Hashtags:** mezcla alcance (amplios) + nicho (especificos del cliente); sin spam; respetar politica del cliente y plataforma.
 
+## Pipeline end-to-end automatizado (comportamiento por defecto si hay herramientas)
+
+**Objetivo:** que Jarvis / `mkt-*` hagan **todo el trabajo programable** en una sola peticion: guion + creacion en Canva + export (o URLs de descarga), **sin** pedir al humano que abra Canva salvo fallo de API.
+
+**Precondiciones (config una vez en el host, no en cada post):** plugin Composio + OAuth Canva activo en Composio; `tools.alsoAllow` con las siete `COMPOSIO_*`; `openclaw composio doctor` healthy. Con eso, en **runtime** no debe hacer falta intervencion humana para autenticar.
+
+**Secuencia obligatoria** cuando el encargo incluye diseno IG y las herramientas estan en contexto:
+
+1. `COMPOSIO_SEARCH_TOOLS` (o equivalente) para localizar acciones del toolkit Canva vigentes.
+2. Crear diseno y/o autofill segun disponibilidad (brand templates, dimensiones 1080x1350 o la elegida).
+3. Lanzar export y recuperar URL de descarga o estado del job.
+4. Incluir en la respuesta: **IDs de diseno**, **URL de edicion** en Canva si la API la devuelve ([design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/)), y **enlace/credenciales del export**.
+5. **No** cerrar el turno solo con markdown de "aqui tu copy" si el usuario pidio post con diseno y las herramientas respondieron OK.
+
+Si las herramientas **no** estan disponibles o la API falla: declararlo en una frase y entregar brief + assets para recuperacion manual.
+
 ## Salida esperada del agente
 
-Entregar en markdown:
+Siempre entregar en markdown **al menos**:
 
 1. **Titulo del carrusel** + ratio elegido (ej. 4:5).
 2. **Lista numerada** de slides: titulo / bullets / nota visual (opcional).
 3. **Caption** + bloque de hashtags sugeridos.
-4. **Checklist AG-03** si va a publicacion: pendiente aprobacion CEO.
 
-No generar ni subir imagenes automaticamente desde el gateway.
+Si el pipeline Canva se ejecuto con exito, **anadir**:
+
+4. **Evidencia de diseno:** `design_id`(s), enlaces **Editar en Canva** si aplican, URL(s) de export o estado del job.
+5. **AG-03** solo si el siguiente paso es **publicar en Instagram** (no para el mero borrador/export).
 
 ## Herramientas de diseno (opcionales, fuera del repo)
 
@@ -163,7 +181,7 @@ Flujo tipo para **crear un post de Instagram** con la API (aplica a Composio, sk
 3. **Crear diseno** (si no hay template) — dimensiones custom (ej. 1080x1350 para IG carrusel).
 4. **Subir asset** — `POST /asset-uploads` con imagen de producto, logo, foto.
 5. **Exportar** — `POST /exports` con `design_id` + formato (PNG 1080x1350). Pollear status hasta `completed`.
-6. **Descargar** — URL temporal del export; pasar a aprobacion AG-03.
+6. **Descargar** — URL temporal del export; entregar al usuario. **AG-03** solo si va a **publicarse** en IG, no por el export en si.
 
 **Para carrusel:** repetir pasos 2-5 por cada slide (max 10).
 
@@ -184,17 +202,15 @@ Flujo tipo para **crear un post de Instagram** con la API (aplica a Composio, sk
 ### Flujo combinado
 
 1. Este skill genera el **guion** (slides, caption, hashtags).
-2. El operador elige herramienta:
-   - **open-carrusel** (A) — control local, HTML custom.
-   - **Composio** (B) — tool calling desde chat, brand templates.
-   - **Canva Connect directo** (C) — scripts CLI, debug, automatizacion.
-   - **MCP oficial** (D, futuro) — generacion IA + edicion en lienzo.
-3. Resultado visual pasa por **AG-03** antes de publicar.
+2. **Por defecto** el ecosistema usa **Composio (B)** para Canva en el gateway; el agente no debe delegar en el humano "ve a Canva" si las herramientas estan disponibles.
+3. **open-carrusel** (A) solo si no hay API o el humano exige control local.
+4. **Canva Connect directo** (C) o **MCP oficial** (D) segun config futura.
+5. **Publicar** en la red social: **AG-03** (aprobacion CEO). Crear/exportar borrador en Canva **no** cuenta como publicacion.
 
 Ver [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md) para detalle completo.
 
 ## Limites
 
 - No sustituye revision legal de claims (salud, finanzas, resultados garantizados).
-- No publicar sin cumplir **AG-03** y politica del cliente en redes.
+- No **publicar** en redes sin cumplir **AG-03** y politica del cliente; la generacion automatica de diseno/export es distinta de la publicacion.
 - No commitear assets binarios grandes al monorepo; entregables en rutas acordadas ([JARVIS_DOCUMENTS_ON_DISK.md](../../../../docs/JARVIS_DOCUMENTS_ON_DISK.md)).

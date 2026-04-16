@@ -51,7 +51,7 @@ Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 - **systematic-debugging** — Ante cualquier problema tecnico: 4 fases, root cause antes de fix.
 - **dev-methodology** — Al escribir scripts/automations: TDD, planes bite-sized, code review.
 - **dual-retrieval-ops** — Preguntas que mezclan hechos concretos y contexto amplio: recuperacion local (dossier, MemPalace) + global (KG, Graphify), citas de fuente; patrones inspirados en LightRAG sin instalar ese servidor. Ver `skills/dual-retrieval-ops/SKILL.md` y [../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
-- **carousel-ops** — Carruseles Instagram y disenos para redes: guion por slides, dimensiones, criterios visuales, caption/hashtags y AG-03. Si el humano no indico **red ni formato**, preguntar antes (o separar entregas por red). Dos herramientas opcionales: open-carrusel (local PNG en `~/tools/`) y Canva via Composio (plugin OpenClaw, diseno desde chat). Ver `skills/carousel-ops/SKILL.md` y [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
+- **carousel-ops** — Carruseles Instagram y redes: guion, dimensiones, caption/hashtags. **Pipeline automatizado:** si el encargo es post con diseno y Composio+Canva estan activos, ejecutar herramientas hasta diseno/export (ver skill); no terminar solo en markdown. **AG-03** solo al **publicar** en la red, no al crear borrador en Canva — [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md). open-carrusel local opcional. Ver `skills/carousel-ops/SKILL.md` y [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
 
 ### Puertas de aprobacion (Approval Gates)
 

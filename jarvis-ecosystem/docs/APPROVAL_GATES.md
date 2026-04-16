@@ -2,7 +2,7 @@
 
 **Inspirado en:** Paperclip AI (governance: acciones que requieren aprobacion humana antes de ejecutarse).  
 **Aplica a:** todos los agentes del ecosistema Jarvis.  
-**Ultima actualizacion:** abril 2026.
+**Ultima actualizacion:** abril 2026 (aclaracion AG-03: publicacion vs borrador Canva automatico).
 
 ---
 
@@ -16,7 +16,7 @@ Los agentes operan con autonomia dentro de limites definidos. Cualquier accion q
 |----|--------|--------------------|-------|----------------|
 | `AG-01` | Enviar propuesta comercial a cliente | sales-hunter, sales-closer | CEO | Tarjeta en Trello "Pendiente aprobacion" + mensaje al CEO |
 | `AG-02` | Comprometer precio, descuento o condiciones contractuales | sales-closer, sales-account | CEO | Dossier del cliente con propuesta adjunta |
-| `AG-03` | Publicar contenido en redes sociales | mkt-content, mkt-social | CEO | Borrador en Trello + preview antes de publicar |
+| `AG-03` | **Publicar** contenido en redes sociales (subir/publicar en la plataforma) | mkt-content, mkt-social, jarvis | CEO | Borrador en Trello + preview antes de publicar |
 | `AG-04` | Envio masivo de email (>10 destinatarios) | mkt-email | CEO | Lista de destinatarios + contenido en borrador |
 | `AG-05` | Ejecutar pagos o comprometer presupuesto | cualquiera | CEO | Monto, proveedor y justificacion |
 | `AG-06` | Crear/eliminar tableros de Trello o canales de Discord | jarvis | CEO | Propuesta con nombre y proposito |
@@ -61,6 +61,12 @@ Estas reglas estan referenciadas en:
 - `agents/ventas/AGENTS.md` — seccion "Lineas rojas".
 - `agents/marketing/AGENTS.md` — seccion "Lineas rojas".
 - `docs/GOBIERNO_JARVIS_V2.md` — modelo operativo general.
+
+## Aclaracion: creacion automatica de diseno vs publicacion
+
+- **Generar** copy, **crear** lienzo en Canva (API/Composio/MCP) y **exportar** PNG/PDF para revision **no** es lo mismo que **publicar** en Instagram u otra red.
+- **AG-03** aplica al acto de **publicacion** (o programacion de publicacion) visible para la audiencia, no al mero borrador tecnico en Canva ni al archivo exportado en el chat.
+- Si el superusuario quiere que el pipeline copy+Canva+export sea **100% automatico sin intervencion** hasta el archivo listo, eso es compatible con esta tabla siempre que **no** se ejecute la publicacion sin pasar por AG-03 (salvo politica explicita del CEO).
 
 ## Excepciones
 

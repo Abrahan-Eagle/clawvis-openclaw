@@ -2,10 +2,20 @@
 
 ## Que queda en el repo (lo necesario)
 
-- **Skill [`carousel-ops`](../agents/jarvis/skills/carousel-ops/SKILL.md):** guion por slides, dimensiones IG, reglas de diseno legibles, caption/hashtags, cumplimiento **AG-03**.
+- **Skill [`carousel-ops`](../agents/jarvis/skills/carousel-ops/SKILL.md):** guion por slides, dimensiones IG, caption/hashtags, y **pipeline automatizado** copy + Canva (Composio) hasta export cuando las herramientas estan disponibles. **AG-03** aplica a **publicar** en Instagram, no a crear borrador/export en Canva — ver [APPROVAL_GATES.md](APPROVAL_GATES.md).
 - Referencia en [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) §2.9 y §2.10.
 
-Con eso Jarvis y `mkt-*` pueden **planificar y redactar** carruseles sin instalar nada mas.
+Jarvis y `mkt-*` deben **ejecutar** el diseno remoto via API cuando el encargo lo pide; no limitarse a texto si Composio+Canva estan configurados.
+
+### Objetivo: cero pasos humanos en runtime (salvo publicar)
+
+| Fase | Quien actua | Interaccion humana |
+|------|-------------|---------------------|
+| Config inicial (una vez) | Operador | OAuth Composio, Canva en dashboard, `alsoAllow` `COMPOSIO_*`, reinicio gateway |
+| Por cada post IG con diseno | Jarvis / `mkt-*` | **Ninguna** si las herramientas responden: buscar acciones Canva, crear/exportar, devolver URLs y `design_id` |
+| Publicar en IG | — | **AG-03** (aprobacion CEO) salvo politica explicita distinta |
+
+Limites tecnicos habituales: cuenta Canva gratis sin brand templates (`items: []`), calidad export Free vs Pro, elementos premium que bloquean export — el skill documenta fallbacks.
 
 ---
 
@@ -39,7 +49,7 @@ npm run dev                                 # abre http://localhost:3000
 | **32 herramientas** | Crear disenos, gestionar carpetas, exportar, comentar, autofill con templates de marca, etc. |
 | **Donde se configura** | `~/.openclaw/openclaw.json` → `plugins.entries.composio` + `consumerKey` (no commitear el key). |
 | **Cuando usarlo** | Cuando Jarvis o `mkt-*` necesitan crear/editar disenos Canva programaticamente desde chat (Telegram, Discord, TUI). |
-| **Quien lo opera** | El agente (via tool calling); el humano aprueba publicacion (AG-03). |
+| **Quien lo opera** | El agente (tool calling) de forma **automatica** en cada encargo; el humano solo para **publicacion** en la red (AG-03), no para cada export en Canva. |
 
 **Herramientas destacadas de Canva via Composio:**
 
@@ -107,25 +117,24 @@ carousel-ops (guion)
   |         |
   v         v
 open-carrusel    Canva/Composio
-(local PNG)      (API remota)
+(local PNG)      (API remota, agente)
   |              |
   v              v
-Archivos PNG    URL de descarga
+Archivos PNG    URL de descarga / design_id
   |              |
   +------+-------+
          |
          v
-  AG-03 (aprobacion CEO)
+  AG-03 solo si PUBLICAR en IG
+  (aprobacion CEO)
          |
          v
   Publicacion en IG
 ```
 
-1. **Jarvis / mkt-content** genera el guion con `carousel-ops`.
-2. El operador elige herramienta:
-   - **open-carrusel** para control total local (HTML custom).
-   - **Canva** para usar templates de marca y edicion visual rapida.
-3. El resultado visual pasa por **AG-03** antes de publicar.
+1. **Jarvis / mkt-content** ejecuta `carousel-ops` y, si aplica, **Canva/Composio en la misma sesion** (sin pasos humanos entre guion y export).
+2. **open-carrusel** solo si no hay API o se pide control local explicito.
+3. **AG-03** unicamente al **publicar** en la red; el export/borrador en Canva puede ser totalmente automatico.
 
 ---
 

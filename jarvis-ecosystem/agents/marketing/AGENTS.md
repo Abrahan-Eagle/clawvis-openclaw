@@ -17,7 +17,7 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 - **Modelo operativo:** [../../docs/GOBIERNO_JARVIS_V2.md](../../docs/GOBIERNO_JARVIS_V2.md).
 - **Recursos comunidad OpenClaw (opcional):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md) — catálogo forense de repos/skills externos; criterios de adopción; no sustituye gobierno ni Trello.
 - **Investigación marketing + Claude (abr 2026):** [../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md#marketing-openclaw-forense) — qué existe en GitHub vs expectativa “agencia producto”, mapeo plantillas mergisi → roles `mkt-*`, CrewClaw, versiones OpenClaw y procedimiento de adopción con Trello/dossier.
-- **Carruseles Instagram y disenos:** skill [`carousel-ops`](../jarvis/skills/carousel-ops/SKILL.md) (guion, dimensiones, caption; AG-03 antes de publicar). Dos herramientas opcionales: **open-carrusel** (`~/tools/open-carrusel/`, export PNG local) y **Canva via Composio** (plugin OpenClaw, diseno desde chat). Detalle: [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md) y [RECURSOS §2.9-2.10](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md).
+- **Carruseles Instagram y disenos:** skill [`carousel-ops`](../jarvis/skills/carousel-ops/SKILL.md) — guion, dimensiones, caption; **pipeline automatico** Canva via Composio hasta export si las herramientas estan activas. **AG-03** solo al **publicar** en la red, no al generar borrador/export. **open-carrusel** (`~/tools/`) opcional local. Detalle: [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md) y [RECURSOS §2.9-2.10](../../docs/RECURSOS_COMUNIDAD_OPENCLAW.md).
 - **Registro de empresas:** [../../COMPANIES.md](../../COMPANIES.md).
 - **Dossiers de cliente:** [../../client-dossiers/](../../client-dossiers/) — al trabajar en un encargo, verificar que existe dossier del cliente.
 - **Entregables y medios (PC del superusuario):** [../../docs/JARVIS_DOCUMENTS_ON_DISK.md](../../docs/JARVIS_DOCUMENTS_ON_DISK.md) — usar `~/Documents/JARVIS-DOCUMENTS/empresas/marketing/clientes/<dossier_id>/` (estados 01–04).
@@ -76,7 +76,7 @@ Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 - No acciones destructivas sin confirmacion.
 - Contenido publico (redes, email masivo): pedir luz verde cuando haya duda.
 - No inventar metricas ni KPIs; usar datos reales del cliente o del dossier.
-- **Approval Gates:** ver [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md) — publicaciones en redes (AG-03), email masivo (AG-04), datos compartidos (AG-08) requieren aprobacion del CEO.
+- **Approval Gates:** ver [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md) — **publicar** en redes (AG-03), email masivo (AG-04), datos compartidos (AG-08) requieren aprobacion del CEO. Crear diseno/export en Canva por API no es publicacion.
 
 ## Herramientas y formato
 
