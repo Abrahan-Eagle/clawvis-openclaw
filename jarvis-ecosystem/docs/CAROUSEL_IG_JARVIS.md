@@ -92,7 +92,17 @@ Por eso es **coherente** que Jarvis pueda **crear** un diseno 1080×1350 e **ins
 
 ### “Que analice plantillas predisenadas del buscador y arme un post completo como en la UI”
 
-Lo que haces en Canva al elegir **Redes → Instagram → plantilla** es un flujo **del producto web**: miles de plantillas publicas. La API expuesta via **Composio** **no** equivale a “abrir el catalogo, elegir la plantilla #1247 y clonarla con texto ya puesto” en un solo paso. Por eso el agente suele acabar en **lienzo + logo** o **texto suelto** para pegar.
+Lo que haces en Canva al elegir **Redes → Instagram → plantilla** es un flujo **del producto web**: miles de plantillas publicas en el explorador. Eso **no** es el mismo catalogo al que la **Connect API** (y por tanto **Composio**) puede decir: *“usa exactamente esta plantilla del buscador por nombre o miniatura”* y rellenarla como en la UI.
+
+| Que pide el usuario | Que hace hoy Composio/Connect en la practica | Por que |
+|---------------------|---------------------------------------------|--------|
+| “Usa una plantilla ya predisenada del buscador de Canva” | **No** hay un paso API equivalente a elegir fila/columna del explorador y clonar ese diseno con un clic | El catalogo publico web no se expone como lista de IDs para autofill masivo; ver [Create design](https://www.canva.dev/docs/connect/api-reference/designs/create-design/) (preset de tamano o lienzo + assets, no “template URL del buscador”). |
+| Crear lienzo 1080×1080 + logo + export | **Si** — suele funcionar | `POST` designs + assets + export |
+| Misma estetica que una plantilla concreta del buscador | Solo si la convertis a flujo soportado por API (abajo) | Sin eso, el agente solo puede aproximar con layout vacio + imagenes |
+
+**No es un bug de Jarvis:** es limite de producto/API. El diseno “nuevo” que ves es un **lienzo con dimensiones** (y quizas imagenes), no un **clon** de una plantilla del explorador.
+
+**Tercera via (estetica generada, no plantilla del buscador):** el [MCP oficial de Canva](https://www.canva.dev/docs/mcp/) expone `generate-design` / `create-design-from-candidate` (generacion y edicion con lenguaje natural). Tampoco elige una miniatura concreta del explorador; aproxima layout por prompt. Requiere intake y configuracion del cliente MCP aparte de Composio.
 
 **Camino automatizable “completo” (texto + imagenes en campos definidos):**
 

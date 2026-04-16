@@ -197,7 +197,7 @@ Flujo tipo para **crear un post de Instagram** con la API (aplica a Composio, sk
 2. Si **no** hay herramientas disponibles, falla la auth, o la llamada devuelve error: **decirlo en una frase clara** ("No se creo ningun lienzo en Canva en esta sesion") y entonces dar el **brief** por slide + enlaces a assets para montaje manual.
 3. **No** presentar solo texto bonito como si ya existiera un diseno guardado en Canva; distinguir siempre **borrador de contenido** vs **diseno creado en la plataforma**.
 
-**Plantillas "del buscador" vs API:** el catalogo publico de plantillas de Canva (UI) **no** se clona por API igual que un clic humano. Para **post completo** con titular, cuerpo e imagenes **rellenados por herramienta**, la via soportada es **Brand template + autofill** (Canva Enterprise / equipo). Si el humano **no** tiene eso, decirlo y ofrecer: maqueta manual + copy por slide, o solo crear diseno + assets.
+**Plantillas "del buscador" vs API:** las plantillas **predisenadas del explorador web** (Redes → Instagram → elegir miniatura) **no** son seleccionables por la Connect API como “usa la plantilla X del catalogo”. Composio puede **crear lienzo** (dimensiones) + **assets** + **export**; para **misma estructura que una plantilla concreta** hace falta **Brand template** del equipo (campos de datos + autofill, suele Enterprise) o flujo hibrido (humano clona una vez en Canva y el API trabaja sobre copias). Si el usuario espera **pixel-perfect** como el buscador: decirlo en una frase y remitir a [CAROUSEL_IG_JARVIS.md](../../../../docs/CAROUSEL_IG_JARVIS.md) seccion plantillas del explorador.
 
 ### Flujo combinado
 
