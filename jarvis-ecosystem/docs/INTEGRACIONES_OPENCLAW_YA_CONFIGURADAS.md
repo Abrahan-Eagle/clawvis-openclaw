@@ -48,7 +48,7 @@ Tres caminos para usar Canva desde el ecosistema Jarvis, de mas inmediato a mas 
 | **C. Canva Connect directo** | Skill instalado | Skill `canva` de ClawHub (`openclaw skills install canva`). OAuth directo, scripts CLI (`canva.sh`), sin intermediario. |
 | **D. MCP oficial Canva** | Pendiente registro | Servidor remoto `https://mcp.canva.com/mcp`. Antes de acceso: completar [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (OAuth Redirect URI obligatorio; volumen estimado, caso de uso, etc.). Cliente tipico: `npx -y mcp-remote@latest https://mcp.canva.com/mcp` — ver [canva.dev/docs/mcp](https://www.canva.dev/docs/mcp/). |
 
-Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://composio.dev/toolkits/canva/framework/openclaw). MCP oficial: [canva.dev/docs/mcp](https://www.canva.dev/docs/mcp/). En el ecosistema Jarvis: [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) **§2.10**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (limites API, brand templates, Telegram/`messaging`).
+Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://composio.dev/toolkits/canva/framework/openclaw). **Documentacion oficial Canva MCP:** [Overview](https://www.canva.dev/docs/mcp/) · [Tools y rate limits](https://www.canva.dev/docs/mcp/tools/) · [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/) · [Troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/) · [Usage policy](https://www.canva.dev/docs/mcp/usage-policy/) · [Prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/). En el ecosistema Jarvis: [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) **§2.10**, [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (tabla de enlaces MCP, limites API, brand templates, Telegram/`messaging`).
 
 ### Checklist de configuración (host donde corre el gateway)
 
@@ -75,6 +75,7 @@ Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://compo
 
 ## Historial
 
+- **2026-04-16:** Enlaces oficiales Canva MCP en documentacion: [Overview](https://www.canva.dev/docs/mcp/), [Tools](https://www.canva.dev/docs/mcp/tools/), [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/), [Troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/), [Usage policy](https://www.canva.dev/docs/mcp/usage-policy/), [Prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/) — tabla en [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md).
 - **2026-04-16:** URL canonica del intake MCP: [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (`/d/e/1FAIpQLSdtsKA9...`); OAuth Redirect URI obligatorio; contenido alineado al texto publico del formulario.
 - **2026-04-16:** Via **D (MCP oficial)** — alineacion con *Canva MCP Connector Intake Form*: descripcion del conector SDK+MCP y nota de verificar enlace al repo en el formulario; enlaces en [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) y [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md).
 - **2026-04-15:** Seccion **Canva (tres vias configuradas)** — tabla comparativa Composio / Canva Connect directo / MCP oficial, skill `canva` de ClawHub, formulario de intake MCP.

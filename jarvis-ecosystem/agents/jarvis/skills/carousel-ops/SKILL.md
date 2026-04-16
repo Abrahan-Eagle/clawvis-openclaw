@@ -132,7 +132,7 @@ Skill [`canva`](../canva/SKILL.md) instalado desde ClawHub (`openclaw skills ins
 
 ### D. Canva MCP oficial (futuro — `generate-design` + editing)
 
-Servidor remoto `https://mcp.canva.com/mcp` — 30+ herramientas incluyendo `generate-design` (IA), `perform-editing-operations` (editar texto en lienzo), `resize-design` (Pro+). Acceso: [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (OAuth Redirect URI obligatorio; el formulario lista capacidades y el snippet `mcp-remote`). Herramientas y planes en [canva.dev/docs/mcp/tools](https://www.canva.dev/docs/mcp/tools/).
+Servidor remoto `https://mcp.canva.com/mcp` — 30+ herramientas incluyendo `generate-design` (IA), `perform-editing-operations` (editar texto en lienzo), `resize-design` (Pro+). Acceso: [Canva MCP Connector Intake Form](https://docs.google.com/forms/d/e/1FAIpQLSdtsKA9LSmY-JEf_nF5QYBdjxfnXbgqvlKzd8obKGSPSK_eOA/viewform) (OAuth Redirect URI obligatorio; el formulario lista capacidades y el snippet `mcp-remote`). Documentacion oficial: [Overview MCP](https://www.canva.dev/docs/mcp/), [herramientas y rate limits](https://www.canva.dev/docs/mcp/tools/), [design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/) (siempre ofrecer enlace de edicion en Canva), [troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/), [usage policy](https://www.canva.dev/docs/mcp/usage-policy/), [prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/).
 
 ---
 

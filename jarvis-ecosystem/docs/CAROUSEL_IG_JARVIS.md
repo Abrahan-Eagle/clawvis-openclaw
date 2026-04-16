@@ -165,6 +165,19 @@ Archivos PNG    URL de descarga
 | `search-brand-templates` / `list-brand-kits` | No | No | Si |
 | `upload-asset-from-url` | Si | Si | Si |
 
+### Documentacion oficial Canva MCP (enlaces)
+
+| Tema | Enlace |
+|------|--------|
+| Vision general (servidor remoto `https://mcp.canva.com/mcp`, DCR, planes) | [Canva Model Context Protocol (MCP)](https://www.canva.dev/docs/mcp/) |
+| Herramientas MCP y limites por minuto / plan | [MCP tools and rate limits](https://www.canva.dev/docs/mcp/tools/) |
+| **Design edit handoff:** devolver `edit_url` o `https://www.canva.com/design/{design_id}/edit` tras crear/listar/editar | [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/) |
+| Timeouts (`generate-design` hasta ~60s), registro manual OAuth, sin auth a nivel organizacion, dominios `canva.com` / `canva.ai` | [Troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/) |
+| Politica de uso para integradores (UX, datos, Brand Kit, agentes compartidos) | [Usage policy](https://www.canva.dev/docs/mcp/usage-policy/) |
+| Usos prohibidos (extraccion masiva, competencia, entrenar modelos con datos Canva) | [Prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/) |
+
+Jarvis y `mkt-*` deben respetar **handoff** (enlace de edicion al usuario) y las politicas anteriores si integran el MCP oficial.
+
 ---
 
 ## Resumen

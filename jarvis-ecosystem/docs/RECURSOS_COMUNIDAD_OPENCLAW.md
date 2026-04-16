@@ -229,7 +229,7 @@ Instalar open-carrusel en el PC del operador es **opcional** para exportar PNGs;
 | Open Carrusel | https://github.com/Hainrixz/open-carrusel | Carruseles IG (HTML → PNG); **patrones** en skill `carousel-ops` — app upstream **opcional** fuera del repo — ver **§2.9**. |
 | Canva + Composio | https://composio.dev/toolkits/canva | Diseno visual via API; plugin OpenClaw `composio` para crear/editar/exportar disenos Canva desde chat — ver **§2.10**. |
 | Canva Connect skill (ClawHub) | https://github.com/openclaw/skills/tree/main/skills/coolmanns/canva-connect | Skill OpenClaw: OAuth directo con Canva Connect API, sin intermediario. Instalado como skill `canva`. |
-| Canva MCP oficial | https://www.canva.dev/docs/mcp/ | 30+ herramientas MCP: `generate-design` (IA), editing transactions, resize, autofill (Enterprise). |
+| Canva MCP (docs) | https://www.canva.dev/docs/mcp/ | Indice: [Overview](https://www.canva.dev/docs/mcp/), [Tools](https://www.canva.dev/docs/mcp/tools/), [Design edit handoff](https://www.canva.dev/docs/mcp/workflows/design-edit/), [Troubleshooting](https://www.canva.dev/docs/mcp/troubleshooting/), [Usage policy](https://www.canva.dev/docs/mcp/usage-policy/), [Prohibited use](https://www.canva.dev/docs/mcp/prohibited-use/) — ver [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) tabla detallada. |
 | canva-design-assets (MCPMarket) | https://mcpmarket.com/tools/skills/canva-design-assets | Patron bulk social media: create, export, upload, comment via Connect API. |
 | canva-gemini-extension (Canva SDK) | https://github.com/canva-sdks/canva-gemini-extension | Extension MCP oficial de Canva para Gemini CLI; codigo de referencia para wrappers. |
 
