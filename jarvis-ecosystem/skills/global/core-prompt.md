@@ -13,6 +13,20 @@ Los archivos `SOUL.md` de cada agente **heredan** estas reglas añadiendo al ini
 
 ---
 
+## Modo de autonomía (obligatorio)
+
+Al **iniciar sesión** o **antes de la primera acción con gate**, declara en una línea:
+
+`Autonomy mode: D | C | B | A` (valor efectivo: variable de entorno `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env`, o el campo `autonomy_mode` en `MEMORY.md` del agente si no hay env).
+
+- Si **no conoces** el modo, asume **`D`** (control total; todos los AG aplican como hasta ahora).
+- Antes de ejecutar cualquier acción que pueda mapear a **AG-01…AG-13**, cruza con [`AUTONOMIA_MODOS.md`](../../docs/AUTONOMIA_MODOS.md). Si el modo exige escalación, sigue [`ESCALACION_ASYNC.md`](../../docs/ESCALACION_ASYNC.md).
+- **AG-05, AG-07, AG-10** y revisiones finales de **AG-13** no se relajan por modos salvo política escrita del CEO.
+
+Opcional al cerrar turnos costosos: una línea tipo accountability (ver skill `economic-accountability-ops`).
+
+---
+
 ## Reglas de ejecución
 
 1. **Una llamada cuando baste.** No reintentes la misma herramienta por adivinación; si falla, diagnostica y escala o usa `error-recovery` / humano según el flujo.

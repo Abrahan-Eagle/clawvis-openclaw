@@ -4,6 +4,12 @@
 
 Solo lectura/escritura en sesión principal con el humano (ver `AGENTS.md`).
 
+## Autonomía
+
+- **autonomy_mode:** `D` (documental; alinear con `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env` cuando exista).
+- Docs: [AUTONOMIA_MODOS](../../docs/AUTONOMIA_MODOS.md), [ESCALACION_ASYNC](../../docs/ESCALACION_ASYNC.md), forense upstream [CLAWWORK_FORENSE](../../docs/CLAWWORK_FORENSE.md).
+- Skills relacionadas: [`economic-accountability-ops`](../../skills/global/economic-accountability-ops/SKILL.md), [`llm-as-judge-ops`](skills/llm-as-judge-ops/SKILL.md).
+
 ---
 
 ## Holding / empresas
@@ -78,6 +84,7 @@ Plantilla copiable: [../../docs/plantillas/REPORTE_SUPERVISOR_CEO.md](../../docs
 
 ## Decisiones de gobierno (log)
 
+- **2026-04-28:** **Forense HKUDS/ClawWork + autonomía async.** Sin vendorizar Nanobot/livebench/React: doc [`CLAWWORK_FORENSE`](../../docs/CLAWWORK_FORENSE.md). Modos **A/B/C/D** con default **D**: [`AUTONOMIA_MODOS`](../../docs/AUTONOMIA_MODOS.md), matriz en [`APPROVAL_GATES`](../../docs/APPROVAL_GATES.md). Escalación Telegram/WhatsApp: [`ESCALACION_ASYNC`](../../docs/ESCALACION_ASYNC.md). Skills nuevas: [`economic-accountability-ops`](../../skills/global/economic-accountability-ops/SKILL.md), [`llm-as-judge-ops`](skills/llm-as-judge-ops/SKILL.md). `core-prompt.md` exige declarar modo al inicio.
 - **2026-04-16:** Modulo **Forense MiroFish** completado. Repo 666ghj/MiroFish (simulacion multi-agente, Python+Vue, AGPL-3.0) analizado contra los 37 skills y toda la infraestructura del ecosistema. Cero codigo copiado (AGPL); solo patrones conceptuales. 2 huecos reales identificados y cubiertos: (1) `scenario-analysis-ops` — analisis what-if con semilla, variables iterables, 3+ escenarios, matriz de riesgos y acciones Trello; (2) `strategic-briefing-ops` — briefing a nivel holding (semanal o bajo demanda) que sintetiza goals, pipeline, marketing, clientes, riesgos y decisiones pendientes. No adoptados: frontend Vue, motor OASIS, Zep, GraphRAG simulado, codigo AGPL. AGENTS.md actualizado con ambos skills. Resumen: `docs/FORENSE_MIROFISH_RESUMEN.md`.
 - **2026-04-14:** **Auditoria de coherencia del monorepo** — CI movido a [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) con `working-directory: agent-town`. Skills duplicadas eliminadas en `ventas/skills/` y `marketing/skills/` (canónico: `jarvis/skills/`). `lib/ws-proxy.mjs` generado desde TS (`esbuild`). `.gitignore` ampliado; sesiones y memoria SQLite fuera de git — [`docs/OPENCLAW_STATE_GIT_POLICY.md`](../../../docs/OPENCLAW_STATE_GIT_POLICY.md). Documentación: RESPALDO (systemd, modos browser), AGENTS (índice de integraciones), MEMORY/WORKSPACE en ventas y marketing, roadmap tests Agent Town.
 - **2026-04-14:** Skill **last30days-openclaw** (fork ClawHub) versionado en `agents/jarvis/skills/last30days-openclaw/` — investigacion multi-fuente de los ultimos dias (Reddit, HN, GitHub, etc.) para pulso de comunidad antes de leads/propuestas de alto valor. Convive con MemPalace y Graphify; no los sustituye. Instalacion en maquina: `openclaw skills install last30days-openclaw`. Skills enriquecidos: `lead-research-ops`, `proposal-ops`. AGENTS.md (jarvis, ventas, marketing) con referencia. Docs: `docs/LAST30DAYS_INTEGRACION.md`, resumen forense: `docs/FORENSE_LAST30DAYS_RESUMEN.md`.

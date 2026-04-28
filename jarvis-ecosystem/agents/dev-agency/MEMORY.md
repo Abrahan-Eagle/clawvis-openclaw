@@ -6,6 +6,11 @@ Memoria a largo plazo del workspace cuando la empresa esté **activa** y los age
 
 - **Vacío hasta activación:** no hay decisiones de equipo registradas aún.
 
+## Autonomía
+
+- **autonomy_mode:** `D` (documental; alinear con `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env` cuando exista).
+- Docs: [AUTONOMIA_MODOS](../../docs/AUTONOMIA_MODOS.md), [ESCALACION_ASYNC](../../docs/ESCALACION_ASYNC.md).
+
 ---
 
 ## Registro

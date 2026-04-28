@@ -96,6 +96,9 @@ Skills instaladas bajo `skills/` que **no** estan en el bloque de calidad comerc
 | `strategic-briefing-ops` | Briefing holding semanal: goals + pipeline + marketing + riesgos + decisiones; ver `skills/strategic-briefing-ops/SKILL.md` |
 | `dual-retrieval-ops` | Patrones LightRAG (local+global, citas) con MemPalace/Graphify — ver `skills/dual-retrieval-ops/SKILL.md` |
 | `carousel-ops` | Carruseles IG y disenos redes; brief por red + brief visual API; ver `skills/carousel-ops/SKILL.md` |
+| `llm-as-judge-ops` | Auditoría LLM-as-judge antes de escalación/publicación (AG-03/12/13); ver `skills/llm-as-judge-ops/SKILL.md` |
+
+Skills **globales** (fuera de `agents/jarvis/skills/`, compartidas): [`economic-accountability-ops`](../../skills/global/economic-accountability-ops/SKILL.md) — cost footer + balance simbólico (usa [`scripts/cost-report.sh`](../../scripts/cost-report.sh)).
 
 Usar bajo demanda; no sustituyen gobierno, Trello ni dossiers.
 

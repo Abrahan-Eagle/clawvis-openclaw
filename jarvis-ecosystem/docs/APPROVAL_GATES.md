@@ -49,6 +49,32 @@ flowchart TD
     Check -->|No| FreeAction["Sin gate de la tabla; ante duda ver regla 1 abajo"]
 ```
 
+## Modos de autonomía (A / B / C / D) y matriz AG × Modo
+
+Los gates anteriores son la **verdad legal** del ecosistema. El modo de autonomía (`JARVIS_AUTONOMY_MODE`, ver [`AUTONOMIA_MODOS.md`](AUTONOMIA_MODOS.md)) define **cuánto puede hacer el agente solo** antes de escalar al CEO por **Telegram / WhatsApp / Trello** según [`ESCALACION_ASYNC.md`](ESCALACION_ASYNC.md).
+
+- **Default recomendado:** **D** (control total; mismo comportamiento que antes de existir modos).
+- **Matriz detallada:** tabla AG × modo en [`AUTONOMIA_MODOS.md`](AUTONOMIA_MODOS.md#matriz-ag--modo-resumen).
+- **Análisis upstream ClawWork (ideas vs código):** [`CLAWWORK_FORENSE.md`](CLAWWORK_FORENSE.md).
+
+### Flujo asíncrono (escalar → esperar → continuar)
+
+```mermaid
+flowchart TD
+  Detect["Agente clasifica acción AG-01..AG-13"]
+  Mode["Lee modo D/C/B/A"]
+  Solo{"¿Modo permite ejecución sin CEO?"}
+  Prep["Preparar payload escalación"]
+  Chan["Notificar CEO canal asíncrono"]
+  Wait["Marcar waiting_for_user / tarea"]
+  Resume["CEO responde approve o reject"]
+  Exec["Ejecutar o cancelar"]
+
+  Detect --> Mode --> Solo
+  Solo -->|sí y política OK| Exec
+  Solo -->|no| Prep --> Chan --> Wait --> Resume --> Exec
+```
+
 ## Reglas para agentes
 
 1. **Ante la duda, preguntar.** Si una accion no esta en la tabla pero podria tener impacto, tratarla como gate.

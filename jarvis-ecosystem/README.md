@@ -66,6 +66,9 @@ Superusuario (Abrahan) ←→ Jarvis (agente maestro)
 | [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) | Primera pasada: tableros Trello + canales Discord alineados a la convención. |
 | [docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md](docs/OPENCLAW_PERMISOS_AUTOMATIZACION.md) | Token Trello con escritura, `exec` en OpenClaw, Discord bot — checklist. |
 | [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md) | `~/.openclaw` vs repo vs snapshot: evitar deriva. |
+| [docs/CLAWWORK_FORENSE.md](docs/CLAWWORK_FORENSE.md) | Análisis HKUDS/ClawWork (benchmark Nanobot): qué adoptar vs qué rechazar. |
+| [docs/AUTONOMIA_MODOS.md](docs/AUTONOMIA_MODOS.md) | Modos de autonomía **A/B/C/D** (default **D**) + matriz con AG-01..AG-13. |
+| [docs/ESCALACION_ASYNC.md](docs/ESCALACION_ASYNC.md) | Escalación al CEO por Telegram/WhatsApp cuando el modo lo exija (`waiting_for_user`). |
 | [docs/SECURITY_GATEWAY.md](docs/SECURITY_GATEWAY.md) | Auth del gateway y superficie de red; `plugins.allow`. |
 | [../docs/TROUBLESHOOTING_OPENCLAW_CPU.md](../docs/TROUBLESHOOTING_OPENCLAW_CPU.md) | CPU al 100%, proceso `rg`, ajustes `memorySearch` / concurrencia / `exec`. |
 | [docs/PRUEBAS_JARVIS_PROMPTS.md](docs/PRUEBAS_JARVIS_PROMPTS.md) | Prompts copy-paste para pruebas del ecosistema (smoke, ClawFlows, OpenClaw, coordinación, RRSS, gobierno). |

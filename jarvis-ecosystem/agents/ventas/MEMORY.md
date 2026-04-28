@@ -8,6 +8,11 @@ Este archivo es el equivalente de [../jarvis/MEMORY.md](../jarvis/MEMORY.md) par
 
 - Si aun no hay entradas, dejar esta seccion vacia o anotar la fecha de creacion del archivo.
 
+## Autonomía
+
+- **autonomy_mode:** `D` (documental; alinear con `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env` cuando exista).
+- Docs: [AUTONOMIA_MODOS](../../docs/AUTONOMIA_MODOS.md), [ESCALACION_ASYNC](../../docs/ESCALACION_ASYNC.md).
+
 ---
 
 ## Registro (editar segun avance el equipo)

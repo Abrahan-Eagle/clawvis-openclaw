@@ -4,6 +4,11 @@
 
 Memoria del workspace cuando la unidad esté **activa**.
 
+## Autonomía
+
+- **autonomy_mode:** `D` (documental; alinear con `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env` cuando exista).
+- Docs: [AUTONOMIA_MODOS](../../docs/AUTONOMIA_MODOS.md), [ESCALACION_ASYNC](../../docs/ESCALACION_ASYNC.md).
+
 ---
 
 ## Registro

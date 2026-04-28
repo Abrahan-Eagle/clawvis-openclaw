@@ -14,7 +14,7 @@ Todos los paths se asumen desde la raíz **`jarvis-ecosystem/`** (salvo que se i
 | [`validate-marketing-skills.sh`](validate-marketing-skills.sh) | Wrapper: valida las marketing skills (frontmatter, atribución, enlaces). | `./scripts/validate-marketing-skills.sh` |
 | [`smoke-marketing-skills-e2e.sh`](smoke-marketing-skills-e2e.sh) | Smoke end-to-end de marketing skills (requiere entorno/OpenClaw según doc del script). | `./scripts/smoke-marketing-skills-e2e.sh` |
 | [`composio-diagnose.sh`](composio-diagnose.sh) | Diagnóstico de red TLS/DNS hacia Composio MCP (no sustituye `openclaw composio doctor`). | `./scripts/composio-diagnose.sh` |
-| [`cost-report.sh`](cost-report.sh) | Reporte de uso/coste por agente parseando sesiones JSONL bajo `~/.openclaw/agents/`. | `./scripts/cost-report.sh` o `./scripts/cost-report.sh 2026-04` |
+| [`cost-report.sh`](cost-report.sh) | Reporte de uso/coste por agente parseando sesiones JSONL bajo `~/.openclaw/agents/`. **Fuente recomendada** para el *cost footer* del skill [`economic-accountability-ops`](../skills/global/economic-accountability-ops/SKILL.md) (balance simbólico aparte). | `./scripts/cost-report.sh` o `./scripts/cost-report.sh 2026-04` |
 | [`graphify-serve-local.sh`](graphify-serve-local.sh) | Sirve `graphify-out/graph.html` en localhost (127.0.0.1), evita 404 de favicon. Requiere `graphify update` previo en el repo. | `./scripts/graphify-serve-local.sh` |
 | [`openclaw-path.sh`](openclaw-path.sh) | Añade al PATH el `openclaw` instalado vía nvm (shells no interactivos / CI). | `source scripts/openclaw-path.sh` |
 | [`trello-bootstrap-boards.sh`](trello-bootstrap-boards.sh) | Crea tableros Trello esqueleto (marketing/ventas) — requiere token con escritura. | Ver [docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md](../docs/BOOTSTRAP_ESQUELETO_TRELLO_DISCORD.md) |
@@ -36,3 +36,4 @@ Definiciones por skill usadas por el generador v2 (coordination, manifests). No 
 - ClawFlows: [../CLAWFLOWS.md](../CLAWFLOWS.md), [../automations/README.md](../automations/README.md)
 - Coherencia repo vs runtime: [../docs/COHERENCIA_RUNTIME_REPO.md](../docs/COHERENCIA_RUNTIME_REPO.md)
 - Graphify: [../docs/GRAPHIFY_INTEGRACION.md](../docs/GRAPHIFY_INTEGRACION.md)
+- Autonomía y forense ClawWork: [../docs/AUTONOMIA_MODOS.md](../docs/AUTONOMIA_MODOS.md), [../docs/CLAWWORK_FORENSE.md](../docs/CLAWWORK_FORENSE.md)
