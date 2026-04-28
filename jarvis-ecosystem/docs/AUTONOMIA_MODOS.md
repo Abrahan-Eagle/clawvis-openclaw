@@ -6,6 +6,19 @@
 
 ---
 
+## Frases breves (para que el agente las diga al usuario)
+
+Usar tal cual o parafrasear sin cambiar el sentido — van **siempre** en la misma respuesta que la declaración del modo activo:
+
+| Modo | Descripción en una frase |
+|------|---------------------------|
+| **D** | Máximo control: cada gate AG pasa por solicitud explícita al CEO como hasta ahora. |
+| **C** | Trabajo solo en research y borradores locales; cualquier cosa visible fuera (RRSS, mails masivos, publicar) la consulto por Telegram/WhatsApp antes. |
+| **B** | Como C, y además puedo automatizar pasos repetibles de bajo riesgo dentro del dossier que ya aprobaste (sin publicar al mundo sin tu OK). |
+| **A** | Piloto: máxima autonomía solo en horario y cuentas/rutas en lista blanca; fuera de eso aplico reglas tipo C o D. |
+
+---
+
 ## Definición de modos
 
 | Modo | Nombre | Comportamiento |

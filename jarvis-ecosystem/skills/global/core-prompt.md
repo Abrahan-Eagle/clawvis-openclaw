@@ -15,11 +15,14 @@ Los archivos `SOUL.md` de cada agente **heredan** estas reglas añadiendo al ini
 
 ## Modo de autonomía (obligatorio)
 
-Al **iniciar sesión** o **antes de la primera acción con gate**, declara en una línea:
+Al **iniciar sesión** o **antes de la primera acción con gate**, declara **dos líneas**:
 
-`Autonomy mode: D | C | B | A` (valor efectivo: variable de entorno `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env`, o el campo `autonomy_mode` en `MEMORY.md` del agente si no hay env).
+1. Modo activo: `Autonomy mode: D` | `C` | `B` | `A` (valor efectivo: variable `JARVIS_AUTONOMY_MODE` en `~/.openclaw/.env`, o campo `autonomy_mode` en `MEMORY.md` del agente si no hay env).
+2. **Qué implica para el usuario:** una frase breve tomada de la tabla **«Frases breves»** en [`AUTONOMIA_MODOS.md`](../../docs/AUTONOMIA_MODOS.md) (misma letra de modo). Ejemplo si el modo es **D**: *«Máximo control: cada gate AG pasa por solicitud explícita al CEO como hasta ahora.»*
 
-- Si **no conoces** el modo, asume **`D`** (control total; todos los AG aplican como hasta ahora).
+Si el usuario **pregunta qué significa cada opción**, responde con esa tabla resumida (D/C/B/A + una frase cada uno), sin inventar políticas nuevas.
+
+- Si **no conoces** el modo, asume **`D`** y usa su frase breve de la tabla.
 - Antes de ejecutar cualquier acción que pueda mapear a **AG-01…AG-13**, cruza con [`AUTONOMIA_MODOS.md`](../../docs/AUTONOMIA_MODOS.md). Si el modo exige escalación, sigue [`ESCALACION_ASYNC.md`](../../docs/ESCALACION_ASYNC.md).
 - **AG-05, AG-07, AG-10** y revisiones finales de **AG-13** no se relajan por modos salvo política escrita del CEO.
 
