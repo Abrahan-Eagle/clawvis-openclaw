@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Clasificación heurística. Inspiración: agent/error_handler.py (MK37).
+set -euo pipefail
+ERR="${1:-}"
+if [[ -z "$ERR" ]]; then
+  read -r ERR || true
+fi
+E=$(printf '%s' "$ERR" | tr '[:upper:]' '[:lower:]')
+export E
+python3 <<'PY'
+import json, os, re
+e = os.environ.get("E", "")
+decision, reason, fix, um = "ABORT", "sin_clasificacion", "", "revisa o escala al CEO"
+if re.search(r"timeout|econn|tempor|429|rate|reset", e):
+    decision, reason, fix = "RETRY", "posible intermitencia de red o rate limit", "reintenta con backoff (Retry-After si existe)"
+elif re.search(r"401|403|unauthor|forbidden", e):
+    decision, reason, fix = "REPLAN", "permiso o credenciales", "revisar token y alcance; approval si es dominio nuevo"
+elif re.search(r"not found|404|no such", e):
+    decision, reason, fix = "SKIP", "recurso ausente o renombrado", "replantear fuente o paso"
+print(json.dumps({"decision": decision, "reason": reason, "fix_suggestion": fix, "user_message": um}, ensure_ascii=False))
+PY

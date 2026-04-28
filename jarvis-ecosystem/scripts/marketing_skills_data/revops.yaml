@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: revops
+template_key: revops
+summary_es: |
+  RevOps: etapas lead→cliente, scoring, routing marketing→ventas.
+triggers_es:
+  - pipeline CRM
+  - routing leads
+  - SLA
+triggers_en:
+  - RevOps
+  - lead routing
+coord_category: strategy
+related_local:
+  - analytics-tracking
+  - sales-enablement
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

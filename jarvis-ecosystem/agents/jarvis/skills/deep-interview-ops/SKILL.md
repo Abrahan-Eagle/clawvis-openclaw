@@ -1,6 +1,8 @@
 ---
 name: deep-interview-ops
 description: "Cuestionamiento socratico estructurado ANTES de ejecutar tareas complejas. Expone supuestos ocultos, mide claridad, y bloquea ejecucion hasta que los requisitos superen el umbral de ambiguedad."
+metadata:
+  version: "1.0.0"
 ---
 
 # Deep Interview Ops

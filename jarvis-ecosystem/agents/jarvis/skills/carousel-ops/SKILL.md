@@ -1,6 +1,8 @@
 ---
 name: carousel-ops
 description: "Carruseles Instagram: narrativa, dimensiones, caption/hashtags, checklist de calidad de diseño (mejor resultado posible en el stack). Pipeline copy + Canva (Composio) hasta export; publicacion AG-03."
+metadata:
+  version: "1.0.0"
 ---
 
 # Carousel ops (Instagram)

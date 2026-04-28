@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Plantilla de plan (≤5 pasos). Completar/ajustar con el LLM en sesión. Inspirado en agent/planner.py (MK37).
+set -euo pipefail
+GOAL="${1:-${GOAL:-}}"
+if [[ -z "$GOAL" ]]; then
+  echo "Uso: planner \"objetivo en lenguaje natural\"" >&2
+  exit 1
+fi
+# Escapar para JSON
+ESC=$(printf '%s' "$GOAL" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+cat <<JSON
+{
+  "schema": "jarvis-plan-v1",
+  "goal": $ESC,
+  "created": "$TS",
+  "max_steps": 5,
+  "steps": [
+    {"i": 1, "tool": "elige", "action": "describe", "args": {}},
+    {"i": 2, "tool": "elige", "action": "describe", "args": {}}
+  ],
+  "note": "Sustituye elige/describe por skills reales (trello, notion, gog, ...). Un paso = una invocación clara. Sin código generado en runtime."
+}
+JSON

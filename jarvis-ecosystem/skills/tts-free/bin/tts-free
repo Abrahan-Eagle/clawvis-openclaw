@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# tts-free — wrapper bash sobre lib/synth.py (Edge TTS)
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+tts-free <command> [options]
+
+Commands:
+  synthesize         --text/--voice/--out [--rate +0% --pitch +0Hz --volume +0% --with-subs]
+  synthesize-file    --text-file/--voice/--out [opciones igual]
+  voices             [--lang es] [--gender Female]
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+self=$(readlink -f "${BASH_SOURCE[0]}")
+SKILL_DIR=$(dirname "$(dirname "$self")")
+VENV_PY="$SKILL_DIR/.venv/bin/python"
+LIB="$SKILL_DIR/lib/synth.py"
+
+if [ ! -x "$VENV_PY" ]; then
+  echo "ERROR: venv no instalada. Corre:" >&2
+  echo "  cd $SKILL_DIR && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt" >&2
+  exit 1
+fi
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+  synthesize)
+    "$VENV_PY" "$LIB" synthesize "$@"
+    ;;
+  synthesize-file)
+    text=""
+    voice=""
+    out=""
+    extras=()
+    while [ $# -gt 0 ]; do
+      case "$1" in
+        --text-file)
+          text=$(cat "$2"); shift 2 ;;
+        --voice) voice="$2"; shift 2 ;;
+        --out) out="$2"; shift 2 ;;
+        *) extras+=("$1"); shift ;;
+      esac
+    done
+    [ -z "$text" ] && { echo "ERROR: --text-file requerido" >&2; exit 1; }
+    [ -z "$voice" ] && { echo "ERROR: --voice requerido" >&2; exit 1; }
+    [ -z "$out" ] && { echo "ERROR: --out requerido" >&2; exit 1; }
+    "$VENV_PY" "$LIB" synthesize --text "$text" --voice "$voice" --out "$out" "${extras[@]}"
+    ;;
+  voices)
+    "$VENV_PY" "$LIB" voices "$@"
+    ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

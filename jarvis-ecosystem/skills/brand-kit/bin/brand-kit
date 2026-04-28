@@ -1,0 +1,156 @@
+#!/usr/bin/env bash
+# brand-kit — lectura y validacion de brand.json por cliente
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+brand-kit <command> [options]
+
+Commands:
+  show       Imprimir brand.json
+  get        Obtener un campo (--field a.b.c notacion punto)
+  validate   Validar campos minimos
+  init       Crear brand.json minimo en el dossier
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/client-dossiers" ]; then echo "$r"; return 0; fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../.." && pwd
+}
+
+ROOT=$(detect_root)
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+
+brand_path() {
+  local d="$1"
+  # Preferimos directorio per-cliente; fallback al JSON plano embebido.
+  if [ -f "$DOSSIERS_DIR/$d/brand.json" ]; then
+    echo "$DOSSIERS_DIR/$d/brand.json"
+    return 0
+  fi
+  if [ -f "$DOSSIERS_DIR/$d.brand.json" ]; then
+    echo "$DOSSIERS_DIR/$d.brand.json"
+    return 0
+  fi
+  echo ""
+}
+
+require_brand() {
+  local p; p=$(brand_path "$1")
+  [ -z "$p" ] && { echo "ERROR: no existe brand.json para '$1' (ni $DOSSIERS_DIR/$1/brand.json ni $DOSSIERS_DIR/$1.brand.json)" >&2; exit 1; }
+  echo "$p"
+}
+
+cmd_show() {
+  local d=""
+  while [ $# -gt 0 ]; do
+    case "$1" in --dossier) d="$2"; shift 2 ;; *) echo "Opcion desconocida: $1" >&2; exit 1 ;; esac
+  done
+  [ -z "$d" ] && { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  jq . "$(require_brand "$d")"
+}
+
+cmd_get() {
+  local d="" field=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) d="$2"; shift 2 ;;
+      --field) field="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$d" ] && { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  [ -z "$field" ] && { echo "ERROR: --field requerido" >&2; exit 1; }
+  jq -r ".${field}" "$(require_brand "$d")"
+}
+
+cmd_validate() {
+  local d=""
+  while [ $# -gt 0 ]; do
+    case "$1" in --dossier) d="$2"; shift 2 ;; *) echo "Opcion desconocida: $1" >&2; exit 1 ;; esac
+  done
+  [ -z "$d" ] && { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  local p; p=$(require_brand "$d")
+  local errs=()
+  jq -e '.name' "$p" >/dev/null || errs+=("missing: name")
+  jq -e '.palette.primary' "$p" >/dev/null || errs+=("missing: palette.primary")
+  jq -e '.palette.bg' "$p" >/dev/null || errs+=("missing: palette.bg")
+  jq -e '.palette.fg' "$p" >/dev/null || errs+=("missing: palette.fg")
+  jq -e '.fonts.heading' "$p" >/dev/null || errs+=("missing: fonts.heading")
+  jq -e '.fonts.body' "$p" >/dev/null || errs+=("missing: fonts.body")
+  if [ "${#errs[@]}" -gt 0 ]; then
+    printf '%s\n' "${errs[@]}" >&2
+    exit 3
+  fi
+  echo "OK"
+}
+
+cmd_init() {
+  local d="" name=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) d="$2"; shift 2 ;;
+      --name) name="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$d" ] && { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  [ -z "$name" ] && name="$d"
+  # Si existe el dossier como JSON plano (convenio actual), creamos directorio paralelo para assets.
+  local dir="$DOSSIERS_DIR/$d"
+  mkdir -p "$dir/assets"
+  local p="$dir/brand.json"
+  if [ -f "$p" ]; then
+    echo "ERROR: ya existe $p" >&2; exit 1
+  fi
+  cat > "$p" <<JSON
+{
+  "id": "$d",
+  "name": "$name",
+  "voice": {
+    "tone": "claro, cercano, evita tecnicismos",
+    "banned_words": []
+  },
+  "palette": {
+    "primary": "#0F172A",
+    "secondary": "#22D3EE",
+    "accent": "#F59E0B",
+    "bg": "#FFFFFF",
+    "fg": "#0F172A",
+    "muted": "#64748B"
+  },
+  "fonts": {
+    "heading": "DejaVu Sans",
+    "body": "DejaVu Sans",
+    "fallback": "DejaVu Sans"
+  },
+  "logo": {
+    "path": "client-dossiers/$d/assets/logo.png",
+    "padding": 40
+  },
+  "claim": "$name"
+}
+JSON
+  echo "$p"
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  show) cmd_show "$@" ;;
+  get) cmd_get "$@" ;;
+  validate) cmd_validate "$@" ;;
+  init) cmd_init "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

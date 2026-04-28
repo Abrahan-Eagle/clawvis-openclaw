@@ -18,11 +18,6 @@ for f in "$REG"/*.yaml; do
   [[ -e "$f" ]] || continue
   base=$(basename "$f" .yaml)
   echo "---------- $base ----------"
-  if [[ "$base" == "lead-qualifier" ]]; then
-    echo "Omitido: clawflows check usa metadata remoto; lead-qualifier no tiene metadata.json en https://clawflows.com (404). El YAML local usa requires: curl/jq — validar manualmente."
-    echo ""
-    continue
-  fi
   if ! clawflows check "$base" 2>&1; then
     FAILED=1
   fi

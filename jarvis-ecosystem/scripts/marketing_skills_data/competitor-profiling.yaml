@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: competitor-profiling
+template_key: seo
+summary_es: |
+  Investiga y perfila competidores desde fuentes públicas con foco en mensajes y gaps.
+triggers_es:
+  - competencia
+  - benchmark
+  - landings rivales
+triggers_en:
+  - competitor research
+  - competitive intel
+coord_category: research
+related_local:
+  - customer-research
+  - seo-audit
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

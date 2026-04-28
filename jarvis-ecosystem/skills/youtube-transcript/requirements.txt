@@ -1,0 +1,2 @@
+# API estable v0.6.x (1.x rompe get_transcript de clase; ver changelog del paquete)
+youtube-transcript-api==0.6.1

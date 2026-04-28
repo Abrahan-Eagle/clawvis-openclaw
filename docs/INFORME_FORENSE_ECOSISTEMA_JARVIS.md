@@ -1329,11 +1329,11 @@
 
 #### Archivos analizados
 
-- [jarvis-ecosystem/automations/registry/lead-qualifier.yaml](../jarvis-ecosystem/automations/registry/lead-qualifier.yaml)
+- *(histórico)* `automations/registry/lead-qualifier.yaml` — **retirado del repo** (abr 2026): no era un flow ejecutable completo en tree; para scoring de leads usar pipelines documentados en `CLAWFLOWS.md` / registry vigente.
 
 #### Hallazgos
 
-1. `registry/lead-qualifier.yaml` presente; calificación automática depende de despliegue ClawFlow.
+1. Calificación automática de leads sigue dependiendo de skills + dossiers + despliegue ClawFlows; no hay YAML dedicado `lead-qualifier` en el árbol actual.
 
 #### Riesgos detectados
 

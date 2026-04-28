@@ -24,6 +24,9 @@ Los agentes operan con autonomia dentro de limites definidos. Cualquier accion q
 | `AG-08` | Compartir datos de clientes fuera del ecosistema | cualquiera | CEO | Descripcion de que datos, a quien y por que |
 | `AG-09` | Instalar dependencias o skills nuevos | jarvis | CEO | Nombre del paquete + justificacion |
 | `AG-10` | Acciones destructivas (rm, borrar repos, revocar accesos) | cualquiera | CEO | Descripcion detallada + confirmacion |
+| `AG-11` | Añadir dominio a **BROWSER_PLAYWRIGHT_ALLOW** o automatizar sitio (login bancos, portales, CRM sin API) | jarvis, dev-agency | CEO | Nombre de dominio + riesgo + prueba en staging / dry-run; ver `skills/browser-playwright/SKILL.md` |
+| `AG-12` | **Publicar** carrusel/reel/video a un canal externo (Instagram, TikTok, Facebook, YouTube, LinkedIn) | marketing, jarvis | CEO | Manifest `index.json` + preview del asset + horario propuesto. Sustituye / complementa AG-03 cuando el contenido fue generado por el pipeline RRSS local. |
+| `AG-13` | Usar **IA generativa** (imagen, voz, video) en assets que se vayan a publicar o entregar al cliente | marketing, dev-agency, jarvis | CEO | Lista de assets IA + manifest con `ai_used:true` + nota legal sobre derechos / atribucion. Se acumula con AG-12 si ademas se publica. |
 
 ## Niveles de aprobacion
 
@@ -36,14 +39,14 @@ Los agentes operan con autonomia dentro de limites definidos. Cualquier accion q
 
 ```mermaid
 flowchart TD
-    Agent["Agente detecta accion con gate"] --> Check{"Es AG-01..AG-10?"}
+    Agent["Agente detecta accion"] --> Check{"La accion coincide con algun AG de la tabla AG-01..AG-13?"}
     Check -->|Si| Prepare["Preparar solicitud en Trello"]
     Prepare --> Notify["Notificar al CEO via canal activo"]
     Notify --> Wait["Esperar aprobacion explicita"]
     Wait --> Approved{"Aprobado?"}
     Approved -->|Si| Execute["Ejecutar accion"]
     Approved -->|No| Cancel["Cancelar y documentar razon"]
-    Check -->|No| FreeAction["Ejecutar libremente"]
+    Check -->|No| FreeAction["Sin gate de la tabla; ante duda ver regla 1 abajo"]
 ```
 
 ## Reglas para agentes
@@ -67,6 +70,52 @@ Estas reglas estan referenciadas en:
 - **Generar** copy, **crear** lienzo en Canva (API/Composio/MCP) y **exportar** PNG/PDF para revision **no** es lo mismo que **publicar** en Instagram u otra red.
 - **AG-03** aplica al acto de **publicacion** (o programacion de publicacion) visible para la audiencia, no al mero borrador tecnico en Canva ni al archivo exportado en el chat.
 - Si el superusuario quiere que el pipeline copy+Canva+export sea **100% automatico sin intervencion** hasta el archivo listo, eso es compatible con esta tabla siempre que **no** se ejecute la publicacion sin pasar por AG-03 (salvo politica explicita del CEO).
+
+## Anexo: skills de marketing (`agents/marketing/skills/`)
+
+Las skills importadas desde [coreyhaines31/marketingskills](https://github.com/coreyhaines31/marketingskills) incluyen en su **Guía Jarvis-ecosystem** que gates aplican según la tarea. Referencia rapida (detalle en cada `SKILL.md`):
+
+| Gate | Skills que lo mencionan explicitamente (lista no exhaustiva) |
+|------|----------------------------------------------------------------|
+| **AG-11** | `customer-research`, `competitor-profiling`, `seo-audit`, `programmatic-seo` (si hay automatizacion/navegacion a dominios no permitidos). |
+| **AG-12** | `social-content`, `email-sequence`, `paid-ads`, `directory-submissions`, `referral-program`, `launch-strategy` (cuando implique publicacion o envio masivo visible). |
+| **AG-13** | `image`, `ad-creative`, `video`, `social-content` (cuando use IA generativa en assets para entregar/publicar). |
+
+Matriz completa: [`docs/RESEARCH_MARKETING_SKILLS.md`](RESEARCH_MARKETING_SKILLS.md).
+
+### Comandos reales (trazabilidad / handoff)
+
+Ejecutar desde la raíz `jarvis-ecosystem/` (ver también cada `SKILL.md` de marketing):
+
+```bash
+# Registrar inicio de trabajo ligado a dossier
+bash skills/global/activity-log/bin/activity-log start \
+  --agent mkt-content \
+  --title "Breve descripción" \
+  --dossier <DOSSIER_ID> \
+  --ref marketing
+
+# Evento intermedio (milestone)
+bash skills/global/activity-log/bin/activity-log event \
+  --task <TASK_ID> \
+  --agent mkt-content \
+  --kind milestone \
+  --note "Estado / entregable"
+
+# Handoff con contrato validado por schema
+bash skills/global/handoff/bin/handoff create \
+  --from mkt-content \
+  --to mkt-social \
+  --schema copy-to-design \
+  --task <TASK_ID> \
+  --payload-file /tmp/handoff-payload.json
+
+bash skills/global/activity-log/bin/activity-log end \
+  --task <TASK_ID> \
+  --note "Cierre / listo para revisión"
+```
+
+Schemas disponibles: `bash skills/global/handoff/bin/handoff schemas`.
 
 ## Excepciones
 

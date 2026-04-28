@@ -1,11 +1,22 @@
-# Automatización Jarvis — briefing matutino (sin dependencias externas obligatorias)
+# Automatización Jarvis — briefing matutino + clima (Open-Meteo) y recordatorio de skills
 name: jarvis-morning-briefing
-description: Fecha/hora local + estado del ecosistema Jarvis (placeholder para calendar/weather cuando estén configurados)
+description: Hora + estado ecosistema + clima (Maracaibo por defecto) + punteros a youtube-transcript / weather-report
 author: jarvis-ecosystem
-version: 1.0.0
+version: 1.1.0
 
 trigger:
   schedule: "30 7 * * *"
+
+config:
+  city:
+    description: "Etiqueta humana (mostrar en notify)"
+    default: "Maracaibo"
+  lat:
+    description: "Latitud Open-Meteo"
+    default: 10.65
+  lon:
+    description: "Longitud Open-Meteo"
+    default: -71.6333
 
 steps:
   - name: now
@@ -18,6 +29,18 @@ steps:
     expression: '"Ecosistema Jarvis + ClawFlows operativo"'
     capture: line
 
+  - name: open-meteo-weather
+    action: evaluate
+    script: |
+      const lat = ${config.lat};
+      const lon = ${config.lon};
+      const u = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon + "&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto";
+      const r = await fetch(u);
+      if (!r.ok) return { error: "http_" + r.status, city: "${config.city}" };
+      const j = await r.json();
+      return { city: "${config.city}", current: j.current, source: "open-meteo" };
+    capture: meteo
+
   - name: notify-user
     action: notify
     message: |
@@ -25,4 +48,8 @@ steps:
       Hora (UTC): ${timestamp}
       ${line}
 
-      Siguiente paso: integrar calendar + weather (skills gog / weather) para agenda y clima reales.
+      Clima (${config.city}): ${meteo.current ? meteo.current.temperature_2m + "°C, humedad " + meteo.current.relative_humidity_2m + "%, viento " + (meteo.current.wind_speed_10m || "?") + " km/h" : JSON.stringify(meteo)}
+
+      Skills del repo: `skills/weather-report/bin/weather-report` (JSON CLI) | `skills/youtube-transcript` (transcript; requiere venv + pip). Ver docs/FORENSE_JARVIS_MK37.md.
+
+      Siguiente paso: integrar calendar (gog / capability calendar) para agenda en el mismo notify.

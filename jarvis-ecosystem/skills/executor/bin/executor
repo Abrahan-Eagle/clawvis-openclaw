@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# “Ejecutor” v1: valida y lista pasos; no invoca el gateway. Inspiración: agent/executor.py (sin código generado).
+set -euo pipefail
+PLAN_FILE="${1:-}"
+if [[ -z "$PLAN_FILE" || ! -f "$PLAN_FILE" ]]; then
+  echo "Uso: executor <plan.json>   # JSON de planner" >&2
+  exit 1
+fi
+python3 - <<'PY' "$PLAN_FILE"
+import json, sys
+p = sys.argv[1]
+with open(p) as f:
+    data = json.load(f)
+steps = data.get("steps", [])
+out = {"dry_run": True, "goal": data.get("goal"), "execute": []}
+for s in steps:
+    out["execute"].append({
+        "tool": s.get("tool"),
+        "action": s.get("action"),
+        "args": s.get("args", {}),
+        "note": "Invocar vía OpenClaw / CLI del skill con aprobación si aplica",
+    })
+print(json.dumps(out, ensure_ascii=False, indent=2))
+PY

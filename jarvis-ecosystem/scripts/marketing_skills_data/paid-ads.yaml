@@ -1,0 +1,19 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: paid-ads
+template_key: paid
+summary_es: |
+  Campañas pagadas: estructura de cuenta, creatividades y medición.
+triggers_es:
+  - Google Ads
+  - Meta Ads
+  - LinkedIn Ads
+triggers_en:
+  - paid ads
+  - PPC
+coord_category: paid
+related_local:
+  - ad-creative
+  - analytics-tracking
+  - page-cro
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

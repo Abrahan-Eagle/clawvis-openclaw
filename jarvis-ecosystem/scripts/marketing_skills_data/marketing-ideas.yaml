@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: marketing-ideas
+template_key: strat_derived
+summary_es: |
+  Lluvia de ideas y tácticas para SaaS/software.
+triggers_es:
+  - ideas de marketing
+  - tácticas
+  - growth ideas
+triggers_en:
+  - marketing ideas
+  - growth tactics
+coord_category: strategy
+related_local:
+  - launch-strategy
+  - content-strategy
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

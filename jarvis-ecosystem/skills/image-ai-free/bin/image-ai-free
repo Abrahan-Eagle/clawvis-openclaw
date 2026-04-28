@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+# image-ai-free — wrapper Pollinations.ai (gratis, sin key) con cache + retry
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+image-ai-free <command> [options]
+
+Commands:
+  generate   Generar imagen via Pollinations
+  clean      Limpiar cache si supera 500MB
+  models     Listar modelos comunes
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+CACHE_DIR="$STATE_DIR/cache/images"
+TIMEOUT="${IMAGE_AI_TIMEOUT:-60}"
+RETRIES="${IMAGE_AI_RETRIES:-3}"
+
+ensure_cache() { mkdir -p "$CACHE_DIR"; }
+
+aspect_to_size() {
+  case "$1" in
+    1:1) echo "1024 1024" ;;
+    4:5) echo "1024 1280" ;;
+    9:16) echo "1080 1920" ;;
+    16:9) echo "1920 1080" ;;
+    3:2) echo "1200 800" ;;
+    *) echo "" ;;
+  esac
+}
+
+cmd_models() {
+  cat <<'EOF'
+flux        # default, equilibrio calidad/velocidad
+flux-realism # mas fotografico
+flux-anime  # estilo anime
+flux-3d     # 3D render
+turbo       # rapido, calidad media
+EOF
+}
+
+cmd_generate() {
+  local prompt="" aspect="1:1" out="" seed="" model="flux"
+  local width="" height="" nocache="false"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --prompt) prompt="$2"; shift 2 ;;
+      --aspect) aspect="$2"; shift 2 ;;
+      --out) out="$2"; shift 2 ;;
+      --seed) seed="$2"; shift 2 ;;
+      --model) model="$2"; shift 2 ;;
+      --width) width="$2"; shift 2 ;;
+      --height) height="$2"; shift 2 ;;
+      --no-cache) nocache="true"; shift ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$prompt" ] && { echo "ERROR: --prompt requerido" >&2; exit 1; }
+  [ -z "$out" ] && { echo "ERROR: --out requerido" >&2; exit 1; }
+
+  if [ -z "$width" ] || [ -z "$height" ]; then
+    read -r width height <<<"$(aspect_to_size "$aspect")"
+    if [ -z "$width" ]; then
+      echo "ERROR: aspect $aspect no soportado y no se paso --width/--height" >&2; exit 1
+    fi
+  fi
+
+  ensure_cache
+  local cache_key cache_path
+  cache_key=$(printf '%s|%s|%s|%s|%s' "$prompt" "$width" "$height" "$seed" "$model" | sha1sum | head -c 12)
+  cache_path="$CACHE_DIR/$cache_key.png"
+
+  if [ "$nocache" = "false" ] && [ -f "$cache_path" ]; then
+    cp "$cache_path" "$out"
+    mkdir -p "$(dirname "$out")"
+    echo "{\"out\":\"$out\",\"cache_hit\":true,\"cache_key\":\"$cache_key\"}"
+    return 0
+  fi
+
+  # URL-encode prompt
+  local prompt_enc
+  prompt_enc=$(jq -rn --arg s "$prompt" '$s|@uri')
+
+  local seed_q=""
+  [ -n "$seed" ] && seed_q="&seed=$seed"
+
+  local url="https://image.pollinations.ai/prompt/${prompt_enc}?width=${width}&height=${height}&nologo=true&model=${model}${seed_q}"
+
+  local attempt=1
+  while [ "$attempt" -le "$RETRIES" ]; do
+    local code
+    code=$(curl -sSL --max-time "$TIMEOUT" -o "$cache_path.tmp" -w "%{http_code}" "$url" || echo "000")
+    if [ "$code" = "200" ] && [ -s "$cache_path.tmp" ]; then
+      mv "$cache_path.tmp" "$cache_path"
+      mkdir -p "$(dirname "$out")"
+      cp "$cache_path" "$out"
+      echo "{\"out\":\"$out\",\"cache_hit\":false,\"cache_key\":\"$cache_key\",\"attempt\":$attempt}"
+      return 0
+    fi
+    rm -f "$cache_path.tmp"
+    echo "WARN: intento $attempt/$RETRIES fallo (http $code)" >&2
+    attempt=$((attempt + 1))
+    sleep $((attempt * 3))
+  done
+
+  echo "ERROR: Pollinations no respondio tras $RETRIES intentos" >&2
+  return 5
+}
+
+cmd_clean() {
+  ensure_cache
+  local size_kb
+  size_kb=$(du -sk "$CACHE_DIR" | awk '{print $1}')
+  echo "Cache size: ${size_kb}KB"
+  if [ "$size_kb" -gt 512000 ]; then
+    echo "Cache > 500MB, limpiando..."
+    rm -f "$CACHE_DIR"/*.png
+    echo "OK"
+  fi
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  generate) cmd_generate "$@" ;;
+  clean) cmd_clean ;;
+  models) cmd_models ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

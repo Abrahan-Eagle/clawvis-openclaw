@@ -1,0 +1,21 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: image
+template_key: pipeline_image
+summary_es: |
+  Briefs y producción de imágenes de marketing enlazando render local e IA gratuita.
+triggers_es:
+  - hero image
+  - thumbnail
+  - creatividades estáticas
+triggers_en:
+  - marketing image
+  - thumbnail
+coord_category: pipeline
+related_local:
+  - social-content
+  - copywriting
+  - page-cro
+hooks_override:
+  - `image-render`, `image-ai-free`, `carousel-render`, `brand-kit` (Tabla en marco de trabajo).
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

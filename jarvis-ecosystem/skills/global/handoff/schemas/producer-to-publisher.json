@@ -1,0 +1,25 @@
+{
+  "$id": "producer-to-publisher",
+  "title": "Producer -> Publisher",
+  "description": "Asset final listo para revision y publicacion (requiere AG-12).",
+  "type": "object",
+  "required": ["asset_path", "format", "channels"],
+  "properties": {
+    "asset_path": { "type": "string" },
+    "manifest_path": { "type": "string" },
+    "format": { "type": "string" },
+    "duration_sec": { "type": "number" },
+    "channels": {
+      "type": "array"
+    },
+    "caption": { "type": "string" },
+    "hashtags": { "type": "array" },
+    "approval": {
+      "type": "object",
+      "properties": {
+        "ag": { "type": "string", "enum": ["AG-03", "AG-12", "AG-13"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] }
+      }
+    }
+  }
+}

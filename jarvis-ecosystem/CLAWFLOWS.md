@@ -1,5 +1,13 @@
 # ClawFlows + Lobster en el ecosistema Jarvis
 
+## Prompt core, memoria y skills del repo (2026-04)
+
+- **Protocolo compartido (texto, no voz):** [skills/global/core-prompt.md](skills/global/core-prompt.md). Cada `agents/*/SOUL.md` hereda con una línea al inicio; cámbialo una sola vez aquí para alinear routing y approval gates.
+- **Memoria operativa por agente:** [skills/global/memory-store/](skills/global/memory-store/) + `agents/<agente>/memory.json`; `MEMORY.md` sigue siendo notas en prosa.
+- **Skills añadidos en este ecosistema** (además de ClawHub): `weather-report`, `youtube-transcript`, `browser-playwright`, conjunto `planner` / `task-queue` / `executor` / `error-recovery` (ver `automations/jarvis/loop-orchestrator.yaml`), y el bloque **v2 abril 2026**: skills globales `activity-log`, `handoff`, `coordinator` (coordinacion); pipeline RRSS local `brand-kit`, `image-render`, `image-ai-free`, `carousel-render`, `tts-free`, `subtitles`, `video-compose`, `video-short` (esqueleto). Ver [docs/PROPUESTA_MEJORA_JARVIS_V2.md](docs/PROPUESTA_MEJORA_JARVIS_V2.md), [docs/COORDINACION_AGENTES.md](docs/COORDINACION_AGENTES.md), [docs/CAROUSEL_PIPELINE_FREE.md](docs/CAROUSEL_PIPELINE_FREE.md), [docs/REELS_TIKTOK_PIPELINE_FREE.md](docs/REELS_TIKTOK_PIPELINE_FREE.md).
+
+El **runtime OpenClaw** no carga automáticamente `core-prompt.md` en el system prompt: el agente (o tú) debe **leerlo al inicio de sesión** o enlazarlo en la configuración del gateway si tu versión soporta inyección. Hasta entonces, la línea *Hereda* en `SOUL.md` es el recordatorio de convenio del equipo.
+
 ## Que es
 
 - **[ClawFlows](https://clawflows.com)**: registro de automatizaciones multi-skill para agentes OpenClaw.
@@ -77,18 +85,24 @@ Tras `source scripts/clawflows-env.sh` (desde `jarvis-ecosystem/`):
 
 ```bash
 ./scripts/clawflows-verify-registry.sh
-./scripts/validate-lead-qualifier-local.sh
 ```
 
 El directorio `agents/jarvis/skills/clawflows-capability-map/` solo declara **Provides** para que `clawflows check` encuentre capabilities; la ejecucion real sigue dependiendo de los skills y credenciales configurados.
 
-### lead-qualifier (registry)
-
-`lead-qualifier` no tiene `metadata.json` en el registry web (**404**), por eso `clawflows check lead-qualifier` falla siempre; el script de verificación lo omite y el script `validate-lead-qualifier-local.sh` comprueba `curl`/`jq`. Revisar cuando el registry publique metadata; hasta entonces no es fallo del ecosistema local.
-
 ### clawflows + Node 22
 
 En Node 22, `clawflows --version` puede fallar con el paquete npm sin parche (import JSON). Si ocurre, el binario global suele estar en `$(npm root -g)/clawflows/bin/clawflows.mjs`: reemplaza la lectura de `package.json` por `readFileSync` + `JSON.parse` (parche local en esa máquina), o usa **Node 20 LTS** solo para el CLI de ClawFlows. No afecta al gateway OpenClaw si este usa otro Node.
+
+### CLI `openclaw` (PATH en shells no interactivos)
+
+El bin `openclaw` suele instalarse con `npm i -g openclaw` bajo el Node de nvm; en **shells no interactivos** (scripts, CI, pruebas) `nvm` no carga y el comando puede dar *orden no encontrada*. Desde `jarvis-ecosystem/`:
+
+```bash
+source scripts/openclaw-path.sh
+openclaw --version
+```
+
+Opcional: `OPENCLAW_NODE_VERSION=22` (o `20`, etc.) antes del `source` para fijar la versión de Node cuyo `bin/` contiene `openclaw`. Ver [scripts/openclaw-path.sh](scripts/openclaw-path.sh). No sustituye a `clawflows-env.sh` (ese script solo arma `CLAWFLOWS_SKILLS` para el CLI ClawFlows).
 
 ## Registro completo de rutinas (con Goal)
 
@@ -99,7 +113,9 @@ Cada rutina debe servir a un goal definido en [GOALS.md](GOALS.md).
 | Rutina | Trigger (cron) | Owner | Goal | Archivo canonico |
 |--------|---------------|-------|------|------------------|
 | Morning Briefing | `30 7 * * *` (7:30 AM UTC diario) | jarvis | G-J01 | `automations/jarvis/morning-briefing.yaml` |
+| Coordination Pulse | `0 */4 * * *` (cada 4h) | jarvis | G-J01 | `automations/jarvis/coordination-pulse.yaml` |
 | Competitor Monitor | `0 9 * * 1-5` (9 AM UTC L-V) | marketing | G-M01 | `automations/marketing/competitor-monitor.yaml` |
+| Content Production Pipeline | `0 */6 * * *` (cada 6h) | marketing | G-M02 | `automations/marketing/content-production-pipeline.yaml` |
 | Pipeline Report | `0 17 * * 5` (5 PM UTC viernes) | ventas | G-V02 | `automations/ventas/pipeline-report.yaml` |
 | Security Audit | `0 8 * * 0` (8 AM UTC domingo) | shared | G-H01 | `automations/shared/security-audit.yaml` |
 
@@ -108,7 +124,6 @@ Cada rutina debe servir a un goal definido en [GOALS.md](GOALS.md).
 | Rutina | Trigger | Descripcion | Skills requeridos |
 |--------|---------|-------------|-------------------|
 | morning-brief | `30 7 * * *` | Briefing con calendario + clima + TTS | calendar, weather, tts |
-| lead-qualifier | (sin trigger) | Scoring de emails/leads | curl, jq |
 | rss-digest | `0 8 * * *` | Digest RSS diario | http |
 | changelog-monitor | `0 10 * * *` | Monitoreo de releases GitHub | http, storage |
 | github-stale-prs | `0 9 * * 1-5` | PRs abiertos sin movimiento | github, notifications |

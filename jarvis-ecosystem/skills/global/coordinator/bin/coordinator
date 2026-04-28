@@ -1,0 +1,323 @@
+#!/usr/bin/env bash
+# coordinator — sintesis ejecutiva del estado del ecosistema
+# Lee state/activity-log.jsonl, state/tasks/, state/handoffs/, client-dossiers/
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+coordinator <command> [options]
+
+Commands:
+  status                Resumen ejecutivo (texto humano)
+  status --json         Mismo contenido en JSON
+  status --agent NAME   Detalle de un agente
+  stuck --hours N       Tareas vivas sin evento desde hace >N horas
+  summary --dossier ID  Cronologia del dossier
+  next --agent NAME     Sugerencia de siguiente accion
+  dossiers --orphan-days N   Dossiers sin actividad en N dias
+  help
+
+Detalle: docs/COORDINACION_AGENTES.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then
+      echo "$r/jarvis-ecosystem"
+      return 0
+    fi
+    if [ -d "$r/state" ]; then
+      echo "$r"
+      return 0
+    fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+LOG="$STATE_DIR/activity-log.jsonl"
+TASKS_DIR="$STATE_DIR/tasks"
+HANDOFFS_DIR="$STATE_DIR/handoffs"
+
+ts_now_iso() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+ts_now_epoch() { date -u +%s; }
+
+iso_to_epoch() {
+  local iso="$1"
+  date -u -d "$iso" +%s 2>/dev/null || echo 0
+}
+
+# ---------- helpers ----------
+collect_active_tasks_json() {
+  shopt -s nullglob
+  local arr="[]"
+  for f in "$TASKS_DIR"/task-*.json; do
+    arr=$(jq -c --slurpfile t <(jq -c . "$f") '. + [$t[0]]' <<<"$arr")
+  done
+  jq -c '[.[] | select(.status=="in_progress" or .status=="blocked")]' <<<"$arr"
+}
+
+collect_open_handoffs_json() {
+  shopt -s nullglob
+  local arr="[]"
+  for f in "$HANDOFFS_DIR"/handoff-*.json; do
+    arr=$(jq -c --slurpfile h <(jq -c . "$f") '. + [$h[0]]' <<<"$arr")
+  done
+  jq -c '[.[] | select(.accepted_at == null and .rejected_at == null)]' <<<"$arr"
+}
+
+last_event_ts_for_task() {
+  local task="$1"
+  [ -f "$LOG" ] || { echo ""; return; }
+  jq -r --arg t "$task" 'select(.task_id == $t) | .ts' "$LOG" | tail -n 1
+}
+
+# ---------- status ----------
+cmd_status_json() {
+  local now_epoch; now_epoch=$(ts_now_epoch)
+  local tasks; tasks=$(collect_active_tasks_json)
+  local handoffs; handoffs=$(collect_open_handoffs_json)
+
+  local tasks_with_age
+  tasks_with_age=$(jq -c --argjson now "$now_epoch" '
+    [ .[] | . as $t |
+      ($t.started_at | sub("Z$"; "Z") | fromdateiso8601 // 0) as $st |
+      $t + {age_hours: (($now - $st) / 3600 | floor)} ]
+  ' <<<"$tasks")
+
+  local handoffs_with_age
+  handoffs_with_age=$(jq -c --argjson now "$now_epoch" '
+    [ .[] | . as $h |
+      ($h.created_at | sub("Z$"; "Z") | fromdateiso8601 // 0) as $st |
+      $h + {age_hours: (($now - $st) / 3600 | floor)} ]
+  ' <<<"$handoffs")
+
+  local stuck
+  stuck=$(cmd_stuck_internal 24)
+
+  jq -n \
+    --argjson tasks "$tasks_with_age" \
+    --argjson handoffs "$handoffs_with_age" \
+    --argjson stuck "$stuck" \
+    --arg now "$(ts_now_iso)" \
+    '{
+      now: $now,
+      active_tasks: $tasks,
+      active_tasks_count: ($tasks | length),
+      open_handoffs: $handoffs,
+      open_handoffs_count: ($handoffs | length),
+      stuck_tasks: $stuck,
+      stuck_count: ($stuck | length)
+    }'
+}
+
+cmd_status_text() {
+  local data; data=$(cmd_status_json)
+  jq -r '
+    "Ecosistema Jarvis — pulso de coordinacion (\(.now))",
+    "",
+    "Tareas activas: \(.active_tasks_count)",
+    (
+      .active_tasks
+      | group_by(.owner)
+      | map({owner: .[0].owner, count: length, samples: map(.title)})
+      | .[]
+      | "  - \(.owner)  \(.count)  (\(.samples | join("; ")))"
+    ),
+    "",
+    "Handoffs abiertos: \(.open_handoffs_count)",
+    (
+      .open_handoffs[]?
+      | "  - \(.id)  \(.schema)  \(.from) -> \(.to)  hace \(.age_hours)h"
+    ),
+    "",
+    "Tareas atrancadas (>24h sin evento): \(.stuck_count)",
+    (
+      .stuck_tasks[]?
+      | "  - \(.id)  \(.owner)  \(.dossier_id // "sin-dossier")  ultimo evento hace \(.hours_since_last)h"
+    )
+  ' <<<"$data"
+}
+
+cmd_status_agent() {
+  local agent="$1"
+  local data; data=$(cmd_status_json)
+  jq -r --arg a "$agent" '
+    "Agente: \($a)",
+    "  Tareas activas: \([.active_tasks[] | select(.owner==$a)] | length)",
+    (.active_tasks[] | select(.owner==$a) | "    - \(.id)  \(.title)  (\(.status), \(.age_hours)h)"),
+    "  Handoffs entrantes abiertos: \([.open_handoffs[] | select(.to==$a)] | length)",
+    (.open_handoffs[] | select(.to==$a) | "    - \(.id)  \(.schema)  de \(.from)  hace \(.age_hours)h"),
+    "  Handoffs salientes abiertos: \([.open_handoffs[] | select(.from==$a)] | length)",
+    (.open_handoffs[] | select(.from==$a) | "    - \(.id)  \(.schema)  a \(.to)  hace \(.age_hours)h")
+  ' <<<"$data"
+}
+
+cmd_status() {
+  local mode="text" agent=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --json) mode="json"; shift ;;
+      --agent) agent="$2"; mode="agent"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  case "$mode" in
+    json) cmd_status_json ;;
+    agent) cmd_status_agent "$agent" ;;
+    *) cmd_status_text ;;
+  esac
+}
+
+# ---------- stuck ----------
+cmd_stuck_internal() {
+  local hours="${1:-24}"
+  local now_epoch; now_epoch=$(ts_now_epoch)
+  local cutoff=$((now_epoch - hours * 3600))
+  shopt -s nullglob
+  local arr="[]"
+  for f in "$TASKS_DIR"/task-*.json; do
+    local id status owner dossier
+    id=$(jq -r '.id' "$f")
+    status=$(jq -r '.status' "$f")
+    owner=$(jq -r '.owner' "$f")
+    dossier=$(jq -r '.dossier_id // empty' "$f")
+    [ "$status" = "done" ] && continue
+    local last_ts
+    last_ts=$(last_event_ts_for_task "$id")
+    [ -z "$last_ts" ] && continue
+    local last_epoch
+    last_epoch=$(iso_to_epoch "$last_ts")
+    if [ "$last_epoch" -lt "$cutoff" ]; then
+      local hours_since=$(( (now_epoch - last_epoch) / 3600 ))
+      arr=$(jq -c \
+        --arg id "$id" --arg owner "$owner" --arg dossier "$dossier" \
+        --arg last "$last_ts" --argjson h "$hours_since" \
+        '. + [{id:$id,owner:$owner,
+              dossier_id:(if $dossier=="" then null else $dossier end),
+              last_event_at:$last,hours_since_last:$h}]' <<<"$arr")
+    fi
+  done
+  echo "$arr"
+}
+
+cmd_stuck() {
+  local hours=24
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --hours) hours="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  cmd_stuck_internal "$hours" | jq .
+}
+
+# ---------- summary --dossier ----------
+cmd_summary() {
+  local dossier=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$dossier" ] && { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  echo "Cronologia de $dossier:"
+  echo ""
+  if [ -f "$LOG" ]; then
+    jq -r --arg d "$dossier" '
+      select(.dossier_id == $d) |
+      "[\(.ts)] \(.agent) -> \(.type) (\(.task_id))" +
+      (if .payload.note then "\n    \(.payload.note)" else "" end) +
+      (if .payload.kind then " [\(.payload.kind)]" else "" end)
+    ' "$LOG"
+  fi
+}
+
+# ---------- next --agent ----------
+cmd_next() {
+  local agent=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --agent) agent="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$agent" ] && { echo "ERROR: --agent requerido" >&2; exit 1; }
+  local data; data=$(cmd_status_json)
+
+  echo "Sugerencias para $agent:"
+  jq -r --arg a "$agent" '
+    [.open_handoffs[] | select(.to==$a and .age_hours >= 2)] as $stale |
+    if ($stale | length) > 0 then
+      ($stale[] | "  - aceptar/rechazar handoff \(.id) (\(.schema), de \(.from), hace \(.age_hours)h)")
+    else "  (sin handoffs entrantes pendientes)" end
+  ' <<<"$data"
+  jq -r --arg a "$agent" '
+    [.active_tasks[] | select(.owner==$a and .status=="blocked" and .age_hours >= 12)] as $blocked |
+    if ($blocked | length) > 0 then
+      ($blocked[] | "  - revisar tarea bloqueada \(.id) (\(.title), bloqueada desde hace \(.age_hours)h): resume o escalar")
+    else empty end
+  ' <<<"$data"
+  jq -r --arg a "$agent" '
+    [.active_tasks[] | select(.owner==$a)] as $active |
+    if ($active | length) == 0 then
+      "  - sin tareas activas: revisar Trello / dossiers asignados"
+    else empty end
+  ' <<<"$data"
+}
+
+# ---------- dossiers --orphan-days ----------
+cmd_dossiers() {
+  local days=7
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --orphan-days) days="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  local now_epoch; now_epoch=$(ts_now_epoch)
+  local cutoff=$((now_epoch - days * 86400))
+  if [ ! -d "$DOSSIERS_DIR" ]; then
+    echo "ERROR: no existe $DOSSIERS_DIR" >&2; exit 1
+  fi
+  shopt -s nullglob
+  for d in "$DOSSIERS_DIR"/cli-*; do
+    [ -d "$d" ] || continue
+    local id; id=$(basename "$d")
+    local last_ts last_epoch
+    if [ -f "$LOG" ]; then
+      last_ts=$(jq -r --arg d "$id" 'select(.dossier_id == $d) | .ts' "$LOG" | tail -n 1)
+    else
+      last_ts=""
+    fi
+    if [ -z "$last_ts" ]; then
+      echo "$id  (sin actividad en log)"
+      continue
+    fi
+    last_epoch=$(iso_to_epoch "$last_ts")
+    if [ "$last_epoch" -lt "$cutoff" ]; then
+      local days_since=$(( (now_epoch - last_epoch) / 86400 ))
+      echo "$id  ultima actividad hace ${days_since}d ($last_ts)"
+    fi
+  done
+}
+
+cmd="${1:-status}"
+shift || true
+case "$cmd" in
+  status) cmd_status "$@" ;;
+  stuck) cmd_stuck "$@" ;;
+  summary) cmd_summary "$@" ;;
+  next) cmd_next "$@" ;;
+  dossiers) cmd_dossiers "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

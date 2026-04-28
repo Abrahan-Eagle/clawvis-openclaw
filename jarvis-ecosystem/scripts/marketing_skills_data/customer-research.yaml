@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: customer-research
+template_key: research_dual
+summary_es: |
+  Investigación de clientes: entrevistas, VOC y JTBD con enlace a ops corta.
+triggers_es:
+  - entrevistas
+  - JTBD
+  - insights clientes
+triggers_en:
+  - customer research
+  - JTBD
+coord_category: research
+related_local:
+  - product-marketing-context
+  - copywriting
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

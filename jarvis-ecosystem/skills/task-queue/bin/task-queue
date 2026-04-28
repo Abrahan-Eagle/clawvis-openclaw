@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Cola de objetivos (JSONL). Inspiración: agent/task_queue.py (MK37).
+set -euo pipefail
+Q="${JARVIS_QUEUE_FILE:-$HOME/.openclaw/jarvis-queue.jsonl}"
+mkdir -p "$(dirname "$Q")"
+usage() {
+  echo "Uso: task-queue submit '<json-una-linea>'" >&2
+  echo "      task-queue list" >&2
+  echo "      task-queue path" >&2
+  exit 1
+}
+cmd="${1:-}"
+case "$cmd" in
+  submit) shift; echo "$*" >> "$Q"; echo OK ;;
+  list) [[ -f "$Q" ]] && cat "$Q" || true ;;
+  path) echo "$Q" ;;
+  ""|-h|--help) usage ;;
+  *) usage ;;
+esac

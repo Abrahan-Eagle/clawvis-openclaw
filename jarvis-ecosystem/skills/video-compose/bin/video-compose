@@ -1,0 +1,235 @@
+#!/usr/bin/env bash
+# video-compose — wrapper ffmpeg para Reels/TikToks (1080x1920) y otros formatos
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+video-compose <command> [options]
+
+Commands:
+  render     Renderizar reel.json -> mp4
+  validate   Validar reel.json
+  probe      ffprobe sobre un mp4
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/skills" ] && [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../.." && pwd
+}
+
+ROOT=$(detect_root)
+ACTIVITY_LOG="$ROOT/skills/global/activity-log/bin/activity-log"
+
+cmd_validate() {
+  local in_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [ -z "$in_file" ] && { echo "ERROR: --in requerido" >&2; exit 1; }
+  [ ! -f "$in_file" ] && { echo "ERROR: $in_file no existe" >&2; exit 1; }
+  jq -e . "$in_file" >/dev/null || { echo "ERROR: JSON invalido" >&2; exit 1; }
+  local format slides_count duration_sum
+  format=$(jq -r '.format' "$in_file")
+  slides_count=$(jq '.slides | length' "$in_file")
+  duration_sum=$(jq '[.slides[].duration] | add' "$in_file")
+  [ "$slides_count" -lt 1 ] && { echo "ERROR: minimo 1 slide" >&2; exit 1; }
+  case "$format" in
+    1080x1920|1080x1080|1920x1080|1080x1350|1200x630) ;;
+    *) echo "ERROR: format $format no soportado" >&2; exit 1 ;;
+  esac
+  echo "OK: $slides_count slides, format=$format, duracion=${duration_sum}s"
+
+  local missing=0
+  while IFS= read -r img; do
+    if [ ! -f "$ROOT/$img" ] && [ ! -f "$img" ]; then
+      echo "WARN: imagen no encontrada: $img" >&2
+      missing=$((missing+1))
+    fi
+  done < <(jq -r '.slides[].image' "$in_file")
+  if [ "$missing" -gt 0 ]; then
+    echo "ERROR: $missing imagenes faltan" >&2
+    exit 2
+  fi
+  return 0
+}
+
+cmd_probe() {
+  local in_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in --in) in_file="$2"; shift 2 ;; *) shift ;; esac
+  done
+  ffprobe -v error -show_format -show_streams "$in_file" 2>&1 | grep -E "duration|width|height|codec_name|format_name|bit_rate"
+}
+
+abs_path() {
+  local p="$1"
+  if [[ "$p" = /* ]]; then echo "$p"; return; fi
+  echo "$ROOT/$p"
+}
+
+cmd_render() {
+  local in_file="" out_dir="" task_id=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      --out-dir) out_dir="$2"; shift 2 ;;
+      --task-id) task_id="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  cmd_validate --in "$in_file" >/dev/null
+
+  local brand_id format slug fps duration_sec
+  brand_id=$(jq -r '.brand_id' "$in_file")
+  format=$(jq -r '.format' "$in_file")
+  slug=$(jq -r '.slug' "$in_file")
+  fps=$(jq -r '.fps // 30' "$in_file")
+  duration_sec=$(jq -r '.duration_sec // 60' "$in_file")
+
+  local W H
+  W=${format%x*}
+  H=${format#*x}
+
+  if [ -z "$out_dir" ]; then
+    out_dir="$ROOT/out/$brand_id/$slug"
+  fi
+  mkdir -p "$out_dir"
+  local tmp_dir
+  tmp_dir=$(mktemp -d)
+  trap "rm -rf '$tmp_dir'" EXIT
+
+  local slides_count
+  slides_count=$(jq '.slides | length' "$in_file")
+  local concat_list="$tmp_dir/list.txt"
+  : > "$concat_list"
+
+  for i in $(seq 0 $((slides_count - 1))); do
+    local img dur trans
+    img=$(jq -r ".slides[$i].image" "$in_file")
+    dur=$(jq -r ".slides[$i].duration" "$in_file")
+    trans=$(jq -r ".slides[$i].transition // \"cut\"" "$in_file")
+
+    img=$(abs_path "$img")
+    local seg="$tmp_dir/seg_$(printf '%03d' "$i").ts"
+
+    ffmpeg -loglevel error -y \
+      -loop 1 -framerate "$fps" -t "$dur" -i "$img" \
+      -vf "scale=$W:$H:force_original_aspect_ratio=decrease,pad=$W:$H:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p" \
+      -c:v libx264 -preset medium -crf 20 -pix_fmt yuv420p \
+      -bsf:v h264_mp4toannexb -f mpegts "$seg"
+
+    echo "file '$seg'" >> "$concat_list"
+  done
+
+  local video_only="$tmp_dir/video.mp4"
+  ffmpeg -loglevel error -y -f concat -safe 0 -i "$concat_list" -c copy "$video_only"
+
+  local voice_path music_path music_vol ass_path burn_subs
+  voice_path=$(jq -r '.audio.voice // ""' "$in_file")
+  music_path=$(jq -r '.audio.music // ""' "$in_file")
+  music_vol=$(jq -r '.audio.music_volume // 0.15' "$in_file")
+  ass_path=$(jq -r '.subtitles.ass // ""' "$in_file")
+  burn_subs=$(jq -r '.subtitles.burn // false' "$in_file")
+
+  local out_mp4="$out_dir/reel.mp4"
+  local has_voice=0 has_music=0
+  local audio_args=()
+
+  if [ -n "$voice_path" ] && [ "$voice_path" != "null" ]; then
+    voice_path=$(abs_path "$voice_path")
+    if [ -f "$voice_path" ]; then
+      audio_args+=( -i "$voice_path" )
+      has_voice=1
+    fi
+  fi
+  if [ -n "$music_path" ] && [ "$music_path" != "null" ]; then
+    music_path=$(abs_path "$music_path")
+    if [ -f "$music_path" ]; then
+      audio_args+=( -i "$music_path" )
+      has_music=1
+    fi
+  fi
+
+  local vf_args=()
+  if [ "$burn_subs" = "true" ] && [ -n "$ass_path" ] && [ "$ass_path" != "null" ]; then
+    ass_path=$(abs_path "$ass_path")
+    if [ -f "$ass_path" ]; then
+      vf_args=( -vf "ass=${ass_path}" )
+    fi
+  fi
+
+  if [ "$has_voice" = "1" ] && [ "$has_music" = "1" ]; then
+    ffmpeg -loglevel error -y -i "$video_only" "${audio_args[@]}" \
+      "${vf_args[@]}" \
+      -filter_complex "[1:a]volume=1.0[v];[2:a]volume=${music_vol}[m];[v][m]amix=inputs=2:duration=first:dropout_transition=0[aout]" \
+      -map 0:v -map "[aout]" \
+      -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -c:a aac -b:a 192k -shortest "$out_mp4"
+  elif [ "$has_voice" = "1" ] || [ "$has_music" = "1" ]; then
+    ffmpeg -loglevel error -y -i "$video_only" "${audio_args[@]}" \
+      "${vf_args[@]}" \
+      -map 0:v -map 1:a \
+      -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -c:a aac -b:a 192k -shortest "$out_mp4"
+  else
+    ffmpeg -loglevel error -y -i "$video_only" "${vf_args[@]}" \
+      -c:v libx264 -preset medium -crf 22 -pix_fmt yuv420p -an "$out_mp4"
+  fi
+
+  local duration sha
+  duration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$out_mp4" 2>/dev/null | head -c 6)
+  sha=$(sha1sum "$out_mp4" | head -c 12)
+  local manifest_path="$out_dir/index.json"
+  jq -n \
+    --slurpfile reel "$in_file" \
+    --arg out "$out_mp4" \
+    --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    --arg sha "$sha" \
+    --arg dur "$duration" \
+    '{
+      generated_at: $ts,
+      out: $out,
+      sha: $sha,
+      duration_real: ($dur | tonumber),
+      reel: $reel[0],
+      ai_used: ($reel[0].ai_assets // false)
+    }' > "$manifest_path"
+
+  if [ -n "$task_id" ] && [ -x "$ACTIVITY_LOG" ]; then
+    local extra_file
+    extra_file=$(mktemp --suffix=.json)
+    jq -n --arg out "$out_mp4" --arg man "$manifest_path" --arg slug "$slug" \
+       '{skill:"video-compose",out:$out,manifest:$man,slug:$slug}' > "$extra_file"
+    bash "$ACTIVITY_LOG" event \
+      --task "$task_id" \
+      --agent marketing \
+      --kind artifact \
+      --note "Reel $slug renderizado (${duration}s en $format)" \
+      --payload-file "$extra_file" >/dev/null 2>&1 || true
+    rm -f "$extra_file"
+  fi
+
+  echo "OK: $out_mp4"
+  echo "Manifiesto: $manifest_path"
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  render) cmd_render "$@" ;;
+  validate) cmd_validate "$@" ;;
+  probe) cmd_probe "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

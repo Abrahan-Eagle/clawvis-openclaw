@@ -36,6 +36,7 @@ Mapeo actual entre agentes y workspaces:
 | `mkt-analytics` | marketing | Analítica y reportes de campañas |
 | `mkt-ads` | marketing | Publicidad paga (ads) |
 | `mkt-email` | marketing | Email marketing y automatización |
+| `mkt-research` | marketing | Investigación de clientes, VOC, desk research (skills profundas `customer-research`, competencia) |
 | `sales-hunter` | ventas | Prospección y generación de leads |
 | `sales-closer` | ventas | Cierre de ventas |
 | `sales-account` | ventas | Gestión de cuentas (post-venta) |

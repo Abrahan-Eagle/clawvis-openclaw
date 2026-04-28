@@ -7,7 +7,7 @@
 ## Qué implica para el agente
 
 1. **No** proponer reconfigurar credenciales salvo que el superusuario lo pida.
-2. Para **Trello** (API / skill): credenciales y uso con `curl`/`jq` — [../../docs/TRELLO_OPENCLAW.md](../../docs/TRELLO_OPENCLAW.md).
+2. Para **Trello** (API / skill): credenciales y uso con `curl`/`jq`; flujo del ecosistema: [FLUJO_TRELLO_ECOSISTEMA.md](FLUJO_TRELLO_ECOSISTEMA.md); convención tableros: [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md).
 3. **Discord y Telegram:** canales y bindings los define OpenClaw; las plantillas de organización ([PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md](PLANTILLA_DISCORD_TELEGRAM_EMPRESA.md)) son referencia de **roles y nombres**, no un checklist de integración técnica pendiente.
 4. **Un solo bot en Discord vs varios agentes OpenClaw** (CEO/supervisor/equipo “visibles”): [DISCORD_JERARQUIA_VS_AGENTES_IA.md](DISCORD_JERARQUIA_VS_AGENTES_IA.md).
 5. Convención de negocio tableros/clientes: [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](CONVENCION_TRELLO_EMPRESA_CLIENTE.md).
@@ -62,6 +62,7 @@ Guia upstream Composio: [How to integrate Canva MCP with OpenClaw](https://compo
    - `plugins.entries.composio.enabled`: `true`
    - `plugins.entries.composio.config.consumerKey`: `"ck_..."` (no commitear)
    - `plugins.allow`: incluir `"composio"`
+   - **Snapshot en Git** ([config/openclaw-home/openclaw.json](../../config/openclaw-home/openclaw.json)): puede incluir el placeholder `ck_REPLACE_ME` solo como ejemplo — **reemplazar antes de usar** en runtime con tu consumer key real (sin volcar secretos al repo).
 4. **Perfil `tools.profile: "messaging"`** (Telegram, etc.): añadir en `tools.alsoAllow` las siete herramientas genéricas `COMPOSIO_*` además de `lobster` / `browser`, para que el agente pueda invocar Composio en canales de mensajería — ver [CAROUSEL_IG_JARVIS.md](CAROUSEL_IG_JARVIS.md) (snapshot en [config/openclaw-home/openclaw.json](../../config/openclaw-home/openclaw.json)).
 5. **Reiniciar gateway:** `openclaw gateway restart` (o `systemctl --user restart openclaw-gateway` si aplica).
 6. **Conectar Canva** en Composio: [Connect Apps](https://dashboard.composio.dev) → autorizar OAuth de Canva con la cuenta deseada.

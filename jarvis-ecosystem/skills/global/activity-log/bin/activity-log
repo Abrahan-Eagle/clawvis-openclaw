@@ -1,0 +1,370 @@
+#!/usr/bin/env bash
+# activity-log — registro unificado de actividad de agentes
+# Detalle: docs/COORDINACION_AGENTES.md
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+activity-log <command> [options]
+
+Commands:
+  start      Iniciar tarea
+  end        Cerrar tarea
+  event      Registrar evento sin cambiar estado
+  block      Marcar tarea bloqueada
+  resume     Reanudar tarea bloqueada
+  handoff    Registrar evento de handoff (lo invoca skill handoff)
+  tail       Mostrar ultimos N eventos
+  filter     Filtrar eventos por agent/dossier/task/type
+  tasks      Listar tareas (filtros: --status --agent --dossier)
+  help       Mostrar esta ayuda
+
+Detalle: docs/COORDINACION_AGENTES.md
+EOF
+}
+
+# Detectar repo root y state dir
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then
+      echo "$r/jarvis-ecosystem"
+      return 0
+    fi
+    if [ -d "$r/state" ]; then
+      echo "$r"
+      return 0
+    fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+LOG="$STATE_DIR/activity-log.jsonl"
+TASKS_DIR="$STATE_DIR/tasks"
+
+ensure_dirs() {
+  mkdir -p "$STATE_DIR" "$TASKS_DIR" "$STATE_DIR/handoffs" "$STATE_DIR/cache/images"
+  [ -f "$LOG" ] || : > "$LOG"
+}
+
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+short_id() { date +%s%N | sha1sum | head -c 6; }
+
+# Escribir evento al log (JSON compactado en una linea)
+emit_event() {
+  ensure_dirs
+  jq -c . <<< "$1" >> "$LOG"
+}
+
+validate_dossier() {
+  local d="$1"
+  [ -z "$d" ] && return 0
+  # Acepta cualquiera de: client-dossiers/<id>.json o client-dossiers/<id>/
+  if [ -f "$DOSSIERS_DIR/$d.json" ] || [ -d "$DOSSIERS_DIR/$d" ]; then
+    return 0
+  fi
+  echo "ERROR: dossier '$d' no existe en $DOSSIERS_DIR (ni $d.json ni carpeta $d/). Crea el dossier antes de iniciar tarea de cliente." >&2
+  return 2
+}
+
+# ---------- START ----------
+cmd_start() {
+  local agent="" title="" dossier="" ref="" task=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --agent) agent="$2"; shift 2 ;;
+      --title) title="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      --ref) ref="$2"; shift 2 ;;
+      --task) task="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$agent" ] && { echo "ERROR: --agent requerido" >&2; exit 1; }
+  [ -z "$title" ] && { echo "ERROR: --title requerido" >&2; exit 1; }
+  validate_dossier "$dossier" || exit 2
+
+  ensure_dirs
+  if [ -z "$task" ]; then
+    task="task-$(date -u +%Y%m%d-%H%M%S)-$(short_id)"
+  fi
+  local now; now=$(ts_now)
+
+  jq -n --arg id "$task" --arg title "$title" --arg owner "$agent" \
+        --arg status "in_progress" --arg dossier "$dossier" --arg started "$now" \
+        --arg ref "$ref" \
+    '{id:$id,title:$title,owner:$owner,status:$status,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      ref:(if $ref=="" then null else $ref end),
+      started_at:$started,ended_at:null,handoffs_open:[]}' \
+    > "$TASKS_DIR/$task.json"
+
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg agent "$agent" --arg type "start" \
+        --arg task "$task" --arg dossier "$dossier" --arg ref "$ref" \
+        --arg title "$title" \
+    '{ts:$ts,agent:$agent,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      ref:(if $ref=="" then null else $ref end),
+      actor:"agent",payload:{title:$title}}')
+  emit_event "$ev"
+
+  jq -n --arg t "$task" '{task_id:$t}'
+}
+
+# ---------- END ----------
+cmd_end() {
+  local task="" note=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task) task="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  ensure_dirs
+  local tf="$TASKS_DIR/$task.json"
+  [ -f "$tf" ] || { echo "ERROR: task $task no existe en $tf" >&2; exit 1; }
+  local now; now=$(ts_now)
+  local agent dossier
+  agent=$(jq -r '.owner // empty' "$tf")
+  dossier=$(jq -r '.dossier_id // empty' "$tf")
+  local open_handoffs
+  open_handoffs=$(jq -r '.handoffs_open | length' "$tf")
+  if [ "$open_handoffs" -gt 0 ]; then
+    echo "WARN: tarea cerrada con $open_handoffs handoff(s) abiertos" >&2
+  fi
+
+  jq --arg now "$now" '.status="done" | .ended_at=$now' "$tf" > "$tf.tmp" && mv "$tf.tmp" "$tf"
+
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg agent "$agent" --arg type "end" \
+        --arg task "$task" --arg dossier "$dossier" --arg note "$note" \
+    '{ts:$ts,agent:$agent,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      actor:"agent",payload:{note:$note}}')
+  emit_event "$ev"
+}
+
+# ---------- EVENT ----------
+cmd_event() {
+  local agent="" task="" kind="info" note="" payload_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --agent) agent="$2"; shift 2 ;;
+      --task) task="$2"; shift 2 ;;
+      --kind) kind="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      --payload-file) payload_file="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$agent" ] && { echo "ERROR: --agent requerido" >&2; exit 1; }
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  ensure_dirs
+  local tf="$TASKS_DIR/$task.json"
+  local dossier=""
+  [ -f "$tf" ] && dossier=$(jq -r '.dossier_id // empty' "$tf")
+  local now; now=$(ts_now)
+  local extra="{}"
+  [ -n "$payload_file" ] && extra=$(jq -c . "$payload_file")
+
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg agent "$agent" --arg type "event" \
+        --arg task "$task" --arg dossier "$dossier" --arg kind "$kind" \
+        --arg note "$note" --argjson extra "$extra" \
+    '{ts:$ts,agent:$agent,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      actor:"agent",payload:({kind:$kind,note:$note} + $extra)}')
+  emit_event "$ev"
+}
+
+# ---------- BLOCK / RESUME ----------
+cmd_block() {
+  local task="" reason=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task) task="$2"; shift 2 ;;
+      --reason) reason="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  ensure_dirs
+  local tf="$TASKS_DIR/$task.json"
+  [ -f "$tf" ] || { echo "ERROR: task $task no existe" >&2; exit 1; }
+  local now; now=$(ts_now)
+  local agent dossier
+  agent=$(jq -r '.owner' "$tf")
+  dossier=$(jq -r '.dossier_id // empty' "$tf")
+  jq '.status="blocked"' "$tf" > "$tf.tmp" && mv "$tf.tmp" "$tf"
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg agent "$agent" --arg type "block" \
+        --arg task "$task" --arg dossier "$dossier" --arg reason "$reason" \
+    '{ts:$ts,agent:$agent,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      actor:"agent",payload:{reason:$reason}}')
+  emit_event "$ev"
+}
+
+cmd_resume() {
+  local task=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task) task="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  ensure_dirs
+  local tf="$TASKS_DIR/$task.json"
+  [ -f "$tf" ] || { echo "ERROR: task $task no existe" >&2; exit 1; }
+  local now; now=$(ts_now)
+  local agent dossier
+  agent=$(jq -r '.owner' "$tf")
+  dossier=$(jq -r '.dossier_id // empty' "$tf")
+  jq '.status="in_progress"' "$tf" > "$tf.tmp" && mv "$tf.tmp" "$tf"
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg agent "$agent" --arg type "resume" \
+        --arg task "$task" --arg dossier "$dossier" \
+    '{ts:$ts,agent:$agent,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      actor:"agent",payload:{}}')
+  emit_event "$ev"
+}
+
+# ---------- HANDOFF (interno) ----------
+cmd_handoff() {
+  local task="" from="" to="" hid="" kind="" reason=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --task) task="$2"; shift 2 ;;
+      --from) from="$2"; shift 2 ;;
+      --to) to="$2"; shift 2 ;;
+      --handoff-id) hid="$2"; shift 2 ;;
+      --kind) kind="$2"; shift 2 ;;
+      --reason) reason="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  [ -z "$kind" ] && { echo "ERROR: --kind (create|accept|reject) requerido" >&2; exit 1; }
+  ensure_dirs
+  local tf="$TASKS_DIR/$task.json"
+  local dossier=""
+  [ -f "$tf" ] && dossier=$(jq -r '.dossier_id // empty' "$tf")
+  local now; now=$(ts_now)
+
+  if [ -f "$tf" ]; then
+    case "$kind" in
+      create)
+        jq --arg h "$hid" '.handoffs_open += [$h] | .handoffs_open |= unique' "$tf" \
+          > "$tf.tmp" && mv "$tf.tmp" "$tf"
+        ;;
+      accept|reject)
+        jq --arg h "$hid" '.handoffs_open |= map(select(. != $h))' "$tf" \
+          > "$tf.tmp" && mv "$tf.tmp" "$tf"
+        ;;
+    esac
+  fi
+
+  local ev
+  ev=$(jq -n --arg ts "$now" --arg from "$from" --arg type "handoff" \
+        --arg task "$task" --arg dossier "$dossier" \
+        --arg to "$to" --arg hid "$hid" --arg kind "$kind" --arg reason "$reason" \
+    '{ts:$ts,agent:$from,type:$type,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      actor:"agent",
+      payload:{handoff_id:$hid,to:$to,kind:$kind,
+               reason:(if $reason=="" then null else $reason end)}}')
+  emit_event "$ev"
+}
+
+# ---------- TAIL ----------
+cmd_tail() {
+  local n=20
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --n) n="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure_dirs
+  tail -n "$n" "$LOG"
+}
+
+# ---------- FILTER ----------
+cmd_filter() {
+  local agent="" dossier="" task="" type="" since="" status=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --agent) agent="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      --task) task="$2"; shift 2 ;;
+      --type) type="$2"; shift 2 ;;
+      --since) since="$2"; shift 2 ;;
+      --status) status="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure_dirs
+  jq -c \
+    --arg agent "$agent" --arg dossier "$dossier" --arg task "$task" \
+    --arg type "$type" --arg since "$since" --arg status "$status" \
+    'select(
+        ($agent=="" or .agent==$agent)
+        and ($dossier=="" or .dossier_id==$dossier)
+        and ($task=="" or .task_id==$task)
+        and ($type=="" or .type==$type)
+        and ($since=="" or (.ts >= $since))
+        and ($status=="" or (.payload.kind==$status))
+     )' "$LOG"
+}
+
+# ---------- TASKS ----------
+cmd_tasks() {
+  local status="" agent="" dossier=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --status) status="$2"; shift 2 ;;
+      --agent) agent="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure_dirs
+  shopt -s nullglob
+  for f in "$TASKS_DIR"/task-*.json; do
+    jq -c \
+      --arg status "$status" --arg agent "$agent" --arg dossier "$dossier" \
+      'select(
+          ($status=="" or .status==$status)
+          and ($agent=="" or .owner==$agent)
+          and ($dossier=="" or .dossier_id==$dossier)
+       )' "$f"
+  done
+}
+
+# ---------- DISPATCH ----------
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  start) cmd_start "$@" ;;
+  end) cmd_end "$@" ;;
+  event) cmd_event "$@" ;;
+  block) cmd_block "$@" ;;
+  resume) cmd_resume "$@" ;;
+  handoff) cmd_handoff "$@" ;;
+  tail) cmd_tail "$@" ;;
+  filter) cmd_filter "$@" ;;
+  tasks) cmd_tasks "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

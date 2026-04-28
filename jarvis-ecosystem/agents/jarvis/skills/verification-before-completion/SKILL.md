@@ -1,6 +1,8 @@
 ---
 name: verification-before-completion
 description: "OBLIGATORIO antes de declarar cualquier tarea como completada. Ejecuta el comando/accion de verificacion, lee el resultado, y SOLO entonces afirma que esta listo. Evidencia antes de claims."
+metadata:
+  version: "1.0.0"
 ---
 
 # Verificacion antes de completar

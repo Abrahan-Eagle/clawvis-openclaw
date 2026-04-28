@@ -1,0 +1,231 @@
+#!/usr/bin/env bash
+# carousel-render — orquesta carruseles a partir de carousel.json
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+carousel-render <command> [options]
+
+Commands:
+  render     Renderizar todos los slides
+  validate   Validar JSON y dependencias
+  preview    Dry-run: listar slides y bg planeados
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/skills" ] && [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../.." && pwd
+}
+
+ROOT=$(detect_root)
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$HOME/Documents/client-dossiers}"
+IMAGE_RENDER="$ROOT/skills/image-render/bin/image-render"
+IMAGE_AI="$ROOT/skills/image-ai-free/bin/image-ai-free"
+ACTIVITY_LOG="$ROOT/skills/global/activity-log/bin/activity-log"
+
+resolve_brand_path() {
+  local id="$1"
+  if [ -f "$DOSSIERS_DIR/$id/brand.json" ]; then
+    echo "$DOSSIERS_DIR/$id/brand.json"
+  elif [ -f "$DOSSIERS_DIR/$id.brand.json" ]; then
+    echo "$DOSSIERS_DIR/$id.brand.json"
+  else
+    return 1
+  fi
+}
+
+cmd_validate() {
+  local in_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [ -z "$in_file" ] && { echo "ERROR: --in requerido" >&2; exit 1; }
+  [ ! -f "$in_file" ] && { echo "ERROR: $in_file no existe" >&2; exit 1; }
+
+  jq -e . "$in_file" >/dev/null || { echo "ERROR: JSON invalido" >&2; exit 1; }
+
+  local id brand_id format slides_count
+  id=$(jq -r '.id' "$in_file")
+  brand_id=$(jq -r '.brand_id' "$in_file")
+  format=$(jq -r '.format' "$in_file")
+  slides_count=$(jq '.slides | length' "$in_file")
+
+  [ "$id" = "null" ] || [ -z "$id" ] && { echo "ERROR: .id requerido" >&2; exit 1; }
+  [ "$brand_id" = "null" ] && { echo "ERROR: .brand_id requerido" >&2; exit 1; }
+  [ "$slides_count" -lt 2 ] && { echo "ERROR: minimo 2 slides" >&2; exit 1; }
+
+  local brand_path
+  if ! brand_path=$(resolve_brand_path "$brand_id"); then
+    echo "ERROR: brand.json no encontrado para '$brand_id' en $DOSSIERS_DIR" >&2; exit 1
+  fi
+
+  case "$format" in
+    1080x1080|1080x1350|1080x1920|1200x630) ;;
+    *) echo "ERROR: format $format no soportado" >&2; exit 1 ;;
+  esac
+
+  echo "OK: $id ($slides_count slides, $format, brand=$brand_id, brand_path=$brand_path)"
+}
+
+cmd_preview() {
+  local in_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [ -z "$in_file" ] && { echo "ERROR: --in requerido" >&2; exit 1; }
+  cmd_validate --in "$in_file"
+  echo ""
+  echo "Slides plan:"
+  jq -r '.slides | to_entries[] | "  \(.key+1|tostring|ltrimstr("0")). [\(.value.type)] \(.value.title // .value.text // "<sin titulo>")\n     bg_prompt: \(.value.bg_prompt // "<none>")"' "$in_file"
+}
+
+cmd_render() {
+  local in_file="" out_dir="" task_id="" no_ai="false" seed="42"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      --out-dir) out_dir="$2"; shift 2 ;;
+      --task-id) task_id="$2"; shift 2 ;;
+      --no-ai) no_ai="true"; shift ;;
+      --seed) seed="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+
+  cmd_validate --in "$in_file" >/dev/null || exit 1
+
+  local brand_id format slug slides_count
+  brand_id=$(jq -r '.brand_id' "$in_file")
+  format=$(jq -r '.format' "$in_file")
+  slug=$(jq -r '.slug' "$in_file")
+  slides_count=$(jq '.slides | length' "$in_file")
+
+  local brand_path
+  brand_path=$(resolve_brand_path "$brand_id")
+
+  if [ -z "$out_dir" ]; then
+    out_dir="$ROOT/out/$brand_id/$slug"
+  fi
+  mkdir -p "$out_dir"
+
+  local manifest_assets="[]"
+
+  for i in $(seq 0 $((slides_count - 1))); do
+    local n_padded slide_json bg_prompt bg_path s_type
+    n_padded=$(printf '%02d' $((i + 1)))
+    slide_json=$(jq ".slides[$i]" "$in_file")
+    s_type=$(echo "$slide_json" | jq -r '.type // "body"')
+    bg_prompt=$(echo "$slide_json" | jq -r '.bg_prompt // ""')
+    bg_path=""
+
+    local out_png="$out_dir/$n_padded.png"
+    local tmp_slide
+    tmp_slide=$(mktemp --suffix=.json)
+    echo "$slide_json" > "$tmp_slide"
+
+    local ai_used="false" ai_key=""
+    if [ -n "$bg_prompt" ] && [ "$no_ai" = "false" ]; then
+      local aspect
+      case "$format" in
+        1080x1080) aspect="1:1" ;;
+        1080x1350) aspect="4:5" ;;
+        1080x1920) aspect="9:16" ;;
+        1200x630) aspect="16:9" ;;
+        *) aspect="1:1" ;;
+      esac
+      bg_path="$out_dir/.bg-$n_padded.png"
+      echo "[$n_padded/$slides_count] $s_type bg_prompt=$bg_prompt"
+      local ai_out
+      if ai_out=$(bash "$IMAGE_AI" generate \
+        --prompt "$bg_prompt" \
+        --aspect "$aspect" \
+        --out "$bg_path" \
+        --seed "$seed" 2>&1); then
+        ai_used="true"
+        ai_key=$(echo "$ai_out" | jq -r '.cache_key // ""' 2>/dev/null || echo "")
+      else
+        echo "WARN: bg generation fallo, render sin bg" >&2
+        bg_path=""
+      fi
+    else
+      echo "[$n_padded/$slides_count] $s_type"
+    fi
+
+    local cmd_args=(slide --brand "$brand_path" --slide "$tmp_slide" --format "$format" --out "$out_png")
+    [ -n "$bg_path" ] && cmd_args+=(--bg "$bg_path")
+    bash "$IMAGE_RENDER" "${cmd_args[@]}" >/dev/null
+
+    rm -f "$tmp_slide"
+
+    local sha
+    sha=$(sha1sum "$out_png" | head -c 12)
+    manifest_assets=$(jq -nc \
+      --argjson prev "$manifest_assets" \
+      --arg n "$n_padded" \
+      --arg type "$s_type" \
+      --arg path "$out_png" \
+      --arg sha "$sha" \
+      --arg ai "$ai_used" \
+      --arg ai_key "$ai_key" \
+      '$prev + [{n:$n, type:$type, path:$path, sha:$sha, ai_used:($ai=="true"), ai_cache_key:$ai_key}]')
+  done
+
+  local manifest_path="$out_dir/index.json"
+  jq -n \
+    --slurpfile car "$in_file" \
+    --argjson assets "$manifest_assets" \
+    --arg out_dir "$out_dir" \
+    --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    '{
+      generated_at: $ts,
+      out_dir: $out_dir,
+      carousel: $car[0],
+      assets: $assets,
+      slides_count: ($assets | length),
+      ai_used: ([$assets[].ai_used] | any)
+    }' > "$manifest_path"
+
+  if [ -n "$task_id" ] && [ -x "$ACTIVITY_LOG" ]; then
+    local extra_file
+    extra_file=$(mktemp --suffix=.json)
+    jq -n --arg out "$out_dir" --arg man "$manifest_path" --arg slug "$slug" \
+       '{skill:"carousel-render",out_dir:$out,manifest:$man,slug:$slug}' > "$extra_file"
+    bash "$ACTIVITY_LOG" event \
+      --task "$task_id" \
+      --agent marketing \
+      --kind artifact \
+      --note "Carrusel $slug generado ($slides_count slides en $format)" \
+      --payload-file "$extra_file" >/dev/null 2>&1 || true
+    rm -f "$extra_file"
+  fi
+
+  echo ""
+  echo "OK: $slides_count slides en $out_dir"
+  echo "Manifiesto: $manifest_path"
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  render) cmd_render "$@" ;;
+  validate) cmd_validate "$@" ;;
+  preview) cmd_preview "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

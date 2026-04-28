@@ -1,0 +1,291 @@
+#!/usr/bin/env bash
+# handoff — contratos JSON entre agentes con validacion de schema (subset)
+# Detalle: docs/COORDINACION_AGENTES.md
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+handoff <command> [options]
+
+Commands:
+  create             Crear handoff y validar payload contra schema
+  accept             Marcar handoff aceptado
+  reject             Marcar handoff rechazado con razon
+  list               Listar handoffs (filtros: --open --to --task --schema)
+  show               Mostrar handoff completo
+  validate-payload   Validar payload contra schema sin crear nada
+  schemas            Listar schemas disponibles
+  help
+
+Detalle: docs/COORDINACION_AGENTES.md
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then
+      echo "$r/jarvis-ecosystem"
+      return 0
+    fi
+    if [ -d "$r/state" ]; then
+      echo "$r"
+      return 0
+    fi
+  fi
+  local self
+  self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+HANDOFFS_DIR="$STATE_DIR/handoffs"
+SELF=$(readlink -f "${BASH_SOURCE[0]}")
+SCHEMAS_DIR=$(dirname "$(dirname "$SELF")")/schemas
+ACTIVITY_LOG="$ROOT/skills/global/activity-log/bin/activity-log"
+
+ensure_dirs() {
+  mkdir -p "$HANDOFFS_DIR"
+}
+
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+short_id() { date +%s%N | sha1sum | head -c 6; }
+
+# Validador subset de JSON Schema en jq:
+# soporta required, type, enum.
+# Devuelve 0 si valido, 3 si invalido (mensaje a stderr).
+validate_payload() {
+  local schema_file="$1"
+  local payload_file="$2"
+  [ -f "$schema_file" ] || { echo "ERROR: schema $schema_file no existe" >&2; return 4; }
+  [ -f "$payload_file" ] || { echo "ERROR: payload $payload_file no existe" >&2; return 4; }
+  local errors
+  errors=$(jq -nc \
+    --slurpfile schema "$schema_file" \
+    --slurpfile data "$payload_file" \
+    '
+    def jstype: if type=="number" and . == (.|floor) then "integer" else type end;
+    def check_required($s; $d):
+      ($s.required // [])
+      | map(. as $k | if ($d|has($k)|not) or $d[$k]==null or $d[$k]=="" then "missing required: \($k)" else empty end);
+    def check_props($s; $d):
+      ($s.properties // {})
+      | to_entries
+      | map(
+          .key as $k | .value as $sp |
+          if ($d|has($k)) and $d[$k] != null then
+            (
+              ( if $sp.type and ($sp.type != ($d[$k] | jstype)) then
+                  "type mismatch: \($k) expected \($sp.type) got \($d[$k] | jstype)"
+                else empty end ),
+              ( if $sp.enum and ($d[$k] as $v | $sp.enum | index($v)) == null then
+                  "enum mismatch: \($k) value \($d[$k]) not in \($sp.enum)"
+                else empty end )
+            )
+          else empty
+          end
+        )
+      | flatten;
+    ($schema[0]) as $s
+    | ($data[0]) as $d
+    | (check_required($s; $d) + check_props($s; $d))
+    ')
+  local n
+  n=$(jq -r 'length' <<<"$errors")
+  if [ "$n" -gt 0 ]; then
+    echo "ERROR: payload no valido contra $(basename "$schema_file"):" >&2
+    jq -r '.[]' <<<"$errors" >&2
+    return 3
+  fi
+  return 0
+}
+
+# ---------- CREATE ----------
+cmd_create() {
+  local from="" to="" schema="" task="" payload_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --from) from="$2"; shift 2 ;;
+      --to) to="$2"; shift 2 ;;
+      --schema) schema="$2"; shift 2 ;;
+      --task) task="$2"; shift 2 ;;
+      --payload-file) payload_file="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$from" ] && { echo "ERROR: --from requerido" >&2; exit 1; }
+  [ -z "$to" ] && { echo "ERROR: --to requerido" >&2; exit 1; }
+  [ -z "$schema" ] && { echo "ERROR: --schema requerido" >&2; exit 1; }
+  [ -z "$task" ] && { echo "ERROR: --task requerido" >&2; exit 1; }
+  [ -z "$payload_file" ] && { echo "ERROR: --payload-file requerido" >&2; exit 1; }
+
+  local schema_file="$SCHEMAS_DIR/$schema.json"
+  validate_payload "$schema_file" "$payload_file" || exit $?
+
+  ensure_dirs
+  local hid="handoff-$(date -u +%Y%m%d-%H%M%S)-$(short_id)"
+  local now; now=$(ts_now)
+  local payload
+  payload=$(jq -c . "$payload_file")
+
+  local dossier=""
+  if [ -f "$STATE_DIR/tasks/$task.json" ]; then
+    dossier=$(jq -r '.dossier_id // empty' "$STATE_DIR/tasks/$task.json")
+  fi
+
+  jq -n \
+    --arg id "$hid" --arg from "$from" --arg to "$to" --arg schema "$schema" \
+    --arg task "$task" --arg dossier "$dossier" --arg now "$now" \
+    --argjson payload "$payload" \
+    '{id:$id,from:$from,to:$to,schema:$schema,task_id:$task,
+      dossier_id:(if $dossier=="" then null else $dossier end),
+      created_at:$now,accepted_at:null,rejected_at:null,rejected_reason:null,
+      payload:$payload}' \
+    > "$HANDOFFS_DIR/$hid.json"
+
+  if [ -x "$ACTIVITY_LOG" ]; then
+    "$ACTIVITY_LOG" handoff --task "$task" --from "$from" --to "$to" \
+      --handoff-id "$hid" --kind create >/dev/null
+  fi
+
+  jq -n --arg h "$hid" '{handoff_id:$h}'
+}
+
+# ---------- ACCEPT ----------
+cmd_accept() {
+  local id="" by="" note=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --by) by="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$id" ] && { echo "ERROR: --id requerido" >&2; exit 1; }
+  ensure_dirs
+  local f="$HANDOFFS_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: handoff $id no existe" >&2; exit 1; }
+  local now; now=$(ts_now)
+  jq --arg now "$now" --arg note "$note" \
+    '.accepted_at=$now | (if $note != "" then .accept_note=$note else . end)' \
+    "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+
+  if [ -x "$ACTIVITY_LOG" ]; then
+    local task from to
+    task=$(jq -r '.task_id' "$f")
+    from=$(jq -r '.from' "$f")
+    to=$(jq -r '.to' "$f")
+    "$ACTIVITY_LOG" handoff --task "$task" --from "$by" --to "$from" \
+      --handoff-id "$id" --kind accept >/dev/null
+  fi
+}
+
+# ---------- REJECT ----------
+cmd_reject() {
+  local id="" by="" reason=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --by) by="$2"; shift 2 ;;
+      --reason) reason="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$id" ] && { echo "ERROR: --id requerido" >&2; exit 1; }
+  [ -z "$reason" ] && { echo "ERROR: --reason requerido" >&2; exit 1; }
+  ensure_dirs
+  local f="$HANDOFFS_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: handoff $id no existe" >&2; exit 1; }
+  local now; now=$(ts_now)
+  jq --arg now "$now" --arg reason "$reason" \
+    '.rejected_at=$now | .rejected_reason=$reason' \
+    "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+
+  if [ -x "$ACTIVITY_LOG" ]; then
+    local task from
+    task=$(jq -r '.task_id' "$f")
+    from=$(jq -r '.from' "$f")
+    "$ACTIVITY_LOG" handoff --task "$task" --from "$by" --to "$from" \
+      --handoff-id "$id" --kind reject --reason "$reason" >/dev/null
+  fi
+}
+
+# ---------- LIST ----------
+cmd_list() {
+  local open_only="false" to_filter="" task_filter="" schema_filter=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --open) open_only="true"; shift ;;
+      --to) to_filter="$2"; shift 2 ;;
+      --task) task_filter="$2"; shift 2 ;;
+      --schema) schema_filter="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure_dirs
+  shopt -s nullglob
+  for f in "$HANDOFFS_DIR"/handoff-*.json; do
+    jq -c \
+      --arg open "$open_only" --arg to "$to_filter" \
+      --arg task "$task_filter" --arg schema "$schema_filter" \
+      'select(
+          ($open != "true" or (.accepted_at == null and .rejected_at == null))
+          and ($to=="" or .to==$to)
+          and ($task=="" or .task_id==$task)
+          and ($schema=="" or .schema==$schema)
+       )' "$f"
+  done
+}
+
+# ---------- SHOW ----------
+cmd_show() {
+  local id=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$id" ] && { echo "ERROR: --id requerido" >&2; exit 1; }
+  local f="$HANDOFFS_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: handoff $id no existe" >&2; exit 1; }
+  jq . "$f"
+}
+
+# ---------- VALIDATE-PAYLOAD ----------
+cmd_validate() {
+  local schema="" payload_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --schema) schema="$2"; shift 2 ;;
+      --payload-file) payload_file="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$schema" ] && { echo "ERROR: --schema requerido" >&2; exit 1; }
+  [ -z "$payload_file" ] && { echo "ERROR: --payload-file requerido" >&2; exit 1; }
+  validate_payload "$SCHEMAS_DIR/$schema.json" "$payload_file"
+  echo "OK"
+}
+
+# ---------- SCHEMAS ----------
+cmd_schemas() {
+  ls "$SCHEMAS_DIR" | sed 's/\.json$//'
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  create) cmd_create "$@" ;;
+  accept) cmd_accept "$@" ;;
+  reject) cmd_reject "$@" ;;
+  list) cmd_list "$@" ;;
+  show) cmd_show "$@" ;;
+  validate-payload) cmd_validate "$@" ;;
+  schemas) cmd_schemas ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

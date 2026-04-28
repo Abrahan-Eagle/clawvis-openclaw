@@ -1,0 +1,19 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: ad-creative
+template_key: paid
+summary_es: |
+  Itera creatividades publicitarias (titulares, textos, bundles creativos).
+triggers_es:
+  - creatividades
+  - variantes ads
+  - UGC brief
+triggers_en:
+  - ad creative
+  - ads copy
+coord_category: paid
+related_local:
+  - paid-ads
+  - copywriting
+  - image
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

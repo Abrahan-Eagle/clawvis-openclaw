@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: ab-test-setup
+template_key: meas
+summary_es: |
+  Diseña experimentos A/B y programas de experimentación continua.
+triggers_es:
+  - A/B test
+  - experimentación
+  - power analysis
+triggers_en:
+  - A/B test
+  - experiment
+coord_category: meas
+related_local:
+  - page-cro
+  - analytics-tracking
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

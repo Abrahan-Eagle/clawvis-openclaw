@@ -15,6 +15,10 @@ agent-town/.turbo/
 agent-town/.env.local
 agent-town/.env*.local
 
+# Jarvis — skills con venv local (youtube-transcript, etc.)
+jarvis-ecosystem/skills/**/.venv/
+jarvis-ecosystem/skills/browser-playwright/node_modules/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -49,3 +53,22 @@ jarvis-ecosystem/agents/ventas/career-ops/node_modules/
 # Graphify (output local, regenerable con graphify)
 graphify-out/
 .graphify_python
+
+# Jarvis ecosystem — capa de coordinacion (Fase 1+ v2)
+# state/ es runtime local: log de actividad, tareas vivas, handoffs, cache de imagenes IA
+jarvis-ecosystem/state/activity-log.jsonl
+jarvis-ecosystem/state/tasks/
+jarvis-ecosystem/state/handoffs/
+jarvis-ecosystem/state/cache/
+# Salidas generadas por el pipeline RRSS (carruseles, reels)
+jarvis-ecosystem/out/
+# Plantillas de musica libre con licencia (las descarga el usuario, no se versionan)
+jarvis-ecosystem/assets/music/*.mp3
+jarvis-ecosystem/assets/music/*.wav
+jarvis-ecosystem/assets/music/*.m4a
+# Fuentes locales (pueden ser pesadas; el repo apunta a fallback DejaVu del sistema)
+jarvis-ecosystem/assets/fonts/*.ttf
+jarvis-ecosystem/assets/fonts/*.otf
+# Skills nuevos con venv / node_modules
+jarvis-ecosystem/skills/video-short/remotion/node_modules/
+jarvis-ecosystem/skills/video-short/remotion/out/

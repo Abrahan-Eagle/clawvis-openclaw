@@ -1,0 +1,42 @@
+{
+  "id": "cli-DEMO-rrss-r001",
+  "brand_id": "cli-DEMO-rrss",
+  "format": "1080x1920",
+  "fps": 30,
+  "duration_sec": 45,
+  "slug": "5-errores-marketing-reel",
+  "ai_assets": true,
+  "slides": [
+    {
+      "image": "out/cli-DEMO-rrss/reel-test/slide-01.png",
+      "duration": 4.0,
+      "transition": "fade",
+      "_note": "hook con 5 errores"
+    },
+    { "image": "out/cli-DEMO-rrss/reel-test/slide-02.png", "duration": 7.5 },
+    { "image": "out/cli-DEMO-rrss/reel-test/slide-03.png", "duration": 7.5 },
+    { "image": "out/cli-DEMO-rrss/reel-test/slide-04.png", "duration": 7.5 },
+    { "image": "out/cli-DEMO-rrss/reel-test/slide-05.png", "duration": 7.5 },
+    { "image": "out/cli-DEMO-rrss/reel-test/slide-06.png", "duration": 7.5 },
+    {
+      "image": "out/cli-DEMO-rrss/reel-test/slide-08.png",
+      "duration": 3.5,
+      "transition": "fade",
+      "_note": "CTA final"
+    }
+  ],
+  "audio": {
+    "voice": "out/cli-DEMO-rrss/reel-test/voice.mp3",
+    "_music": "assets/music/upbeat-loop.mp3 (opcional, gitignored)",
+    "music_volume": 0.15
+  },
+  "subtitles": {
+    "ass": "out/cli-DEMO-rrss/reel-test/voice.ass",
+    "burn": true
+  },
+  "_notes": [
+    "Plantilla de 45s. Ajusta duraciones para empatar con la voz real (suma debe ser ~duration_sec).",
+    "ai_assets: true porque la voz viene de tts-free (Edge TTS) -> requiere AG-13.",
+    "Para musica, dropear el archivo en assets/music/ (gitignored) y descomentar audio.music."
+  ]
+}

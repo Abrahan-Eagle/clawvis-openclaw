@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: email-sequence
+template_key: email_sequences
+summary_es: |
+  Secuencias drip, lifecycle y automatizaciones de email.
+triggers_es:
+  - drip
+  - lifecycle email
+  - nutrición
+triggers_en:
+  - email sequence
+  - drip
+coord_category: copy
+related_local:
+  - copywriting
+  - analytics-tracking
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: marketing-psychology
+template_key: strat
+summary_es: |
+  Principios psicológicos y modelos mentales aplicados a marketing.
+triggers_es:
+  - sesgos
+  - priming
+  - urgencia ética
+triggers_en:
+  - marketing psychology
+  - behavioral
+coord_category: strategy
+related_local:
+  - copywriting
+  - pricing-strategy
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

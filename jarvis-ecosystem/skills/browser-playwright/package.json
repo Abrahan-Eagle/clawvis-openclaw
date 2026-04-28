@@ -1,0 +1,10 @@
+{
+  "name": "jarvis-browser-playwright",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Navegación headless (inspiración browser_control MK37 — re-implementación propia)",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}

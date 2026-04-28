@@ -89,6 +89,6 @@ Prioriza entender necesidades antes de empujar producto. Escucha activa, siguien
 
 ## ClawFlows
 
-Skills alineados con Jarvis vía `skills/` (excepto **career-ops**, local a este workspace). Automatizaciones de ventas: `../../automations/ventas/` y `lead-qualifier` en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
+Skills alineados con Jarvis vía `skills/` (excepto **career-ops**, local a este workspace). Automatizaciones de ventas: `../../automations/ventas/`; flows del registry en `../../automations/registry/`. Ver `../../CLAWFLOWS.md`.
 
 Ajusta este archivo con playbooks y objeciones frecuentes de tu negocio cuando lo necesites.

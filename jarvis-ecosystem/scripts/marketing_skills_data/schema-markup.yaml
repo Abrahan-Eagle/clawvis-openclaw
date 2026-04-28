@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: schema-markup
+template_key: seo
+summary_es: |
+  Schema.org y datos estructurados para rich results.
+triggers_es:
+  - schema.org
+  - FAQ schema
+  - rich snippets
+triggers_en:
+  - schema markup
+  - structured data
+coord_category: seo
+related_local:
+  - seo-audit
+  - site-architecture
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

@@ -43,6 +43,7 @@ Antes de actuar:
 2. Lee `USER.md` — a quién ayudas
 3. Lee [WORKSPACE_POLICY.md](WORKSPACE_POLICY.md) — rutas permitidas y entregables (política canónica en [../jarvis/WORKSPACE_POLICY.md](../jarvis/WORKSPACE_POLICY.md))
 4. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe
+5. Librería **marketingskills** (40 skills): [skills/README.md](skills/README.md) — investigación en [../../docs/RESEARCH_MARKETING_SKILLS.md](../../docs/RESEARCH_MARKETING_SKILLS.md); skills rápidas `*-ops` siguen en [../jarvis/skills/](../jarvis/skills/README.md).
 
 Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por **agent ID** y sesión; este workspace es el contexto compartido del equipo.
 
@@ -82,7 +83,7 @@ Skills operativos de negocio (en `../../agents/jarvis/skills/`):
 
 - Sigue las convenciones de `TOOLS.md` del workspace Jarvis principal si las compartes.
 - En Discord/WhatsApp: evita tablas markdown; usa listas.
-- **Skills:** las carpetas en `skills/` son copia de `agents/jarvis/skills/`; editar ahí y replicar aquí.
+- **Skills:** Marketing tiene **dos capas**: (a) variantes rápidas `*-ops` en [`agents/jarvis/skills/`](../jarvis/skills/) (chat iterativo); (b) librería profunda (40 skills) en [`skills/`](skills/README.md) — MIT upstream, cuerpo adaptado ES + `references/upstream-en.md`. Sincronización al runtime del gateway: [`scripts/sync-marketing-skills-from-repo.sh`](../../scripts/sync-marketing-skills-from-repo.sh) (además de [`sync-jarvis-skills-from-repo.sh`](../../scripts/sync-jarvis-skills-from-repo.sh)).
 
 ## Grupos y heartbeats
 

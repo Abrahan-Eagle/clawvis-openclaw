@@ -1,0 +1,82 @@
+# Pipeline de produccion de contenido RRSS (carruseles + reels)
+# Documentacion: docs/PIPELINE_CONTENIDO_RRSS.md, CAROUSEL_PIPELINE_FREE.md, REELS_TIKTOK_PIPELINE_FREE.md
+# Approval gates aplicables: AG-12 (publicar), AG-13 (uso de IA generativa)
+name: marketing-content-production-pipeline
+description: Pipeline tracker que monitorea handoffs de marketing y reporta contenido listo para AG-12/AG-13
+author: marketing
+version: 1.0.0
+
+trigger:
+  schedule: "0 */6 * * *"
+
+config:
+  state_dir:
+    description: Directorio state del ecosistema
+    default: "jarvis-ecosystem/state"
+  out_dir:
+    description: Directorio de outputs renderizados
+    default: "jarvis-ecosystem/out"
+
+steps:
+  - name: timestamp
+    action: evaluate
+    expression: 'new Date().toISOString()'
+    capture: timestamp
+
+  - name: collect-pipeline-status
+    action: evaluate
+    script: |
+      const { execSync } = require("child_process");
+      const path = require("path");
+      const repoRoot = process.cwd();
+      const out = {};
+
+      try {
+        const result = execSync(
+          `bash jarvis-ecosystem/skills/global/coordinator/bin/coordinator status --json --agent marketing`,
+          { encoding: "utf-8", cwd: repoRoot, stdio: ["ignore", "pipe", "pipe"] }
+        );
+        out.coordinator = JSON.parse(result);
+      } catch (e) {
+        out.coordinator_error = String(e.message || e);
+      }
+
+      try {
+        const handoffs = execSync(
+          `bash jarvis-ecosystem/skills/global/handoff/bin/handoff list --status pending --to-agent marketing`,
+          { encoding: "utf-8", cwd: repoRoot, stdio: ["ignore", "pipe", "pipe"] }
+        );
+        out.pending_handoffs_into_marketing = handoffs.trim();
+      } catch (e) {
+        out.handoff_error = String(e.message || e);
+      }
+
+      try {
+        const ls = execSync(
+          `find jarvis-ecosystem/out -maxdepth 4 -name "index.json" -mmin -360 -not -path "*/node_modules/*" 2>/dev/null || true`,
+          { encoding: "utf-8", cwd: repoRoot }
+        );
+        out.recent_assets_last_6h = ls.trim().split("\n").filter(Boolean);
+      } catch (e) {
+        out.assets_error = String(e.message || e);
+      }
+
+      return out;
+    capture: pipeline
+
+  - name: notify-pipeline-status
+    action: notify
+    message: |
+      Marketing Pipeline — Reporte de produccion (cada 6h)
+      Hora (UTC): ${timestamp}
+
+      Tareas activas marketing:
+      ${pipeline.coordinator ? JSON.stringify(pipeline.coordinator.active_tasks || [], null, 2) : pipeline.coordinator_error || "(sin datos)"}
+
+      Handoffs pendientes hacia marketing:
+      ${pipeline.pending_handoffs_into_marketing || "(ninguno)"}
+
+      Assets generados ultimas 6h:
+      ${(pipeline.recent_assets_last_6h && pipeline.recent_assets_last_6h.length) ? pipeline.recent_assets_last_6h.join("\n") : "(ninguno)"}
+
+      Recordatorio: cualquier asset listo para publicar debe pasar AG-12 (y AG-13 si ai_used). Ver docs/APPROVAL_GATES.md.

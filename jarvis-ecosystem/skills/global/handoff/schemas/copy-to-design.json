@@ -1,0 +1,27 @@
+{
+  "$id": "copy-to-design",
+  "title": "Copy -> Design",
+  "description": "Copy + estructura para que carousel-render o video-short produzca el asset.",
+  "type": "object",
+  "required": ["hook", "slides", "cta", "deliverable_format"],
+  "properties": {
+    "hook": { "type": "string" },
+    "slides": {
+      "type": "array"
+    },
+    "cta": { "type": "string" },
+    "deliverable_format": {
+      "type": "string",
+      "enum": [
+        "carousel_ig_1080x1350",
+        "carousel_ig_1080x1080",
+        "story_1080x1920",
+        "reel_1080x1920",
+        "post_facebook_1200x630",
+        "post_tiktok_1080x1920"
+      ]
+    },
+    "brand_id": { "type": "string" },
+    "duration_sec": { "type": "integer" }
+  }
+}

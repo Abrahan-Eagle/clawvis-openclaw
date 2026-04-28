@@ -2,8 +2,8 @@
 
 _Learn about the person you're helping. Update this as you go._
 
-- **Name:** Abraham Pulido
-- **What to call them:** Abraham
+- **Name:** Abrahan Pulido
+- **What to call them:** Abrahan
 - **Pronouns:** (not specified)
 - **Timezone:** America/Caracas
 - **Notes:** 

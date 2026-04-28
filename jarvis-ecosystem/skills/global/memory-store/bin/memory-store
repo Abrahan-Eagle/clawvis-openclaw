@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# memory-store — memoria categorizada + recorte (inspiración: Jarvis-MK37 memory_manager; re-implementación propia).
+set -euo pipefail
+
+MEMORY_MAX_CHARS="${MEMORY_MAX_CHARS:-2200}"
+MAX_VALUE_LEN="${MEMORY_MAX_VALUE_LEN:-380}"
+
+usage() {
+  cat <<'USAGE'
+Uso: memory-store --file <path.json> <comando> [args]
+
+Comandos:
+  init                    Crea JSON vacío si no existe
+  get <categoria> [clave] Imprime valor JSON o vacío
+  set <categoria> <clave> <valor...>
+  forget <categoria> <clave>
+  format-prompt           Markdown para inyectar en prompt (stdout)
+  trim                    Fuerza recorte por MEMORY_MAX_CHARS
+  path                    Imprime ruta absoluta del archivo
+
+Variables: MEMORY_FILE (alias de --file), MEMORY_MAX_CHARS, MEMORY_MAX_VALUE_LEN
+USAGE
+}
+
+empty_json() {
+  jq -n '{
+    identity: {},
+    preferences: {},
+    projects: {},
+    relationships: {},
+    wishes: {},
+    notes: {},
+    companies: {},
+    clients: {}
+  }'
+}
+
+ensure_file() {
+  local f="$1"
+  mkdir -p "$(dirname "$f")"
+  if [[ ! -f "$f" ]]; then
+    empty_json >"$f"
+  fi
+}
+
+read_all() {
+  local f="$1"
+  ensure_file "$f"
+  jq -c . "$f"
+}
+
+truncate_val() {
+  local v="$1"
+  local max="$2"
+  if ((${#v} > max)); then
+    echo "${v:0:$((max-1))}…"
+  else
+    echo "$v"
+  fi
+}
+
+one_trim_oldest() {
+  # Elimina la entrada (value+updated) más antigua, si existe
+  echo "$1" | jq '
+    def flat:
+      [ to_entries[] as $c | $c.value | to_entries[]?
+        | select(.value | type == "object" and has("value"))
+        | {cat: $c.key, key: .key, updated: (.value.updated // "0000-00-00")} ];
+    (flat | sort_by(.updated) | .[0]) as $e
+    | if $e == null then .
+      else del(.[$e.cat][$e.key])
+      end
+  '
+}
+
+trim_memory() {
+  local data="$1"
+  local max="$2"
+  while true; do
+    local len
+    len=$(echo "$data" | jq -c . | wc -c)
+    if (( len <= max )); then
+      break
+    fi
+    local next
+    next=$(one_trim_oldest "$data")
+    if [[ "$next" == "$data" ]]; then
+      break
+    fi
+    data="$next"
+  done
+  echo -n "$data"
+}
+
+cmd_set() {
+  local f="$1" cat="$2" key="$3"
+  shift 3 || true
+  local val
+  val=$(truncate_val "$*" "$MAX_VALUE_LEN")
+  local today
+  today=$(date +%Y-%m-%d)
+  local data
+  data=$(read_all "$f")
+  data=$(echo "$data" | jq --arg c "$cat" --arg k "$key" --arg v "$val" --arg d "$today" '
+    .[$c] = (.[$c] // {}) | .[$c][$k] = {value: $v, updated: $d}
+  ')
+  data=$(trim_memory "$data" "$MEMORY_MAX_CHARS")
+  echo "$data" | jq . >"$f.tmp" && mv "$f.tmp" "$f"
+  echo "OK set $cat/$key"
+}
+
+cmd_forget() {
+  local f="$1" cat="$2" key="$3"
+  local data
+  data=$(read_all "$f")
+  data=$(echo "$data" | jq --arg c "$cat" --arg k "$key" 'del(.[$c][$k])')
+  echo "$data" | jq . >"$f.tmp" && mv "$f.tmp" "$f"
+  echo "OK forget $cat/$key"
+}
+
+cmd_get() {
+  local f="$1" cat="$2" key="${3:-}"
+  local data
+  data=$(read_all "$f")
+  if [[ -z "$key" ]]; then
+    echo "$data" | jq -c ".[\"$cat\"] // {}"
+  else
+    echo "$data" | jq -c ".[\"$cat\"][\"$key\"] // empty"
+  fi
+}
+
+cmd_format_prompt() {
+  local f="$1"
+  local data
+  data=$(read_all "$f")
+  echo "$data" | jq -r '
+    def vof($e): if ($e | type) == "object" and ($e | has("value")) then $e.value else $e end;
+    def block($t;$d):
+      if ($d | length) == 0 then empty
+      else
+        $t + ":\n" + (
+          [ $d | to_entries[] | select(vof(.value) != null and (vof(.value) | tostring | length) > 0)
+            | "  - \(.key): \(vof(.value))" ] | join("\n")
+        )
+      end;
+    ([
+      block("Identity"; .identity),
+      block("Preferences"; .preferences),
+      block("Projects"; .projects),
+      block("Relationships"; .relationships),
+      block("Wishes"; .wishes),
+      block("Companies"; .companies),
+      block("Clients"; .clients),
+      block("Notes"; .notes)
+    ] | map(select(. != null and . != "")) | join("\n\n")) as $body
+    | if ($body | length) == 0 then ""
+      else "[WHAT YOU KNOW — use naturally, do not recite as a list]\n\n" + $body + "\n"
+      end
+  '
+}
+
+FILE=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --file) FILE="$2"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) break ;;
+  esac
+done
+
+FILE="${FILE:-${MEMORY_FILE:-}}"
+if [[ -z "$FILE" ]]; then
+  echo "memory-store: falta --file o MEMORY_FILE" >&2
+  usage
+  exit 1
+fi
+FILE=$(readlink -f "$FILE" 2>/dev/null || realpath "$FILE" 2>/dev/null || echo "$FILE")
+
+cmd="${1:-}"
+shift || true
+
+case "$cmd" in
+  init) ensure_file "$FILE"; echo "OK $FILE" ;;
+  path) echo "$FILE" ;;
+  get) cmd_get "$FILE" "${1:-}" "${2:-}" ;;
+  set) cmd_set "$FILE" "${1:-}" "${2:-}" "${@:3}" ;;
+  forget) cmd_forget "$FILE" "${1:-}" "${2:-}" ;;
+  format-prompt) cmd_format_prompt "$FILE" ;;
+  trim)
+    d=$(read_all "$FILE")
+    d=$(trim_memory "$d" "$MEMORY_MAX_CHARS")
+    echo "$d" | jq . >"$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+    echo OK
+    ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

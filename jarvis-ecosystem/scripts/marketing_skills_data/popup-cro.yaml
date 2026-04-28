@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: popup-cro
+template_key: cro
+summary_es: |
+  Popups, modales y overlays orientados a captura o siguiente paso.
+triggers_es:
+  - popup
+  - modal
+  - overlay
+triggers_en:
+  - popup
+  - modal
+coord_category: cro
+related_local:
+  - page-cro
+  - lead-magnets
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

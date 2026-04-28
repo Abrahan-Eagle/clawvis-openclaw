@@ -1,0 +1,24 @@
+{
+  "$id": "research-to-strategy",
+  "title": "Research -> Strategy",
+  "description": "Resultados de investigacion (mkt-analytics o sales-hunter) hacia el estratega.",
+  "type": "object",
+  "required": ["topic", "audience", "key_findings", "sources"],
+  "properties": {
+    "topic": { "type": "string" },
+    "audience": {
+      "type": "object",
+      "required": ["primary"],
+      "properties": {
+        "primary": { "type": "string" },
+        "pains": { "type": "array" },
+        "desires": { "type": "array" }
+      }
+    },
+    "key_findings": { "type": "array" },
+    "competitors": { "type": "array" },
+    "opportunities": { "type": "array" },
+    "sources": { "type": "array" },
+    "confidence": { "type": "string", "enum": ["low", "medium", "high"] }
+  }
+}

@@ -15,16 +15,22 @@ El CLI solo lista archivos `*.yaml` **directamente** bajo `CLAWFLOWS_DIR`, no en
 - En la **raíz** de `automations/` hay **archivos YAML** con el mismo contenido que los de `jarvis/`, `marketing/`, etc. (para que `clawflows list` los vea). **Edita primero** en `automations/jarvis/`, `automations/marketing/`, `automations/ventas/` — o un solo sitio que el equipo elija — y **vuelve a alinear** la copia de la raíz si cambia el flujo (por ejemplo `diff`/`cp` entre `jarvis/morning-briefing.yaml` y `jarvis-morning-briefing.yaml`).
 - **No** asumir symlinks: en este repo las copias en raíz son ficheros regulares idénticos a la última sincronización.
 
+**Script recomendado:** desde `jarvis-ecosystem/` ejecuta [`./scripts/sync-automations-yaml.sh`](../scripts/sync-automations-yaml.sh) para copiar **subcarpeta → raíz** según la tabla siguiente (idempotente). Con `./scripts/sync-automations-yaml.sh --check` solo detecta *drift* (salida ≠0 si hay diferencias).
+
 ### Tabla raíz ↔ subcarpeta (pares esperados)
 
 | Archivo en raíz | Canónico en subcarpeta |
 |-----------------|-------------------------|
 | `jarvis-morning-briefing.yaml` | `jarvis/morning-briefing.yaml` |
+| `jarvis-coordination-pulse.yaml` | `jarvis/coordination-pulse.yaml` |
 | `marketing-competitor-monitor.yaml` | `marketing/competitor-monitor.yaml` |
+| `marketing-content-production-pipeline.yaml` | `marketing/content-production-pipeline.yaml` |
+| `marketing-youtube-trending-watch.yaml` | `marketing/youtube-trending-watch.yaml` |
 | `ventas-pipeline-report.yaml` | `ventas/pipeline-report.yaml` |
+| `jarvis-loop-orchestrator.yaml` | `jarvis/loop-orchestrator.yaml` |
 | `shared-security-audit.yaml` | `shared/security-audit.yaml` |
 
-Tras editar un lado, `diff` los dos y copiar si hace falta.
+Tras editar un lado, `diff` los dos y copiar si hace falta, o ejecutar `./scripts/sync-automations-yaml.sh`.
 
 ## `clawflows list` vs `registry/`
 
@@ -56,7 +62,6 @@ Desde el directorio `jarvis-ecosystem/`:
 
 ```bash
 ./scripts/clawflows-verify-registry.sh
-./scripts/validate-lead-qualifier-local.sh
 ```
 
 El mapa de capabilities para el CLI está en [`agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md`](../agents/jarvis/skills/clawflows-capability-map/CAPABILITY.md).

@@ -1,0 +1,23 @@
+{
+  "$id": "design-to-producer",
+  "title": "Design -> Producer",
+  "description": "Disenio aprobado + assets para que el productor (video o carousel) lo render finalice.",
+  "type": "object",
+  "required": ["template", "brand_path", "assets"],
+  "properties": {
+    "template": { "type": "string" },
+    "brand_path": { "type": "string" },
+    "assets": {
+      "type": "object",
+      "properties": {
+        "voice_path": { "type": "string" },
+        "music_path": { "type": "string" },
+        "subs_path": { "type": "string" },
+        "images_dir": { "type": "string" }
+      }
+    },
+    "duration_sec": { "type": "integer" },
+    "format": { "type": "string" },
+    "out_path": { "type": "string" }
+  }
+}

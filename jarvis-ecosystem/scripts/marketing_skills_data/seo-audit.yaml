@@ -1,0 +1,19 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: seo-audit
+template_key: seo_dual
+summary_es: |
+  Auditoría SEO técnica, on-page y de contenido con priorización accionable.
+triggers_es:
+  - auditoría SEO
+  - Search Console
+  - indexación
+triggers_en:
+  - SEO audit
+  - technical SEO
+coord_category: seo
+related_local:
+  - ai-seo
+  - site-architecture
+  - schema-markup
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

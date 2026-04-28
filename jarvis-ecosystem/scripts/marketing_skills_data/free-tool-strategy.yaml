@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: free-tool-strategy
+template_key: growth
+summary_es: |
+  Evalúa/diseña free tools para marketing (lead gen, SEO, shares).
+triggers_es:
+  - free tool
+  - calculadora
+  - widget
+triggers_en:
+  - free tool
+  - micro-product
+coord_category: growth
+related_local:
+  - lead-magnets
+  - seo-audit
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

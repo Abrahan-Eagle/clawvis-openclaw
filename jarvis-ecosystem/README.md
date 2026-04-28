@@ -7,7 +7,7 @@
 ## Estructura del holding
 
 ```
-Superusuario (Abraham) ←→ Jarvis (agente maestro)
+Superusuario (Abrahan) ←→ Jarvis (agente maestro)
                               |
         ┌─────────────────────┼─────────────────────┐
    Marketing          Ventas          (Planificadas:
@@ -36,14 +36,14 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | Ruta | Descripción |
 |------|-------------|
 | `agents/jarvis/` | Workspace del agente maestro: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `MEMORY.md`, `skills/`, `scripts/` (model-router), `memory/`. |
-| `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`. Las skills compartidas viven solo en [`agents/jarvis/skills/`](agents/jarvis/skills/) (sin copias duplicadas aquí). |
+| `agents/marketing/` | Empresa Marketing & Comunicación: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`. **Skills de marketing (40)** en [`agents/marketing/skills/`](agents/marketing/skills/README.md) (adaptadas de [marketingskills](https://github.com/coreyhaines31/marketingskills)); skills compartidas y variantes `*-ops` siguen en [`agents/jarvis/skills/`](agents/jarvis/skills/). |
 | `agents/ventas/` | Empresa Ventas: `IDENTITY.md`, `AGENTS.md`, `SOUL.md`, `skills/career-ops/` (solo Ventas), [`career-ops/`](agents/ventas/career-ops/) (herramienta local). Resto de skills: [`agents/jarvis/skills/`](agents/jarvis/skills/). Detalle: [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). |
 | `agents/dev-agency/`, `agents/legal/`, `agents/contadores/` | Empresas **planificadas**: scaffold (`IDENTITY`, `AGENTS`, `SOUL`, `USER`, `MEMORY`). Sin agentes en gateway hasta activación — [COMPANIES.md](COMPANIES.md). |
 | `automations/` | YAML ClawFlows; ver [automations/README.md](automations/README.md). |
-| `scripts/` | `clawflows-env.sh`, verificación del registry, etc. |
+| `scripts/` | `clawflows-env.sh`, `openclaw-path.sh` (PATH para `openclaw` en pruebas/CI), verificación del registry, `generate_marketing_skills.py` / `validate-marketing-skills.sh` (skills marketing), etc. |
 | [CLAWFLOWS.md](CLAWFLOWS.md) | Guía ClawFlows + Lobster. |
 
-**Skills canónicas:** toda skill compartida está en **`agents/jarvis/skills/`** (una sola copia; evita drift). Marketing y Ventas **no** duplican esas carpetas. **Excepción:** `agents/ventas/skills/career-ops/` (y `agents/ventas/career-ops/`) es solo Ventas — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md). Los README en `agents/marketing/skills/` y `agents/ventas/skills/` enlazan a Jarvis.
+**Dos capas de skills en Marketing:** (a) variantes rápidas **`*-ops`** en **`agents/jarvis/skills/`** (una sola copia compartida); (b) librería **profunda** (40 skills MIT/adaptadas) en **`agents/marketing/skills/`** — **no** es duplicado del árbol Jarvis; regeneración: `scripts/generate_marketing_skills.py`. **Runtime:** sincronizar ambas capas al workspace del gateway con `sync-jarvis-skills-from-repo.sh` **y** [`sync-marketing-skills-from-repo.sh`](scripts/sync-marketing-skills-from-repo.sh) — [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md). **Excepción Ventas:** `agents/ventas/skills/career-ops/` — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md).
 
 ## Documentación de gobierno
 
@@ -68,11 +68,13 @@ Superusuario (Abraham) ←→ Jarvis (agente maestro)
 | [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md) | `~/.openclaw` vs repo vs snapshot: evitar deriva. |
 | [docs/SECURITY_GATEWAY.md](docs/SECURITY_GATEWAY.md) | Auth del gateway y superficie de red; `plugins.allow`. |
 | [../docs/TROUBLESHOOTING_OPENCLAW_CPU.md](../docs/TROUBLESHOOTING_OPENCLAW_CPU.md) | CPU al 100%, proceso `rg`, ajustes `memorySearch` / concurrencia / `exec`. |
+| [docs/PRUEBAS_JARVIS_PROMPTS.md](docs/PRUEBAS_JARVIS_PROMPTS.md) | Prompts copy-paste para pruebas del ecosistema (smoke, ClawFlows, OpenClaw, coordinación, RRSS, gobierno). |
+| [docs/RESEARCH_MARKETING_SKILLS.md](docs/RESEARCH_MARKETING_SKILLS.md) | Investigación forense + matriz: import de `coreyhaines31/marketingskills` (40 skills) en `agents/marketing/skills/`. |
 
 ## Checklist rápido
 
-- Tras **git pull** en `clawvis-openclaw`, si el gateway usa una copia en `$HOME/jarvis-ecosystem` (no symlink al repo), sincronizar skills desde la raiz del monorepo: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./jarvis-ecosystem/scripts/sync-jarvis-skills-from-repo.sh` — o desde `jarvis-ecosystem/`: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./scripts/sync-jarvis-skills-from-repo.sh` — ver [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md).
+- Tras **git pull** en `clawvis-openclaw`, si el gateway usa una copia en `$HOME/jarvis-ecosystem` (no symlink al repo), sincronizar skills desde la raiz del monorepo: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./jarvis-ecosystem/scripts/sync-jarvis-skills-from-repo.sh` **y** `./jarvis-ecosystem/scripts/sync-marketing-skills-from-repo.sh` — o desde `jarvis-ecosystem/`: `JARVIS_WORKSPACE_BASE=$HOME/jarvis-ecosystem ./scripts/sync-jarvis-skills-from-repo.sh && ./scripts/sync-marketing-skills-from-repo.sh` — ver [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md).
 - Cambiar **Telegram / modelo / binding** → `~/.openclaw/openclaw.json` + reinicio del gateway.
-- Cambiar **skill o prompt del agente** → `agents/jarvis/skills/` (y alinear copias en marketing/ventas); **career-ops** solo en `agents/ventas/` (ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md)).
+- Cambiar **skill o prompt del agente** → `agents/jarvis/skills/`; skills **marketing profundas** → `agents/marketing/skills/` (regenerar con `scripts/generate_marketing_skills.py`); **career-ops** solo en `agents/ventas/` (ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md)).
 - **Backup de config en Git** → actualizar `config/openclaw-home/` según el procedimiento del README raíz (sin secretos).
 - **Agregar empresa nueva** → ver checklist en [COMPANIES.md](COMPANIES.md).

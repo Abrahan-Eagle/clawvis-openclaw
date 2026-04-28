@@ -205,6 +205,10 @@
         "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing"
       },
       {
+        "id": "mkt-research",
+        "workspace": "/home/aipp/jarvis-ecosystem/agents/marketing"
+      },
+      {
         "id": "sales-hunter",
         "workspace": "/home/aipp/jarvis-ecosystem/agents/ventas"
       },

@@ -1,0 +1,30 @@
+# Jarvis — orquestador (planner + queue + executor + error-recovery) — recordatorio operativo
+name: jarvis-loop-orchestrator
+description: Plantilla — generar plan, encolar opcional, dry-run; documentación en skills/planner, task-queue, executor, error-recovery
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 12 * * 0"
+
+config:
+  sample_goal:
+    description: "Objetivo de ejemplo (editar en config al instalar)"
+    default: "Revisar Trello y redactar un parrafo de estado para el CEO"
+
+steps:
+  - name: notify
+    action: notify
+    message: |
+      Jarvis — loop orchestrator (plantilla v1)
+      Objetivo ejemplo: ${config.sample_goal}
+
+      Flujo manual:
+      1) skills/planner/bin/planner "${config.sample_goal}" > /tmp/jarvis-plan.json
+      2) Editar pasos con tools reales (trello, notion, ...).
+      3) skills/executor/bin/executor /tmp/jarvis-plan.json
+      4) skills/task-queue/bin/task-queue submit '{"goal":"..."}'
+      5) echo "error" | skills/error-recovery/bin/error-recovery
+
+      No ejecuta el gateway: contrato y CLI locales. Ver docs/FORENSE_JARVIS_MK37.md.
+      Dominios/instalación: @../../docs/APPROVAL_GATES.md

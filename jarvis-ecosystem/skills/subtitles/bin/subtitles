@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+# subtitles — generador / normalizador SRT/ASS
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+subtitles <command> [options]
+
+Commands:
+  from-script  --in script.json --out out.srt
+  split-words  --in voice.srt --out words.srt [--max-words 4]
+  to-ass       --in voice.srt --out voice.ass --brand <id>
+  help
+
+Detalle: SKILL.md
+EOF
+}
+
+self=$(readlink -f "${BASH_SOURCE[0]}")
+SKILL_DIR=$(dirname "$(dirname "$self")")
+ROOT=$(cd "$SKILL_DIR/../.." && pwd)
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$HOME/Documents/client-dossiers}"
+
+resolve_brand_path() {
+  local id="$1"
+  if [ -f "$DOSSIERS_DIR/$id/brand.json" ]; then
+    echo "$DOSSIERS_DIR/$id/brand.json"
+  elif [ -f "$DOSSIERS_DIR/$id.brand.json" ]; then
+    echo "$DOSSIERS_DIR/$id.brand.json"
+  else
+    return 1
+  fi
+}
+
+fmt_srt_time() {
+  python3 -c "
+s = float('$1')
+if s < 0: s = 0
+h = int(s // 3600); m = int((s % 3600) // 60); sec = int(s % 60); ms = int(round((s - int(s)) * 1000))
+if ms == 1000: ms = 0; sec += 1
+print(f'{h:02d}:{m:02d}:{sec:02d},{ms:03d}')
+"
+}
+
+cmd_from_script() {
+  local in_file="" out_file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      --out) out_file="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$in_file" ] || [ -z "$out_file" ] && { echo "ERROR: --in y --out requeridos" >&2; exit 1; }
+
+  mkdir -p "$(dirname "$out_file")"
+  python3 - <<PY > "$out_file"
+import json, sys
+data = json.load(open("$in_file"))
+def fmt(s):
+    if s < 0: s = 0
+    h = int(s // 3600); m = int((s % 3600) // 60); sec = int(s % 60); ms = int(round((s - int(s)) * 1000))
+    if ms == 1000: ms = 0; sec += 1
+    return f"{h:02d}:{m:02d}:{sec:02d},{ms:03d}"
+for i, b in enumerate(data["blocks"], 1):
+    print(i)
+    print(f"{fmt(b['start'])} --> {fmt(b['end'])}")
+    print(b["text"])
+    print()
+PY
+  echo "$out_file"
+}
+
+cmd_split_words() {
+  local in_file="" out_file="" max_words=4
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      --out) out_file="$2"; shift 2 ;;
+      --max-words) max_words="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$in_file" ] || [ -z "$out_file" ] && { echo "ERROR: --in y --out requeridos" >&2; exit 1; }
+
+  mkdir -p "$(dirname "$out_file")"
+  python3 - "$in_file" "$out_file" "$max_words" <<'PY'
+import re, sys
+src, dst, max_words = sys.argv[1], sys.argv[2], int(sys.argv[3])
+text = open(src, encoding="utf-8").read().strip()
+blocks = re.split(r"\n\s*\n", text)
+def parse_time(t):
+    h, m, rest = t.split(":")
+    s, ms = rest.split(",")
+    return int(h)*3600 + int(m)*60 + int(s) + int(ms)/1000
+def fmt(s):
+    if s < 0: s = 0
+    h = int(s//3600); m = int((s%3600)//60); sec = int(s%60); ms = int(round((s - int(s))*1000))
+    if ms == 1000: ms = 0; sec += 1
+    return f"{h:02d}:{m:02d}:{sec:02d},{ms:03d}"
+out_idx = 1
+out_lines = []
+for blk in blocks:
+    lines = blk.strip().split("\n")
+    if len(lines) < 3: continue
+    times = lines[1]
+    if "-->" not in times: continue
+    a, b = [t.strip() for t in times.split("-->")]
+    start, end = parse_time(a), parse_time(b)
+    content = " ".join(lines[2:]).strip()
+    words = content.split()
+    if not words: continue
+    chunks = [words[i:i+max_words] for i in range(0, len(words), max_words)]
+    duration = end - start
+    per_chunk = duration / len(chunks)
+    for i, chunk in enumerate(chunks):
+        cs = start + i * per_chunk
+        ce = cs + per_chunk
+        out_lines.append(str(out_idx))
+        out_lines.append(f"{fmt(cs)} --> {fmt(ce)}")
+        out_lines.append(" ".join(chunk))
+        out_lines.append("")
+        out_idx += 1
+open(dst, "w", encoding="utf-8").write("\n".join(out_lines))
+PY
+  echo "$out_file"
+}
+
+ass_color() {
+  # Convierte #RRGGBB a &H00BBGGRR (ASS color format)
+  local hex="${1#\#}"
+  local r="${hex:0:2}" g="${hex:2:2}" b="${hex:4:2}"
+  echo "&H00${b^^}${g^^}${r^^}"
+}
+
+cmd_to_ass() {
+  local in_file="" out_file="" brand=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --in) in_file="$2"; shift 2 ;;
+      --out) out_file="$2"; shift 2 ;;
+      --brand) brand="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -z "$in_file" ] || [ -z "$out_file" ] || [ -z "$brand" ] && { echo "ERROR: --in/--out/--brand requeridos" >&2; exit 1; }
+  local brand_path
+  if ! brand_path=$(resolve_brand_path "$brand"); then
+    echo "ERROR: brand no encontrado: $brand" >&2; exit 1
+  fi
+  local heading_font primary_color outline_color
+  heading_font=$(jq -r '.fonts.heading // "Arial"' "$brand_path")
+  primary_color=$(ass_color "$(jq -r '.palette.bg // "#FFFFFF"' "$brand_path")")
+  outline_color=$(ass_color "$(jq -r '.palette.fg // "#000000"' "$brand_path")")
+
+  mkdir -p "$(dirname "$out_file")"
+  python3 - "$in_file" "$out_file" "$heading_font" "$primary_color" "$outline_color" <<'PY'
+import re, sys
+src, dst, font, primary, outline = sys.argv[1:6]
+text = open(src, encoding="utf-8").read().strip()
+blocks = re.split(r"\n\s*\n", text)
+def parse_time(t):
+    h, m, rest = t.split(":")
+    s, ms = rest.split(",")
+    return int(h)*3600 + int(m)*60 + int(s) + int(ms)/1000
+def ass_time(s):
+    if s < 0: s = 0
+    h = int(s//3600); m = int((s%3600)//60); sec = int(s%60); cs = int(round((s - int(s))*100))
+    if cs == 100: cs = 0; sec += 1
+    return f"{h:01d}:{m:02d}:{sec:02d}.{cs:02d}"
+
+header = f"""[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,{font},72,{primary},{primary},{outline},&H00000000,1,0,0,0,100,100,0,0,1,4,0,2,40,40,180,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""
+events = []
+for blk in blocks:
+    lines = blk.strip().split("\n")
+    if len(lines) < 3: continue
+    times = lines[1]
+    if "-->" not in times: continue
+    a, b = [t.strip() for t in times.split("-->")]
+    start, end = parse_time(a), parse_time(b)
+    content = " ".join(lines[2:]).strip().replace("{", "(").replace("}", ")").replace("\n", "\\N")
+    events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Default,,0,0,0,,{content}")
+open(dst, "w", encoding="utf-8").write(header + "\n".join(events) + "\n")
+PY
+  echo "$out_file"
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  from-script) cmd_from_script "$@" ;;
+  split-words) cmd_split_words "$@" ;;
+  to-ass) cmd_to_ass "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

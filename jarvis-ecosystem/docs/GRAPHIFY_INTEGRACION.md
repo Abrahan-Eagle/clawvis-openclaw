@@ -104,6 +104,8 @@ graphify cursor install   # Cursor rules
 graphify claw install     # OpenClaw AGENTS.md
 ```
 
+**Rutas `pipx` y nombre `graphifyy`:** el paquete en PyPI se publica como **graphify**; el instalador `pipx install graphifyy` apunta a ese paquete y el virtualenv en disco suele llamarse `graphifyy`. Por eso en `openclaw.json` el MCP puede usar `.../pipx/venvs/graphifyy/bin/python3` — es coherente con pipx, **no** un error tipográfico del proyecto.
+
 ---
 
 **Repo fuente:** [safishamsi/graphify](https://github.com/safishamsi/graphify) (26.4k stars, MIT)

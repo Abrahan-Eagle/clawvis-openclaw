@@ -4,6 +4,15 @@ Skills define _how_ tools work. This file is for _your_ specifics — the stuff 
 
 ## ClawFlows / Jarvis (2026-03)
 
+- **Memoria estructurada:** `../../skills/global/memory-store/` + `memory.json` (misma carpeta de agente).
+- **Core prompt (protocolo compartido):** `../../skills/global/core-prompt.md`.
+- **Nuevos skills en repo (2026-04, forense MK37):** `../../skills/weather-report/`, `../../skills/youtube-transcript/`, `../../skills/browser-playwright/`, orquestación `../../skills/planner/`, `task-queue/`, `executor/`, `error-recovery/` (ver `../../docs/FORENSE_JARVIS_MK37.md`).
+- **v2 abril 2026 — coordinacion + RRSS local (todos free / sin GPU):**
+  - Coordinacion: `../../skills/global/activity-log/`, `../../skills/global/handoff/` (con schemas JSON), `../../skills/global/coordinator/`. Ver [../../docs/COORDINACION_AGENTES.md](../../docs/COORDINACION_AGENTES.md).
+  - Pipeline carruseles: `../../skills/brand-kit/`, `../../skills/image-render/` (Pillow), `../../skills/image-ai-free/` (Pollinations), `../../skills/carousel-render/`. Ver [../../docs/CAROUSEL_PIPELINE_FREE.md](../../docs/CAROUSEL_PIPELINE_FREE.md).
+  - Pipeline reels/tiktoks: `../../skills/tts-free/` (Edge TTS), `../../skills/subtitles/`, `../../skills/video-compose/` (ffmpeg), `../../skills/video-short/` (Remotion, esqueleto). Ver [../../docs/REELS_TIKTOK_PIPELINE_FREE.md](../../docs/REELS_TIKTOK_PIPELINE_FREE.md).
+  - Approval gates nuevos: **AG-12** (publicar contenido) y **AG-13** (uso de IA generativa). Ver [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md).
+  - Estado runtime no versionado: `../../state/` (gitignored). Manifest de cada asset: `out/<brand>/<slug>/index.json` con `ai_used` declarado.
 - **Automatizaciones**: raíz del ecosistema `../../automations/` — ver `../../CLAWFLOWS.md`.
 - **CLI**: `clawflows`; cargar entorno con `source ../../scripts/clawflows-env.sh` (y opcionalmente `../../.env` para Ollama). Ver `../../CLAWFLOWS.md`.
 - **Skills instalados** (también enlazados desde marketing/ventas): `gog`, `himalaya`, `xurl`, `slack`, `blogwatcher`, `summarize`, `notion`, `trello`, `session-logs`, `nano-pdf`, `mcporter`, `tmux`, `video-frames` bajo `./skills/<nombre>/`.
@@ -22,7 +31,7 @@ No pegues API keys en este archivo; usa `~/.openclaw/.env` u otra tienda segura.
 
 | Integración | Documentación |
 |-------------|----------------|
-| Trello + OpenClaw | [docs/TRELLO_OPENCLAW.md](../../../docs/TRELLO_OPENCLAW.md) (`TRELLO_API_KEY`, `TRELLO_TOKEN`, `exec`, `jq`) |
+| Trello + OpenClaw | [INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md](../../docs/INTEGRACIONES_OPENCLAW_YA_CONFIGURADAS.md), [CONVENCION_TRELLO_EMPRESA_CLIENTE.md](../../docs/CONVENCION_TRELLO_EMPRESA_CLIENTE.md) (`TRELLO_*`, `exec`, `jq`) |
 | Ollama local | Variables `OLLAMA_*` en [`.env`](../../.env) del ecosistema (ejemplo) |
 
 Otras skills (Notion, Slack, etc.): seguir el `SKILL.md` de cada carpeta bajo `./skills/<nombre>/`.

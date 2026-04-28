@@ -1,0 +1,18 @@
+{
+  "$id": "strategy-to-copy",
+  "title": "Strategy -> Copy",
+  "description": "Brief creativo del estratega hacia el copywriter.",
+  "type": "object",
+  "required": ["objective", "audience", "key_message", "tone"],
+  "properties": {
+    "objective": { "type": "string" },
+    "audience": { "type": "string" },
+    "key_message": { "type": "string" },
+    "tone": { "type": "string" },
+    "format": { "type": "string", "enum": ["carousel_ig", "reel", "story", "post_facebook", "tiktok", "email"] },
+    "kpi": { "type": "array" },
+    "must_have": { "type": "array" },
+    "avoid": { "type": "array" },
+    "deadline": { "type": "string" }
+  }
+}

@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: content-strategy
+template_key: strat
+summary_es: |
+  Define pilares temáticos, calendario y foco de negocio.
+triggers_es:
+  - editorial
+  - pilares SEO
+  - thought leadership
+triggers_en:
+  - content strategy
+  - editorial
+coord_category: strategy
+related_local:
+  - seo-audit
+  - social-content
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

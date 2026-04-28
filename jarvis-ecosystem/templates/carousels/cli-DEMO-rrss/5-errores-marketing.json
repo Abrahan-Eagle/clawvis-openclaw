@@ -1,0 +1,55 @@
+{
+  "id": "cli-DEMO-rrss-c001",
+  "brand_id": "cli-DEMO-rrss",
+  "format": "1080x1350",
+  "slug": "5-errores-marketing",
+  "title": "5 errores comunes en marketing organico",
+  "ai_assets": false,
+  "slides": [
+    {
+      "type": "hook",
+      "title": "5 errores que cuestan clientes",
+      "subtitle": "Y como evitarlos en 7 dias"
+    },
+    {
+      "type": "step",
+      "n": 1,
+      "title": "Postear sin escuchar",
+      "body": "Antes de publicar, lee comentarios y DMs. La voz del cliente vale mas que cualquier estrategia."
+    },
+    {
+      "type": "step",
+      "n": 2,
+      "title": "Vender en cada post",
+      "body": "Educa, entretiene, inspira. Solo 1 de cada 5 piezas debe pedir compra directa."
+    },
+    {
+      "type": "step",
+      "n": 3,
+      "title": "Ignorar metricas",
+      "body": "Mide guardados, comparticiones y respuestas a stories. Likes mienten."
+    },
+    {
+      "type": "step",
+      "n": 4,
+      "title": "Cambiar de tono",
+      "body": "Tu marca tiene una voz. Mantenla constante en todos los formatos."
+    },
+    {
+      "type": "step",
+      "n": 5,
+      "title": "Olvidar el CTA",
+      "body": "Cada pieza necesita un siguiente paso claro: comentar, guardar, escribir, agendar."
+    },
+    {
+      "type": "quote",
+      "text": "El cliente no compra una funcion, compra un cambio en su vida.",
+      "author": "Estrategia 101"
+    },
+    {
+      "type": "cta",
+      "title": "Hablemos",
+      "subtitle": "DM o link en bio para auditoria gratis"
+    }
+  ]
+}

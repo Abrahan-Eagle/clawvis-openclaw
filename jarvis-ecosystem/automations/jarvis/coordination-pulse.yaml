@@ -1,0 +1,63 @@
+# Automatizacion Jarvis — pulso de coordinacion (cada 4h)
+# Lee state/ via skill `coordinator` y publica resumen al CEO.
+# Detalle: docs/COORDINACION_AGENTES.md
+name: jarvis-coordination-pulse
+description: Resumen ejecutivo del estado del ecosistema (tareas activas, handoffs abiertos, tareas atrancadas).
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 */4 * * *"
+
+config:
+  stuck_hours:
+    description: "Horas sin evento para considerar tarea atrancada"
+    default: 24
+  orphan_days:
+    description: "Dias sin actividad para considerar dossier huerfano"
+    default: 7
+
+steps:
+  - name: now
+    action: evaluate
+    expression: 'new Date().toISOString()'
+    capture: timestamp
+
+  - name: pulse
+    action: evaluate
+    script: |
+      const { execSync } = require('child_process');
+      const path = require('path');
+      const root = process.env.JARVIS_ROOT
+        || (() => { try { return execSync('git rev-parse --show-toplevel', { encoding: 'utf8' }).trim() + '/jarvis-ecosystem' } catch { return process.cwd() } })();
+      const bin = path.join(root, 'skills/global/coordinator/bin/coordinator');
+      const json = execSync(`${bin} status --json`, { encoding: 'utf8' });
+      const data = JSON.parse(json);
+      const stuck = JSON.parse(execSync(`${bin} stuck --hours ${config.stuck_hours || 24}`, { encoding: 'utf8' }));
+      let dossier_orphans = '';
+      try {
+        dossier_orphans = execSync(`${bin} dossiers --orphan-days ${config.orphan_days || 7}`, { encoding: 'utf8' });
+      } catch (e) { dossier_orphans = '(no se pudo leer dossiers)'; }
+      return {
+        active: data.active_tasks_count,
+        handoffs_open: data.open_handoffs_count,
+        stuck_count: stuck.length,
+        stuck_samples: stuck.slice(0, 5).map(s => `${s.id} (${s.owner}) ${s.hours_since_last}h`),
+        dossier_orphans: dossier_orphans.trim()
+      };
+    capture: pulse
+
+  - name: notify-user
+    action: notify
+    message: |
+      Jarvis — Coordination Pulse (${timestamp})
+
+      Tareas activas: ${pulse.active}
+      Handoffs abiertos: ${pulse.handoffs_open}
+      Tareas atrancadas (>${config.stuck_hours}h): ${pulse.stuck_count}
+      ${pulse.stuck_samples.length ? "  - " + pulse.stuck_samples.join("\n  - ") : ""}
+
+      Dossiers huerfanos (>${config.orphan_days}d):
+      ${pulse.dossier_orphans || "(ninguno)"}
+
+      Detalle: ejecutar `coordinator status` o `coordinator summary --dossier cli-...`.

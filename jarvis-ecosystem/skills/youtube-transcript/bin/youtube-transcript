@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Wrapper: transcript | trending-hint
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PY="$DIR/lib/yt_transcript.py"
+VENV="${YOUTUBE_TRANSCRIPT_VENV:-$DIR/.venv}"
+usage() {
+  echo "Uso: youtube-transcript transcript <url|id> [lang]" >&2
+  echo "     youtube-transcript trending-hint  (mensaje: usar API/YouTube Data o RSS manual)" >&2
+  exit 1
+}
+cmd="${1:-}"
+shift || true
+case "$cmd" in
+  transcript)
+    if [[ ! -d "$VENV" ]]; then
+      echo "{\"error\":\"no_venv\",\"hint\":\"cd $DIR && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt\"}"
+      exit 1
+    fi
+    exec "$VENV/bin/python" "$PY" "$@"
+    ;;
+  trending-hint)
+    echo '{"info":"Tendencias por región: configurar YOUTUBE_API_KEY y Data API, o abrir YouTube > Explorar > Tendencias. Este skill se centra en transcript."}'
+    ;;
+  ""|-h|--help) usage ;;
+  *) echo "{\"error\":\"unknown_cmd\",\"cmd\":\"$cmd\"}"; exit 1 ;;
+esac

@@ -1,0 +1,26 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: social-content
+template_key: pipeline_social
+summary_es: |
+  Estrategia y piezas para redes (hooks, calendario, repurposing) enlazando pipeline jarvis.
+triggers_es:
+  - Instagram
+  - LinkedIn
+  - calendario editorial
+  - short-form
+triggers_en:
+  - social content
+  - LinkedIn
+  - content calendar
+coord_category: pipeline
+related_local:
+  - copywriting
+  - image
+  - video
+  - page-cro
+hooks_override:
+  - `brand-kit` — validar identidad del dossier.
+  - `carousel-render` / `carousel-ops` — carruseles.
+  - `docs/CAROUSEL_PIPELINE_FREE.md`, `docs/REELS_TIKTOK_PIPELINE_FREE.md`.
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

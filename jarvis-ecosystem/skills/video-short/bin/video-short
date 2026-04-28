@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+# video-short — Remotion wrapper (esqueleto v0.5)
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+video-short <command> [options]
+
+Commands:
+  list-templates           Listar templates disponibles
+  render --template <slug> --props <file.json> --out <file.mp4>
+  studio                   Arranca remotion studio (npm run dev)
+  setup                    Instala node_modules
+
+Detalle: SKILL.md
+EOF
+}
+
+self=$(readlink -f "${BASH_SOURCE[0]}")
+SKILL_DIR=$(dirname "$(dirname "$self")")
+REMOTION_DIR="$SKILL_DIR/remotion"
+
+ensure_setup() {
+  if [ ! -d "$REMOTION_DIR/node_modules" ]; then
+    echo "ERROR: Remotion no instalado. Corre: video-short setup" >&2
+    exit 1
+  fi
+}
+
+cmd_setup() {
+  cd "$REMOTION_DIR"
+  npm install
+}
+
+cmd_list() {
+  cat <<'EOF'
+five-bullets   Hook + 5 bullets + CTA (45s) [esqueleto]
+quote-card     Cita grande con autor (15s) [esqueleto]
+step-by-step   Pasos numerados (60s) [esqueleto]
+
+NOTA: templates por implementar. Para produccion ya, usar video-compose.
+EOF
+}
+
+cmd_render() {
+  ensure_setup
+  local template="" props="" out=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --template) template="$2"; shift 2 ;;
+      --props) props="$2"; shift 2 ;;
+      --out) out="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+  [ -z "$template" ] || [ -z "$props" ] || [ -z "$out" ] && {
+    echo "ERROR: --template, --props y --out son requeridos" >&2; exit 1
+  }
+  echo "WARN: video-short renderer aun en esqueleto. Para produccion usar video-compose."
+  echo "Template solicitado: $template (no implementado)"
+  echo "Props: $props -> $out"
+  exit 9
+}
+
+cmd_studio() {
+  ensure_setup
+  cd "$REMOTION_DIR"
+  npm run dev
+}
+
+cmd="${1:-help}"
+shift || true
+case "$cmd" in
+  list-templates) cmd_list ;;
+  render) cmd_render "$@" ;;
+  studio) cmd_studio ;;
+  setup) cmd_setup ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

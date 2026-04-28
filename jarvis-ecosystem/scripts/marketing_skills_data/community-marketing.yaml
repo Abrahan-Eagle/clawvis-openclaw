@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: community-marketing
+template_key: growth
+summary_es: |
+  Construye y activa comunidades online para crecimiento y lealtad.
+triggers_es:
+  - Discord
+  - Slack community
+  - ambassadors
+triggers_en:
+  - community marketing
+  - community-led
+coord_category: growth
+related_local:
+  - social-content
+  - referral-program
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

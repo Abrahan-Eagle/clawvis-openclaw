@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export NODE_PATH="${DIR}/node_modules"
+if [[ ! -d "$DIR/node_modules/playwright" ]]; then
+  echo '{"error":"run: cd skills/browser-playwright && npm install && npx playwright install chromium"}' 2>&1
+  exit 1
+fi
+exec node "$DIR/src/run.mjs" "$@"

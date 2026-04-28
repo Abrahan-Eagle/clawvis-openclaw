@@ -37,9 +37,41 @@ JARVIS_WORKSPACE_BASE=/home/aipp/jarvis-ecosystem \
 
 (ajusta ambas rutas a tu usuario y clon). Script: [../scripts/sync-jarvis-skills-from-repo.sh](../scripts/sync-jarvis-skills-from-repo.sh).
 
-O sustituir `jarvis-ecosystem` del usuario por **symlink** al repo (regla 1 arriba) y reiniciar el gateway.
+O sustituir `jarvis-ecosystem` del usuario por **symlink** al clon (regla 1 arriba) y reiniciar el gateway.
 
 **Alternativa dev:** en `~/.openclaw/openclaw.json`, `agents.list[].workspace` puede apuntar **directamente** al clon, p. ej. `/var/www/clawvis-openclaw/jarvis-ecosystem/agents/jarvis`, para evitar duplicados (solo si esa ruta existe en la misma maquina que el gateway).
+
+## Marketing skills (40 profundas)
+
+Los agentes `mkt-*` necesitan también el árbol **`agents/marketing/skills/`** (marketingskills adaptadas). El script **`sync-jarvis-skills-from-repo.sh` no las copia**.
+
+**Sincronizar marketing** (paralelo al de Jarvis):
+
+```bash
+JARVIS_WORKSPACE_BASE=/home/aipp/jarvis-ecosystem \
+  /var/www/clawvis-openclaw/jarvis-ecosystem/scripts/sync-marketing-skills-from-repo.sh
+```
+
+Comprobación rápida:
+
+```bash
+ls /home/aipp/jarvis-ecosystem/agents/marketing/skills/copywriting/SKILL.md
+```
+
+Script: [../scripts/sync-marketing-skills-from-repo.sh](../scripts/sync-marketing-skills-from-repo.sh).
+
+## Automations (raíz vs subcarpeta)
+
+El CLI `clawflows list` solo enumera `*.yaml` en la **raíz** de `automations/`. Las copias planas (`jarvis-morning-briefing.yaml`, etc.) deben mantenerse **idénticas** a los YAML canónicos en `automations/jarvis/`, `marketing/`, etc.
+
+Para propagar cambios **subcarpeta → raíz** sin drift manual, desde `jarvis-ecosystem/`:
+
+```bash
+./scripts/sync-automations-yaml.sh          # aplica copias
+./scripts/sync-automations-yaml.sh --check  # solo comprueba (exit ≠ 0 si hay diferencias)
+```
+
+Detalle de pares y convención: [automations/README.md](../automations/README.md).
 
 ## Historial y secretos
 

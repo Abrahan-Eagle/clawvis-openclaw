@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: programmatic-seo
+template_key: seo
+summary_es: |
+  SEO programático con plantillas + datos estructurados y control de calidad.
+triggers_es:
+  - pSEO
+  - plantillas SEO
+  - datasets
+triggers_en:
+  - programmatic SEO
+  - pSEO
+coord_category: seo
+related_local:
+  - site-architecture
+  - schema-markup
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

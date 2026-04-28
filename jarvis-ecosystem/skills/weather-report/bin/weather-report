@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Open-Meteo (sin API key). Inspiración: patrón de actions/weather en Jarvis-MK37 — re-implementación propia.
+set -euo pipefail
+
+usage() {
+  echo "Uso: weather-report [--lat N] [--lon M] [nombre_ciudad]" >&2
+  echo "  Sin args: default Maracaibo, VE (10.65, -71.6333)" >&2
+  echo "  Salida: JSON (current + request_args)" >&2
+  exit 1
+}
+
+LAT="${WEATHER_DEFAULT_LAT:-10.65}"
+LON="${WEATHER_DEFAULT_LON:--71.6333}"
+LABEL="Maracaibo"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --lat) LAT="$2"; shift 2 ;;
+    --lon) LON="$2"; shift 2 ;;
+    -h|--help) usage ;;
+    *) LABEL="$*"; break ;;
+  esac
+done
+
+URL="https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto"
+JSON=$(curl -fsS --max-time 15 "$URL") || { echo '{"error":"fetch_failed"}'; exit 1; }
+
+echo "$JSON" | jq --arg label "$LABEL" --argjson lat "$LAT" --argjson lon "$LON" \
+  '{
+     label: $label,
+     lat: $lat,
+     lon: $lon,
+     current: .current,
+     source: "open-meteo"
+   }'

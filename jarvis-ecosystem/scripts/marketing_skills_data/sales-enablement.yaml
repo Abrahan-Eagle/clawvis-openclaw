@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: sales-enablement
+template_key: sales_derived
+summary_es: |
+  Colateral comercial: decks, one-pagers, battlecards y objeciones.
+triggers_es:
+  - battlecard
+  - deck ventas
+  - one-pager
+triggers_en:
+  - sales enablement
+  - battlecard
+coord_category: sales
+related_local:
+  - competitor-profiling
+  - customer-research
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

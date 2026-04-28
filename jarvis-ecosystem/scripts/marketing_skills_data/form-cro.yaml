@@ -1,0 +1,18 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: form-cro
+template_key: cro
+summary_es: |
+  Optimiza formularios (lead, contacto, demo): campos, errores y microcopy.
+triggers_es:
+  - formulario
+  - lead form
+  - demo request
+triggers_en:
+  - lead form
+  - contact form
+coord_category: cro
+related_local:
+  - page-cro
+  - copywriting
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

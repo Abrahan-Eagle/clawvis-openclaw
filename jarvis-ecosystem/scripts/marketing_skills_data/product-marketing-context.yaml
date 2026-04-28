@@ -1,0 +1,23 @@
+# Auto-generado por scripts/generate_marketing_skills.py — no editar a mano salvo saber que se sobrescribe.
+slug: product-marketing-context
+template_key: foundation
+summary_es: |
+  Crea y mantiene el documento de contexto de marketing (producto, audiencia, posicionamiento) que el resto de skills debe leer primero.
+triggers_es:
+  - contexto de marketing
+  - ICP
+  - posicionamiento
+  - marketing-context.md
+  - antes de copy
+triggers_en:
+  - marketing context
+  - ICP
+  - positioning
+  - set up context
+coord_category: foundation
+related_local:
+  - copywriting
+  - page-cro
+  - customer-research
+body_sections_note: >-
+  El cuerpo largo se renderiza desde scripts/marketing_skills_v2/templates.py + manifest.py (plantilla por template_key).

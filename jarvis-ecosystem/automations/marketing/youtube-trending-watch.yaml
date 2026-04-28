@@ -1,0 +1,28 @@
+# Marketing — recordatorio de tendencias / video (usar con youtube-transcript + summarize)
+name: youtube-trending-watch
+description: Recordatorio semanal para vigilar nichos en YouTube (transcribir + resumir vía skills del repo)
+author: jarvis-ecosystem
+version: 1.0.0
+
+trigger:
+  schedule: "0 10 * * 1"
+
+config:
+  niche:
+    description: "Tema o competidor a vigilar (texto libre para el operador)"
+    default: "actualizar con brief del CEO"
+
+steps:
+  - name: day
+    action: evaluate
+    expression: new Date().toISOString().slice(0, 10)
+    capture: today
+
+  - name: remind
+    action: notify
+    message: |
+      Marketing — YouTube trending / niche watch (${today})
+      - Revisar tendencias (YouTube UI o Data API con clave; ver skill youtube-transcript/trending-hint)
+      - Para videos clave: `skills/youtube-transcript` → transcript → `summarize`
+      - Registrar en Trello/Notion según flujo
+      Nicho / foco: ${config.niche}
