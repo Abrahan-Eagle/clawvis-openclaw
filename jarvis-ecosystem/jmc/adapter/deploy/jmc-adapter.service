@@ -1,0 +1,4 @@
+# Generada por scripts/jmc-systemd-install.sh en /etc/systemd/system/jmc-adapter.service
+# No editar a mano salvo override: sudo systemctl edit jmc-adapter
+#
+# Variables: /etc/jmc/jmc-adapter.env (ejemplo en jmc-adapter.env.example)

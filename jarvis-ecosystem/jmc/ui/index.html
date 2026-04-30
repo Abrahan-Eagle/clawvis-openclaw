@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:* http://localhost:* https://127.0.0.1:* https://localhost:*; base-uri 'self'; object-src 'none'" />
+  <title>JMC</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navegación principal">
+      <div class="sidebar-brand">
+        <span class="sidebar-logo" id="sidebar-brand-logo" aria-hidden="true">◆</span>
+        <div class="sidebar-brand-text">
+          <div class="sidebar-title" id="sidebar-brand-name">JMC</div>
+          <div class="sidebar-sub" id="sidebar-brand-sub">v1.11</div>
+        </div>
+        <span class="sidebar-notif-wrap">
+          <button type="button" class="sidebar-notif-btn" id="btn-sidebar-notif" aria-label="Notificaciones" title="Notificaciones">🔔</button>
+          <span class="sidebar-global-badge" id="sidebar-global-badge" aria-live="polite" title=""></span>
+        </span>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-theme muted" style="padding:0.35rem 0.75rem;font-size:0.78rem;border-top:1px solid var(--border)">
+        <span>Tema</span>
+        <button type="button" class="btn btn--ghost btn-sm" data-theme-pick="auto">Auto</button>
+        <button type="button" class="btn btn--ghost btn-sm" data-theme-pick="light">Claro</button>
+        <button type="button" class="btn btn--ghost btn-sm" data-theme-pick="dark">Oscuro</button>
+        <button type="button" class="btn btn--ghost btn-sm" id="btn-forget-token" title="Limpia token y caches locales">Olvidar token</button>
+      </div>
+      <div class="sidebar-foot muted">
+        <div id="sidebar-foot-status" class="sidebar-foot-status" aria-live="polite" title="">Cargando estado…</div>
+        <div class="sidebar-foot-shortcuts">Atajos: <button type="button" class="sidebar-kbd-btn" id="sidebar-shortcuts" aria-label="Ver atajos de teclado">?</button></div>
+      </div>
+    </aside>
+    <div class="main-wrap">
+      <header class="app-header">
+        <div id="jmc-auth-banner" class="jmc-auth-banner" hidden role="alert">Demasiados fallos de auth en esta IP — espere o revise <span class="mono">/v1/auth/status</span>.</div>
+        <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Menú">☰</button>
+        <div class="header-health" id="health-dot" title="Estado API">
+          <span class="health-led health-led--unknown"></span>
+          <span id="health-label" class="muted">…</span>
+        </div>
+        <span id="poll-readout" class="muted header-poll-readout" aria-live="polite"></span>
+        <div class="header-actions">
+          <button type="button" id="btn-search-global" class="btn btn--ghost btn-sm" title="Búsqueda en repo (Ctrl+Shift+F)">Buscar</button>
+          <span id="export-hint" class="muted export-hint" title=""></span>
+          <button type="button" id="btn-connection" class="btn btn--ghost btn-connection" aria-expanded="false" aria-controls="connection-popover">Conexión</button>
+          <button type="button" id="btn-export-view" class="btn btn--ghost" title="Exportar JSON (Alt+Shift+E)">Export JSON</button>
+        </div>
+      </header>
+      <div id="connection-popover" class="connection-popover" hidden role="region" aria-label="Conexión y polling">
+        <div class="connection-popover-inner">
+          <label class="muted" for="api-base">URL base del API (opcional)</label>
+          <input type="url" id="api-base" class="input-token" placeholder="http://127.0.0.1:8765 — vacío = misma pestaña" autocomplete="off" aria-label="Origen del adapter JMC (host y puerto)" />
+          <label class="muted" for="token">Bearer</label>
+          <input type="password" id="token" class="input-token" placeholder="token" autocomplete="off" aria-label="Token Bearer para el adapter" />
+          <button type="button" id="save-token" class="btn btn--primary">Guardar</button>
+          <span id="auth-status" class="muted"></span>
+          <label class="muted" for="poll">Polling (s)</label>
+          <input type="number" id="poll" class="input-num" value="15" min="5" max="300" aria-label="Intervalo de actualización en segundos" />
+        </div>
+      </div>
+      <main id="main" class="main-content"></main>
+    </div>
+  </div>
+
+  <div id="search-backdrop" class="cmdk-backdrop" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-labelledby="search-dialog-title">
+      <h2 id="search-dialog-title" class="visually-hidden">Búsqueda global</h2>
+      <input type="search" id="search-global-input" class="cmdk-input" placeholder="Texto en MEMORY, docs, skills… (mín. 2 caracteres)" autocomplete="off" aria-label="Búsqueda global en el repo" />
+      <ul id="search-global-list" class="cmdk-list"></ul>
+      <p class="cmdk-hint muted">Esc cerrar · <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></p>
+    </div>
+  </div>
+
+  <div id="cmdk-backdrop" class="cmdk-backdrop" hidden>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-labelledby="cmdk-title">
+      <h2 id="cmdk-title" class="visually-hidden">Paleta de comandos</h2>
+      <input type="search" id="cmdk-input" class="cmdk-input" placeholder="Ir a vista, abrir tarea, filtrar…" autocomplete="off" aria-label="Buscar en la paleta" />
+      <ul id="cmdk-list" class="cmdk-list"></ul>
+      <p class="cmdk-hint muted">Esc cerrar · clic para ejecutar</p>
+    </div>
+  </div>
+
+  <div id="modal-backdrop" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" id="modal-box">
+      <button type="button" class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="components/tables.js"></script>
+  <script src="components/chat.js"></script>
+  <script src="components/kanban.js"></script>
+  <script src="state/filters.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

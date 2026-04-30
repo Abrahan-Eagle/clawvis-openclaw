@@ -1,0 +1,12 @@
+# Entornos locales y artefactos de build (no versionar)
+.venv/
+.venv-*/
+.venv-test/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Instalaciones accidentales bajo adapter/ (deps van por pip / pyproject)
+adapter/psutil/
+adapter/psutil-*.dist-info/
