@@ -22,6 +22,15 @@ jarvis-ecosystem/skills/browser-playwright/node_modules/
 # Python
 __pycache__/
 *.py[cod]
+.venv/
+**/.venv/
+**/.venv-*/
+
+# Venvs locales del ecosistema (no versionar)
+jarvis-ecosystem/.venv-jmc/
+jarvis-ecosystem/agents/jarvis/.venv-docconv/
+jarvis-ecosystem/desktop/**/.venv/
+tools/**/.venv/
 
 # OS / editor
 .DS_Store
