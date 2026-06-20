@@ -1,275 +1,208 @@
 ---
 name: scenario-analysis-ops
-description: "Analisis de escenarios what-if para decisiones estrategicas del holding. Semilla -> contexto -> variables -> escenarios -> informe iterativo con matriz de riesgos y acciones Trello."
+description: >
+  Analisis what-if estrategico sin motor de simulacion: semilla, variables, escenarios, matriz de riesgos, iteracion.
+  Trigger: que pasa si, escenarios, comparar opciones estrategicas, riesgos de decision.
+license: UNLICENSED
+metadata:
+  author: JARVIS Global
+  version: "1.0"
+  scope: [global]
+  category: ops
+  upstream: clawvis:scenario-analysis-ops
+  auto_invoke:
+    - "Que pasa si decision estrategica"
+    - "Comparar escenarios base optimista pesimista"
+    - "Matriz de riesgos what-if"
+  triggers: what-if, escenarios, que pasa si, analisis estrategico, matriz riesgos
+  related-skills:
+    - strategic-briefing-ops
+    - scenario-router
+    - strangeverse
+    - deep-interview-ops
+    - brainstorming-ops
+    - task-pipeline-ops
+    - writing-plans
+allowed-tools: [Read, Edit, Write, Glob, Grep, Bash]
 ---
 
 # Scenario Analysis Ops
 
-Inspirado en el patron semilla-a-informe de simuladores multi-agente (MiroFish et al.), adaptado al ecosistema Jarvis sin motor de simulacion ni dependencias externas. Produce informes de escenarios estructurados e iterables.
+Patrón **semilla → contexto → variables → escenarios → informe iterativo**, inspirado en simuladores multi-agente (MiroFish / StrangeVerse) pero **sin motor de simulación** ni dependencias externas. Para simulación social con muchos agentes, escalar a `strangeverse` vía `scenario-router`.
 
-## Cuando se activa
+## Cuándo usar
 
-- Decisiones estrategicas que afectan mas de una empresa del holding
-- Evaluar expansion a nuevo servicio, mercado o cliente grande
-- Cambios de pricing o modelo de negocio
-- Evaluar riesgos operativos (dependencia de proveedor, cambio de plataforma, contratacion)
-- Comparar inversiones alternativas (publicidad vs contenido organico, Workana vs outbound directo)
-- Cualquier situacion donde el CEO necesite ver "que pasa si X cambia"
+- Decisiones estratégicas (pricing, expansión, priorización, inversión)
+- Evaluar riesgos operativos o de mercado sin coste LLM
+- Comparar alternativas antes de Spec Kit o implementación
+- Cualquier "¿qué pasa si X cambia?" donde no hace falta simular redes sociales
 
-NO usar para:
-- Tareas operativas del dia a dia (usar `task-pipeline-ops`)
-- Propuestas a clientes (usar `proposal-ops`)
-- Brainstorming de ideas (usar `brainstorming-ops`)
+**No usar para:**
 
-## Relacion con otros skills
+- Tareas operativas del día (`task-pipeline-ops`)
+- Implementar feature o bugfix (`sdd-router`)
+- Brainstorming libre de ideas (`brainstorming-ops`)
+- Dinámica social / opinión pública masiva (`strangeverse`)
+
+## Relación con otros skills
 
 ```
-deep-interview-ops  (si el pedido es vago)
-        |
-        v
+deep-interview-ops  (semilla vaga)
+        ↓
 scenario-analysis-ops  (este skill)
-        |
-        v
-brainstorming-ops  (para disenar la ejecucion del escenario elegido)
-        |
-        v
-task-pipeline-ops  (para ejecutar)
+        ↓
+brainstorming-ops → writing-plans / sdd-router / task-pipeline-ops
 ```
 
-## Prerequisitos obligatorios
+## Prerrequisitos
 
-**ANTES de analizar:**
-1. Leer `GOALS.md` — los escenarios deben evaluarse contra los goals activos
-2. Leer `LESSONS.md` — evitar repetir errores documentados
-3. Si hay cliente involucrado: leer su dossier en `client-dossiers/`
-4. Si hay datos recientes relevantes: consultar MemPalace (`mempalace_search`)
-5. Si el tema toca codigo/infra del ecosistema: consultar Graphify
+**Antes de analizar (repo Cursor genérico):**
 
-## El proceso
+1. `AGENTS.md` del proyecto activo
+2. `docs/active_context.md` si existe
+3. Docs de producto relevantes (`README.md`, `docs/product-marketing-context.md`, brand, etc.)
+4. **Opcional:** briefing reciente de `strategic-briefing-ops` (decisiones pendientes, riesgos) como input de contexto
+5. Si el cwd es **clawvis** `jarvis-ecosystem`: además `GOALS.md`, `LESSONS.md`, `client-dossiers/` según aplique
 
-### Fase 1: Definir la semilla
+Documentar fuentes en el informe — cada claim trazable.
 
-La semilla es la pregunta o situacion que dispara el analisis. Debe ser una frase concreta, no un tema vago.
+## Proceso
 
-| Semilla debil | Semilla fuerte |
+### Fase 1: Semilla concreta
+
+| Semilla débil | Semilla fuerte |
 |---------------|----------------|
-| "Mejorar ventas" | "Que pasa si duplicamos el presupuesto de outbound y reducimos Workana a 50%?" |
-| "Expandir el holding" | "Que impacto tiene activar dev-agency en Q3 con 2 desarrolladores freelance?" |
-| "Competencia" | "Si un competidor ofrece carruseles IG a mitad de precio, como afecta a marketing?" |
+| "Mejorar ventas" | "¿Qué pasa si subimos comisión a 3% en Q3 con solo rubro Animales activo?" |
+| "Expandir mercado" | "¿Si abrimos Zonix en Valencia con 5 farmacias piloto, qué CAC asumimos?" |
+| "Competencia" | "Si un competidor baja precio 30% en carruseles IG, ¿cómo afecta retención?" |
 
-Si la semilla es vaga, activar `deep-interview-ops` para acotar antes de continuar.
+Semilla vaga → `deep-interview-ops` primero.
 
-### Fase 2: Inyeccion de contexto
+### Fase 2: Contexto
 
-Recopilar automaticamente:
+Recopilar del repo y datos del usuario:
 
 ```
 Contexto = {
-  goals:     GOALS.md (goals activos de las empresas involucradas),
-  pipeline:  Estado actual del pipeline (Trello o ultimo health check),
-  dossiers:  Clientes relevantes al escenario,
-  memoria:   Decisiones y lecciones recientes (MEMORY.md + LESSONS.md),
-  externo:   Si aplica, last30days-openclaw para pulso de mercado
+  producto:   AGENTS.md + active_context + docs dominio,
+  restricciones: stack, regulación, deuda técnica citada,
+  datos:      métricas que el usuario proporcione,
+  externo:    búsqueda web solo si el usuario pide o falta dato crítico
 }
 ```
 
-Documentar el contexto usado en el informe — todo claim debe ser trazable.
+### Fase 3: Variables (3–6)
 
-### Fase 3: Identificar variables clave
+| Variable | Actual | Rango | Unidad | Controlable? |
+|----------|--------|-------|--------|--------------|
+| … | … | … | … | Sí / Parcial / No |
 
-Extraer 3-6 variables que determinan el resultado del escenario. Cada variable necesita:
+### Fase 4: Escenarios (mínimo 3)
 
-```
-| Variable | Valor actual | Rango posible | Unidad | Controlable? |
-|----------|-------------|---------------|--------|--------------|
-| Presupuesto outbound | $500/mes | $0 - $2000 | USD | Si |
-| Leads Workana / semana | 8 | 2 - 15 | leads | Parcial |
-| Win rate propuestas | 18% | 10% - 35% | % | Si (mejorando propuestas) |
-| Timeline activacion dev-agency | N/A | Q3 - Q4 2026 | trimestre | Si |
-```
+- **Base:** continuidad actual
+- **Optimista:** variables controlables a favor
+- **Pesimista:** externos en contra
+- Opcional: escenario nombrado por el usuario
 
-**Variables controlables** = las que el holding puede cambiar con una decision.
-**Variables parciales** = dependen de factores externos pero se pueden influenciar.
-**Variables externas** = fuera de control (mercado, competencia, regulacion).
-
-### Fase 4: Construir escenarios
-
-Minimo 3 escenarios. Cada uno es una combinacion especifica de valores de las variables.
-
-#### Escenario Base (continuidad)
-
-Que pasa si todo sigue como esta. Usar valores actuales de todas las variables.
-
-#### Escenario Optimista
-
-Que pasa si las variables controlables se mueven a favor y las externas son neutrales.
-
-#### Escenario Pesimista
-
-Que pasa si las variables externas se mueven en contra y las controlables tienen el impacto minimo esperado.
-
-#### Escenarios adicionales (opcional)
-
-Si hay una combinacion especifica que el CEO quiere evaluar, agregarla como escenario nombrado.
-
-**Tabla de escenarios:**
-
-```
-| Escenario | Var 1 | Var 2 | Var 3 | Resultado estimado | Confianza |
-|-----------|-------|-------|-------|--------------------|-----------|
-| Base | actual | actual | actual | [resultado] | Alta |
-| Optimista | +X | +Y | neutral | [resultado] | Media |
-| Pesimista | -X | neutral | -Z | [resultado] | Media |
-| [Nombrado] | valor | valor | valor | [resultado] | Baja-Media |
-```
-
-**Confianza:** Alta = basado en datos reales; Media = proyeccion razonable; Baja = supuesto sin datos.
+Tabla comparativa con **confianza** (Alta / Media / Baja).
 
 ### Fase 5: Matriz de riesgos
 
-Para cada escenario, identificar los 3-5 riesgos principales.
-
-```
-| Riesgo | Probabilidad | Impacto | Escenario | Mitigacion |
-|--------|-------------|---------|-----------|------------|
-| [descripcion] | Alta/Media/Baja | Alto/Medio/Bajo | Optimista | [accion concreta] |
-| [descripcion] | ... | ... | Pesimista | [accion concreta] |
-```
-
-Riesgos con Probabilidad Alta + Impacto Alto = **deal-breakers** que deben resolverse antes de proceder.
+Probabilidad × Impacto; deal-breakers = Alta + Alto.
 
 ### Fase 6: Resumen ejecutivo
 
-Escribir PRIMERO (antes de presentar el informe completo). 5-7 oraciones que responden:
-
-1. Que se analizo (semilla)
-2. Que escenario recomiendas y por que
-3. Cual es el riesgo principal
-4. Que decision necesita el CEO
-5. Que goal del holding se avanza
-
-**El resumen ejecutivo va AL INICIO del informe, no al final.**
+**Al inicio del informe** (5–7 oraciones): qué se analizó, recomendación, riesgo principal, decisión requerida.
 
 ### Fase 7: Acciones recomendadas
 
-Para el escenario recomendado, listar acciones concretas:
+| # | Acción | Área | Plazo |
+|---|--------|------|-------|
+| 1 | … | Backend/PM/… | … |
 
-```
-| # | Accion | Responsable | Goal | Plazo | Trello |
-|---|--------|-------------|------|-------|--------|
-| 1 | [accion concreta] | [agente o empresa] | G-XXX | [dias/semana] | Crear tarjeta |
-| 2 | ... | ... | ... | ... | ... |
-```
+Sin herramientas externas obligatorias; el usuario decide tracking.
 
-Si requiere aprobacion: indicar el gate (`AG-XX`) de `APPROVAL_GATES.md`.
+## Iteración
 
-## Protocolo de iteracion
+Si el usuario cambia una variable:
 
-Este es el patron clave que diferencia scenario-analysis de un brainstorming one-shot:
+1. Recalcular escenarios afectados
+2. Actualizar riesgos y resumen
+3. Marcar `--- Iteración N (variable: …) ---`
+4. Máximo **5 iteraciones**; luego pedir más datos o escalar a `strangeverse`
 
-**Cuando el CEO dice "y si cambio X?":**
+## Escalar a StrangeVerse
 
-1. Identificar que variable(s) cambiaron
-2. Recalcular SOLO los escenarios afectados (no todo el informe)
-3. Actualizar matriz de riesgos si cambian probabilidades
-4. Regenerar resumen ejecutivo y acciones
-5. Marcar la iteracion:
+Cuando hace falta **simulación multi-agente** (opinión pública, narrativa emergente, semilla larga en PDFs):
 
-```
---- Iteracion 2 (variable: presupuesto outbound = $1500) ---
-[Nuevo resumen ejecutivo]
-[Escenarios actualizados]
-[Nuevas acciones si cambian]
-```
+1. Confirmar coste LLM/Zep con el usuario
+2. `scenario-router` → `strangeverse status`
+3. Flujo API: ontology → build → sim → report (ver skill `strangeverse`)
 
-**Maximo 5 iteraciones** antes de tomar decision. Si despues de 5 iteraciones no hay claridad, escalar: el problema probablemente necesita mas datos, no mas escenarios.
-
-## Plantilla de informe completo
+## Plantilla de informe
 
 ```markdown
-# Analisis de Escenarios: [titulo corto]
+# Análisis de escenarios: [título]
 
-**Fecha:** YYYY-MM-DD
-**Semilla:** [la pregunta original]
-**Iteracion:** 1 de N
-**Goals relacionados:** G-XXX, G-YYY
+**Fecha:** YYYY-MM-DD | **Semilla:** … | **Iteración:** 1
 
 ## Resumen ejecutivo
-
-[5-7 oraciones: que se analizo, recomendacion, riesgo principal, decision requerida]
+[5-7 oraciones]
 
 ## Contexto
+[fuentes citadas]
 
-- Goals: [cuales aplican]
-- Pipeline: [estado relevante]
-- Clientes: [dossiers consultados]
-- Datos externos: [si se uso last30days u otra fuente]
-- Lecciones previas: [si aplican de LESSONS.md]
-
-## Variables clave
-
-| Variable | Valor actual | Rango | Controlable? |
-|----------|-------------|-------|--------------|
-| ... | ... | ... | ... |
+## Variables
+| Variable | Actual | Rango | Controlable? |
 
 ## Escenarios
-
-### Base
-[Descripcion + resultado]
-
-### Optimista
-[Descripcion + resultado]
-
-### Pesimista
-[Descripcion + resultado]
+### Base / Optimista / Pesimista
 
 ## Tabla comparativa
-
-| Escenario | Var 1 | Var 2 | ... | Resultado | Confianza |
-|-----------|-------|-------|-----|-----------|-----------|
-| ... | ... | ... | ... | ... | ... |
+| Escenario | … | Resultado | Confianza |
 
 ## Matriz de riesgos
-
-| Riesgo | Probabilidad | Impacto | Mitigacion |
-|--------|-------------|---------|------------|
-| ... | ... | ... | ... |
+| Riesgo | Probabilidad | Impacto | Mitigación |
 
 ## Acciones recomendadas
+| # | Acción | Área | Plazo |
 
-| # | Accion | Responsable | Goal | Plazo | Gate |
-|---|--------|-------------|------|-------|------|
-| ... | ... | ... | ... | ... | ... |
-
-## Decision requerida
-
-[Que necesita decidir el CEO para avanzar]
+## Decisión requerida
+[qué debe decidir el líder del proyecto]
 ```
 
-## Donde guardar el informe
+## Dónde guardar
 
-- **Trello:** Crear tarjeta en el tablero de la empresa principal involucrada, columna "Review"
-- **Disco:** Si el informe es largo o tiene multiples iteraciones: `~/Documents/JARVIS-DOCUMENTS/[empresa]/scenarios/YYYY-MM-DD-[slug].md`
-- **Memoria:** Anotar la decision final en `MEMORY.md` una vez que el CEO decida
+- Repo producto: `docs/scenarios/YYYY-MM-DD-<slug>.md` (con aprobación del usuario)
+- clawvis holding: `~/Documents/JARVIS-DOCUMENTS/...` según convención local
 
 ## Checklist
 
-- [ ] Semilla concreta (no vaga)
-- [ ] Contexto inyectado con fuentes citadas
-- [ ] 3-6 variables identificadas con valores y rangos
-- [ ] Minimo 3 escenarios con tabla comparativa
-- [ ] Matriz de riesgos con mitigaciones
-- [ ] Resumen ejecutivo AL INICIO
-- [ ] Acciones con responsable, goal y plazo
-- [ ] Decision requerida explicita para el CEO
-- [ ] Si es iteracion: marcada con numero y variable cambiada
+- [ ] Semilla concreta
+- [ ] Contexto con fuentes
+- [ ] ≥3 escenarios + tabla
+- [ ] Matriz de riesgos
+- [ ] Resumen al inicio
+- [ ] Decisión explícita
+- [ ] `verification-before-completion` al cerrar
 
-## Output esperado
+---
 
-Entregar:
-- Informe completo usando la plantilla
-- Tabla comparativa de escenarios
-- Matriz de riesgos
-- Lista de acciones con Trello
-- Nota clara de que decision necesita el CEO
-- Listo para iterar si el CEO cambia una variable
+## Overlay clawvis — holding OpenClaw
+
+### Contexto automático (Fase 2 escenarios)
+
+Recopilar antes de informe what-if:
+
+- `GOALS.md` — goals activos de empresas involucradas
+- Pipeline Trello o último `pipeline-health-ops`
+- `client-dossiers/` relevantes
+- `MEMORY.md`, `LESSONS.md`
+- Opcional: `last30days-openclaw` para pulso de mercado
+
+### Acciones post-informe
+
+- Crear/actualizar tarjetas Trello con acciones recomendadas
+- Escalar al CEO decisiones con deal-breakers (Probabilidad Alta + Impacto Alto)
+
+Doc holding: [FORENSE_MIROFISH_RESUMEN.md](../../../docs/FORENSE_MIROFISH_RESUMEN.md), [FLUJO_TRELLO_ECOSISTEMA.md](../../../docs/FLUJO_TRELLO_ECOSISTEMA.md).

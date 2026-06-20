@@ -1,74 +1,82 @@
 ---
 name: brainstorming-ops
-description: "OBLIGATORIO antes de cualquier tarea compleja: propuestas comerciales, campanas de marketing, features, scripts, integraciones. Explora contexto, pregunta, propone alternativas, presenta diseno y obtiene aprobacion antes de ejecutar."
+description: >
+  OBLIGATORIO antes de tareas complejas en proyecto activo: pantallas, providers, navegación,
+  flujos KYC/onboarding. Propone alternativas y obtiene aprobación antes de codificar.
+  Trigger: Planificar módulo, feature ambiguo, rediseño UI.
+license: UNLICENSED
+metadata:
+  author: proyecto Team
+  version: "1.0.0"
+  scope: [root]
+  auto_invoke:
+    - "Planificar desarrollo"
+    - "Iniciar módulo"
+  related-skills:
+    - deep-interview-ops
+    - jarvis-core
+    - product-ui-design
 ---
 
-# Brainstorming operativo
+# Brainstorming ops — proyecto activo
 
-Inspirado en superpowers:brainstorming. Adaptado para operaciones de negocio, no solo codigo.
+Adaptado desde clawvis-openclaw.
 
-NO ejecutes ninguna accion hasta presentar un diseno y obtener aprobacion del CEO o del agente coordinador.
+## Regla
 
-## Cuando se activa
+**NO escribir código** hasta diseño aprobado por el usuario.
 
-- Propuesta comercial a un cliente
-- Campana de marketing nueva
-- Nuevo script o automatizacion
-- Cambio en la configuracion del ecosistema (openclaw.json, integraciones)
-- Cualquier tarea que toque mas de un agente o empresa del holding
+## Cuándo se activa
 
-## Anti-patron: "Esto es muy simple para pensarlo"
-
-Toda tarea pasa por este proceso. Una propuesta de 2 parrafos, un post para redes, un script de 10 lineas. "Simple" es donde las suposiciones no examinadas causan mas trabajo desperdiciado. El diseno puede ser corto (2-3 oraciones para cosas triviales), pero DEBES presentarlo y obtener aprobacion.
+- Nueva pantalla o flujo (marketplace, chat, perfil, KYC)
+- Cambios en Provider / navegación
+- Tema, accesibilidad, responsive
+- Integración API nueva en servicios
 
 ## Checklist
 
-1. **Explorar contexto** — revisar dossier del cliente, Trello, MEMORY.md, docs relevantes
-2. **Preguntas clarificadoras** — una a la vez, entender proposito, restricciones, criterio de exito
-3. **Proponer 2-3 alternativas** — con trade-offs y tu recomendacion
-4. **Presentar diseno** — en secciones proporcionales a la complejidad, validar cada seccion
-5. **Documentar diseno** — en la tarjeta de Trello o en `memory/` segun corresponda
-6. **Obtener aprobacion** — del CEO si aplica Approval Gate (ver `docs/APPROVAL_GATES.md`)
-7. **Transicion a ejecucion** — descomponer en tareas bite-sized si es necesario
+1. Leer `AGENTS.md`, `docs/active_context.md`, `{producto}-flutter-arch`, `{producto}-ui-design`.
+2. Preguntas clarificadoras.
+3. 2–3 alternativas (widgets, estado, rutas).
+4. Plan en `.agents/plans/implementation_plan.md`.
+5. OK del usuario.
 
-## Proceso por tipo de tarea
+## Secuencia
 
-### Propuesta comercial (ventas)
+```
+deep-interview-ops (si vago) → brainstorming-ops → task-pipeline-ops → ejecución
+```
 
-1. Leer dossier del cliente (`client-dossiers/`)
-2. Preguntar: Que necesita exactamente? Presupuesto? Timeline? Competencia?
-3. Proponer 2-3 enfoques de propuesta (precio, alcance, diferenciador)
-4. Presentar borrador al CEO para aprobacion (AG-01)
-5. Solo despues de aprobacion: enviar
+## Contexto proyecto
 
-### Campana de marketing
+- Siempre `AppConfig.apiUrl` — sin URLs hardcodeadas.
+- Provider + servicios por feature.
+- Tema: `corral_x_theme.dart`.
 
-1. Revisar goals de marketing (G-M01, G-M02)
-2. Preguntar: Objetivo de la campana? Audiencia? Canal? KPIs?
-3. Proponer alternativas de contenido/canal
-4. Presentar plan al CEO para aprobacion (AG-03)
-5. Solo despues de aprobacion: ejecutar
+---
 
-### Script o automatizacion
+## Overlay clawvis — holding OpenClaw
 
-1. Revisar CLAWFLOWS.md y scripts/ existentes
-2. Preguntar: Que problema resuelve? Con que frecuencia? Que datos necesita?
-3. Proponer alternativa simple vs robusta
-4. Presentar diseno (pseudocodigo o esquema)
-5. Implementar con verificacion (ver skill verification-before-completion)
+NO ejecutar ninguna acción hasta presentar un diseño y obtener aprobación del **CEO** o del agente coordinador.
 
-## Principios
+### Cuándo se activa (holding)
 
-- **Una pregunta a la vez** — no abrumar con multiples preguntas
-- **Multiple choice cuando sea posible** — mas facil de responder
-- **YAGNI** — eliminar funcionalidades innecesarias de todo diseno
-- **Explorar alternativas siempre** — proponer 2-3 antes de decidir
-- **Validacion incremental** — presentar diseno, obtener aprobacion, luego avanzar
+- Propuesta comercial a un cliente
+- Campaña de marketing nueva
+- Nuevo script o automatización (`scripts/`, ClawFlows)
+- Cambio en `openclaw.json` o integraciones
+- Cualquier tarea que toque más de un agente o empresa del holding
 
-## Senales de que lo estas haciendo mal
+### Checklist holding
 
-- Saltar directamente a ejecutar sin preguntar
-- Enviar propuesta sin revisar dossier del cliente
-- Crear campana sin definir KPIs
-- Escribir script sin revisar si ya existe algo similar
-- "Ya se lo que necesita" sin verificar con el CEO
+1. Explorar contexto — dossier (`client-dossiers/`), Trello, MEMORY.md
+2. Preguntas clarificadoras — una a la vez
+3. Proponer 2–3 alternativas con trade-offs
+4. Presentar diseño; documentar en tarjeta Trello o `memory/`
+5. Aprobación CEO si aplica Approval Gate — [APPROVAL_GATES.md](../../../docs/APPROVAL_GATES.md)
+
+### Proceso por tipo
+
+- **Propuesta comercial:** dossier → borrador → AG-01 → enviar
+- **Campaña marketing:** goals G-M* → plan → AG-03 → ejecutar
+- **Script/automatización:** revisar CLAWFLOWS.md → diseño → `verification-before-completion`

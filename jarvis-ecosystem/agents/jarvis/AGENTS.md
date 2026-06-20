@@ -63,6 +63,21 @@ Antes de ejecutar tareas complejas, aplicar los skills de calidad en `skills/`:
 - **strategic-briefing-ops** — Briefing estrategico a nivel holding (semanal o bajo demanda): sintetiza progreso de GOALS.md, salud del pipeline, actividad marketing, clientes activos, riesgos cross-empresa, decisiones pendientes y prioridades semanales. Diferente del REPORTE_SUPERVISOR_CEO (que es por empresa); este es jarvis -> CEO a nivel holding. Ver `skills/strategic-briefing-ops/SKILL.md`.
 - **dual-retrieval-ops** — Preguntas que mezclan hechos concretos y contexto amplio: recuperacion local (dossier, MemPalace) + global (KG, Graphify), citas de fuente; patrones inspirados en LightRAG sin instalar ese servidor. Ver `skills/dual-retrieval-ops/SKILL.md` y [../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](../../docs/DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md).
 - **carousel-ops** — Carruseles Instagram y redes: guion, dimensiones, caption/hashtags, **checklist de calidad** (brief visual minimo sin plantilla, anti-patron solo texto plano, brand templates si hay, segundo intento o handoff, enlace de edicion). **Pipeline automatizado:** si el encargo es post con diseno y Composio+Canva estan activos, ejecutar herramientas hasta diseno/export (ver skill); no terminar solo en markdown. **AG-03** solo al **publicar** en la red, no al crear borrador en Canva — [../../docs/APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md). open-carrusel local opcional. Ver `skills/carousel-ops/SKILL.md` y [../../docs/CAROUSEL_IG_JARVIS.md](../../docs/CAROUSEL_IG_JARVIS.md).
+- **llm-as-judge-ops** — Auditoría automática pre-gate (score + rúbrica JSON) antes de AG-03/AG-12/AG-13 o escalación async. Rúbricas holding en overlay local. Ver `skills/llm-as-judge-ops/SKILL.md`.
+- **parallel-judge-ops** — Verificación adversarial paralela (2+ jueces) en diffs o entregables de alto riesgo; complementa llm-as-judge. Ver `skills/parallel-judge-ops/SKILL.md`.
+- **agent-loop-engineering** — Diseñar bucles de agente concisos y controlados (iteración vs prompt monolítico). Ver `skills/agent-loop-engineering/SKILL.md`.
+- **human-in-the-loop-ops** — Gates CEO/HITL/HOTL en loops autónomos; nunca push/deploy/publicación sin OK explícito. Ver `skills/human-in-the-loop-ops/SKILL.md`.
+- **cognitive-doc-design-ops** — Docs y PR con baja carga cognitiva (README, onboarding, RFC). Ver `skills/cognitive-doc-design-ops/SKILL.md`.
+- **comment-writer-ops** — Comentarios colaborativos (PR, issue, review, Slack). Ver `skills/comment-writer-ops/SKILL.md`.
+
+### Skills globales sincronizadas (jarvis-skills-library)
+
+Parte de `skills/` se mantiene alineada con la fuente canónica [jarvis-skills-library](https://github.com/AIPP/jarvis-skills-library) vía manifest `.global-sync-manifest`:
+
+- **passthrough** — `SKILL.md` idéntico al canónico (p. ej. `parallel-judge-ops`, `verification-before-completion`).
+- **overlay** — base canónica + `OVERLAY.md` holding (p. ej. `brainstorming-ops`, `llm-as-judge-ops`).
+
+Tras `git pull` en la library: ejecutar `../../scripts/sync-global-skills-from-library.sh` y `../../scripts/check-global-skills-sync.sh`. Detalle: [COHERENCIA_RUNTIME_REPO.md](../../docs/COHERENCIA_RUNTIME_REPO.md) y doc upstream en la library (`docs/CLAWVIS_INTEGRATION.md`).
 
 ### Puertas de aprobacion (Approval Gates)
 

@@ -1,0 +1,18 @@
+# Global skills synced from jarvis-skills-library
+# Format: <skill-name> <tier>
+# tier: passthrough | overlay
+llm-as-judge-ops overlay
+parallel-judge-ops passthrough
+agent-loop-engineering passthrough
+human-in-the-loop-ops passthrough
+cognitive-doc-design-ops passthrough
+comment-writer-ops passthrough
+verification-before-completion passthrough
+systematic-debugging passthrough
+brainstorming-ops overlay
+deep-interview-ops overlay
+task-pipeline-ops overlay
+structured-commits-ops overlay
+session-learner-ops overlay
+scenario-analysis-ops overlay
+strategic-briefing-ops overlay

@@ -60,6 +60,31 @@ ls /home/aipp/jarvis-ecosystem/agents/marketing/skills/copywriting/SKILL.md
 
 Script: [../scripts/sync-marketing-skills-from-repo.sh](../scripts/sync-marketing-skills-from-repo.sh).
 
+## Skills globales: jarvis-skills-library ↔ clawvis
+
+Dos capas en `agents/jarvis/skills/`:
+
+| Capa | Origen | Ejemplos |
+|------|--------|----------|
+| **global-sync** | [jarvis-skills-library](https://github.com/AIPP/jarvis-skills-library) vía manifest | `parallel-judge-ops`, `brainstorming-ops`, `llm-as-judge-ops` |
+| **local-only** | Solo clawvis (dominio holding / OpenClaw) | `carousel-ops`, `proposal-ops`, `trello`, marketing wrappers |
+
+Manifest: `agents/jarvis/skills/.global-sync-manifest` (tier `passthrough` | `overlay`).
+
+**Sincronizar desde la library** (tras cambios canónicos o `git pull` en jarvis-skills-library):
+
+```bash
+JARVIS_SKILLS_LIBRARY=/var/www/html/proyectos/AIPP/jarvis-skills-library \
+  /var/www/clawvis-openclaw/jarvis-ecosystem/scripts/sync-global-skills-from-library.sh
+
+JARVIS_SKILLS_LIBRARY=/var/www/html/proyectos/AIPP/jarvis-skills-library \
+  /var/www/clawvis-openclaw/jarvis-ecosystem/scripts/check-global-skills-sync.sh
+```
+
+Tier **overlay**: editar solo `OVERLAY.md` local; no parchear a mano el cuerpo canónico en `SKILL.md` (se regenera en sync).
+
+Doc bidireccional en la library: `docs/CLAWVIS_INTEGRATION.md`.
+
 ## Automations (raíz vs subcarpeta)
 
 El CLI `clawflows list` solo enumera `*.yaml` en la **raíz** de `automations/`. Las copias planas (`jarvis-morning-briefing.yaml`, etc.) deben mantenerse **idénticas** a los YAML canónicos en `automations/jarvis/`, `marketing/`, etc.

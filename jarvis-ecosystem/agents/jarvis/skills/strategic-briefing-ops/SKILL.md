@@ -1,232 +1,267 @@
 ---
 name: strategic-briefing-ops
-description: "Briefing estrategico a nivel holding: sintetiza goals, pipeline, marketing, riesgos y decisiones pendientes en un informe ejecutivo para el CEO. Semanal o bajo demanda."
+description: >
+  Briefing estrategico consolidado: sintetiza estado del proyecto, progreso, riesgos y decisiones pendientes
+  en un informe ejecutivo para el lider del proyecto. Semanal o bajo demanda.
+  Trigger: como va todo, estado general, briefing estrategico, resumen ejecutivo semanal.
+license: UNLICENSED
+metadata:
+  author: JARVIS Global
+  version: "1.0"
+  scope: [global]
+  category: ops
+  upstream: clawvis:strategic-briefing-ops
+  auto_invoke:
+    - "Como va todo el proyecto"
+    - "Estado general del producto"
+    - "Briefing estrategico semanal"
+    - "Resumen ejecutivo para el founder"
+  triggers: briefing estrategico, estado general, como va todo, resumen ejecutivo, god view
+  related-skills:
+    - scenario-analysis-ops
+    - scenario-router
+    - session-learner-ops
+    - verification-before-completion
+    - jarvis-core
+allowed-tools: [Read, Edit, Write, Glob, Grep, Bash]
 ---
 
 # Strategic Briefing Ops
 
-Inspirado en el patron "god view" de simuladores multi-agente: una vista periodica que sintetiza el estado completo del holding en un solo documento ejecutivo. Sin motor de simulacion — usa las fuentes de datos que ya existen en el ecosistema.
+Patrón **god-view** inspirado en simuladores multi-agente (MiroFish): vista periódica que sintetiza el estado completo en un solo documento ejecutivo. **Sin motor de simulación** — usa fuentes ya existentes en el repo y memoria del proyecto.
 
-## Cuando se activa
+Doc upstream: [docs/MIROFISH_UPSTREAM.md](../../docs/MIROFISH_UPSTREAM.md).
 
-- **Semanal** como rutina del heartbeat de jarvis (recomendado: lunes AM)
-- **Bajo demanda** cuando el CEO pide "como va todo" o "dame el estado general"
+## Cuándo se activa
+
+- **Semanal** como rutina (recomendado: lunes AM)
+- **Bajo demanda** cuando el líder pide "cómo va todo" o "estado general"
 - **Antes de decisiones grandes** como input para `scenario-analysis-ops`
-- **Despues de eventos significativos** (cierre de deal, perdida de cliente, cambio operativo)
+- **Después de eventos significativos** (release, pérdida de cliente, incidente, pivot)
 
 ## Diferencia con otros reportes
 
-| Reporte | Alcance | Autor | Destinatario |
-|---------|---------|-------|-------------|
-| **REPORTE_SUPERVISOR_CEO** | Una empresa | Supervisor | CEO |
-| **pipeline-health-ops** | Pipeline ventas | sales-hunter | jarvis/CEO |
-| **Este skill** | **Todo el holding** | **jarvis** | **CEO** |
+| Reporte | Alcance | Típico destinatario |
+|---------|---------|---------------------|
+| Reporte por módulo / sprint | Un feature o área | Tech lead / PM |
+| `scenario-analysis-ops` | Una pregunta what-if concreta | Quien decide esa decisión |
+| **Este skill** | **Vista consolidada del proyecto o holding** | **Líder / founder / CEO** |
 
-Este skill es la capa superior: toma datos de los reportes por empresa y pipeline, los sintetiza, y agrega vision cross-empresa que ningun reporte individual tiene.
+Este skill es la capa superior: sintetiza progreso, riesgos cross-área y decisiones pendientes que ningún informe puntual cubre solo.
 
 ## Fuentes de datos (recopilar en orden)
 
-### 1. Goals (estado actual)
+### 1. Estado del proyecto (progreso y metas)
 
-Leer `GOALS.md`. Para cada goal activo, evaluar:
+Leer `AGENTS.md` y `docs/active_context.md` (si existe). Extraer:
 
-```
-| Goal | Metrica | Progreso | Tendencia | Nota |
-|------|---------|----------|-----------|------|
-| G-H01 | Agentes con heartbeat | X de Y | → | |
-| G-V01 | Leads/semana | N | ↑/↓/→ | |
-| G-M01 | Posts/semana | N | ↑/↓/→ | |
-| ... | ... | ... | ... | |
-```
-
-**Tendencia**: ↑ mejorando, ↓ empeorando, → estable. Basada en las ultimas 2-4 semanas si hay datos.
-
-### 2. Pipeline de ventas
-
-Fuente: ultimo output de `pipeline-health-ops` o estado actual de Trello ventas.
-
-Extraer:
-- Coverage ratio
-- Deals activos por etapa
-- Deals estancados (>48h sin movimiento)
-- Forecast del mes
-
-Si no hay health check reciente: anotar "sin datos frescos" y recomendar ejecutar `pipeline-health-ops`.
-
-### 3. Actividad de marketing
-
-Fuente: Trello marketing, ultimos posts/carruseles, metricas si estan disponibles.
-
-Extraer:
-- Contenido publicado esta semana/periodo
-- Engagement si hay datos
-- Campanas activas
-- Alineacion con G-M01, G-M02
-
-### 4. Clientes activos
-
-Fuente: `client-dossiers/` — listar dossiers con estado activo.
+- Metas o hitos activos citados en memoria
+- Módulos completados vs en curso
+- Divergencias planes vs código si están documentadas
 
 ```
-| Cliente | Empresa | Estado | Ultima actividad | Riesgo |
-|---------|---------|--------|------------------|--------|
-| [nombre] | marketing | Activo | [fecha/accion] | Bajo/Medio/Alto |
+| Meta / hito | Métrica o criterio | Progreso | Tendencia | Nota |
+|-------------|-------------------|----------|-----------|------|
+| … | … | … | ↑/↓/→ | … |
 ```
 
-### 5. Memoria reciente
+**Tendencia:** ↑ mejorando, ↓ empeorando, → estable (últimas 2–4 semanas si hay datos).
 
-Fuente: `MEMORY.md` (ultimas entradas), `LESSONS.md`, `memory/` (ultimos 7 dias).
+### 2. Salud técnica (opcional pero recomendado)
 
-Extraer:
-- Decisiones tomadas esta semana
-- Lecciones nuevas
-- Propuestas pendientes de aprobacion
+- `git status` / rama activa vs `dev`/`main`
+- CI reciente si el usuario menciona o hay workflow en repo
+- Tests: último resultado conocido en `active_context` o walkthrough
+
+### 3. Actividad reciente
+
+Fuentes: `docs/active_context.md`, `.agents/plans/walkthrough.md`, changelog en `AGENTS.md` (sección Cambios recientes), commits recientes si relevante.
+
+- Entregas de la semana/periodo
+- Decisiones tomadas
+- Propuestas pendientes de aprobación
+
+### 4. Clientes / stakeholders (si aplica)
+
+Si el usuario o el repo tienen dossiers, CRM notes o pack inversor:
+
+```
+| Stakeholder | Contexto | Estado | Última actividad | Riesgo |
+|-------------|----------|--------|------------------|--------|
+| … | … | … | … | Bajo/Medio/Alto |
+```
+
+Sin datos: sección "sin datos de clientes en repo" — no inventar.
+
+### 5. Métricas de negocio (opcional)
+
+Solo si el usuario provee datos o existen en `docs/Lanzamiento/`, dashboards, KPIs en README. No inferir cifras.
 
 ### 6. Riesgos y blockers
 
-Consolidar de todas las fuentes anteriores:
-- Deals estancados (pipeline)
-- Goals con tendencia ↓
-- Clientes con riesgo medio/alto
-- Dependencias no resueltas (tokens, permisos, activaciones pendientes)
-- Blockers tecnicos (Composio, API limits, etc.)
+Consolidar de todas las fuentes:
+
+- Metas con tendencia ↓
+- Deuda técnica citada en memoria
+- Dependencias no resueltas (tokens, permisos, deploy)
+- Blockers de integración o regulación documentados
+
+## Workspace clawvis (opcional)
+
+Si el cwd incluye `clawvis-openclaw/jarvis-ecosystem`, leer además:
+
+- `GOALS.md`, `LESSONS.md`, `MEMORY.md`
+- `client-dossiers/` para clientes activos
+- Último output de `pipeline-health-ops` si existe
+
+Ver [STRANGEVERSE_INTEGRATION.md](../../docs/STRANGEVERSE_INTEGRATION.md) § clawvis.
 
 ## Estructura del briefing
 
 ```markdown
-# Briefing Estrategico — Holding Jarvis
+# Briefing Estratégico — [Proyecto / Holding]
 
 **Periodo:** [fecha inicio] – [fecha fin]
 **Generado:** YYYY-MM-DD
-**Proximo briefing sugerido:** [fecha]
+**Próximo briefing sugerido:** [fecha]
 
 ---
 
 ## Resumen ejecutivo (3-5 oraciones)
 
-[Estado general del holding. Que va bien, que necesita atencion, que decision
-se necesita esta semana.]
+[Estado general. Qué va bien, qué necesita atención, qué decisión se necesita esta semana.]
 
 ---
 
-## 1. Goals — Progreso
+## 1. Progreso y metas
 
-| Goal | Empresa | Metrica | Valor actual | Tendencia | Estado |
-|------|---------|---------|-------------|-----------|--------|
-| G-H01 | holding | ... | ... | ↑/↓/→ | En track / Riesgo / Bloqueado |
-| G-V01 | ventas | ... | ... | ... | ... |
-| G-M01 | marketing | ... | ... | ... | ... |
-| G-J01 | jarvis | ... | ... | ... | ... |
+| Meta / hito | Métrica | Valor actual | Tendencia | Estado |
+|-------------|---------|--------------|-----------|--------|
+| … | … | … | ↑/↓/→ | En track / Riesgo / Bloqueado |
 
-**Goals en riesgo:** [lista o "ninguno"]
+**Metas en riesgo:** [lista o "ninguna"]
 
 ---
 
-## 2. Pipeline de ventas
+## 2. Salud técnica
 
-- **Coverage ratio:** X.Xx (saludable / riesgoso / critico)
-- **Deals activos:** N (detalle por etapa)
-- **Deals estancados:** N (nombres + dias sin movimiento)
-- **Forecast mes:** $XXX (conservador)
-- **Accion requerida:** [prospectar mas / cerrar deals abiertos / mejorar propuestas / ninguna]
+- **Rama / deploy:** …
+- **Tests / CI:** …
+- **Deuda técnica destacada:** …
 
 ---
 
-## 3. Marketing
+## 3. Actividad reciente
 
-- **Contenido publicado:** N piezas ([lista breve])
-- **Engagement:** [datos si hay, "sin metricas" si no]
-- **Campanas activas:** [lista o "ninguna"]
-- **Alineacion G-M02:** X% del contenido apunta a servicio vendible
+- **Entregas:** …
+- **Decisiones tomadas:** …
+- **Pendientes de aprobación:** …
 
 ---
 
-## 4. Clientes
+## 4. Stakeholders / clientes (si hay datos)
 
-| Cliente | Empresa | Estado | Riesgo | Nota |
-|---------|---------|--------|--------|------|
-| ... | ... | ... | ... | ... |
+| Nombre | Contexto | Estado | Riesgo | Nota |
+|--------|----------|--------|--------|------|
+| … | … | … | … | … |
 
 ---
 
 ## 5. Riesgos y blockers
 
-| # | Riesgo/Blocker | Empresa | Impacto | Accion sugerida |
-|---|----------------|---------|---------|-----------------|
-| 1 | ... | ... | Alto/Medio | ... |
-| 2 | ... | ... | ... | ... |
+| # | Riesgo/Blocker | Área | Impacto | Acción sugerida |
+|---|----------------|------|---------|-----------------|
+| 1 | … | … | Alto/Medio | … |
 
 ---
 
 ## 6. Decisiones pendientes
 
-| Decision | Contexto | Opciones | Recomendacion jarvis |
-|----------|----------|----------|---------------------|
-| ... | ... | A / B | [cual y por que] |
+| Decision | Contexto | Opciones | Recomendación JARVIS |
+|----------|----------|----------|----------------------|
+| … | … | A / B | [cuál y por qué] |
 
 ---
 
-## 7. Prioridades proxima semana
+## 7. Prioridades próxima semana
 
-1. [Prioridad 1] — goal: G-XXX — responsable: [agente/empresa]
-2. [Prioridad 2] — ...
-3. [Prioridad 3] — ...
+1. [Prioridad 1] — meta: … — responsable: …
+2. [Prioridad 2] — …
+3. [Prioridad 3] — …
 
 ---
 
 ## 8. Lecciones y patrones recientes
 
-[Solo si hay entradas nuevas en LESSONS.md o session-learner-ops esta semana.
-Si no hay, omitir esta seccion.]
+[Solo si hay entradas nuevas en active_context o session-learner. Si no, omitir.]
 ```
 
 ## Reglas de calidad
 
-1. **Concision** — El briefing no debe superar 2 paginas. Si hay mucho que decir, resumir y enlazar a fuentes.
-2. **Datos, no opiniones vagas** — Cada afirmacion debe tener un dato o enlace. "Las ventas van bien" no sirve; "Coverage 2.8x, 3 deals en negociacion" si.
-3. **Tendencias, no solo snapshots** — Comparar con periodo anterior siempre que haya datos.
-4. **Acciones, no solo diagnostico** — Cada seccion que tenga problema debe tener accion sugerida.
-5. **Resumen ejecutivo primero** — El CEO debe poder leer solo las primeras 5 lineas y saber si necesita profundizar.
+1. **Concisión** — No superar ~2 páginas. Resumir y enlazar a fuentes.
+2. **Datos, no opiniones vagas** — Cada afirmación con dato o fuente citada.
+3. **Tendencias, no solo snapshots** — Comparar con periodo anterior cuando haya datos.
+4. **Acciones, no solo diagnóstico** — Cada problema con acción sugerida.
+5. **Resumen ejecutivo primero** — El líder puede leer solo las primeras líneas.
 
 ## Cadencia recomendada
 
-| Frecuencia | Cuando | Notas |
+| Frecuencia | Cuándo | Notas |
 |------------|--------|-------|
-| **Semanal** | Lunes AM (heartbeat jarvis) | Standard; el CEO revisa antes de planificar la semana |
-| **Bajo demanda** | CEO pide estado general | Puede ser version reducida (solo secciones relevantes) |
-| **Post-evento** | Cierre deal, perdida, cambio operativo | Solo secciones afectadas + impacto en goals |
+| **Semanal** | Lunes AM | Standard antes de planificar la semana |
+| **Bajo demanda** | Líder pide estado | Versión reducida (secciones relevantes) |
+| **Post-evento** | Release, incidente, pivot | Solo secciones afectadas + impacto en metas |
 
-## Integracion con otros skills
+## Integración con otros skills
 
-- **pipeline-health-ops**: datos del pipeline van a seccion 2
-- **scenario-analysis-ops**: el briefing puede disparar un analisis de escenarios si hay decisiones complejas
-- **session-learner-ops**: lecciones recientes van a seccion 8
-- **dual-retrieval-ops**: si se necesita anclar datos a fuentes especificas
+- **scenario-analysis-ops:** si hay decisiones complejas en sección 6 → invocar análisis what-if
+- **scenario-router:** si el briefing revela necesidad de simulación social → escalar con gate de coste
+- **session-learner-ops:** lecciones recientes en sección 8
+- **verification-before-completion:** antes de entregar briefing final
 
-## Donde guardar el briefing
+## Dónde guardar el briefing
 
-- **Trello:** No crear tarjeta (no es una tarea, es un reporte)
-- **Discord/Telegram:** Enviar resumen ejecutivo (seccion 0) al canal del CEO si esta configurado
-- **Disco:** `~/Documents/JARVIS-DOCUMENTS/holding/briefings/YYYY-MM-DD.md` (solo si el CEO lo pide archivado)
-- **Memoria:** Anotar decisiones tomadas despues del briefing en `MEMORY.md`
+- Repo producto: `docs/briefings/YYYY-MM-DD.md` (con aprobación del usuario)
+- clawvis holding: `~/Documents/JARVIS-DOCUMENTS/holding/briefings/YYYY-MM-DD.md` si el CEO lo pide archivado
+- No crear tarjeta de tarea por defecto — es un reporte, no una tarea
 
 ## Checklist
 
-- [ ] Lei GOALS.md y evalúe progreso de cada goal activo
-- [ ] Recopile datos de pipeline (Trello o ultimo health check)
-- [ ] Recopile actividad de marketing
-- [ ] Revise dossiers de clientes activos
-- [ ] Revise MEMORY.md y LESSONS.md (ultimas 1-2 semanas)
-- [ ] Consolide riesgos y blockers de todas las fuentes
-- [ ] Identifique decisiones pendientes con opciones
-- [ ] Escribi resumen ejecutivo AL INICIO (3-5 oraciones)
-- [ ] Cada afirmacion tiene dato o fuente
-- [ ] Prioridades de la proxima semana con goal y responsable
+- [ ] Leí `AGENTS.md` y `docs/active_context.md`
+- [ ] Evalué progreso de metas/hitos activos
+- [ ] Revisé actividad reciente (walkthrough, cambios recientes)
+- [ ] Consolidé riesgos y blockers
+- [ ] Identifiqué decisiones pendientes con opciones
+- [ ] Escribí resumen ejecutivo AL INICIO (3–5 oraciones)
+- [ ] Cada afirmación tiene dato o fuente
+- [ ] Prioridades top-3 con meta y responsable
+- [ ] `verification-before-completion` al cerrar
 
 ## Output esperado
 
-Entregar:
 - Briefing completo usando la plantilla
-- Resumen ejecutivo que se pueda enviar standalone por mensaje
-- Lista de decisiones pendientes con recomendacion
+- Resumen ejecutivo standalone (mensaje corto)
+- Lista de decisiones pendientes con recomendación
 - Prioridades top-3 para la semana
+
+---
+
+## Overlay clawvis — holding OpenClaw
+
+### Cuándo (holding)
+
+- Rutina **semanal** heartbeat jarvis (lunes AM recomendado)
+- CEO pide estado general del holding
+- Input previo a `scenario-analysis-ops`
+
+### Fuentes obligatorias
+
+1. `GOALS.md` — progreso por goal (G-H*, G-V*, G-M*)
+2. Pipeline — último `pipeline-health-ops` o Trello ventas
+3. Marketing — actividad reciente agentes mkt-*
+4. `client-dossiers/` — clientes activos
+5. Riesgos cross-empresa y decisiones pendientes CEO
+
+### Diferencia reportes
+
+Este skill = vista **todo el holding** (jarvis → CEO). No sustituye REPORTE_SUPERVISOR_CEO ni pipeline-health por empresa.
