@@ -1,6 +1,10 @@
 # Global skills synced from jarvis-skills-library
 # Format: <skill-name> <tier>
 # tier: passthrough | overlay
+jarvis-core overlay
+jarvis-experts overlay
+fan-out-synthesize-ops passthrough
+notebooklm-router passthrough
 llm-as-judge-ops overlay
 parallel-judge-ops passthrough
 agent-loop-engineering passthrough
