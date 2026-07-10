@@ -11,6 +11,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import os from "node:os";
 import { createLogger } from "@/lib/logger";
+import { isSafePath, isValidAgentId } from "@/lib/path-safety";
 
 const log = createLogger("agents/discover");
 
@@ -25,17 +26,6 @@ interface DiscoveredAgent {
 const OPENCLAW_DIR = path.join(os.homedir(), ".openclaw");
 const OPENCLAW_CONFIG = path.join(OPENCLAW_DIR, "openclaw.json");
 const AGENTS_DIR = path.join(OPENCLAW_DIR, "agents");
-
-/** Ensure resolved target is within the allowed base directory. */
-function isSafePath(base: string, target: string): boolean {
-  const resolved = path.resolve(target);
-  return resolved.startsWith(base + path.sep) || resolved === base;
-}
-
-/** Validate agentId: no path separators or traversal. */
-function isValidAgentId(id: string): boolean {
-  return /^[a-zA-Z0-9_-]+$/.test(id) && !id.includes("..");
-}
 
 async function fileExists(p: string): Promise<boolean> {
   try {

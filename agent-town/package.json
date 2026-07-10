@@ -13,8 +13,9 @@
   "scripts": {
     "dev": "tsx server.ts",
     "dev:next": "next dev",
-    "build": "next build && pnpm build:ws-proxy",
+    "build": "next build && pnpm build:ws-proxy && pnpm build:auggie-bridge",
     "build:ws-proxy": "esbuild lib/ws-proxy.ts --bundle --platform=node --format=esm --outfile=lib/ws-proxy.mjs --packages=external --banner:js=\"/* Generated from lib/ws-proxy.ts — do not edit; run: pnpm build:ws-proxy */\"",
+    "build:auggie-bridge": "esbuild lib/auggie-bridge.ts --bundle --platform=node --format=esm --outfile=lib/auggie-bridge.mjs --packages=external --banner:js=\"/* Generated from lib/auggie-bridge.ts — do not edit; run: pnpm build:auggie-bridge */\"",
     "start": "NODE_ENV=production tsx server.ts",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",

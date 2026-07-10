@@ -4,6 +4,9 @@
  *
  * Handles WebSocket upgrades, the connect/challenge handshake, chat send/abort,
  * session listing, and model listing by spawning `auggie` child processes.
+ *
+ * **Producción:** `lib/auggie-bridge.mjs` se genera desde este archivo
+ * (`pnpm build:auggie-bridge`, encadenado en `pnpm build`). No editar el `.mjs` a mano.
  */
 
 import { type IncomingMessage } from "http";

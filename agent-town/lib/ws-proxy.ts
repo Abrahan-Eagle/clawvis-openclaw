@@ -18,6 +18,7 @@ import { type IncomingMessage } from "http";
 import type { Duplex } from "stream";
 import { RawData, WebSocket, WebSocketServer } from "ws";
 import { createLogger } from "./logger";
+import { isAllowedWsOrigin, isForwardableCloseCode } from "./ws-origin";
 
 const proxyLog = createLogger("WS Proxy");
 
@@ -139,14 +140,6 @@ function buildDeviceBlock(
 
 // ── Proxy core ───────────────────────────────────────────
 
-function isForwardableCloseCode(code: number) {
-  return (
-    code === 1000 ||
-    (code >= 1001 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006) ||
-    (code >= 3000 && code <= 4999)
-  );
-}
-
 function proxyWebSocket(clientWs: WebSocket, gatewayUrl: string) {
   const upstream = new WebSocket(gatewayUrl);
   const bufferedMessages: Array<{ data: RawData; isBinary: boolean }> = [];
@@ -265,23 +258,11 @@ function proxyWebSocket(clientWs: WebSocket, gatewayUrl: string) {
 function checkOrigin(req: IncomingMessage, socket: Duplex): boolean {
   const origin = req.headers.origin;
   const host = req.headers.host;
-  if (origin && host) {
-    try {
-      const originHost = new URL(origin).host;
-      if (originHost !== host) {
-        proxyLog.warn(`Rejected WS upgrade: origin ${origin} does not match host ${host}`);
-        socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
-        socket.destroy();
-        return false;
-      }
-    } catch {
-      proxyLog.warn(`Rejected WS upgrade: invalid origin ${origin}`);
-      socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
-      socket.destroy();
-      return false;
-    }
-  }
-  return true;
+  if (isAllowedWsOrigin(origin, host)) return true;
+  proxyLog.warn(`Rejected WS upgrade: origin ${origin} does not match host ${host}`);
+  socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
+  socket.destroy();
+  return false;
 }
 
 /**

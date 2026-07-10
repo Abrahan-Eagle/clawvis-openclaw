@@ -28,6 +28,20 @@ function createLogger(tag) {
   };
 }
 
+// lib/ws-origin.ts
+function isAllowedWsOrigin(origin, host) {
+  if (!origin || !host) return true;
+  try {
+    const originHost = new URL(origin).host;
+    return originHost === host;
+  } catch {
+    return false;
+  }
+}
+function isForwardableCloseCode(code) {
+  return code === 1e3 || code >= 1001 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006 || code >= 3e3 && code <= 4999;
+}
+
 // lib/ws-proxy.ts
 var proxyLog = createLogger("WS Proxy");
 var MAX_BUFFERED_MESSAGES = 100;
@@ -108,9 +122,6 @@ function buildDeviceBlock(identity, nonce, connectParams) {
     signedAt: signedAtMs,
     nonce
   };
-}
-function isForwardableCloseCode(code) {
-  return code === 1e3 || code >= 1001 && code <= 1014 && code !== 1004 && code !== 1005 && code !== 1006 || code >= 3e3 && code <= 4999;
 }
 function proxyWebSocket(clientWs, gatewayUrl) {
   const upstream = new WebSocket(gatewayUrl);
@@ -216,23 +227,11 @@ function proxyWebSocket(clientWs, gatewayUrl) {
 function checkOrigin(req, socket) {
   const origin = req.headers.origin;
   const host = req.headers.host;
-  if (origin && host) {
-    try {
-      const originHost = new URL(origin).host;
-      if (originHost !== host) {
-        proxyLog.warn(`Rejected WS upgrade: origin ${origin} does not match host ${host}`);
-        socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
-        socket.destroy();
-        return false;
-      }
-    } catch {
-      proxyLog.warn(`Rejected WS upgrade: invalid origin ${origin}`);
-      socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
-      socket.destroy();
-      return false;
-    }
-  }
-  return true;
+  if (isAllowedWsOrigin(origin, host)) return true;
+  proxyLog.warn(`Rejected WS upgrade: origin ${origin} does not match host ${host}`);
+  socket.write("HTTP/1.1 403 Forbidden\r\n\r\n");
+  socket.destroy();
+  return false;
 }
 function attachWsProxy(server, gatewayUrl, path2 = "/api/gateway") {
   const wss = new WebSocketServer({ noServer: true });

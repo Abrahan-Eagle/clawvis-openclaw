@@ -6,7 +6,7 @@
  * 2. Copy public/        → .next/standalone/public/
  * 3. Copy .next/static/  → .next/standalone/.next/static/
  * 4. Copy server.prod.mjs → .next/standalone/server.prod.mjs
- * 5. Copy lib/*.mjs (ws-proxy from `pnpm build:ws-proxy`, auggie-bridge) → standalone/lib/
+ * 5. Copy lib/*.mjs (ws-proxy + auggie-bridge from `pnpm build`) → standalone/lib/
  */
 
 import {
