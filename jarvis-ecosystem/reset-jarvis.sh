@@ -1,20 +1,23 @@
-#!/bin/bash
-# 🦞 Jarvis Reset Tool - AIBlock
-# Este script limpia procesos colgados y archivos de bloqueo (.lock)
+#!/usr/bin/env bash
+# Jarvis Reset Tool — limpia locks y procesos OpenClaw colgados (sin matar todo Node del host).
+set -euo pipefail
 
-echo "🛡️ Iniciando limpieza de emergencia del Ecosistema Jarvis..."
+echo "Iniciando limpieza de emergencia del Ecosistema Jarvis..."
 
-# 1. Matar procesos de OpenClaw y Node que puedan estar colgados
-echo "🔸 Terminando procesos de OpenClaw/Node..."
-pkill -f openclaw
-pkill -f node
+# 1. Terminar solo procesos OpenClaw / gateway relacionados (no `pkill -f node` global)
+echo "Terminando procesos OpenClaw (gateway / CLI)..."
+pkill -f '[o]penclaw' 2>/dev/null || true
+pkill -f '[o]penclaw-gateway' 2>/dev/null || true
+# Cursor proxy del ecosistema (puerto 4646) — opcional
+if [[ "${RESET_CURSOR_PROXY:-0}" == "1" ]]; then
+  echo "Terminando cursor-agent-api-proxy (RESET_CURSOR_PROXY=1)..."
+  pkill -f 'cursor-agent-api' 2>/dev/null || true
+fi
 
 # 2. Limpiar archivos de bloqueo (.lock) que impiden que Jarvis inicie
-echo "🔸 Limpiando archivos de bloqueo (.lock)..."
-rm -f "$HOME/.openclaw/agents/"*/sessions/*.lock 2>/dev/null
+echo "Limpiando archivos de bloqueo (.lock)..."
+rm -f "$HOME/.openclaw/agents/"*/sessions/*.lock 2>/dev/null || true
 
-# 3. Reiniciar Ollama (Opcional, pero recomendado en 4GB RAM)
-# echo "🔸 Reiniciando Ollama..."
-# systemctl restart ollama || sudo systemctl restart ollama
-
-echo "✅ Sistema desbloqueado. Ahora puedes volver a correr: openclaw agent --agent jarvis --local"
+echo "Sistema desbloqueado."
+echo "Siguiente paso tipico: systemctl --user restart openclaw-gateway"
+echo "O: openclaw agent --agent jarvis --message \"ping\""

@@ -7,13 +7,23 @@ on:
   pull_request:
     branches: [main]
 
-defaults:
-  run:
-    working-directory: agent-town
-
 jobs:
+  secrets-and-automations:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tracked files for secrets
+        run: bash scripts/check-no-secrets.sh
+
+      - name: Check automations YAML drift
+        run: bash jarvis-ecosystem/scripts/sync-automations-yaml.sh --check
+
   agent-town:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agent-town
     steps:
       - uses: actions/checkout@v4
 
