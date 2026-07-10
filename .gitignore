@@ -45,11 +45,22 @@ Thumbs.db
 # Política: `docs/OPENCLAW_STATE_GIT_POLICY.md`
 openclaw-state/.env
 openclaw-state/agents/**/sessions/
+openclaw-state/agents/**/auth-profiles.json
 openclaw-state/memory/
 openclaw-state/openclaw.json.bak*
 
-# Perfil Chromium embebido (pesado)
+# Identidad del dispositivo (claves PEM) — nunca en git
+openclaw-state/identity/
+
+# Perfil Chromium embebido (pesado) — dir o symlink
+openclaw-state/browser/openclaw/user-data
 openclaw-state/browser/openclaw/user-data/
+openclaw-state/browser/openclaw/user-data.bak
+openclaw-state/browser/openclaw/user-data.bak/
+openclaw-state/browser/**/user-data
+openclaw-state/browser/**/user-data/
+openclaw-state/browser/**/user-data.bak
+openclaw-state/browser/**/user-data.bak/
 
 # Credenciales de canales (WhatsApp, etc.) — no subir
 openclaw-state/credentials/

@@ -8,10 +8,15 @@
 |---------------|--------|
 | `openclaw-state/.env` | Secretos y variables locales |
 | `openclaw-state/agents/**/sessions/` | Transcripts JSONL (privacidad, volumen) |
+| `openclaw-state/agents/**/auth-profiles.json` | Perfiles de auth de proveedores |
+| `openclaw-state/identity/` | Claves PEM del dispositivo (`device.json`) |
 | `openclaw-state/memory/*.sqlite` | Memoria SQLite del gateway (estado volátil) |
 | `openclaw-state/openclaw.json.bak*` | Copias de respaldo locales |
 | `openclaw-state/credentials/` | Ya ignorado; credenciales de canales |
 | `openclaw-state/browser/.../user-data/` | Perfil Chromium pesado |
+| `openclaw-state/browser/.../user-data.bak/` | Restos de perfil Chromium |
+
+**Verificación:** `bash scripts/check-no-secrets.sh` (solo archivos trackeados).
 
 ## Qué puede seguir versionado (opcional por equipo)
 

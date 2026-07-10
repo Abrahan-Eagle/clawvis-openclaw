@@ -55,7 +55,7 @@
           "maxTokens": 65536
         }
       ],
-      "apiKey": "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"
+      "apiKey": "OPENROUTER_API_KEY"
     },
     "ollama": {
       "baseUrl": "http://127.0.0.1:11434",
