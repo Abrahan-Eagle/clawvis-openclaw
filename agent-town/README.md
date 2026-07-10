@@ -8,7 +8,7 @@ Your agents deserve more than a terminal. Give them an office, a town, and event
 
 [![GitHub](https://img.shields.io/badge/repo-clawvis--openclaw-181717?logo=github)](https://github.com/Abrahan-Eagle/clawvis-openclaw)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Node.js](https://img.shields.io/badge/node-%3E%3D18-green)](https://nodejs.org)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D22-green)](https://nodejs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
 [![Phaser](https://img.shields.io/badge/Phaser-3-8B44AC)](https://phaser.io/)

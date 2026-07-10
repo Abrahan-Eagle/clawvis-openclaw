@@ -11,20 +11,20 @@ Todo el material versionado vive aquí: ecosistema Jarvis, docs, y una **copia s
 | Carpeta | Contenido |
 |---------|-----------|
 | `jarvis-ecosystem/` | Automations, agents, skills, scripts, docs del ecosistema Jarvis (índice: [jarvis-ecosystem/README.md](jarvis-ecosystem/README.md)) |
-| `config/openclaw-home/` | Instantánea sanitizada de `~/.openclaw` (`openclaw.json`, `workspace/`, `cron/`… **sin** `.env`, sesiones ni credenciales) |
+| `config/openclaw-home/` | Instantánea sanitizada de `~/.openclaw` (`openclaw.json`, `workspace/`, `cron/jobs.json`… **sin** `.env`, sesiones, `devices/`, `cron/runs`, credenciales) |
 | `documentos-jarvis-openclaw/` | Coordinación y notas en `Documentos` (gestión por fecha) |
-| `openclaw-state/` | Copia histórica / referencia de estado OpenClaw (ver también `config/openclaw-home/`) |
+| `openclaw-state/` | Referencia histórica **acotada** (preferir `config/openclaw-home/` para plantilla; ver [OPENCLAW_STATE_GIT_POLICY.md](docs/OPENCLAW_STATE_GIT_POLICY.md)) |
 | `agent-town/` | Proyecto Agent Town (Next); `node_modules` y `.next` no se versionan |
 | `deploy/systemd/` | Referencia: `openclaw-gateway.service`, `cursor-agent-api.service.example`, `agent-town-dev.service.example` |
 | `descargas-openclaw/` | Descargas relacionadas (opcional) |
 
-**Seguridad:** este repo puede contener **secretos**. Debe ser **privado** en GitHub. Los servicios en ejecución siguen usando `~/.jarvis-ecosystem`, `~/.openclaw` y `~/agent-town` en disco; esta copia es para versionado y respaldo.
+**Seguridad:** el repo debe ser **privado**. No versionar secretos reales; verificar con `bash scripts/check-no-secrets.sh`. Los servicios en ejecución usan `~/.jarvis-ecosystem`, `~/.openclaw` y Agent Town en disco; este árbol es respaldo/procedimiento.
 
 ## Puesta en marcha (Linux, máquina actual)
 
 1. **Node.js 22+** (OpenClaw lo exige): con nvm, `nvm install 22` y `nvm alias default 22`. En `~/.bashrc` ya se puede cargar `nvm use 22` en silencio tras `nvm.sh`.
 2. **OpenClaw global:** `npm install -g openclaw@latest` usando el Node 22 de nvm.
-3. **Config en vivo:** copiar o enlazar `~/.openclaw` desde `openclaw-state/` y ajustar rutas (`/home/TU_USUARIO`). En el navegador embebido, `browser.executablePath` debe apuntar a un Chrome/Chromium instalado (ej. `/usr/bin/google-chrome`).
+3. **Config en vivo:** preferir la plantilla [`config/openclaw-home/`](config/openclaw-home/) (sanitizada) → copiar a `~/.openclaw` y ajustar rutas (`/home/TU_USUARIO`). Completar `.env` y keys reales **solo en HOME**. En el navegador embebido, `browser.executablePath` debe apuntar a un Chrome/Chromium instalado (ej. `/usr/bin/google-chrome`).
 4. **Ecosistema Jarvis:** `ln -sfn /ruta/al/repo/jarvis-ecosystem ~/.jarvis-ecosystem`.
 
    **Coherencia con OpenClaw:** en `~/.openclaw/openclaw.json`, los agentes (`agents.list`) suelen apuntar el `workspace` a rutas bajo `/home/TU_USUARIO/jarvis-ecosystem/agents/...`. Eso **debe resolver al mismo árbol** que `jarvis-ecosystem/` del repo (vía el enlace simbólico). Comprueba con `readlink -f ~/.jarvis-ecosystem` y compáralo con la ruta absoluta del repo; si editas solo el clon en `/var/www/...` pero OpenClaw apunta a otra copia, perderás cambios en GitHub.
@@ -36,7 +36,14 @@ Todo el material versionado vive aquí: ecosistema Jarvis, docs, y una **copia s
 
 Si las tareas en Agent Town pasan a **FAILED** al instante con `Assign failed` en el chat, revisa el log del gateway: versiones recientes de OpenClaw rechazan propiedades extra en `chat.send`. El front ya no envía `seatLabel`/`seatRole` salvo proveedor **Auggie**.
 
-Perfil CDP del navegador en el repo: `openclaw-state/browser/openclaw/user-data` → enlace a `~/.openclaw/cdp-user-data` (evita rutas de otro usuario).
+Perfil CDP del navegador: **no** viene versionado. En la máquina local crea el enlace si hace falta:
+
+```bash
+mkdir -p ~/.openclaw/browser/openclaw
+ln -sfn ~/.openclaw/cdp-user-data ~/.openclaw/browser/openclaw/user-data
+```
+
+(El path antiguo `openclaw-state/browser/...` se destrackeó en la remediación forense; no lo esperes en un clon fresco.)
 
 ## Telegram (OpenClaw)
 

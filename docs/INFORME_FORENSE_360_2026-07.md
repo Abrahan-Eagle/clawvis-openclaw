@@ -21,32 +21,34 @@
 
 ## 1. Resumen ejecutivo
 
-El monorepo es un **respaldo operativo + código** alrededor de OpenClaw, Jarvis (holding multi-empresa) y Agent Town (UI Next.js). La arquitectura es coherente para un operador único, pero la **higiene de secretos y de `openclaw-state/` está rota**: hay una API key OpenRouter real en Git, `.env` trackeado pese a `.gitignore`, y backups/browser/auth-profiles versionados en contra de la política documentada.
+> **Estado post-remediación (olas 1+2, 2026-07-10):** los secretos P0 de la auditoría inicial (OpenRouter en `models.json`, `.env` trackeado, `identity/`, bak, auth-profiles, browser user-data) **ya no están en el índice Git**. La ola 2 corrigió además tokens operator en `devices/paired.json`, PII de teléfono en `USER.md`, firma rota de `server.prod.mjs`, y alineó docs. **Pendiente humano:** rotar keys/tokens en dashboards y decidir purga de historial.
 
-| Dimensión | Estado |
-|-----------|--------|
+El monorepo es un **respaldo operativo + código** alrededor de OpenClaw, Jarvis (holding multi-empresa) y Agent Town (UI Next.js). La arquitectura es coherente para un operador único.
+
+| Dimensión | Estado (post ola 2) |
+|-----------|---------------------|
 | Arquitectura | Viable (gateway + workspaces + UI) |
-| Seguridad de repo | **Crítica** (secretos en índice) |
-| Agent Town calidad | Buena base (CI, Vitest en `lib/`), gaps en proxy/discover |
-| Jarvis ecosystem | Rico en skills/docs; deuda en duplicación y scripts destructivos |
-| Docs vs realidad | Desalineados (`config/openclaw-home` “sin secretos” es falso) |
+| Seguridad de repo | **Mejorada** (scanner CI; residuales destrackeados; historial aún puede tener secretos viejos) |
+| Agent Town calidad | CI + Vitest `lib/` (6 suites); helpers path/origin; prod server alineado |
+| Jarvis ecosystem | Rico en skills/docs; `reset-jarvis` acotado; automations check en CI |
+| Docs vs realidad | Alineadas en ola 2 (este informe + README/AGENTS) |
 
 ---
 
 ## 2. Mapa de madurez
 
-| Área | Madurez | Justificación breve |
-|------|---------|---------------------|
-| Arquitectura | 7/10 | Flujo claro: canales → gateway → agentes → Agent Town |
-| Seguridad / secretos | 2/10 | Key OpenRouter en Git; `.env` trackeado; gateway auth none |
-| DevOps / deploy | 6/10 | systemd documentado; CI Agent Town; sin check de secretos/automations |
-| QA / tests | 5/10 | Vitest `lib/` + pytest JMC; sin tests ws-proxy/discover |
-| Datos / estado | 3/10 | Política clara, incumplimiento parcial; espejo docs enorme |
-| Producto / gobierno | 7/10 | GOBIERNO_V2, dossiers, GOALS/LESSONS maduros |
-| Agent Town UX | 6/10 | Pixel-office usable; token client-side; stub seat-sync |
-| Documentación | 6/10 | Densa y útil; contradicciones sanitización/política |
+| Área | Madurez (ola 1) | Madurez (ola 2) | Notas |
+|------|-----------------|-----------------|-------|
+| Arquitectura | 7/10 | 7/10 | Sin cambio estructural |
+| Seguridad / secretos | 2/10 | **7/10** | Índice limpio + scanner; historial/rotación humana pendiente |
+| DevOps / deploy | 6/10 | **8/10** | CI secrets + automations; `server.prod` firmas OK |
+| QA / tests | 5/10 | **6/10** | +path-safety + ws-origin; sin E2E WS real |
+| Datos / estado | 3/10 | **6/10** | Política cumplida en prohibidos; espejo docs 819 aún opcional |
+| Producto / gobierno | 7/10 | 7/10 | — |
+| Agent Town UX | 6/10 | 6/10 | Threat model documentado |
+| Documentación | 6/10 | **8/10** | Coherencia post-ola 2 |
 
-**Promedio ponderado (seguridad ×2):** ~5.0/10.
+**Promedio ponderado (seguridad ×2):** ~7.0/10 (antes ~5.0).
 
 ---
 
@@ -189,22 +191,48 @@ Esfuerzo: 1h
 
 ## 6. Roadmap de remediación
 
-| Fase | Acciones | Estado plan |
-|------|----------|-------------|
-| **0** | Este informe | Hecho |
-| **1** | P0 secretos + script + README | **Aplicado 2026-07-10** (placeholders; `.env` destrackeado; `scripts/check-no-secrets.sh`) |
-| **2** | Higiene openclaw-state + gitignore | **Aplicado** (`identity/`, bak, auth-profiles, browser user-data fuera del índice) |
-| **3** | Agent Town + jarvis-ecosystem hardening | **Aplicado** (tests path/origin; auggie-bridge vía esbuild; reset-jarvis acotado; CI) |
+### Ola 1 (2026-07-10 mañana)
+
+| Fase | Acciones | Estado |
+|------|----------|--------|
+| **0** | Informe inicial | Hecho |
+| **1** | P0 secretos + script + README | **Aplicado** |
+| **2** | Higiene openclaw-state + gitignore | **Aplicado** |
+| **3** | Agent Town + jarvis hardening | **Aplicado** (parcial H-12: helpers, no E2E WS) |
 | **4** | Docs + verificación | **Aplicado** |
 
-**Pendiente humano:** rotar key OpenRouter en dashboard; decidir purga de historial Git; OK opcional para destrackear espejo `openclaw-state/workspace/docs/`.
+### Ola 2 (2026-07-10 tarde) — re-forense
 
-**Fuera de alcance automático:** rotación OpenRouter (humano), purga `git filter-repo` (requiere orden explícita), destrackear espejo docs workspace (requiere OK).
+| ID | Hallazgo | Estado |
+|----|----------|--------|
+| W2-01 | `server.prod.mjs` firmas rotas | **Aplicado** |
+| W2-02 | `devices/paired.json` tokens operator | **Aplicado** (destrackeado; **rotar tokens humano**) |
+| W2-03 | PII teléfono / cron runs / delivery-queue | **Aplicado** (destrack + placeholder USER.md) |
+| W2-04 | Scanner incompleto | **Aplicado** |
+| W2-05 | `prepublishOnly` sin regenerar `.mjs` | **Aplicado** |
+| W2-06 | `reset-jarvis` pkill amplio | **Aplicado** |
+| W2-07…W2-11 | Incoherencias docs | **Aplicado** (esta sección + README/AGENTS/CLAUDE) |
+
+### Estado de hallazgos ola 1 (H-xx)
+
+| ID | Estado |
+|----|--------|
+| H-01…H-06 | **Resuelto** en índice (historial puede conservar copias) |
+| H-07 | **Pendiente opcional** (espejo 819 docs) |
+| H-08 | **Parcial** (`gateway.auth.mode: none` sigue; PII nombre en USER.md intencional) |
+| H-09 | **Mitigado** (CI `--check` automations) |
+| H-10 | **Resuelto** |
+| H-11 | **Resuelto** (mjs = artefacto esbuild) |
+| H-12 | **Parcial** (tests helpers; no suite E2E proxy) |
+| H-13 | **Documentado** (threat model) |
+| H-14…H-17 | **Pendiente / bajo** |
+
+**Pendiente humano:** rotar OpenRouter + 4 tokens operator; decidir purga historial; OK espejo workspace docs.
 
 ---
 
 ## 7. Veredicto
 
-El ecosistema es **operativamente útil y bien documentado** para un superusuario, pero **no está listo para compartir el repo** ni para tratar `config/openclaw-home` como plantilla segura hasta completar P0. Prioridad absoluta: **sanitizar índice + rotar key**. Después, higiene de state y tests del perímetro Agent Town.
+Tras olas 1+2, el **índice Git está en condición razonable** para un repo **privado** de un solo operador: plantilla sanitizada, scanner en CI, producción Agent Town con firmas correctas. **No** asumir que el historial está limpio ni que tokens antiguos están rotados. Compartir el repo o hacerlo público **sigue requiriendo** rotación + (opcional) `git filter-repo`.
 
-*Informe generado 2026-07-10 — auditoría forense 360° clawvis-openclaw.*
+*Informe generado 2026-07-10 — auditoría forense 360° + ola 2 clawvis-openclaw.*

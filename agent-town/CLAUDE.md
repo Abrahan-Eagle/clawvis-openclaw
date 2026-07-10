@@ -76,7 +76,7 @@ moderninteriors-win/2_Characters/
 6. 加 Agent 逻辑
 ```
 
-## 项目结构（与仓库一致，2026-04）
+## 项目结构（与仓库一致，2026-07）
 
 ```
 agent-town/
@@ -85,23 +85,26 @@ agent-town/
 │   ├── layout.tsx
 │   ├── globals.css
 │   └── api/
-│       ├── agents/discover/route.ts   # GET 发现 agent / 配置
+│       ├── agents/discover/route.ts   # GET 发现 agent / 配置（path-safety）
 │       └── internal/seat-sync/route.ts
 ├── server.ts                    # 开发：Next + WebSocket 代理到 Gateway
-├── server.prod.mjs              # 生产：standalone 入口（import ./lib/ws-proxy.mjs）
+├── server.prod.mjs              # 生产：standalone（attachWsProxy(server, url) / attachAuggieBridge(server)）
 ├── lib/
-│   ├── ws-proxy.ts              # 代理逻辑（源文件）
-│   ├── ws-proxy.mjs             # 由 pnpm build:ws-proxy 从 ws-proxy.ts 生成，勿手改
+│   ├── ws-proxy.ts / ws-proxy.mjs     # pnpm build:ws-proxy
+│   ├── auggie-bridge.ts / .mjs        # pnpm build:auggie-bridge
+│   ├── ws-origin.ts, path-safety.ts   # helpers testeables
 │   ├── gateway.ts, store.ts, hooks/, …
-│   └── __tests__/               # Vitest（reducer, gateway-handler, utils, persistence）
+│   └── __tests__/               # 6 suites Vitest（+ path-safety, ws-origin）
 ├── components/
 │   ├── game/                    # Phaser（PhaserGame.tsx, scenes/, …）
 │   ├── hud/, panel/, …
 ├── public/maps/
+├── docs/THREAT_MODEL_GATEWAY_TOKEN.md
 └── types/
 ```
 
 WebSocket 浏览器 → `/api/gateway`（见 `lib/ws-proxy.ts`），非旧版 `app/api/ws/route.ts`。
+`pnpm build` = `next build` + `build:ws-proxy` + `build:auggie-bridge`。
 
 ## Phaser 集成要点
 
