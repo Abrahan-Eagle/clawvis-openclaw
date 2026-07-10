@@ -75,6 +75,8 @@ Detalle, matriz, router y consumo en reposo: [docs/MODELOS_JARVIS_OPENCLAW.md](d
 
 | Documento | Contenido |
 |-----------|-----------|
+| [INFORME_FORENSE_360_2026-07.md](docs/INFORME_FORENSE_360_2026-07.md) | Auditoría forense 360° (jul 2026): hallazgos P0–P3, madurez, backlog. |
+| [OPENCLAW_STATE_GIT_POLICY.md](docs/OPENCLAW_STATE_GIT_POLICY.md) | Qué de `openclaw-state/` no va en Git (`identity/`, bak, credentials, …). |
 | [RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md](docs/RESPALDO_OPENCLAW_CONFIGURACION_APLICADA.md) | Respaldo **sin secretos**: systemd, fragmentos de `openclaw.json`, regla **`plugins.allow`**, proxy 4646, comandos de copia local. |
 | [SPIKE_CURSOR_OPENCLAW.md](docs/SPIKE_CURSOR_OPENCLAW.md) | Spike Cursor + OpenClaw (Linux): CLI, gateway, puertos 18789 / 4646 / 18790. |
 | [PROVEEDOR_CURSOR_OPENCLAW.md](docs/PROVEEDOR_CURSOR_OPENCLAW.md) | Guía del proveedor Cursor / OpenAI-compatible con OpenClaw. |
@@ -88,8 +90,10 @@ Detalle, matriz, router y consumo en reposo: [docs/MODELOS_JARVIS_OPENCLAW.md](d
 
 ## Qué queda en GitHub y qué no
 
-- **En el repo (GitHub):** markdown de `docs/`, `deploy/systemd/`, `jarvis-ecosystem/`, etc. — útil para reproducir **procedimiento** y valores no sensibles.
-- **No subir nunca:** `~/.openclaw/.env`, tokens de bots, API keys. El `openclaw.json` **completo** en HOME no se versiona aquí por defecto; para copia de seguridad usa backups locales fechados (ver sección “Respaldo físico” en el doc de respaldo) o la carpeta `openclaw-state/` del repo **solo si** mantienes el repo **privado** y aceptas el riesgo (el README ya advierte que puede contener secretos).
+- **En el repo (GitHub):** markdown de `docs/`, `deploy/systemd/`, `jarvis-ecosystem/`, plantilla sanitizada en `config/openclaw-home/` (placeholders en `models.json`, sin `.env` ni `identity/`).
+- **No subir nunca:** `~/.openclaw/.env`, tokens de bots, API keys reales, `openclaw-state/identity/`, `credentials/`, `auth-profiles.json`, `openclaw.json.bak*`, perfil Chromium. Ver [OPENCLAW_STATE_GIT_POLICY.md](docs/OPENCLAW_STATE_GIT_POLICY.md).
+- **Verificación pre-push:** `bash scripts/check-no-secrets.sh` (también en CI).
+- **Acción humana tras fuga histórica:** rotar keys en dashboards de proveedores (p. ej. OpenRouter); la purga de historial Git (`filter-repo`) solo con orden explícita.
 - Tras cambios en el equipo: `git add`, `commit`, `push` desde la raíz del repo.
 
 ## Pruebas rápidas (CLI)
