@@ -27,6 +27,11 @@ agents/**/agent/auth-profiles.json
 /identity/
 /devices/
 
+# Corridas cron y backups (sessionIds / drift)
+/cron/runs/
+/cron/*.bak
+/cron/jobs.json.bak
+
 # Estado de sesión / tareas locales
 /memory/
 /tasks/

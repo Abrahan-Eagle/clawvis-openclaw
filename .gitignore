@@ -65,6 +65,24 @@ openclaw-state/browser/**/user-data.bak/
 # Credenciales de canales (WhatsApp, etc.) — no subir
 openclaw-state/credentials/
 
+# Dispositivos emparejados (tokens operator del gateway)
+openclaw-state/devices/
+
+# Cola de entrega / logs / corridas cron (runtime, PII, sessionIds)
+openclaw-state/delivery-queue/
+openclaw-state/logs/
+openclaw-state/cron/runs/
+openclaw-state/cron/*.bak
+openclaw-state/cron/jobs.json.bak
+
+# Plantilla config: no versionar corridas ni backups de cron
+config/openclaw-home/cron/runs/
+config/openclaw-home/cron/*.bak
+config/openclaw-home/cron/jobs.json.bak
+config/openclaw-home/logs/
+config/openclaw-home/delivery-queue/
+config/openclaw-home/devices/
+
 # Variables de entorno del ecosistema Jarvis (ClawFlows, scripts) — no subir
 jarvis-ecosystem/.env
 jarvis-ecosystem/.env.*

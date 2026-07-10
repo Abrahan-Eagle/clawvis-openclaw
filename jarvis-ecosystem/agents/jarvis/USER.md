@@ -8,8 +8,8 @@ _Learn about the person you're helping. Update this as you go._
 - **Timezone:** America/Caracas
 - **Notes:** 
   - Connected via WhatsApp and Telegram
-  - Telegram bot: @jarvis_eagle_777_bot (token stored in TOOLS.md)
-  - Chat ID: +584124352014
+  - Telegram bot: @jarvis_eagle_777_bot (token solo en `~/.openclaw/.env`, nunca en git)
+  - Chat ID: `+58XXXXXXXXXX` (placeholder; valor real solo en runtime local / HOME)
   - Permission granted to configure integrations
 
 ## Context
