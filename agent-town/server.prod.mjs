@@ -3,6 +3,11 @@
  *
  * Reads the Next.js config from the standalone build output and creates
  * an HTTP server with Next.js request handler + WebSocket proxy.
+ *
+ * Signatures must match lib/ws-proxy.mjs and lib/auggie-bridge.mjs
+ * (generated from TypeScript via pnpm build:ws-proxy / build:auggie-bridge):
+ *   attachWsProxy(server, gatewayUrl, path?)
+ *   attachAuggieBridge(server, path?)
  */
 
 import { createServer } from "node:http";
@@ -28,7 +33,6 @@ const requiredServerFiles = JSON.parse(
 process.env.__NEXT_PRIVATE_STANDALONE_CONFIG = JSON.stringify(requiredServerFiles.config);
 
 const { default: next } = await import("next");
-const { WebSocket, WebSocketServer } = await import("ws");
 
 const port = parseInt(process.env.PORT ?? "3000", 10);
 const GATEWAY_URL = process.env.GATEWAY_URL ?? "ws://127.0.0.1:18789/";
@@ -46,9 +50,9 @@ app
     });
 
     if (AGENT_PROVIDER === "auggie") {
-      attachAuggieBridge(server, WebSocket, WebSocketServer);
+      attachAuggieBridge(server);
     } else {
-      attachWsProxy(server, WebSocket, WebSocketServer, GATEWAY_URL);
+      attachWsProxy(server, GATEWAY_URL);
     }
 
     server.listen(port, () => {

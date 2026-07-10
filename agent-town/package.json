@@ -23,7 +23,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky",
-    "prepublishOnly": "next build && node scripts/prepare-package.mjs"
+    "prepublishOnly": "pnpm build && node scripts/prepare-package.mjs"
   },
   "lint-staged": {
     "*.{ts,tsx,mts,js,mjs,css}": [
