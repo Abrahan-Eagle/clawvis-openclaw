@@ -1,7 +1,9 @@
 # Gobierno operativo Jarvis v2
 
 **Ámbito:** modelo humano–IA para un holding de empresas (marketing, ventas, desarrollo, legal, contadores, etc.) orquestado por OpenClaw/Jarvis.  
-**Última revisión:** abril 2026.
+**Última revisión:** julio 2026.
+
+**Piezas operativas jul 2026 (además de gates/Trello):** memoria estructurada (`memory-store` en Session Startup), compactación (`session-compact-ops`), eval pre-AG-12 (`judge-run` → `state/judge/`), learning HITL (`lessons-scan.sh`), context packs (`contexts/`), loop RRSS ([MANUAL_RRSS_JARVIS.md](MANUAL_RRSS_JARVIS.md)). Detalle de flujos: [CLAWFLOWS.md](../CLAWFLOWS.md). Gates: [APPROVAL_GATES.md](APPROVAL_GATES.md).
 
 ---
 

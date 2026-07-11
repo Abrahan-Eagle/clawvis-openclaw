@@ -153,12 +153,14 @@ flowchart TB
 | Fase | Entregables clave | Estado |
 |---|---|---|
 | 0 | 4 docs maestras (esta + coordinacion + pipeline + research) | en curso |
-| 1 | activity-log + handoff + schemas | pendiente |
-| 2 | coordinator + cron pulse + dossier obligatorio | pendiente |
-| 3 | brand-kit + image-render + image-ai-free + carousel-render | pendiente |
-| 4 | tts-free + subtitles + video-short + video-compose | pendiente |
-| 5 | Pipeline orquestado + AG-12/AG-13 + actualizaciones de docs | pendiente |
-| 6 | Demo end-to-end (1 carrusel + 1 reel) + verificacion | pendiente |
+| 1 | activity-log + handoff + schemas | **hecho** |
+| 2 | coordinator + cron pulse + dossier obligatorio | **hecho** |
+| 3 | brand-kit + image-render + image-ai-free + carousel-render | **hecho** |
+| 4 | tts-free + subtitles + video-short + video-compose | **hecho** (video-short parcial v0.5) |
+| 5 | Pipeline orquestado + AG-12/AG-13 + actualizaciones de docs | **parcial** — `approval-gate`, `mkt-publish`, dispatcher, heartbeats plantilla (jul 2026); cron runtime requiere OK CEO |
+| 6 | Demo end-to-end (1 carrusel + 1 reel) + verificacion | **hecho** (ver `DEMO_PIPELINE_RRSS.md`) |
+
+**Actualización jul 2026:** loop RRSS modo C — ver [MANUAL_RRSS_JARVIS.md](MANUAL_RRSS_JARVIS.md).
 
 ---
 

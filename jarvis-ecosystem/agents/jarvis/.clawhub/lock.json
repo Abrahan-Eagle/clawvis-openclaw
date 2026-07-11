@@ -52,6 +52,16 @@
     "video-frames": {
       "version": "1.0.0",
       "installedAt": 1774456148917
+    },
+    "canva": {
+      "version": "1.0.0",
+      "installedAt": 1752170000000,
+      "note": "registered jul-2026 (was on disk without lock)"
+    },
+    "last30days-openclaw": {
+      "version": "1.0.0",
+      "installedAt": 1752170000000,
+      "note": "registered jul-2026 (was on disk without lock)"
     }
   }
 }

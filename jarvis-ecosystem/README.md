@@ -42,6 +42,10 @@ Superusuario (Abrahan) ←→ Jarvis (agente maestro)
 | `automations/` | YAML ClawFlows; ver [automations/README.md](automations/README.md). |
 | `scripts/` | `clawflows-env.sh`, `openclaw-path.sh` (PATH para `openclaw` en pruebas/CI), verificación del registry, `generate_marketing_skills.py` / `validate-marketing-skills.sh` (skills marketing), etc. |
 | [CLAWFLOWS.md](CLAWFLOWS.md) | Guía ClawFlows + Lobster. |
+| [docs/MANUAL_RRSS_JARVIS.md](docs/MANUAL_RRSS_JARVIS.md) | Loop agencia RRSS (modo C): heartbeats, dispatcher, judge-run pre-AG-12, approval-gate, mkt-publish. |
+| [contexts/](contexts/) | Context packs `research` / `produce` / `review` (`JARVIS_CONTEXT_MODE`). |
+| `skills/global/judge-run/`, `session-compact-ops/`, `memory-store/` | Eval pre-gate, compactación estratégica, memoria estructurada (`memory.json`). |
+| `scripts/lessons-scan.sh`, `scripts/memory-consolidate.sh` | Learning loop HITL (candidatos LESSONS / memory.json; sin auto-escribir). |
 
 **Dos capas de skills en Marketing:** (a) variantes rápidas **`*-ops`** en **`agents/jarvis/skills/`** (una sola copia compartida); (b) librería **profunda** (40 skills MIT/adaptadas) en **`agents/marketing/skills/`** — **no** es duplicado del árbol Jarvis; regeneración: `scripts/generate_marketing_skills.py`. **Runtime:** sincronizar ambas capas al workspace del gateway con `sync-jarvis-skills-from-repo.sh` **y** [`sync-marketing-skills-from-repo.sh`](scripts/sync-marketing-skills-from-repo.sh) — [docs/COHERENCIA_RUNTIME_REPO.md](docs/COHERENCIA_RUNTIME_REPO.md). **Excepción Ventas:** `agents/ventas/skills/career-ops/` — ver [agents/ventas/AGENTS.md](agents/ventas/AGENTS.md).
 
