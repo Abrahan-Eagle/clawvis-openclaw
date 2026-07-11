@@ -1,0 +1,39 @@
+{
+  "_comment": "Plantilla — NO sobrescribe jobs.json del runtime. Fusionar a mano en ~/.openclaw/cron/jobs.json tras OK del CEO.",
+  "jobs": [
+    {
+      "id": "jarvis-marketing-orchestrator",
+      "name": "Marketing loop orchestrator (modo C)",
+      "enabled": false,
+      "agentId": "jarvis",
+      "sessionTarget": "isolated",
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 */3 * * *",
+        "tz": "America/Caracas"
+      },
+      "payload": {
+        "kind": "agentTurn",
+        "timeoutSeconds": 180,
+        "message": "Orquestación marketing (modo C):\n1) Ejecuta `bash scripts/marketing-dispatch.sh --dry-run` y luego sin --dry-run si hay handoffs abiertos hacia mkt-*.\n2) Revisa `coordinator status` y handoffs abiertos >2h.\n3) NO publiques (AG-12/13). Si hay asset listo, verifica que exista approval-gate request pendiente.\n4) Resume con HEARTBEAT_OK si no hay acción."
+      }
+    },
+    {
+      "id": "mkt-content-due-calendar",
+      "name": "Recordatorio editorial-calendar due",
+      "enabled": false,
+      "agentId": "mkt-content",
+      "sessionTarget": "isolated",
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * 1-5",
+        "tz": "America/Caracas"
+      },
+      "payload": {
+        "kind": "agentTurn",
+        "timeoutSeconds": 120,
+        "message": "Ejecuta `editorial-calendar due --hours 72`. Si hay slots sin asset, crea/continúa UNA tarea de producción. No publiques."
+      }
+    }
+  ]
+}

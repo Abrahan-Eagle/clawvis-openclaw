@@ -15,11 +15,14 @@ Un heartbeat es un turno periodico que OpenClaw ejecuta automaticamente para cad
 
 ## Agentes con heartbeat activo
 
-| Agente | Intervalo | Horario activo | Target | HEARTBEAT.md |
-|--------|-----------|----------------|--------|--------------|
-| `jarvis` | 30 min | 08:00-24:00 VET | none | `agents/jarvis/HEARTBEAT.md` |
-| `sales-hunter` | 1 hora | 08:00-23:00 VET | none | `agents/ventas/HEARTBEAT.md` |
-| `mkt-content` | 2 horas | 09:00-22:00 VET | none | `agents/marketing/HEARTBEAT.md` |
+| Agente | Intervalo (plantilla repo) | Horario | Target | HEARTBEAT.md |
+|--------|----------------------------|---------|--------|--------------|
+| `jarvis` | 30m | 08:00–24:00 VET | none | `agents/jarvis/HEARTBEAT.md` |
+| `mkt-content`, `mkt-social`, `mkt-analytics`, `mkt-ads`, `mkt-email`, `mkt-research` | 2h | 09:00–22:00 VET | none | `agents/marketing/HEARTBEAT.md` |
+| `sales-hunter` (runtime tipico) | 1h | 08:00–23:00 VET | none | `agents/ventas/HEARTBEAT.md` |
+| `sales-*` en plantilla repo | sin heartbeat | — | — | Añadir en `~/.openclaw` si se desea |
+
+**Plantilla:** [`jarvis-ecosystem/openclaw.json`](../openclaw.json). **Runtime:** fusionar a `~/.openclaw/openclaw.json` con OK del CEO (ver [MANUAL_RRSS_JARVIS.md](MANUAL_RRSS_JARVIS.md)).
 
 **Nota:** `target: "none"` significa que el heartbeat corre internamente sin enviar mensajes al CEO. Para activar notificaciones por WhatsApp/Discord/Telegram, cambiar `target` a `"last"` o al canal especifico.
 

@@ -10,15 +10,111 @@
         "google/gemini-2.0-flash-lite-preview-02-05",
         "ollama/qwen2.5-coder:0.5b",
         "ollama/phi"
-      ]
+      ],
+      "subagents": {
+        "maxConcurrent": 4
+      }
     },
     "list": [
-      { "id": "jarvis", "workspace": "./agents/jarvis", "default": true },
-      { "id": "mkt-content", "workspace": "./agents/marketing" },
-      { "id": "mkt-social", "workspace": "./agents/marketing" },
-      { "id": "mkt-analytics", "workspace": "./agents/marketing" },
-      { "id": "mkt-ads", "workspace": "./agents/marketing" },
-      { "id": "mkt-email", "workspace": "./agents/marketing" },
+      {
+        "id": "jarvis",
+        "workspace": "./agents/jarvis",
+        "default": true,
+        "heartbeat": {
+          "every": "30m",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "08:00",
+            "end": "24:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-content",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-social",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-analytics",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-ads",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-email",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
+      {
+        "id": "mkt-research",
+        "workspace": "./agents/marketing",
+        "heartbeat": {
+          "every": "2h",
+          "target": "none",
+          "lightContext": true,
+          "activeHours": {
+            "start": "09:00",
+            "end": "22:00",
+            "timezone": "America/Caracas"
+          }
+        }
+      },
       { "id": "sales-hunter", "workspace": "./agents/ventas" },
       { "id": "sales-closer", "workspace": "./agents/ventas" },
       { "id": "sales-account", "workspace": "./agents/ventas" }

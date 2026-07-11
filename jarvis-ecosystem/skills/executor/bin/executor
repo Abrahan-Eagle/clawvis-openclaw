@@ -1,24 +1,114 @@
 #!/usr/bin/env bash
-# “Ejecutor” v1: valida y lista pasos; no invoca el gateway. Inspiración: agent/executor.py (sin código generado).
+# executor — v2: dry-run por defecto; --live ejecuta CLIs locales allowlisted
 set -euo pipefail
-PLAN_FILE="${1:-}"
+
+PLAN_FILE=""
+LIVE=false
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --live) LIVE=true; shift ;;
+    --dry-run) LIVE=false; shift ;;
+    -*) echo "Uso: executor [--live|--dry-run] <plan.json>" >&2; exit 1 ;;
+    *) PLAN_FILE="$1"; shift ;;
+  esac
+done
+
 if [[ -z "$PLAN_FILE" || ! -f "$PLAN_FILE" ]]; then
-  echo "Uso: executor <plan.json>   # JSON de planner" >&2
+  echo "Uso: executor [--live|--dry-run] <plan.json>   # JSON de planner" >&2
   exit 1
 fi
-python3 - <<'PY' "$PLAN_FILE"
-import json, sys
-p = sys.argv[1]
-with open(p) as f:
-    data = json.load(f)
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../.." && pwd
+}
+ROOT=$(detect_root)
+
+export JARVIS_ROOT="$ROOT"
+export EXECUTOR_LIVE="$LIVE"
+
+python3 - <<'PY' "$PLAN_FILE" "$ROOT" "$LIVE"
+import json, sys, subprocess, shlex, os
+from pathlib import Path
+
+plan_path, root, live = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3] == "true"
+data = json.loads(plan_path.read_text())
 steps = data.get("steps", [])
-out = {"dry_run": True, "goal": data.get("goal"), "execute": []}
+
+# tool -> relative bin under jarvis-ecosystem
+ALLOW = {
+    "editorial-calendar": "skills/global/editorial-calendar/bin/editorial-calendar",
+    "approval-gate": "skills/global/approval-gate/bin/approval-gate",
+    "client-onboard": "skills/global/client-onboard/bin/client-onboard",
+    "mkt-publish": "skills/global/mkt-publish/bin/mkt-publish",
+    "handoff": "skills/global/handoff/bin/handoff",
+    "activity-log": "skills/global/activity-log/bin/activity-log",
+    "coordinator": "skills/global/coordinator/bin/coordinator",
+    "publish-safety": "skills/global/publish-safety/bin/publish-safety",
+    "creative-qa": "skills/global/creative-qa/bin/creative-qa",
+    "de-ai-ify": "skills/global/de-ai-ify/bin/de-ai-ify",
+    "competitor-intel": "skills/global/competitor-intel/bin/competitor-intel",
+    "client-report": "skills/global/client-report/bin/client-report",
+    "social-metrics": "skills/global/social-metrics/bin/social-metrics",
+    "brand-kit": "skills/brand-kit/bin/brand-kit",
+    "carousel-render": "skills/carousel-render/bin/carousel-render",
+    "error-recovery": "skills/error-recovery/bin/error-recovery",
+}
+
+out = {"dry_run": not live, "goal": data.get("goal"), "execute": [], "results": []}
+
 for s in steps:
-    out["execute"].append({
-        "tool": s.get("tool"),
-        "action": s.get("action"),
-        "args": s.get("args", {}),
-        "note": "Invocar vía OpenClaw / CLI del skill con aprobación si aplica",
-    })
+    tool = s.get("tool") or ""
+    action = s.get("action") or ""
+    args = s.get("args") or {}
+    entry = {"tool": tool, "action": action, "args": args}
+    out["execute"].append(entry)
+    if tool not in ALLOW:
+        out["results"].append({**entry, "ok": False, "error": f"tool not allowlisted: {tool}"})
+        continue
+    bin_path = root / ALLOW[tool]
+    if not bin_path.exists():
+        out["results"].append({**entry, "ok": False, "error": f"bin missing: {bin_path}"})
+        continue
+    # Build argv: bin action --k v ...
+    argv = [str(bin_path)]
+    if action and action not in ("describe", "run", ""):
+        argv.append(action)
+    elif tool == "mkt-publish":
+        pass  # mkt-publish has no subcommand
+    for k, v in args.items():
+        flag = f"--{k.replace('_', '-')}"
+        if isinstance(v, bool):
+            if v:
+                argv.append(flag)
+        elif v is None:
+            continue
+        else:
+            argv.extend([flag, str(v)])
+    if not live:
+        out["results"].append({**entry, "ok": True, "would_run": argv, "note": "dry-run"})
+        continue
+    # Safety: never force-live publish from executor without explicit arg
+    if tool == "mkt-publish" and "--force-live" in argv:
+        out["results"].append({**entry, "ok": False, "error": "executor refuses --force-live; run mkt-publish manually after AG-12"})
+        continue
+    try:
+        proc = subprocess.run(argv, capture_output=True, text=True, timeout=120, cwd=str(root))
+        out["results"].append({
+            **entry,
+            "ok": proc.returncode == 0,
+            "returncode": proc.returncode,
+            "stdout": (proc.stdout or "")[:2000],
+            "stderr": (proc.stderr or "")[:1000],
+            "argv": argv,
+        })
+    except Exception as e:
+        out["results"].append({**entry, "ok": False, "error": str(e), "argv": argv})
+
 print(json.dumps(out, ensure_ascii=False, indent=2))
 PY
