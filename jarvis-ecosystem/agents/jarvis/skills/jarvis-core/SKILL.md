@@ -221,4 +221,4 @@ Precedencia y honestidad de `jarvis-core` aplican. Ajustes holding:
 3. Memoria: Engram MCP si disponible; si no, `MEMORY.md` + dossiers + Trello.
 4. Skills de dominio holding (marketing×40, `proposal-ops`, `carousel-ops`) **no** se sustituyen por globales.
 
-Ver: [APPROVAL_GATES.md](../../../docs/APPROVAL_GATES.md) y docs library `CLAWVIS_INTEGRATION.md`.
+Ver: [APPROVAL_GATES.md](../../../../docs/APPROVAL_GATES.md) y docs library `CLAWVIS_INTEGRATION.md`.

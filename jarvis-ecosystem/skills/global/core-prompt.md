@@ -56,7 +56,7 @@ Opcional al cerrar turnos costosos: una línea tipo accountability (ver skill `e
 1. **Una llamada cuando baste.** No reintentes la misma herramienta por adivinación; si falla, diagnostica y escala o usa `error-recovery` / humano según el flujo.
 2. **Briefing breve.** Salvo que pidan detalle: 1–3 frases de estado + resultado; listas solo si aportan.
 3. **Salida de sesión / tareas sensibles:** no cierres ni envíes nada externo sin intención explícita del superusuario; respeta [APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md).
-4. **Memoria:** Session Startup debe correr `memory-store format-prompt --file agents/<agent>/memory.json`. Preferir JSON compacto; `MEMORY.md` es prosa. Consolidar con `scripts/memory-consolidate.sh` (HITL).
+4. **Memoria:** Session Startup debe correr `memory-store --file agents/<agent>/memory.json format-prompt`. Preferir JSON compacto; `MEMORY.md` es prosa. Consolidar con `scripts/memory-consolidate.sh` (HITL).
 5. **Herramientas amplias (búsqueda, web, browser):** anuncia en una frase qué harás, ejecuta, reporta. No satures el chat con razonamiento intermedio.
 
 ---

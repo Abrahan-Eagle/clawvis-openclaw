@@ -20,7 +20,7 @@ Esta carpeta NO se versiona (excepto este README y los placeholders). Vive en `.
 
 ```bash
 cd /var/www/clawvis-openclaw/jarvis-ecosystem
-mkdir -p state/tasks state/handoffs state/approvals state/editorial-calendar state/cache/images
+mkdir -p state/tasks state/handoffs state/approvals state/judge state/editorial-calendar state/cache/images
 touch state/activity-log.jsonl
 ```
 

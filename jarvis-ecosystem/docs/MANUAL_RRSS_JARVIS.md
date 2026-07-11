@@ -41,7 +41,7 @@ export PATH="$PWD/skills/global/editorial-calendar/bin:$PWD/skills/global/approv
 ## Memoria y aprendizaje (HITL)
 
 ```bash
-memory-store format-prompt --file agents/marketing/memory.json
+memory-store --file agents/marketing/memory.json format-prompt
 bash scripts/memory-consolidate.sh --agent marketing    # propone; --apply solo con OK
 bash scripts/lessons-scan.sh                            # candidatos LESSONS.md
 ```
