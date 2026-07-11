@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+# mkt-publish — dry-run + Meta Graph (IG/FB) tras approval-gate
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+mkt-publish [options]
+
+Options:
+  --handoff ID          Handoff producer-to-publisher
+  --dossier ID          Dossier (opcional si viene en handoff/approval)
+  --channel instagram|facebook  (default instagram)
+  --dry-run             Simula publicación (default si no hay token)
+  --force-live          Intenta Meta Graph real (requiere gate approved + token)
+  --caption-file PATH
+  --asset PATH
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+HANDOFFS_DIR="$STATE_DIR/handoffs"
+APP_DIR="$STATE_DIR/approvals"
+PUB_DIR="$STATE_DIR/publish-log"
+GATE_BIN="$ROOT/skills/global/approval-gate/bin/approval-gate"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+handoff=""
+dossier=""
+channel="instagram"
+dry_run=true
+force_live=false
+caption_file=""
+asset=""
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --handoff) handoff="$2"; shift 2 ;;
+    --dossier) dossier="$2"; shift 2 ;;
+    --channel) channel="$2"; shift 2 ;;
+    --dry-run) dry_run=true; shift ;;
+    --force-live) force_live=true; dry_run=false; shift ;;
+    --caption-file) caption_file="$2"; shift 2 ;;
+    --asset) asset="$2"; shift 2 ;;
+    help|--help|-h) usage; exit 0 ;;
+    *) echo "Opcion desconocida: $1" >&2; usage; exit 1 ;;
+  esac
+done
+
+mkdir -p "$PUB_DIR"
+
+# Load handoff payload if present
+caption=""
+if [ -n "$handoff" ]; then
+  hf="$HANDOFFS_DIR/$handoff.json"
+  [ -f "$hf" ] || { echo "ERROR: handoff $handoff no existe" >&2; exit 1; }
+  asset=${asset:-$(jq -r '.payload.asset_path // .payload.asset // empty' "$hf")}
+  caption=$(jq -r '.payload.caption // empty' "$hf")
+  dossier=${dossier:-$(jq -r '.payload.dossier_id // empty' "$hf")}
+  # Gate check
+  if [ -x "$GATE_BIN" ]; then
+    check=$("$GATE_BIN" check --handoff "$handoff" 2>/dev/null || echo '{"status":"missing"}')
+    st=$(jq -r '.status' <<<"$check")
+    if [ "$force_live" = true ] && [ "$st" != "approved" ]; then
+      echo "ERROR: approval-gate no approved para handoff $handoff (status=$st). AG-12 requerido." >&2
+      exit 3
+    fi
+  fi
+fi
+
+[ -n "$caption_file" ] && [ -f "$caption_file" ] && caption=$(cat "$caption_file")
+
+token="${META_ACCESS_TOKEN:-${FACEBOOK_ACCESS_TOKEN:-}}"
+ig_user="${META_IG_USER_ID:-}"
+page_id="${META_PAGE_ID:-}"
+
+result_status="dry_run"
+remote_id=""
+missing=()
+
+if [ -z "$token" ]; then missing+=("META_ACCESS_TOKEN"); fi
+if [ "$channel" = "instagram" ] && [ -z "$ig_user" ]; then missing+=("META_IG_USER_ID"); fi
+if [ "$channel" = "facebook" ] && [ -z "$page_id" ]; then missing+=("META_PAGE_ID"); fi
+if [ -z "$asset" ]; then missing+=("asset_path"); fi
+
+if [ "$force_live" = true ] && [ "$dry_run" = false ]; then
+  if [ ${#missing[@]} -gt 0 ]; then
+    echo "ERROR: faltan credenciales/paths: ${missing[*]}" >&2
+    echo "TikTok/X: publicación manual (sin API en v1)." >&2
+    exit 4
+  fi
+  # Meta Graph: create media container then publish (simplified)
+  if [ "$channel" = "instagram" ]; then
+    # Expect public URL for asset in META_ASSET_PUBLIC_URL or file:// not supported by Graph
+    public_url="${META_ASSET_PUBLIC_URL:-}"
+    if [ -z "$public_url" ]; then
+      echo "ERROR: Meta Graph requiere META_ASSET_PUBLIC_URL (URL pública de la imagen)" >&2
+      exit 4
+    fi
+    create=$(curl -sS -X POST "https://graph.facebook.com/v19.0/${ig_user}/media" \
+      -d "image_url=${public_url}" \
+      --data-urlencode "caption=${caption}" \
+      -d "access_token=${token}")
+    creation_id=$(jq -r '.id // empty' <<<"$create")
+    if [ -z "$creation_id" ]; then
+      echo "ERROR: Meta create media fallo: $create" >&2
+      exit 5
+    fi
+    pub=$(curl -sS -X POST "https://graph.facebook.com/v19.0/${ig_user}/media_publish" \
+      -d "creation_id=${creation_id}" -d "access_token=${token}")
+    remote_id=$(jq -r '.id // empty' <<<"$pub")
+    result_status="published"
+  else
+    echo "ERROR: facebook feed publish v1 limitado; usa --dry-run o Instagram" >&2
+    exit 4
+  fi
+else
+  dry_run=true
+  result_status="dry_run"
+fi
+
+log_id="pub-$(date +%Y%m%d)-$(date +%s%N | sha1sum | head -c 6)"
+jq -n \
+  --arg id "$log_id" --arg ho "$handoff" --arg d "$dossier" --arg ch "$channel" \
+  --arg asset "$asset" --arg st "$result_status" --arg rid "$remote_id" --arg now "$(ts_now)" \
+  --argjson missing "$(printf '%s\n' "${missing[@]:-}" | jq -R . | jq -s -c 'map(select(length>0))')" \
+  '{id:$id,handoff_id:(if $ho=="" then null else $ho end),dossier_id:(if $d=="" then null else $d end),channel:$ch,asset_path:(if $asset=="" then null else $asset end),status:$st,remote_id:(if $rid=="" then null else $rid end),missing_credentials:$missing,note:"TikTok/X = manual en v1",created_at:$now}' \
+  > "$PUB_DIR/$log_id.json"
+
+jq -c . "$PUB_DIR/$log_id.json"

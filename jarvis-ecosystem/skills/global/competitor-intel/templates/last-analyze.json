@@ -1,0 +1,44 @@
+{
+  "dossier_id": "corralx",
+  "dry_run": true,
+  "source": "/var/www/clawvis-openclaw/jarvis-ecosystem/skills/global/competitor-intel/templates/viral-posts.example.json",
+  "top3": [
+    {
+      "hook": "3 errores que matan tu engagement",
+      "formato": "carrusel",
+      "tema": "educacion",
+      "engagement_score": 0.92
+    },
+    {
+      "hook": "Antes / despues del cliente",
+      "formato": "reel",
+      "tema": "testimonio",
+      "engagement_score": 0.88
+    },
+    {
+      "hook": "Checklist de la semana",
+      "formato": "carrusel",
+      "tema": "utilidad",
+      "engagement_score": 0.81
+    }
+  ],
+  "patterns": [
+    {
+      "hook": "3 errores que matan tu engagement",
+      "formato": "carrusel",
+      "tema": "educacion"
+    },
+    {
+      "hook": "Antes / despues del cliente",
+      "formato": "reel",
+      "tema": "testimonio"
+    },
+    {
+      "hook": "Checklist de la semana",
+      "formato": "carrusel",
+      "tema": "utilidad"
+    }
+  ],
+  "note": "Solo inspiracion — no copy literal. Apify/Meta Ads = futuro --live",
+  "analyzed_at": "2026-07-10T20:30:42Z"
+}

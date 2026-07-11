@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# creative-qa — checks básicos pre-AG-12 sobre assets
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+creative-qa <command> [options]
+
+Commands:
+  check   --file PATH [--min-bytes N] [--ext png,jpg,jpeg,webp,mp4]
+  batch   --dir PATH
+  help
+EOF
+}
+
+cmd_check() {
+  local file="" min_bytes=1024 ext="png,jpg,jpeg,webp,mp4"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --file) file="$2"; shift 2 ;;
+      --min-bytes) min_bytes="$2"; shift 2 ;;
+      --ext) ext="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$file" ] || { echo "ERROR: --file requerido" >&2; exit 1; }
+  local ok=true
+  local issues=()
+  if [ ! -f "$file" ]; then
+    ok=false; issues+=("missing_file")
+  else
+    local sz; sz=$(wc -c < "$file" | tr -d ' ')
+    [ "$sz" -ge "$min_bytes" ] || { ok=false; issues+=("too_small:${sz}"); }
+    local e="${file##*.}"; e=$(echo "$e" | tr 'A-Z' 'a-z')
+    echo ",$ext," | grep -qi ",$e," || { ok=false; issues+=("bad_ext:$e"); }
+  fi
+  local issues_json
+  issues_json=$(printf '%s\n' "${issues[@]:-}" | jq -R . | jq -s -c 'map(select(length>0))')
+  jq -n --arg f "$file" --argjson ok "$ok" --argjson issues "$issues_json" \
+    '{file:$f,ok:$ok,issues:$issues}'
+  $ok || exit 2
+}
+
+cmd_batch() {
+  local dir=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dir) dir="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -d "$dir" ] || { echo "ERROR: --dir invalido" >&2; exit 1; }
+  local fail=0
+  while IFS= read -r -d '' f; do
+    cmd_check --file "$f" || fail=$((fail+1))
+  done < <(find "$dir" -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.webp' -o -iname '*.mp4' \) -print0)
+  [ "$fail" -eq 0 ]
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  check) cmd_check "$@" ;;
+  batch) cmd_batch "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

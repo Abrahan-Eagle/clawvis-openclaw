@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+# client-onboard — wizard dossier + brand checklist
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+client-onboard <command> [options]
+
+Commands:
+  init      --id DOSSIER_ID --nombre "Nombre" [--rubro R] [--instagram @h]
+  brand     --dossier ID [--from-template PATH]
+  checklist --dossier ID
+  validate  --dossier ID
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+BRANDS_DIR="$ROOT/brands"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+cmd_init() {
+  local id="" nombre="" rubro="general" ig=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --nombre) nombre="$2"; shift 2 ;;
+      --rubro) rubro="$2"; shift 2 ;;
+      --instagram) ig="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$id" ] && [ -n "$nombre" ] || { echo "ERROR: --id y --nombre requeridos" >&2; exit 1; }
+  local dir="$DOSSIERS_DIR/$id"
+  if [ -d "$dir" ] || [ -f "$DOSSIERS_DIR/$id.json" ]; then
+    echo "ERROR: dossier $id ya existe" >&2; exit 1
+  fi
+  mkdir -p "$dir"
+  jq -n \
+    --arg id "$id" --arg n "$nombre" --arg r "$rubro" --arg ig "$ig" --arg now "$(ts_now)" \
+    '{
+      dossier_id:$id, version:$now, nombre_comercial:$n, rubro:$r,
+      servicios_contratados_o_deseados:["gestion_redes"],
+      empresa_del_holding_asignada:"marketing",
+      redes_sociales:{instagram_handle:(if $ig=="" then null else $ig end), plataformas:["instagram_feed"], frecuencia_posts_semana:3},
+      accesos_meta:{instagram_business:"pendiente", checklist:"docs/PUBLICACION_RRSS_SETUP.md"},
+      aprobaciones:{agencia_publicacion:"CEO_AG-12", plazo_horas:48},
+      onboarding:{completado:null, checklist_pending:true}
+    }' > "$dir/dossier.json"
+  echo "{\"dossier_id\":\"$id\",\"path\":\"$dir/dossier.json\"}"
+}
+
+cmd_brand() {
+  local dossier="" from=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --from-template) from="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  local dir="$DOSSIERS_DIR/$dossier"
+  [ -d "$dir" ] || [ -f "$DOSSIERS_DIR/$dossier.json" ] || { echo "ERROR: dossier no existe" >&2; exit 2; }
+  mkdir -p "$dir" "$BRANDS_DIR/$dossier"
+  local dest="$dir/brand.json"
+  if [ -n "$from" ] && [ -f "$from" ]; then
+    cp "$from" "$dest"
+  elif [ -f "$BRANDS_DIR/aiblock/brand.json" ]; then
+    cp "$BRANDS_DIR/aiblock/brand.json" "$dest"
+  else
+    jq -n --arg d "$dossier" '{dossier_id:$d,colors:{primary:"#000000"},banned_words:[],voice:"cercana"}' > "$dest"
+  fi
+  cp "$dest" "$BRANDS_DIR/$dossier/brand.json" 2>/dev/null || true
+  echo "{\"brand\":\"$dest\"}"
+}
+
+cmd_checklist() {
+  local dossier=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  local df="$DOSSIERS_DIR/$dossier/dossier.json"
+  [ -f "$df" ] || df="$DOSSIERS_DIR/$dossier.json"
+  [ -f "$df" ] || { echo "ERROR: dossier no encontrado" >&2; exit 2; }
+  local brand="$DOSSIERS_DIR/$dossier/brand.json"
+  [ -f "$brand" ] || brand="$BRANDS_DIR/$dossier/brand.json"
+  python3 - "$df" "$brand" <<'PY'
+import json, sys
+from pathlib import Path
+d = json.loads(Path(sys.argv[1]).read_text())
+brand = Path(sys.argv[2])
+items = [
+  ("dossier.json", True),
+  ("brand.json", brand.is_file()),
+  ("instagram_handle", bool((d.get("redes_sociales") or {}).get("instagram_handle"))),
+  ("accesos_meta.instagram_business != pendiente", (d.get("accesos_meta") or {}).get("instagram_business") not in (None, "pendiente", "")),
+  ("frecuencia_posts_semana", bool((d.get("redes_sociales") or {}).get("frecuencia_posts_semana"))),
+]
+print(json.dumps({"dossier_id": d.get("dossier_id"), "items": [{"check": a, "ok": b} for a,b in items], "ready": all(b for _,b in items[:3])}, ensure_ascii=False, indent=2))
+PY
+}
+
+cmd_validate() {
+  cmd_checklist "$@"
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  init) cmd_init "$@" ;;
+  brand) cmd_brand "$@" ;;
+  checklist|validate) cmd_checklist "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

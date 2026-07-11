@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# competitor-intel — ingest + viral-analyze (dry-run sin Apify)
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+competitor-intel <command> [options]
+
+Commands:
+  ingest         --dossier ID --file PATH.json
+  viral-analyze  --dossier ID [--dry-run]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+CI_DIR="$STATE_DIR/competitor-intel"
+SELF_DIR=$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")
+TEMPLATES="$(dirname "$SELF_DIR")/templates"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+cmd_ingest() {
+  local dossier="" file=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --file) file="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] && [ -n "$file" ] || { echo "ERROR: --dossier --file requeridos" >&2; exit 1; }
+  [ -f "$file" ] || { echo "ERROR: file no existe" >&2; exit 1; }
+  mkdir -p "$CI_DIR/$dossier"
+  local dest="$CI_DIR/$dossier/posts-$(date +%Y%m%d).json"
+  cp "$file" "$dest"
+  echo "{\"ingested\":\"$dest\"}"
+}
+
+cmd_viral_analyze() {
+  local dossier="" dry=true
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --dry-run) dry=true; shift ;;
+      --live) dry=false; shift ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  mkdir -p "$CI_DIR/$dossier"
+  local src=""
+  shopt -s nullglob
+  local files=("$CI_DIR/$dossier"/posts-*.json)
+  if [ ${#files[@]} -gt 0 ]; then
+    src=$(ls -t "${files[@]}" | head -1)
+  elif [ -f "$TEMPLATES/viral-posts.example.json" ]; then
+    src="$TEMPLATES/viral-posts.example.json"
+  else
+    echo '[{"hook":"Tip del dia","formato":"carrusel","tema":"educacion","engagement_score":0.8}]' > "$CI_DIR/$dossier/posts-example.json"
+    src="$CI_DIR/$dossier/posts-example.json"
+  fi
+  python3 - "$src" "$dossier" "$dry" "$(ts_now)" <<'PY'
+import json, sys
+from pathlib import Path
+posts = json.loads(Path(sys.argv[1]).read_text())
+if isinstance(posts, dict):
+    posts = posts.get("posts") or posts.get("items") or [posts]
+ranked = sorted(posts, key=lambda p: float(p.get("engagement_score") or p.get("score") or 0), reverse=True)[:3]
+patterns = []
+for p in ranked:
+    patterns.append({
+        "hook": p.get("hook") or p.get("title"),
+        "formato": p.get("formato") or p.get("format"),
+        "tema": p.get("tema") or p.get("topic"),
+    })
+out = {
+    "dossier_id": sys.argv[2],
+    "dry_run": sys.argv[3] == "true",
+    "source": sys.argv[1],
+    "top3": ranked,
+    "patterns": patterns,
+    "note": "Solo inspiracion — no copy literal. Apify/Meta Ads = futuro --live",
+    "analyzed_at": sys.argv[4],
+}
+print(json.dumps(out, ensure_ascii=False, indent=2))
+Path(f"{Path(sys.argv[1]).parent}/last-analyze.json").write_text(json.dumps(out, ensure_ascii=False, indent=2))
+PY
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  ingest) cmd_ingest "$@" ;;
+  viral-analyze) cmd_viral_analyze "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

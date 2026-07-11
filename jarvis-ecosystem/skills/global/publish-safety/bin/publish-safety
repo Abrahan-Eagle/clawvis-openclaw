@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# publish-safety — pre-flight cuenta/canal/credenciales + record
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+publish-safety <command> [options]
+
+Commands:
+  check   --account DOSSIER [--channel instagram]
+  record  --account DOSSIER --status ok|fail [--note "..."]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+SAFE_DIR="$STATE_DIR/publish-safety"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+cmd_check() {
+  local account="" channel="instagram"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --account|--dossier) account="$2"; shift 2 ;;
+      --channel) channel="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$account" ] || { echo "ERROR: --account requerido" >&2; exit 1; }
+  local df="$DOSSIERS_DIR/$account/dossier.json"
+  [ -f "$df" ] || df="$DOSSIERS_DIR/$account.json"
+  local issues=()
+  [ -f "$df" ] || issues+=("dossier_missing")
+  if [ -f "$df" ]; then
+    local ig_status
+    ig_status=$(jq -r '.accesos_meta.instagram_business // "pendiente"' "$df")
+    [ "$ig_status" != "pendiente" ] || issues+=("instagram_business_pendiente")
+  fi
+  [ -n "${META_ACCESS_TOKEN:-}" ] || issues+=("META_ACCESS_TOKEN_missing")
+  if [ "$channel" = "instagram" ]; then
+    [ -n "${META_IG_USER_ID:-}" ] || issues+=("META_IG_USER_ID_missing")
+  fi
+  local ok=true
+  [ ${#issues[@]} -eq 0 ] || ok=false
+  local issues_json
+  issues_json=$(printf '%s\n' "${issues[@]:-}" | jq -R . | jq -s -c 'map(select(length>0))')
+  jq -n --arg a "$account" --arg ch "$channel" --argjson ok "$ok" --argjson issues "$issues_json" \
+    '{account:$a,channel:$ch,ok:$ok,issues:$issues,note:"dry-run publish allowed even if ok=false; --force-live requires ok"}'
+  $ok || exit 2
+}
+
+cmd_record() {
+  local account="" status="" note=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --account|--dossier) account="$2"; shift 2 ;;
+      --status) status="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$account" ] && [ -n "$status" ] || { echo "ERROR: --account --status requeridos" >&2; exit 1; }
+  mkdir -p "$SAFE_DIR"
+  local id="ps-$(date +%Y%m%d)-$(date +%s%N | sha1sum | head -c 6)"
+  jq -n --arg id "$id" --arg a "$account" --arg s "$status" --arg n "$note" --arg now "$(ts_now)" \
+    '{id:$id,account:$a,status:$s,note:$n,recorded_at:$now}' > "$SAFE_DIR/$id.json"
+  echo "{\"id\":\"$id\"}"
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  check) cmd_check "$@" ;;
+  record) cmd_record "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

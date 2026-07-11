@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+# editorial-calendar — slots de publicación por dossier
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+editorial-calendar <command> [options]
+
+Commands:
+  add       --dossier ID --channel CH --at ISO8601 [--asset PATH] [--caption FILE] [--title T]
+  list      [--dossier ID] [--status STATUS]
+  due       [--hours N] [--dossier ID]
+  approve   --id SLOT_ID [--note "..."]
+  set-status --id SLOT_ID --status planned|ready|published|cancelled
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+CAL_DIR="$STATE_DIR/editorial-calendar"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+short_id() { date +%s%N | sha1sum | head -c 6; }
+ensure() { mkdir -p "$CAL_DIR"; }
+
+cmd_add() {
+  local dossier="" channel="" at="" asset="" caption="" title=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --channel) channel="$2"; shift 2 ;;
+      --at) at="$2"; shift 2 ;;
+      --asset) asset="$2"; shift 2 ;;
+      --caption) caption="$2"; shift 2 ;;
+      --title) title="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] && [ -n "$channel" ] && [ -n "$at" ] || { echo "ERROR: --dossier --channel --at requeridos" >&2; exit 1; }
+  if [ ! -f "$DOSSIERS_DIR/$dossier.json" ] && [ ! -d "$DOSSIERS_DIR/$dossier" ]; then
+    echo "ERROR: dossier $dossier no existe" >&2; exit 2
+  fi
+  ensure
+  local id="slot-$(date +%Y%m%d)-$(short_id)"
+  local cap_text=""
+  [ -n "$caption" ] && [ -f "$caption" ] && cap_text=$(cat "$caption")
+  jq -n \
+    --arg id "$id" --arg d "$dossier" --arg ch "$channel" --arg at "$at" \
+    --arg asset "$asset" --arg title "$title" --arg cap "$cap_text" --arg now "$(ts_now)" \
+    '{id:$id,dossier_id:$d,channel:$ch,scheduled_at:$at,asset_path:(if $asset=="" then null else $asset end),title:(if $title=="" then null else $title end),caption:(if $cap=="" then null else $cap end),status:"planned",created_at:$now,approved_at:null,published_at:null}' \
+    > "$CAL_DIR/$id.json"
+  echo "{\"slot_id\":\"$id\"}"
+}
+
+cmd_list() {
+  local dossier="" status=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --status) status="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure
+  shopt -s nullglob
+  for f in "$CAL_DIR"/slot-*.json; do
+    jq -c --arg d "$dossier" --arg s "$status" \
+      'select(($d=="" or .dossier_id==$d) and ($s=="" or .status==$s))' "$f"
+  done
+}
+
+cmd_due() {
+  local hours=48 dossier=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --hours) hours="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure
+  python3 - "$CAL_DIR" "$hours" "$dossier" <<'PY'
+import json, sys
+from datetime import datetime, timezone, timedelta
+from pathlib import Path
+cal, hours, dossier = Path(sys.argv[1]), int(sys.argv[2]), sys.argv[3]
+now = datetime.now(timezone.utc)
+end = now + timedelta(hours=hours)
+for f in sorted(cal.glob("slot-*.json")):
+    d = json.loads(f.read_text())
+    if dossier and d.get("dossier_id") != dossier:
+        continue
+    if d.get("status") in ("published", "cancelled"):
+        continue
+    raw = d.get("scheduled_at") or ""
+    try:
+        t = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+    except Exception:
+        continue
+    if now <= t <= end or t < now:
+        print(json.dumps(d, ensure_ascii=False))
+PY
+}
+
+cmd_approve() {
+  local id="" note=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$id" ] || { echo "ERROR: --id requerido" >&2; exit 1; }
+  local f="$CAL_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: slot $id no existe" >&2; exit 1; }
+  jq --arg now "$(ts_now)" --arg note "$note" \
+    '.status="published" | .approved_at=$now | .published_at=$now | .note=(if $note=="" then .note else $note end)' \
+    "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  echo OK
+}
+
+cmd_set_status() {
+  local id="" status=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --status) status="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$id" ] && [ -n "$status" ] || { echo "ERROR: --id --status requeridos" >&2; exit 1; }
+  local f="$CAL_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: slot $id no existe" >&2; exit 1; }
+  jq --arg s "$status" '.status=$s' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  echo OK
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  add) cmd_add "$@" ;;
+  list) cmd_list "$@" ;;
+  due) cmd_due "$@" ;;
+  approve) cmd_approve "$@" ;;
+  set-status) cmd_set_status "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

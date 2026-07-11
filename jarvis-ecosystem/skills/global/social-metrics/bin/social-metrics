@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+# social-metrics — Insights Meta (dry-run sin token) → state/metrics
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+social-metrics <command> [options]
+
+Commands:
+  pull    --dossier ID [--channel instagram] [--dry-run]
+  show    --dossier ID [--period YYYY-MM]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+MET_DIR="$STATE_DIR/metrics"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+
+cmd_pull() {
+  local dossier="" channel="instagram" dry=true
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --channel) channel="$2"; shift 2 ;;
+      --dry-run) dry=true; shift ;;
+      --live) dry=false; shift ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  mkdir -p "$MET_DIR/$dossier"
+  local period; period=$(date -u +%Y-%m)
+  local out="$MET_DIR/$dossier/$period.json"
+  local token="${META_ACCESS_TOKEN:-}"
+  local ig="${META_IG_USER_ID:-}"
+  if [ "$dry" = true ] || [ -z "$token" ] || [ -z "$ig" ]; then
+    jq -n --arg d "$dossier" --arg ch "$channel" --arg p "$period" --arg now "$(ts_now)" \
+      '{dossier_id:$d,channel:$ch,period:$p,source:"dry_run",metrics:{reach:null,impressions:null,engagement:null,followers:null},note:"Configura META_ACCESS_TOKEN + META_IG_USER_ID para --live",pulled_at:$now}' \
+      > "$out"
+  else
+    raw=$(curl -sS "https://graph.facebook.com/v19.0/${ig}/insights?metric=impressions,reach,profile_views&period=day&access_token=${token}" || true)
+    jq -n --arg d "$dossier" --arg ch "$channel" --arg p "$period" --arg now "$(ts_now)" --argjson raw "${raw:-null}" \
+      '{dossier_id:$d,channel:$ch,period:$p,source:"meta_graph",raw:$raw,pulled_at:$now}' > "$out" 2>/dev/null \
+      || jq -n --arg d "$dossier" --arg err "$raw" --arg now "$(ts_now)" \
+        '{dossier_id:$d,source:"meta_graph_error",error:$err,pulled_at:$now}' > "$out"
+  fi
+  cat "$out"
+}
+
+cmd_show() {
+  local dossier="" period
+  period=$(date -u +%Y-%m)
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --period) period="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  local f="$MET_DIR/$dossier/$period.json"
+  [ -f "$f" ] || { echo "ERROR: no hay metrics en $f" >&2; exit 1; }
+  jq . "$f"
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  pull) cmd_pull "$@" ;;
+  show) cmd_show "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

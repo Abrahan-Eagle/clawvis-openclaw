@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# de-ai-ify — limpia captions vs banned_words del brand.json
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+de-ai-ify <command> [options]
+
+Commands:
+  clean   --text "..." | --file PATH [--dossier ID] [--brand PATH]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+
+cmd_clean() {
+  local text="" file="" dossier="" brand=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --text) text="$2"; shift 2 ;;
+      --file) file="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      --brand) brand="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$text" ] || { [ -n "$file" ] && [ -f "$file" ] && text=$(cat "$file"); }
+  [ -n "$text" ] || { echo "ERROR: --text o --file requerido" >&2; exit 1; }
+  if [ -z "$brand" ] && [ -n "$dossier" ]; then
+    brand="$DOSSIERS_DIR/$dossier/brand.json"
+    [ -f "$brand" ] || brand="$ROOT/brands/$dossier/brand.json"
+  fi
+  python3 - "$text" "${brand:-}" <<'PY'
+import json, re, sys
+text = sys.argv[1]
+brand_path = sys.argv[2]
+banned = [
+    "delve", "landscape", "testament", "underscore", "pivotal",
+    "en el mundo de hoy", "en conclusion", "es importante destacar",
+    "como ia", "como modelo de lenguaje",
+]
+if brand_path:
+    try:
+        b = json.load(open(brand_path))
+        banned += list(b.get("banned_words") or [])
+    except Exception:
+        pass
+cleaned = text
+removed = []
+for w in banned:
+    if not w:
+        continue
+    pat = re.compile(re.escape(w), re.I)
+    if pat.search(cleaned):
+        removed.append(w)
+        cleaned = pat.sub("", cleaned)
+cleaned = re.sub(r"\s{2,}", " ", cleaned).strip()
+# Soften common AI openers
+cleaned = re.sub(r"^(¡?Hola!?[,!]?\s*)+", "", cleaned, flags=re.I)
+print(json.dumps({"original": text, "cleaned": cleaned, "removed": removed}, ensure_ascii=False, indent=2))
+PY
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  clean) cmd_clean "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

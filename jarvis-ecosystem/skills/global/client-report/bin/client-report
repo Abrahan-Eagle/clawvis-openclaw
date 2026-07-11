@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# client-report — informe mensual HTML por dossier
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+client-report <command> [options]
+
+Commands:
+  generate  --dossier ID [--period YYYY-MM]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+DOSSIERS_DIR="${JARVIS_DOSSIERS_DIR:-$ROOT/client-dossiers}"
+OUT_DIR="$STATE_DIR/reports"
+
+cmd_generate() {
+  local dossier="" period
+  period=$(date -u +%Y-%m)
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --dossier) dossier="$2"; shift 2 ;;
+      --period) period="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$dossier" ] || { echo "ERROR: --dossier requerido" >&2; exit 1; }
+  mkdir -p "$OUT_DIR/$dossier"
+  local df="$DOSSIERS_DIR/$dossier/dossier.json"
+  [ -f "$df" ] || df="$DOSSIERS_DIR/$dossier.json"
+  local name="$dossier"
+  [ -f "$df" ] && name=$(jq -r '.nombre_comercial // .dossier_id' "$df")
+  local metrics="$STATE_DIR/metrics/$dossier/$period.json"
+  local met_block="<p>Sin métricas (ejecuta social-metrics pull).</p>"
+  [ -f "$metrics" ] && met_block="<pre>$(jq -c . "$metrics" | sed 's/</\&lt;/g')</pre>"
+  local slots=""
+  shopt -s nullglob
+  for f in "$STATE_DIR/editorial-calendar"/slot-*.json; do
+    jq -e --arg d "$dossier" 'select(.dossier_id==$d)' "$f" >/dev/null 2>&1 || continue
+    slots+="<li>$(jq -r '"\(.scheduled_at) — \(.channel) — \(.status)"' "$f")</li>"
+  done
+  [ -z "$slots" ] && slots="<li>Sin slots en editorial-calendar</li>"
+  local html="$OUT_DIR/$dossier/report-$period.html"
+  cat > "$html" <<EOF
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Reporte $name — $period</title>
+<style>body{font-family:system-ui;max-width:720px;margin:2rem auto;padding:0 1rem} h1{color:#1a1a1a}</style>
+</head><body>
+<h1>Reporte RRSS — $name</h1>
+<p>Periodo: <strong>$period</strong></p>
+<h2>Calendario</h2><ul>$slots</ul>
+<h2>Métricas</h2>$met_block
+<p><em>Generado por client-report v1 — Jarvis Ecosystem</em></p>
+</body></html>
+EOF
+  echo "{\"report\":\"$html\",\"dossier_id\":\"$dossier\",\"period\":\"$period\"}"
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  generate) cmd_generate "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac
