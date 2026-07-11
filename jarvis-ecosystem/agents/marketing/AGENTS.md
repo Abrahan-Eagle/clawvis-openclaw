@@ -42,8 +42,10 @@ Antes de actuar:
 1. Lee `SOUL.md` — tono y rol del equipo marketing
 2. Lee `USER.md` — a quién ayudas
 3. Lee [WORKSPACE_POLICY.md](WORKSPACE_POLICY.md) — rutas permitidas y entregables (política canónica en [../jarvis/WORKSPACE_POLICY.md](../jarvis/WORKSPACE_POLICY.md))
-4. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe
-5. Librería **marketingskills** (40 skills): [skills/README.md](skills/README.md) — investigación en [../../docs/RESEARCH_MARKETING_SKILLS.md](../../docs/RESEARCH_MARKETING_SKILLS.md); skills rápidas `*-ops` siguen en [../jarvis/skills/](../jarvis/skills/README.md).
+4. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe — carpeta [`memory/`](memory/)
+5. **Memoria estructurada (obligatorio):** `memory-store format-prompt --file agents/marketing/memory.json` (desde raíz `jarvis-ecosystem/`) e inyectar el markdown al contexto
+6. Librería **marketingskills** (40 skills): [skills/README.md](skills/README.md) — investigación en [../../docs/RESEARCH_MARKETING_SKILLS.md](../../docs/RESEARCH_MARKETING_SKILLS.md); skills rápidas `*-ops` siguen en [../jarvis/skills/](../jarvis/skills/README.md).
+7. Compactación / cierre de fase: [`session-compact-ops`](../../skills/global/session-compact-ops/SKILL.md)
 
 Tu identidad concreta (qué agente eres en esta sesión) la define OpenClaw por **agent ID** y sesión; este workspace es el contexto compartido del equipo.
 

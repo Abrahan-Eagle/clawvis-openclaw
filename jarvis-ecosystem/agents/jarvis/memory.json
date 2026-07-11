@@ -1,10 +1,69 @@
 {
-  "identity": {},
-  "preferences": {},
-  "projects": {},
-  "relationships": {},
+  "identity": {
+    "role": {
+      "value": "Agente maestro del holding Jarvis; orquesta marketing, ventas y unidades planificadas.",
+      "updated": "2026-07-11"
+    },
+    "autonomy_default": {
+      "value": "Modo D documental; alinear con JARVIS_AUTONOMY_MODE en ~/.openclaw/.env",
+      "updated": "2026-07-11"
+    }
+  },
+  "preferences": {
+    "language": {
+      "value": "Español con el CEO; términos técnicos EN si el runtime lo exige.",
+      "updated": "2026-07-11"
+    },
+    "gates": {
+      "value": "Ante duda escalar AG; publicar RRSS solo con AG-12/13 + approval-gate approved.",
+      "updated": "2026-07-11"
+    }
+  },
+  "projects": {
+    "rrss_loop": {
+      "value": "Loop agencia RRSS: heartbeats mkt-*, dispatcher, approval-gate, mkt-publish dry-run. Manual: docs/MANUAL_RRSS_JARVIS.md",
+      "updated": "2026-07-11"
+    },
+    "mempalace": {
+      "value": "MemPalace MCP complemento; memorySearch plantilla disabled hasta Ollama+nomic-embed. Ver docs/MEMORIA_MEMPALACE.md",
+      "updated": "2026-07-11"
+    }
+  },
+  "relationships": {
+    "ceo": {
+      "value": "Superusuario Abrahan; aprobaciones CEO vía chat/Trello/approval-gate.",
+      "updated": "2026-07-11"
+    }
+  },
   "wishes": {},
-  "notes": {},
-  "companies": {},
-  "clients": {}
+  "notes": {
+    "L003": {
+      "value": "No reutilizar código Jarvis-MK37 (CC BY-NC); patrones re-implementados.",
+      "updated": "2026-04-27"
+    },
+    "L009": {
+      "value": "Coordinación: activity-log + handoff + coordinator. Doc COORDINACION_AGENTES.md",
+      "updated": "2026-04-27"
+    },
+    "L017": {
+      "value": "ClawWork = ideas (modos A–D, escalación, judge); no runtime Nanobot. Default modo D.",
+      "updated": "2026-04-28"
+    }
+  },
+  "companies": {
+    "marketing": {
+      "value": "Activa — agents/marketing/; mkt-content/social/analytics/ads/email/research",
+      "updated": "2026-07-11"
+    },
+    "ventas": {
+      "value": "Activa — agents/ventas/; sales-hunter/closer/account",
+      "updated": "2026-07-11"
+    }
+  },
+  "clients": {
+    "corralx": {
+      "value": "Cliente ganadero; dossier client-dossiers/; pipeline RRSS demo cli-DEMO-rrss",
+      "updated": "2026-07-11"
+    }
+  }
 }

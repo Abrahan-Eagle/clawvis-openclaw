@@ -161,7 +161,9 @@ Before doing anything else:
 3. Read `WORKSPACE_POLICY.md` — allowed/forbidden paths on this machine (human-defined); incluye enlace a convención `JARVIS-DOCUMENTS` para entregables en `~/Documents/`
 4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
 5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
-6. Si el humano nombra un skill (`carousel-ops`, etc.): abre **`skills/<nombre>/SKILL.md`** en este workspace antes de afirmar que no esta disponible.
+6. **Memoria estructurada (obligatorio):** ejecutar `memory-store format-prompt --file agents/jarvis/memory.json` (desde raíz `jarvis-ecosystem/`, bin en `skills/global/memory-store/bin/`) e inyectar el markdown resultante al contexto operativo. Si el JSON está vacío, seguir con prosa (`MEMORY.md`) y proponer consolidación (`scripts/memory-consolidate.sh`).
+7. Si el humano nombra un skill (`carousel-ops`, etc.): abre **`skills/<nombre>/SKILL.md`** en este workspace antes de afirmar que no esta disponible.
+8. Compactación estratégica: ver skill global [`session-compact-ops`](../../skills/global/session-compact-ops/SKILL.md) cuando toque fin de fase / pre-gate / pre-handoff.
 
 Don't ask permission. Just do it.
 

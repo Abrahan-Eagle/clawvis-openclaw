@@ -1,10 +1,65 @@
 {
-  "identity": {},
-  "preferences": {},
-  "projects": {},
-  "relationships": {},
+  "identity": {
+    "team": {
+      "value": "Empresa Marketing & Comunicación del holding; workspace compartido mkt-*.",
+      "updated": "2026-07-11"
+    },
+    "autonomy": {
+      "value": "Modo C recomendado: produce assets/handoffs; publica solo con AG-12/13 CEO.",
+      "updated": "2026-07-11"
+    }
+  },
+  "preferences": {
+    "brand_first": {
+      "value": "Leer product-marketing-context y dossier antes de copy/carrusel.",
+      "updated": "2026-07-11"
+    },
+    "pipeline_free": {
+      "value": "Stack local: brand-kit, carousel-render, video-compose, tts-free. Docs CAROUSEL_PIPELINE_FREE / REELS.",
+      "updated": "2026-04-27"
+    }
+  },
+  "projects": {
+    "skills_v2": {
+      "value": "40 marketingskills adaptadas ES + sync-marketing-skills-from-repo.sh (2026-04-28).",
+      "updated": "2026-04-28"
+    },
+    "rrss_loop": {
+      "value": "HEARTBEAT.md + marketing-dispatch + approval-gate + judge-run pre-AG-12. Manual MANUAL_RRSS_JARVIS.md",
+      "updated": "2026-07-11"
+    }
+  },
+  "relationships": {
+    "jarvis": {
+      "value": "Orquestación holding; handoffs y activity-log unificados.",
+      "updated": "2026-07-11"
+    },
+    "ventas": {
+      "value": "Contenido alineado a servicios que ventas ofrece (G-M02).",
+      "updated": "2026-07-11"
+    }
+  },
   "wishes": {},
-  "notes": {},
-  "companies": {},
-  "clients": {}
+  "notes": {
+    "L011": {
+      "value": "activity-log flags: --task/--agent/--kind/--note/--payload-file (no --task-id legacy).",
+      "updated": "2026-04-27"
+    },
+    "L012": {
+      "value": "Handoff producer-to-publisher: asset_path + channels[] + format.",
+      "updated": "2026-04-27"
+    }
+  },
+  "companies": {
+    "aiblock_marketing": {
+      "value": "Presencia digital Aiblock medible (G-M01).",
+      "updated": "2026-07-11"
+    }
+  },
+  "clients": {
+    "cli-DEMO-rrss": {
+      "value": "Demo E2E carrusel+reel abr 2026; plantillas en templates/reels y out/cli-DEMO-rrss/",
+      "updated": "2026-04-27"
+    }
+  }
 }
