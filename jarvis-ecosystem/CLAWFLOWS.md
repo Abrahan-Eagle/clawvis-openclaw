@@ -3,7 +3,7 @@
 ## Prompt core, memoria y skills del repo (2026-04)
 
 - **Protocolo compartido (texto, no voz):** [skills/global/core-prompt.md](skills/global/core-prompt.md). Cada `agents/*/SOUL.md` hereda con una línea al inicio; cámbialo una sola vez aquí para alinear routing y approval gates.
-- **Memoria operativa por agente:** [skills/global/memory-store/](skills/global/memory-store/) + `agents/<agente>/memory.json`; `MEMORY.md` sigue siendo notas en prosa.
+- **Memoria operativa por agente:** [skills/global/memory-store/](skills/global/memory-store/) + `agents/<agente>/memory.json` (Session Startup: `format-prompt`); `MEMORY.md` = prosa. Consolidación HITL: `scripts/memory-consolidate.sh`. Compactación: [session-compact-ops](skills/global/session-compact-ops/SKILL.md). Judge pre-AG-12: [judge-run](skills/global/judge-run/SKILL.md) → `state/judge/`. Lecciones: `scripts/lessons-scan.sh`. Context packs: [contexts/](contexts/).
 - **Skills añadidos en este ecosistema** (además de ClawHub): `weather-report`, `youtube-transcript`, `browser-playwright`, conjunto `planner` / `task-queue` / `executor` / `error-recovery` (ver `automations/jarvis/loop-orchestrator.yaml`), y el bloque **v2 abril 2026**: skills globales `activity-log`, `handoff`, `coordinator` (coordinacion); pipeline RRSS local `brand-kit`, `image-render`, `image-ai-free`, `carousel-render`, `tts-free`, `subtitles`, `video-compose`, `video-short` (esqueleto). Ver [docs/PROPUESTA_MEJORA_JARVIS_V2.md](docs/PROPUESTA_MEJORA_JARVIS_V2.md), [docs/COORDINACION_AGENTES.md](docs/COORDINACION_AGENTES.md), [docs/CAROUSEL_PIPELINE_FREE.md](docs/CAROUSEL_PIPELINE_FREE.md), [docs/REELS_TIKTOK_PIPELINE_FREE.md](docs/REELS_TIKTOK_PIPELINE_FREE.md).
 
 El **runtime OpenClaw** no carga automáticamente `core-prompt.md` en el system prompt: el agente (o tú) debe **leerlo al inicio de sesión** o enlazarlo en la configuración del gateway si tu versión soporta inyección. Hasta entonces, la línea *Hereda* en `SOUL.md` es el recordatorio de convenio del equipo.
@@ -69,7 +69,12 @@ Ver `automations/README.md` para la diferencia entre `list` y la carpeta `regist
 
 ## Skills instalados (ClawHub) — carpeta compartida
 
-`agents/marketing/skills` y la mayor parte de `agents/ventas/skills` duplican el contenido de `agents/jarvis/skills` (copias por skill). **Excepción:** `agents/ventas/skills/career-ops/` es solo Ventas (no existe en jarvis). **Canónico para editar:** `agents/jarvis/skills/`; luego sincronizar o reinstalar según tu flujo (ver `README.md` en la raíz de `jarvis-ecosystem/`).
+**Skills por capa (jul 2026):**
+
+- `agents/jarvis/skills/` — skills globales JARVIS + ClawHub + variantes `*-ops` (canónico para ops de gobierno).
+- `agents/marketing/skills/` — **40 skills de dominio** (marketingskills / guías v2). **No** son copia de jarvis; son exclusivas de marketing.
+- `agents/ventas/skills/career-ops/` — solo Ventas.
+- `skills/` y `skills/global/` — CLIs de producción y coordinación (carousel-render, handoff, editorial-calendar, approval-gate, mkt-publish, …). Ver [docs/MANUAL_RRSS_JARVIS.md](docs/MANUAL_RRSS_JARVIS.md).
 
 Instalados: `gog`, `himalaya`, `xurl`, `slack`, `blogwatcher`, `summarize`, `notion`, `trello`, `session-logs`, `nano-pdf`, `mcporter`, `tmux`, `video-frames`.
 
