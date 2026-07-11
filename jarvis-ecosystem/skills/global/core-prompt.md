@@ -13,6 +13,27 @@ Los archivos `SOUL.md` de cada agente **heredan** estas reglas añadiendo al ini
 
 ---
 
+## Context packs (conmutables)
+
+Al iniciar sesión o al cambiar de fase, declara una línea:
+
+`Context mode: research | produce | review`  
+(valor: variable `JARVIS_CONTEXT_MODE` o instrucción del usuario).
+
+Packs en [`contexts/`](../../contexts/):
+
+| Modo | Archivo | Uso |
+|------|---------|-----|
+| research | `contexts/research.md` | Investigación / competitor / brief |
+| produce | `contexts/produce.md` | Copy, renders, handoffs (no publicar) |
+| review | `contexts/review.md` | Judge, QA, gates, métricas dry-run |
+
+Si no hay modo, asume el del rol (marketing heartbeat → produce; briefing → research).
+
+**Compactación estratégica:** skill [`session-compact-ops`](session-compact-ops/SKILL.md) en fin de fase, pre-gate, pre-handoff (además de `memoryFlush` nativo).
+
+---
+
 ## Modo de autonomía (obligatorio)
 
 Al **iniciar sesión** o **antes de la primera acción con gate**, declara **dos líneas**:
@@ -35,7 +56,7 @@ Opcional al cerrar turnos costosos: una línea tipo accountability (ver skill `e
 1. **Una llamada cuando baste.** No reintentes la misma herramienta por adivinación; si falla, diagnostica y escala o usa `error-recovery` / humano según el flujo.
 2. **Briefing breve.** Salvo que pidan detalle: 1–3 frases de estado + resultado; listas solo si aportan.
 3. **Salida de sesión / tareas sensibles:** no cierres ni envíes nada externo sin intención explícita del superusuario; respeta [APPROVAL_GATES.md](../../docs/APPROVAL_GATES.md).
-4. **Memoria:** para contexto compacto, preferir `memory.json` vía skill `memory-store` (`format-prompt`); `MEMORY.md` es registro en prosa.
+4. **Memoria:** Session Startup debe correr `memory-store format-prompt --file agents/<agent>/memory.json`. Preferir JSON compacto; `MEMORY.md` es prosa. Consolidar con `scripts/memory-consolidate.sh` (HITL).
 5. **Herramientas amplias (búsqueda, web, browser):** anuncia en una frase qué harás, ejecuta, reporta. No satures el chat con razonamiento intermedio.
 
 ---
