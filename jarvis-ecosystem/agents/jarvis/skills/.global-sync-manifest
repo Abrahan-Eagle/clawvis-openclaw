@@ -18,5 +18,8 @@ deep-interview-ops overlay
 task-pipeline-ops overlay
 structured-commits-ops overlay
 session-learner-ops overlay
+session-startup-ops passthrough
+strategic-compact-ops passthrough
+context-packs-ops passthrough
 scenario-analysis-ops overlay
 strategic-briefing-ops overlay

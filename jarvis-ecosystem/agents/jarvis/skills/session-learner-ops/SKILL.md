@@ -36,11 +36,11 @@ Mismo proceso y plantilla que Backend.
 
 Si el repo producto tiene ECC hooks activos (`install-ecc-runtime.sh --with-hooks`), complementar con skill `continuous-learning-v2` para instincts y `/evolve`. **Cierre canónico JARVIS:** siempre `docs/active_context.md` vía esta skill primero.
 
-Si hubo auditoría Cyber Neo en la sesión, enlazar path del reporte MD en `active_context` (hallazgos Critical/High) — forense: [CYBER_NEO_FORENSE_JARVIS.md](file:///var/www/html/proyectos/AIPP/jarvis-skills-library/docs/CYBER_NEO_FORENSE_JARVIS.md).
+Si hubo auditoría Cyber Neo en la sesión, enlazar path del reporte MD en `active_context` (hallazgos Critical/High) — forense: [CYBER_NEO_FORENSE_JARVIS.md](../../docs/CYBER_NEO_FORENSE_JARVIS.md).
 
-Opcional tras cierre canónico: si el usuario pide consolidación profunda de señales de sesión, invocar `learning-loop-router` → wrap-up — ver [LEARNING_LOOP_INTEGRATION.md](file:///var/www/html/proyectos/AIPP/jarvis-skills-library/docs/LEARNING_LOOP_INTEGRATION.md). No sustituye este skill.
+Opcional tras cierre canónico: si el usuario pide consolidación profunda de señales de sesión, invocar `learning-loop-router` → wrap-up — ver [LEARNING_LOOP_INTEGRATION.md](../../docs/LEARNING_LOOP_INTEGRATION.md). No sustituye este skill.
 
-Si la sesión usó `skill-loop run` y el workflow terminó (`done`), documentar resultado del loop en `active_context` (iteraciones, skill final) — ver [SKILL_LOOP_INTEGRATION.md](file:///var/www/html/proyectos/AIPP/jarvis-skills-library/docs/SKILL_LOOP_INTEGRATION.md). Cierre canónico sigue siendo este skill.
+Si la sesión usó `skill-loop run` y el workflow terminó (`done`), documentar resultado del loop en `active_context` (iteraciones, skill final) — ver [SKILL_LOOP_INTEGRATION.md](../../docs/SKILL_LOOP_INTEGRATION.md). Cierre canónico sigue siendo este skill.
 
 ---
 
@@ -54,6 +54,19 @@ Tras tareas significativas del holding:
 - Patrones reutilizables → notificar actualización de `SOUL.md` / `AGENTS.md` si aplica
 - Complementa `MEMORY.md` y dossiers; no sustituye Trello como registro formal de entregables
 
+### Learning loop HITL (jul 2026)
+
+Cadencia sugerida: **cierre de módulo** o **semanal**.
+
+```bash
+cd jarvis-ecosystem
+bash scripts/lessons-scan.sh          # candidatos L0XX desde activity-log (solo imprime)
+bash scripts/memory-consolidate.sh --agent jarvis   # propuestas memory.json (HITL)
+# Con OK CEO: copiar filas a LESSONS.md; memory-consolidate --apply solo si revisado
+```
+
+No auto-escribir `LESSONS.md`. Instincts ECC / hooks no aplican en OpenClaw (ver RECURSOS §2.7).
+
 ### Integración
 
-Coordinar con `strategic-briefing-ops` y heartbeat semanal.
+Coordinar con `strategic-briefing-ops`, `session-compact-ops` y heartbeat semanal.
