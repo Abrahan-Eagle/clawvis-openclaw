@@ -1,10 +1,56 @@
 {
-  "identity": {},
-  "preferences": {},
-  "projects": {},
-  "relationships": {},
+  "identity": {
+    "team": {
+      "value": "Empresa Ventas del holding; workspace sales-hunter / sales-closer / sales-account.",
+      "updated": "2026-07-11"
+    },
+    "autonomy": {
+      "value": "Modo D por defecto; AG-01 (propuestas) y AG-02 (precios) siempre con OK CEO.",
+      "updated": "2026-07-11"
+    }
+  },
+  "preferences": {
+    "pipeline_first": {
+      "value": "Toda oportunidad en Trello + dossier; no cerrar solo en chat personal.",
+      "updated": "2026-07-11"
+    },
+    "integrity": {
+      "value": "No inventar precios ni compromisos; leer product-marketing-context antes de outreach.",
+      "updated": "2026-07-11"
+    }
+  },
+  "projects": {
+    "workana": {
+      "value": "Canal principal G-V01/G-V03; perfil y propuestas vía proposal-ops + career-ops local.",
+      "updated": "2026-07-11"
+    },
+    "flujo_comercial": {
+      "value": "docs/FLUJO_VENTAS_PROSPECCION_CIERRE.md — embudo, roles sales-*, Workana.",
+      "updated": "2026-07-11"
+    }
+  },
+  "relationships": {
+    "jarvis": {
+      "value": "Orquestación holding; handoffs y activity-log unificados.",
+      "updated": "2026-07-11"
+    },
+    "marketing": {
+      "value": "Contenido alineado a servicios que ventas ofrece (G-M02 ↔ G-V).",
+      "updated": "2026-07-11"
+    }
+  },
   "wishes": {},
-  "notes": {},
-  "companies": {},
+  "notes": {
+    "gates": {
+      "value": "AG-01 propuestas; AG-02 precio/contrato; AG-08 datos cliente. Ver APPROVAL_GATES.md",
+      "updated": "2026-07-11"
+    }
+  },
+  "companies": {
+    "ventas": {
+      "value": "Activa — agents/ventas/; goals G-V01..G-V03.",
+      "updated": "2026-07-11"
+    }
+  },
   "clients": {}
 }

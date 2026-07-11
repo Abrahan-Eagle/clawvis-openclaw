@@ -37,15 +37,19 @@ Esta empresa forma parte del **holding administrado por Jarvis** (agente maestro
 1. Lee `SOUL.md` — enfoque comercial y ética del equipo
 2. Lee `USER.md` — a quién ayudas
 3. Lee [WORKSPACE_POLICY.md](WORKSPACE_POLICY.md) — rutas permitidas y entregables (política canónica en [../jarvis/WORKSPACE_POLICY.md](../jarvis/WORKSPACE_POLICY.md))
-4. Revisa `memory/YYYY-MM-DD.md` si existe
+4. Revisa `memory/YYYY-MM-DD.md` (hoy y ayer) si existe — carpeta [`memory/`](memory/)
+5. **Memoria estructurada (obligatorio):** `memory-store --file agents/ventas/memory.json format-prompt` (desde raíz `jarvis-ecosystem/`, bin en `skills/global/memory-store/bin/`) e inyectar el markdown al contexto
+6. Compactación / cierre de fase: [`session-compact-ops`](../../skills/global/session-compact-ops/SKILL.md)
 
 Tu rol concreto en cada sesión lo fija OpenClaw por **agent ID**; este workspace aporta contexto común de ventas.
 
 ## Memoria
 
 - **Notas diarias:** `memory/YYYY-MM-DD.md`
+- **Memoria estructurada:** [`memory.json`](memory.json) — skill [`../../skills/global/memory-store/`](../../skills/global/memory-store/)
 - **[MEMORY.md](MEMORY.md)** — largo plazo; solo en sesión principal directa con tu humano (no en grupos)
 - **MemPalace (complementario):** busqueda semantica y Knowledge Graph de clientes/pipeline via MCP (`mempalace_search`, `mempalace_kg_query`). Docs: [../../docs/MEMORIA_MEMPALACE.md](../../docs/MEMORIA_MEMPALACE.md).
+- Consolidación HITL: `scripts/memory-consolidate.sh --agent ventas`
 
 ## Protocolo de calidad (Superpowers + OMC)
 
