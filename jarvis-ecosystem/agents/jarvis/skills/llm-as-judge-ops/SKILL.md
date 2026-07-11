@@ -32,7 +32,7 @@ allowed-tools: [Read, Edit, Write, Glob, Grep, Bash, Task]
 - **No reemplaza** juicio humano ni gates irreversibles. Si `score < threshold_pass` o `must_fix` no está vacío → **bloquear** hasta corrección o escalación explícita.
 - **vs `parallel-judge-ops`:** un juez con rúbrica + score; parallel-judge = 2+ jueces independientes en paralelo.
 - **vs `doubt-driven-development`:** doubt-driven = duda in-flight; esta skill = auditoría de entregable casi terminado.
-- Overlay dominio (marketing, AG gates holding): ver repo producto / clawvis `OVERLAY.md`. Doc sync: [docs/CLAWVIS_INTEGRATION.md](../../docs/CLAWVIS_INTEGRATION.md).
+- Overlay dominio (marketing, AG gates holding): ver repo producto / clawvis `OVERLAY.md`. Doc sync: [docs/CLAWVIS_INTEGRATION.md](../../../docs/CLAWVIS_INTEGRATION.md).
 
 # LLM-as-Judge Ops
 
@@ -99,7 +99,8 @@ Adaptar pesos al repo activo. Productos pueden añadir categorías vía overlay.
 2. Fijar `threshold_pass` (subir en auth/prod/irreversible).
 3. Ejecutar auditoría con contexto mínimo necesario (artefacto + criterio de éxito).
 4. Parsear JSON; si falla bloqueo → re-auditar o escalar humano.
-5. Si pasa → proceder a gate humano (`human-in-the-loop-ops`) o cierre (`verification-before-completion`).
+5. Si `score ≥ threshold_pass` y `must_fix` vacío → **`approval-gate request`** (cuando el gate sea AG-12/AG-03/AG-13 u otro irreversible documentado) vía `human-in-the-loop-ops`; si no hay gate formal, cerrar con `verification-before-completion`.
+6. Si no pasa → **bloquear**; corregir `must_fix` o escalar humano (no forzar `approval-gate request`).
 
 ## Anti-patrones
 
@@ -107,9 +108,11 @@ Adaptar pesos al repo activo. Productos pueden añadir categorías vía overlay.
 - `threshold_pass` cosmético (siempre 0.5) sin calibrar por riesgo.
 - Ignorar `must_fix` no vacío "porque el score pasó".
 - Sustituir `parallel-judge-ops` en diffs críticos por un solo juez barato.
+- Solicitar `approval-gate request` con score bajo o `must_fix` pendiente.
 
 ## Skills relacionadas
 
+- `approval-gate` — enforcement CLI post-juez (`request` solo si pasa el umbral).
 - `parallel-judge-ops` — verificación adversarial paralela (2+ jueces).
 - `human-in-the-loop-ops` — gates y escalamiento humano.
 - `verification-before-completion` — evidencia empírica antes de declarar done.

@@ -30,7 +30,7 @@ allowed-tools: [Read, Edit, Write, Glob, Grep, Bash]
 
 Patrón **god-view** inspirado en simuladores multi-agente (MiroFish): vista periódica que sintetiza el estado completo en un solo documento ejecutivo. **Sin motor de simulación** — usa fuentes ya existentes en el repo y memoria del proyecto.
 
-Doc upstream: [docs/MIROFISH_UPSTREAM.md](../../docs/MIROFISH_UPSTREAM.md).
+Doc upstream: [docs/MIROFISH_UPSTREAM.md](../../../docs/MIROFISH_UPSTREAM.md).
 
 ## Cuándo se activa
 
@@ -114,7 +114,7 @@ Si el cwd incluye `clawvis-openclaw/jarvis-ecosystem`, leer además:
 - `client-dossiers/` para clientes activos
 - Último output de `pipeline-health-ops` si existe
 
-Ver [STRANGEVERSE_INTEGRATION.md](../../docs/STRANGEVERSE_INTEGRATION.md) § clawvis.
+Ver [STRANGEVERSE_INTEGRATION.md](../../../docs/STRANGEVERSE_INTEGRATION.md) § clawvis.
 
 ## Estructura del briefing
 
