@@ -1,0 +1,165 @@
+#!/usr/bin/env bash
+# approval-gate — AG-12/13 persistidos en state/approvals
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+approval-gate <command> [options]
+
+Commands:
+  request   --ag AG-12|AG-13 --task ID [--handoff ID] [--dossier ID] [--reason "..."] [--by AGENT]
+  approve   --id ESC_ID [--by CEO] [--note "..."]
+  reject    --id ESC_ID --reason "..." [--by CEO]
+  check     --id ESC_ID | --handoff ID
+  list      [--status pending|approved|rejected] [--ag AG-12]
+  help
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+STATE_DIR="${JARVIS_STATE_DIR:-$ROOT/state}"
+APP_DIR="$STATE_DIR/approvals"
+ACTIVITY_LOG="$ROOT/skills/global/activity-log/bin/activity-log"
+ts_now() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }
+short_id() { date +%s%N | sha1sum | head -c 6; }
+ensure() { mkdir -p "$APP_DIR"; }
+
+cmd_request() {
+  local ag="" task="" handoff="" dossier="" reason="" by="mkt-social"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --ag) ag="$2"; shift 2 ;;
+      --task) task="$2"; shift 2 ;;
+      --handoff) handoff="$2"; shift 2 ;;
+      --dossier) dossier="$2"; shift 2 ;;
+      --reason) reason="$2"; shift 2 ;;
+      --by) by="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$ag" ] && [ -n "$task" ] || { echo "ERROR: --ag y --task requeridos" >&2; exit 1; }
+  case "$ag" in AG-12|AG-13|AG-03) ;; *) echo "ERROR: --ag debe ser AG-12, AG-13 o AG-03" >&2; exit 1 ;; esac
+  ensure
+  local id="esc-$(date +%Y%m%d)-$(short_id)"
+  jq -n \
+    --arg id "$id" --arg ag "$ag" --arg task "$task" --arg ho "$handoff" \
+    --arg d "$dossier" --arg reason "$reason" --arg by "$by" --arg now "$(ts_now)" \
+    '{id:$id,ag:$ag,task_id:$task,handoff_id:(if $ho=="" then null else $ho end),dossier_id:(if $d=="" then null else $d end),reason:(if $reason=="" then null else $reason end),requested_by:$by,status:"pending",created_at:$now,decided_at:null,decided_by:null,decision_note:null}' \
+    > "$APP_DIR/$id.json"
+  if [ -x "$ACTIVITY_LOG" ]; then
+    "$ACTIVITY_LOG" event --agent "$by" --task "$task" --kind approval_request \
+      --payload "{\"esc_id\":\"$id\",\"ag\":\"$ag\",\"handoff_id\":\"$handoff\"}" >/dev/null 2>&1 || true
+  fi
+  # Sugerencia pre-AG-12: judge-run (no bloquea)
+  local hint=""
+  if [ "$ag" = "AG-12" ] || [ "$ag" = "AG-03" ]; then
+    if [ -n "$handoff" ]; then
+      hint="Antes de escalate al CEO: judge-run --handoff $handoff (state/judge/). Ver MANUAL_RRSS_JARVIS.md"
+    else
+      hint="Antes de escalate al CEO: judge-run --file <asset-or-handoff.json> (state/judge/)."
+    fi
+  fi
+  if [ -n "$hint" ]; then
+    jq -n --arg id "$id" --arg ag "$ag" --arg hint "$hint" \
+      '{esc_id:$id,status:"pending",ag:$ag,hint:$hint}'
+  else
+    echo "{\"esc_id\":\"$id\",\"status\":\"pending\",\"ag\":\"$ag\"}"
+  fi
+}
+
+cmd_decide() {
+  local action="$1"; shift
+  local id="" by="CEO" note="" reason=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --by) by="$2"; shift 2 ;;
+      --note) note="$2"; shift 2 ;;
+      --reason) reason="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  [ -n "$id" ] || { echo "ERROR: --id requerido" >&2; exit 1; }
+  if [ "$action" = "reject" ] && [ -z "$reason" ]; then
+    echo "ERROR: --reason requerido para reject" >&2; exit 1
+  fi
+  local f="$APP_DIR/$id.json"
+  [ -f "$f" ] || { echo "ERROR: escalacion $id no existe" >&2; exit 1; }
+  local status="approved"
+  [ "$action" = "reject" ] && status="rejected"
+  local final_note="$note"
+  [ "$action" = "reject" ] && final_note="$reason"
+  jq --arg now "$(ts_now)" --arg by "$by" --arg st "$status" --arg note "$final_note" \
+    '.status=$st | .decided_at=$now | .decided_by=$by | .decision_note=$note' \
+    "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+  echo "{\"esc_id\":\"$id\",\"status\":\"$status\"}"
+}
+
+cmd_check() {
+  local id="" handoff=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --id) id="$2"; shift 2 ;;
+      --handoff) handoff="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure
+  if [ -n "$id" ]; then
+    local f="$APP_DIR/$id.json"
+    [ -f "$f" ] || { echo "ERROR: $id no existe" >&2; exit 1; }
+    jq '{esc_id:.id,status,ag,handoff_id,decided_at}' "$f"
+    return 0
+  fi
+  if [ -n "$handoff" ]; then
+    shopt -s nullglob
+    local found=0
+    for f in "$APP_DIR"/esc-*.json; do
+      if jq -e --arg h "$handoff" 'select(.handoff_id==$h)' "$f" >/dev/null 2>&1; then
+        jq '{esc_id:.id,status,ag,handoff_id,decided_at}' "$f"
+        found=1
+      fi
+    done
+    [ "$found" -eq 1 ] || { echo "{\"status\":\"missing\",\"handoff_id\":\"$handoff\"}"; exit 2; }
+    return 0
+  fi
+  echo "ERROR: --id o --handoff requerido" >&2; exit 1
+}
+
+cmd_list() {
+  local status="" ag=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --status) status="$2"; shift 2 ;;
+      --ag) ag="$2"; shift 2 ;;
+      *) echo "Opcion desconocida: $1" >&2; exit 1 ;;
+    esac
+  done
+  ensure
+  shopt -s nullglob
+  for f in "$APP_DIR"/esc-*.json; do
+    jq -c --arg s "$status" --arg a "$ag" \
+      'select(($s=="" or .status==$s) and ($a=="" or .ag==$a))' "$f"
+  done
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  request) cmd_request "$@" ;;
+  approve) cmd_decide approve "$@" ;;
+  reject) cmd_decide reject "$@" ;;
+  check) cmd_check "$@" ;;
+  list) cmd_list "$@" ;;
+  help|--help|-h) usage ;;
+  *) echo "Comando desconocido: $cmd" >&2; usage; exit 1 ;;
+esac

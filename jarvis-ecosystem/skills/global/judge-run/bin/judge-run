@@ -1,0 +1,164 @@
+#!/usr/bin/env bash
+# judge-run — eval ligero pre-AG-12; escribe state/judge/judge-*.json
+# Modo heurístico + plantilla de prompt para LLM en sesión (no llama API sola).
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+judge-run --handoff ID | --file PATH [--category carousel_ig|copy_editing|ad_creative|generic] [--out DIR]
+
+Lee un handoff JSON (state/handoffs/) o asset/manifest, aplica checklist heurística
+alineada a llm-as-judge-ops/OVERLAY.md, escribe state/judge/judge-<ts>-<id>.json
+e imprime path + score. Incluye campo llm_prompt_template para juicio humano/LLM.
+
+No sustituye approval-gate ni el OK del CEO.
+EOF
+}
+
+detect_root() {
+  local r
+  if r=$(git rev-parse --show-toplevel 2>/dev/null); then
+    if [ -d "$r/jarvis-ecosystem" ]; then echo "$r/jarvis-ecosystem"; return 0; fi
+    if [ -d "$r/state" ]; then echo "$r"; return 0; fi
+  fi
+  local self; self=$(readlink -f "${BASH_SOURCE[0]}")
+  cd "$(dirname "$self")/../../../.." && pwd
+}
+
+ROOT=$(detect_root)
+HANDOFF=""
+FILE=""
+CATEGORY="generic"
+OUT_DIR="${JARVIS_JUDGE_DIR:-$ROOT/state/judge}"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --handoff) HANDOFF="$2"; shift 2 ;;
+    --file) FILE="$2"; shift 2 ;;
+    --category) CATEGORY="$2"; shift 2 ;;
+    --out) OUT_DIR="$2"; shift 2 ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Opción desconocida: $1" >&2; usage; exit 1 ;;
+  esac
+done
+
+if [ -z "$FILE" ] && [ -n "$HANDOFF" ]; then
+  base="$HANDOFF"
+  [[ "$base" == handoff-* ]] || base="handoff-$HANDOFF"
+  [[ "$base" == *.json ]] || base="${base}.json"
+  FILE="$ROOT/state/handoffs/$base"
+fi
+
+[ -n "$FILE" ] && [ -f "$FILE" ] || { echo "ERROR: --handoff o --file requerido y existente" >&2; exit 1; }
+
+mkdir -p "$OUT_DIR"
+ts=$(date -u +%Y%m%dT%H%M%SZ)
+short=$(basename "$FILE" .json | tr -c 'A-Za-z0-9_-' '_' | cut -c1-40)
+out="$OUT_DIR/judge-${ts}-${short}.json"
+
+# Parse handoff-ish JSON if possible
+payload=$(cat "$FILE")
+is_json=0
+echo "$payload" | jq -e . >/dev/null 2>&1 && is_json=1
+
+schema=""; asset=""; channels=""; caption=""; format=""; dossier=""; task=""; hid=""
+if [ "$is_json" -eq 1 ]; then
+  schema=$(echo "$payload" | jq -r '.schema // empty')
+  asset=$(echo "$payload" | jq -r '.payload.asset_path // .asset_path // empty')
+  channels=$(echo "$payload" | jq -r '(.payload.channels // .channels // []) | join(",")')
+  caption=$(echo "$payload" | jq -r '.payload.caption // .caption // empty')
+  format=$(echo "$payload" | jq -r '.payload.format // .format // empty')
+  dossier=$(echo "$payload" | jq -r '.dossier_id // empty')
+  task=$(echo "$payload" | jq -r '.task_id // empty')
+  hid=$(echo "$payload" | jq -r '.id // empty')
+fi
+
+# Heuristic checklist
+declare -a findings=()
+score=100
+must_fix=0
+
+check() {
+  local ok="$1" pts="$2" msg="$3"
+  if [ "$ok" = "1" ]; then
+    findings+=("{\"pass\":true,\"msg\":$(echo "$msg" | jq -Rs .)}")
+  else
+    findings+=("{\"pass\":false,\"msg\":$(echo "$msg" | jq -Rs .)}")
+    score=$((score - pts))
+    if [ "$pts" -ge 20 ]; then must_fix=1; fi
+  fi
+}
+
+[ -n "$schema" ] && check 1 0 "schema=$schema" || check 0 15 "Sin schema de handoff"
+[ -n "$asset" ] && check 1 0 "asset_path presente" || check 0 25 "Falta asset_path (crítico publisher)"
+if [ -n "$asset" ]; then
+  if [ -f "$ROOT/$asset" ] || [ -f "$asset" ]; then
+    check 1 0 "archivo asset existe en disco"
+  else
+    check 0 20 "asset_path no existe en disco: $asset"
+  fi
+fi
+[ -n "$channels" ] && check 1 0 "channels=$channels" || check 0 15 "channels vacío o ausente"
+[ -n "$format" ] && check 1 0 "format=$format" || check 0 10 "format ausente"
+[ -n "$caption" ] && check 1 0 "caption presente (${#caption} chars)" || check 0 10 "caption vacío"
+[ -n "$dossier" ] && check 1 0 "dossier_id=$dossier" || check 0 5 "sin dossier_id"
+
+# Category-specific soft checks
+case "$CATEGORY" in
+  carousel_ig)
+    echo "$format" | grep -qiE 'carousel|1080' && check 1 0 "format sugiere carrusel/1080" || check 0 10 "category=carousel_ig pero format no sugiere carrusel"
+    ;;
+  copy_editing|ad_creative|generic) ;;
+esac
+
+[ "$score" -lt 0 ] && score=0
+verdict="pass"
+[ "$score" -lt 70 ] && verdict="review"
+[ "$must_fix" -eq 1 ] || [ "$score" -lt 50 ] && verdict="fail"
+
+findings_json=$(printf '%s\n' "${findings[@]}" | jq -s .)
+
+llm_prompt=$(cat <<PROMPT
+Eres juez LLM (llm-as-judge-ops holding). Evalúa el entregable RRSS antes de AG-12.
+Categoría: $CATEGORY
+Archivo fuente: $FILE
+Schema: $schema | asset: $asset | channels: $channels | format: $format
+Caption: $caption
+
+Rúbrica carousel_ig (si aplica): coherencia narrativa 25%, CTA 15%, alineación dossier 25%, legal/marca 20%, formato técnico 15%.
+Devuelve JSON: {score:0-100, verdict, must_fix:bool, findings:[], ag_gates_touched:["AG-12"], riesgos:[]}
+PROMPT
+)
+
+jq -n \
+  --arg id "judge-${ts}-${short}" \
+  --arg ts "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  --arg src "$FILE" \
+  --arg cat "$CATEGORY" \
+  --arg verdict "$verdict" \
+  --argjson score "$score" \
+  --argjson must_fix "$must_fix" \
+  --argjson findings "$findings_json" \
+  --arg prompt "$llm_prompt" \
+  --arg hid "$hid" \
+  --arg task "$task" \
+  --arg dossier "$dossier" \
+  '{
+    id: $id,
+    created_at: $ts,
+    mode: "heuristic+prompt",
+    category: $cat,
+    source_file: $src,
+    handoff_id: (if $hid=="" then null else $hid end),
+    task_id: (if $task=="" then null else $task end),
+    dossier_id: (if $dossier=="" then null else $dossier end),
+    score: $score,
+    verdict: $verdict,
+    must_fix: ($must_fix==1),
+    findings: $findings,
+    ag_gates_touched: ["AG-12"],
+    llm_prompt_template: $prompt,
+    note: "Heurística local; opcionalmente re-puntuar con LLM usando llm_prompt_template y sobrescribir este JSON."
+  }' > "$out"
+
+echo "{\"judge_file\":\"$out\",\"score\":$score,\"verdict\":\"$verdict\",\"must_fix\":$([ "$must_fix" -eq 1 ] && echo true || echo false)}"
