@@ -98,6 +98,15 @@ jarvis-ecosystem/state/activity-log.jsonl
 jarvis-ecosystem/state/tasks/
 jarvis-ecosystem/state/handoffs/
 jarvis-ecosystem/state/cache/
+jarvis-ecosystem/state/approvals/
+jarvis-ecosystem/state/judge/
+jarvis-ecosystem/state/editorial-calendar/
+jarvis-ecosystem/state/metrics/
+jarvis-ecosystem/state/publish-log/
+jarvis-ecosystem/state/publish-safety/
+jarvis-ecosystem/state/reports/
+jarvis-ecosystem/state/competitor-intel/
+jarvis-ecosystem/state/escalations/
 # Salidas generadas por el pipeline RRSS (carruseles, reels)
 jarvis-ecosystem/out/
 # Plantillas de musica libre con licencia (las descarga el usuario, no se versionan)

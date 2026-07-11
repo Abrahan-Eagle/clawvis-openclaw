@@ -6,6 +6,19 @@ Sistema de memoria complementario a `memory-core` de OpenClaw. Aporta busqueda s
 
 **No reemplaza** la memoria nativa de OpenClaw (`MEMORY.md`, `memory/*.md`, session-memory hook). Es un **complemento** que agrega recall semantico y grafo de conocimiento.
 
+### `agents.defaults.memorySearch` (plantilla OpenClaw)
+
+En `config/openclaw-home/openclaw.json` la plantilla deja **`memorySearch.enabled: false`** por defecto. Motivo: el índice vectorial nativo exige Ollama + modelo `nomic-embed-text` y sync; activarlo sin ese runtime satura CPU o falla en silencio.
+
+| Capa | Estado en plantilla | Notas |
+|------|---------------------|-------|
+| `memoryFlush` pre-compaction | **enabled** | Persistencia a `memory/` antes de compactar |
+| `memorySearch` (vector nativo) | **disabled** | Activar solo tras verificar Ollama + embed; gate AG-07 si se toca runtime |
+| MemPalace MCP | Complementario | Independiente de `memorySearch` |
+| `memory-store` (`memory.json`) | Activo en repo | Session Startup: `format-prompt` |
+
+Cuando el CEO active búsqueda vectorial nativa: poner `enabled: true`, `sync.onSessionStart` según carga, y documentar en este archivo.
+
 **Patrones tipo LightRAG (sin instalar LightRAG):** el skill [`dual-retrieval-ops`](../agents/jarvis/skills/dual-retrieval-ops/SKILL.md) usa MemPalace + dossiers como capa “local” y KG + Graphify como capa “global”. No es otro producto de memoria; es metodología. Detalle: [DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md](DUAL_RETRIEVAL_LIGHTRAG_PATTERNS.md) y [RECURSOS_COMUNIDAD_OPENCLAW.md](RECURSOS_COMUNIDAD_OPENCLAW.md) §2.8.
 
 ---

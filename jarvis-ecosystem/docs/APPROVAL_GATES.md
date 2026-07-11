@@ -2,13 +2,33 @@
 
 **Inspirado en:** Paperclip AI (governance: acciones que requieren aprobacion humana antes de ejecutarse).  
 **Aplica a:** todos los agentes del ecosistema Jarvis.  
-**Ultima actualizacion:** abril 2026 (aclaracion AG-03: publicacion vs borrador Canva automatico).
+**Ultima actualizacion:** julio 2026 (CLI `approval-gate` + pre-check `judge-run` antes de AG-12).
 
 ---
 
 ## Principio
 
 Los agentes operan con autonomia dentro de limites definidos. Cualquier accion que **comprometa recursos, reputacion o datos** debe pasar por aprobacion explicita del CEO (superusuario) antes de ejecutarse.
+
+## CLI operativo (jul 2026)
+
+Skill global **`approval-gate`** — bin `skills/global/approval-gate/bin/approval-gate`. Persiste escalaciones en `state/approvals/esc-*.json`.
+
+```bash
+cd jarvis-ecosystem
+export PATH="$PWD/skills/global/approval-gate/bin:$PWD/skills/global/judge-run/bin:$PATH"
+
+# Pre-gate recomendado (eval ligero → state/judge/)
+judge-run --handoff handoff-... --category carousel_ig
+
+# Solicitar gate (AG-12 / AG-13 / AG-03)
+approval-gate request --ag AG-12 --task task-... --handoff handoff-... --dossier <id>
+approval-gate approve --id esc-...
+approval-gate check --handoff handoff-...
+approval-gate list --status pending
+```
+
+**Antes de AG-12:** correr `judge-run` (heurística + plantilla LLM) y adjuntar el `judge-*.json` a la solicitud / Trello. Ver [MANUAL_RRSS_JARVIS.md](MANUAL_RRSS_JARVIS.md).
 
 ## Tabla de approval gates
 
